@@ -2,7 +2,7 @@ using System.Reflection;
 using Heyer.Storage.API.Providers.Filesystem;
 using Microsoft.Extensions.Options;
 
-namespace Heyer.Storage.API.Tests.Providers.Filesystem;
+namespace Heyer.Storage.API.Tests.UnitTests.Providers.Filesystem;
 
 public class FilesystemStorageStrategyTests
 {
