@@ -9,17 +9,14 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
 {
     public static readonly Dictionary<string, string?> InMemoryConfiguration = new()
     {
-        ["StorageStrategy:Type"] = "Filesystem",
-        ["StorageStrategy:FilesystemStorage:RootPath"] = "IntegrationTests/Endpoints/StoreEndpointTests",
+        [Config.StorageStrategy_Type] = "Filesystem",
+        [Config.StorageStrategy_FilesystemStorage_RootPath] = "IntegrationTests/Endpoints/StoreEndpointTests",
     };
-    
+
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureHostConfiguration(config =>
-        {
-            config.AddInMemoryCollection(InMemoryConfiguration);
-        });
-        
+        builder.ConfigureHostConfiguration(config => { config.AddInMemoryCollection(InMemoryConfiguration); });
+
         return base.CreateHost(builder);
     }
 }

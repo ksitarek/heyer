@@ -27,7 +27,7 @@ public class StoreEndpointTests
     public void OneTimeTeardown()
     {
         // cleanup test files
-        var storePath = ApplicationFactory.InMemoryConfiguration["StorageStrategy:FilesystemStorage:RootPath"];
+        var storePath = ApplicationFactory.InMemoryConfiguration[Config.StorageStrategy_FilesystemStorage_RootPath];
         if (Directory.Exists(storePath!))
             Directory.Delete(storePath, true);
     }
