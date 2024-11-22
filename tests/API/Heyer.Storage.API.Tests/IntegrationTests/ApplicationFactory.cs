@@ -15,7 +15,7 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
     
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureAppConfiguration(config =>
+        builder.ConfigureHostConfiguration(config =>
         {
             config.AddInMemoryCollection(InMemoryConfiguration);
         });

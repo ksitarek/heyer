@@ -1,9 +1,10 @@
+using FluentResults;
 using Heyer.Storage.API.Providers;
 using MediatR;
 
 namespace Heyer.Storage.API.Endpoints.Store;
 
-public class StoreRequestHandler : IRequestHandler<StoreRequest, StoreResult>
+public class StoreRequestHandler : IRequestHandler<StoreRequest, Result<StoreResult>>
 {
     private readonly IStorageStrategy _storageStrategy;
 
@@ -12,7 +13,7 @@ public class StoreRequestHandler : IRequestHandler<StoreRequest, StoreResult>
         _storageStrategy = storageStrategy;
     }
     
-    public async Task<StoreResult> Handle(StoreRequest request, CancellationToken cancellationToken)
+    public async Task<Result<StoreResult>> Handle(StoreRequest request, CancellationToken cancellationToken)
     {
         var key = Guid.NewGuid().ToString();
 
@@ -22,6 +23,6 @@ public class StoreRequestHandler : IRequestHandler<StoreRequest, StoreResult>
         
         // TODO add db record
 
-        return new(key);
+        return new StoreResult(key);
     }
 }

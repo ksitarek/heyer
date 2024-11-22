@@ -10,7 +10,7 @@ public static class EndpointsExtensions
     public static WebApplication MapEndpoints(this WebApplication app)
     {
         return app.MapStoreEndpoint()
-                  .MapAntiforgeryEndpoint();
+            .MapAntiforgeryEndpoint();
     }
 
     private static WebApplication MapStoreEndpoint(this WebApplication app)
@@ -18,7 +18,9 @@ public static class EndpointsExtensions
         app.MapPost("/store", async (IMediator mediator, [FromForm] StoreRequest request) =>
         {
             var response = await mediator.Send(request);
-            return Results.Ok(response);
+            return response.IsSuccess
+                ? Results.Ok(response.ValueOrDefault)
+                : ResponseErrorHandling.Handle(response);
         });
 
         return app;
