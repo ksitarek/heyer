@@ -13,13 +13,11 @@ public class StoreEndpointTests
 {
     private ApplicationFactory _factory;
     private IMongoCollection<StorageRegistryEntry> _collection;
-
-
+    
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
         _factory = new ApplicationFactory();
-        await _factory.InitializeDependenciesAsync();
 
         _collection = (_factory.Services.GetRequiredService(typeof(IMongoCollection<StorageRegistryEntry>))
             as IMongoCollection<StorageRegistryEntry>)!;
