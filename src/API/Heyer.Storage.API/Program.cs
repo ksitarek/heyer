@@ -2,12 +2,14 @@ using System.Reflection;
 using FluentValidation;
 using Heyer.Storage.API.Endpoints;
 using Heyer.Storage.API.Middleware;
+using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddStorageStrategy(builder.Configuration.GetSection("StorageStrategy"));
+builder.Services.AddRegistryStrategy(builder.Configuration.GetSection("RegistryStrategy"));
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(MediatorValidationMiddleware<,>));

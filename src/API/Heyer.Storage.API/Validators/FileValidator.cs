@@ -1,4 +1,3 @@
-using FileSignatures;
 using FileSignatures.Formats;
 using FluentValidation;
 
@@ -9,7 +8,6 @@ public class FileValidator : AbstractValidator<IFormFile>
     private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".pdf" };
     private static readonly Type[] AllowedFormats = { typeof(Image), typeof(Pdf) };
     
-    private static readonly FileFormatInspector FileInspector = new();
     
     public FileValidator()
     {
@@ -31,8 +29,7 @@ public class FileValidator : AbstractValidator<IFormFile>
 
     private static bool BeOfAllowedType(IFormFile file)
     {
-        using var fileStream = file.OpenReadStream();
-        var fileFormat = FileInspector.DetermineFileFormat(fileStream);
+        var fileFormat = file.GetFileFormat();
         return fileFormat != null && AllowedFormats.Any(t => fileFormat.GetType().IsAssignableTo(t));
     }
 }

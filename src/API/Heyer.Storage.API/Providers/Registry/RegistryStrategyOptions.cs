@@ -5,7 +5,7 @@ namespace Heyer.Storage.API.Providers.Registry;
 public class RegistryStrategyOptions
 {
     public RegistryStrategyType Type { get; set; }
-    public MongoDBRegistryOptions MongoDB { get; set; } = new();
+    public MongoDBRegistryOptions MongoDBRegistry { get; set; } = new();
     
     public enum RegistryStrategyType
     {

@@ -13,7 +13,7 @@ public static class RegistryStrategyExtensions
         switch (registryStrategyOptions.Type)
         {
             case RegistryStrategyOptions.RegistryStrategyType.MongoDB:
-                services.AddMongoDBRegistryProvider(registryStrategyOptions.MongoDB);
+                services.AddMongoDBRegistryProvider(registryStrategyOptions.MongoDBRegistry);
                 break;
             case RegistryStrategyOptions.RegistryStrategyType.Unknown:
             default:

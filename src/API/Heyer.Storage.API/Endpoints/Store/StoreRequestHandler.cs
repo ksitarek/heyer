@@ -1,5 +1,5 @@
 using FluentResults;
-using Heyer.Storage.API.Providers;
+using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
 using MediatR;
 
@@ -8,10 +8,12 @@ namespace Heyer.Storage.API.Endpoints.Store;
 public class StoreRequestHandler : IRequestHandler<StoreRequest, Result<StoreResult>>
 {
     private readonly IStorageStrategy _storageStrategy;
+    private readonly IRegistryStrategy _registryStrategy;
 
-    public StoreRequestHandler(IStorageStrategy storageStrategy)
+    public StoreRequestHandler(IStorageStrategy storageStrategy, IRegistryStrategy registryStrategy)
     {
         _storageStrategy = storageStrategy;
+        _registryStrategy = registryStrategy;
     }
     
     public async Task<Result<StoreResult>> Handle(StoreRequest request, CancellationToken cancellationToken)
@@ -21,8 +23,16 @@ public class StoreRequestHandler : IRequestHandler<StoreRequest, Result<StoreRes
         await using var fileReadStream = request.File.OpenReadStream();
         
         await _storageStrategy.StoreAsync(key, fileReadStream, cancellationToken);
-        
-        // TODO add db record
+
+        try
+        {
+            await _registryStrategy.RegisterNewFileAsync(key, request.File, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            await _storageStrategy.DeleteAsync(key, CancellationToken.None);
+            return Result.Fail(new Error($"Failed to register file: {e.Message}"));
+        }
 
         return new StoreResult(key);
     }
