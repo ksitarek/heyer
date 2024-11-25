@@ -2,7 +2,7 @@ using System.Reflection;
 using FluentValidation;
 using Heyer.Storage.API.Endpoints;
 using Heyer.Storage.API.Middleware;
-using Heyer.Storage.API.Providers;
+using Heyer.Storage.API.Providers.Storage;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +25,9 @@ app.MapEndpoints();
 await app.RunAsync();
 
 // For Integration Testing
-public partial class Program
+namespace Heyer.Storage.API
 {
-};
+    public partial class Program
+    {
+    };
+}

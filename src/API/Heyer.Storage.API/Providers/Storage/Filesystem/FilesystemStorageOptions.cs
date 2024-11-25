@@ -1,4 +1,4 @@
-namespace Heyer.Storage.API.Providers.Filesystem;
+namespace Heyer.Storage.API.Providers.Storage.Filesystem;
 
 public class FilesystemStorageOptions
 {

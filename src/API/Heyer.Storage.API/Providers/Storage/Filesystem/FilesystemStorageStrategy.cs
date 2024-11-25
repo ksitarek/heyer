@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 
-namespace Heyer.Storage.API.Providers.Filesystem;
+namespace Heyer.Storage.API.Providers.Storage.Filesystem;
 
 internal class FilesystemStorageStrategy : IStorageStrategy
 {

@@ -1,6 +1,4 @@
-using Microsoft.Extensions.Options;
-
-namespace Heyer.Storage.API.Providers;
+namespace Heyer.Storage.API.Providers.Storage;
 
 public interface IStorageStrategy
 {

@@ -1,5 +1,5 @@
 using System.Reflection;
-using Heyer.Storage.API.Providers.Filesystem;
+using Heyer.Storage.API.Providers.Storage.Filesystem;
 using Microsoft.Extensions.Options;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Providers.Filesystem;

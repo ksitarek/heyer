@@ -1,6 +1,6 @@
-using Heyer.Storage.API.Providers.Filesystem;
+using Heyer.Storage.API.Providers.Storage.Filesystem;
 
-namespace Heyer.Storage.API.Providers;
+namespace Heyer.Storage.API.Providers.Storage;
 
 public class StorageStrategyOptions
 {
