@@ -12,8 +12,8 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
     {
         [Config.RegistryStrategy_MongoDbRegistry_ConnectionString] = "",
     };
-    
-    public readonly Dictionary<string, string?> InstanceConfigOverrides = new();
+
+    private readonly Dictionary<string, string?> _instanceConfigOverrides = new();
 
     public ApplicationFactory()
     {
@@ -22,7 +22,7 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
     
     public ApplicationFactory(Dictionary<string, string?> configOverrides)
     {
-        InstanceConfigOverrides = configOverrides;
+        _instanceConfigOverrides = configOverrides;
     }
 
     protected override IHost CreateHost(IHostBuilder builder)
@@ -30,7 +30,7 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
         builder.ConfigureHostConfiguration(config =>
         {
             config.AddInMemoryCollection(InMemoryConfiguration);
-            config.AddInMemoryCollection(InstanceConfigOverrides);
+            config.AddInMemoryCollection(_instanceConfigOverrides);
         });
 
         return base.CreateHost(builder);

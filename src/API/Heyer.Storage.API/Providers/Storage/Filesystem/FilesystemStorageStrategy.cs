@@ -1,13 +1,17 @@
+using FluentResults;
 using Microsoft.Extensions.Options;
 
 namespace Heyer.Storage.API.Providers.Storage.Filesystem;
 
 internal class FilesystemStorageStrategy : IStorageStrategy
 {
+    private readonly ILogger<FilesystemStorageStrategy> _logger;
     private readonly string _rootPath;
 
-    public FilesystemStorageStrategy(IOptions<FilesystemStorageOptions> options)
+    public FilesystemStorageStrategy(IOptions<FilesystemStorageOptions> options,
+                                     ILogger<FilesystemStorageStrategy> logger)
     {
+        _logger = logger;
         _rootPath = options.Value.RootPath;
         EnsureRootPathExists();
     }
@@ -20,38 +24,63 @@ internal class FilesystemStorageStrategy : IStorageStrategy
         }
     }
 
-    public async Task StoreAsync(string key, Stream stream, CancellationToken cancellationToken = default)
+    public async Task<Result> StoreAsync(string key, Stream stream, CancellationToken cancellationToken = default)
     {
         var path = Path.Combine(_rootPath, key);
 
         if (File.Exists(path))
         {
-            throw new InvalidOperationException("File already exists.");
+            _logger.LogError("File already exists.");
+            return Result.Fail("File already exists.");
         }
-        
-        await using var fileStream = File.Create(path);
-        stream.Seek(0, SeekOrigin.Begin);
-        await stream.CopyToAsync(fileStream, cancellationToken);
-    }
 
-    public Task DeleteAsync(string key, CancellationToken cancellationToken = default)
-    {
-        var path = Path.Combine(_rootPath, key);
-        File.Delete(path);
-        return Task.CompletedTask;
-    }
-
-    public Task<Stream> GetAsync(string key, CancellationToken cancellationToken = default)
-    {
-        var path = Path.Combine(_rootPath, key);
-        
         try
         {
-            return Task.FromResult<Stream>(File.OpenRead(path));
+            await using var fileStream = File.Create(path);
+            stream.Seek(0, SeekOrigin.Begin);
+            await stream.CopyToAsync(fileStream, cancellationToken);
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to create file.");
+            return Result.Fail(e.Message);
+        }
+    }
+
+    public Task<Result> DeleteAsync(string key, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var path = Path.Combine(_rootPath, key);
+            File.Delete(path);
+            return Task.FromResult(Result.Ok());
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to delete file.");
+            return Task.FromResult(Result.Fail(e.Message));
+        }
+    }
+
+    public Task<Result<Stream>> GetAsync(string key, CancellationToken cancellationToken = default)
+    {
+        var path = Path.Combine(_rootPath, key);
+
+        try
+        {
+            return Task.FromResult<Result<Stream>>(File.OpenRead(path));
         }
         catch (FileNotFoundException e)
         {
-            throw new FileNotFoundException("File not found.", e);
+            _logger.LogError(e, "File not found.");
+            return Task.FromResult(Result.Fail<Stream>("File not found."));
         }
+    }
+
+    public Task<Result> PreserveAsync(string key, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(Result.Ok());
     }
 }

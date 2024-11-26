@@ -1,5 +1,7 @@
 using System.Reflection;
+using FluentAssertions;
 using Heyer.Storage.API.Providers.Storage.Filesystem;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Providers.Filesystem;
@@ -21,7 +23,7 @@ public class FilesystemStorageStrategyTests
             RootPath = testRootPath
         };
 
-        _strategy = new FilesystemStorageStrategy(Options.Create(_options));
+        _strategy = new FilesystemStorageStrategy(Options.Create(_options), new NullLogger<FilesystemStorageStrategy>());
     }
     
     [TearDown]
@@ -56,9 +58,12 @@ public class FilesystemStorageStrategyTests
         
         await _strategy.StoreAsync(key, stream1);
 
-        // Act & Assert
-        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await _strategy.StoreAsync(key, stream2));
-        Assert.That(exception.Message, Is.EqualTo("File already exists."));
+        // Act
+        var result = await _strategy.StoreAsync(key, stream2);
+        
+        // Assert
+        result.IsSuccess.Should().BeFalse();
+        result.Errors[0].Message.Should().Be("File already exists.");
         
         var filePath = Path.Combine(_options.RootPath, key);
         Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data1"));
@@ -92,16 +97,21 @@ public class FilesystemStorageStrategyTests
         var result = await _strategy.GetAsync(key);
 
         // Assert
-        var resultText = await GetTextFromStreamAsync(result);
+        result.IsSuccess.Should().BeTrue();
+        
+        var resultText = await GetTextFromStreamAsync(result.Value);
         Assert.That(resultText, Is.EqualTo("test-data"));
     }
 
     [Test]
-    public void GetAsync_WhenKeyNotFound_ShouldThrow()
+    public async Task GetAsync_WhenKeyNotFound_ShouldThrow()
     {
-        // Act & Assert
-        var exception = Assert.ThrowsAsync<FileNotFoundException>(async () => await _strategy.GetAsync("non-existing-key"));
-        Assert.That(exception.Message, Is.EqualTo("File not found."));
+        // Act
+        var result = await _strategy.GetAsync("non-existing-key");
+        
+        // Assert
+        result.IsSuccess.Should().BeFalse();
+        result.Errors[0].Message.Should().Be("File not found.");
     }
     
     private static async Task<string> GetTextFromStreamAsync(Stream stream)

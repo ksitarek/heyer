@@ -22,16 +22,17 @@ public class StoreRequestHandler : IRequestHandler<StoreRequest, Result<StoreRes
 
         await using var fileReadStream = request.File.OpenReadStream();
         
-        await _storageStrategy.StoreAsync(key, fileReadStream, cancellationToken);
-
-        try
+        var storeResult = await _storageStrategy.StoreAsync(key, fileReadStream, cancellationToken);
+        if(storeResult.IsFailed)
         {
-            await _registryStrategy.RegisterNewFileAsync(key, request.File, cancellationToken);
+            return Result.Fail(storeResult.Errors);
         }
-        catch (Exception e)
+        
+        var registerNewFileResult = await _registryStrategy.RegisterNewFileAsync(key, request.File, cancellationToken);
+        if(registerNewFileResult.IsFailed)
         {
             await _storageStrategy.DeleteAsync(key, CancellationToken.None);
-            return Result.Fail(new Error($"Failed to register file: {e.Message}"));
+            return Result.Fail(registerNewFileResult.Errors);
         }
 
         return new StoreResult(key);
