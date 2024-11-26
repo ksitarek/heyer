@@ -12,6 +12,7 @@ builder.Services.AddStorageStrategy(builder.Configuration.GetSection("StorageStr
 builder.Services.AddRegistryStrategy(builder.Configuration.GetSection("RegistryStrategy"));
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(MediatorLoggingMiddleware<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(MediatorValidationMiddleware<,>));
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
