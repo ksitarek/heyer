@@ -48,13 +48,13 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
         return svc as TService ?? throw new InvalidOperationException($"Service of type {typeof(TService)} not found.");
     }
 
-    protected override void Dispose(bool disposing)
+    public override ValueTask DisposeAsync()
     {
         // cleanup test files
         var storePath = GetConfigValue(Config.StorageStrategy_FilesystemStorage_RootPath)?.ToString();
         if (!string.IsNullOrEmpty(storePath) && Directory.Exists(storePath))
             Directory.Delete(storePath, true);
-
-        base.Dispose(disposing);
+        
+        return base.DisposeAsync();
     }
 }

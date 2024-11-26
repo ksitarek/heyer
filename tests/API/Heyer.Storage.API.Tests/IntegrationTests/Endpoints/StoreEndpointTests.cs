@@ -14,7 +14,7 @@ public class StoreEndpointTests
     public async Task StoreEndpoint_WithValidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        await using var factory = CreateFactory("MongoDB", "FilesystemStorage");
+        await using var factory = CreateFactory("MongoDB", "Filesystem");
         var client = factory.CreateClient();
 
         // Act
@@ -41,7 +41,7 @@ public class StoreEndpointTests
     public async Task StoreEndpoint_WithInvalidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        await using var factory = CreateFactory("MongoDB", "FilesystemStorage");
+        await using var factory = CreateFactory("MongoDB", "Filesystem");
         var client = factory.CreateClient();
 
         // Act
