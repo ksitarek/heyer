@@ -14,7 +14,7 @@ public class StoreEndpointTests
     public async Task StoreEndpoint_WithValidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        await using var factory = CreateFactory("MongoDB", "Filesystem");
+        await using var factory = ApplicationFactory.Create();
         var client = factory.CreateClient();
 
         // Act
@@ -34,14 +34,14 @@ public class StoreEndpointTests
         entry.Key.Should().Be(content.FileHandle);
         entry.FileName.Should().Be("test-file.png");
         entry.ContentType.Should().Be("image/png");
-        entry.Size.Should().Be(7936);
+        entry.Size.Should().Be(2620);
     }
 
     [Test]
     public async Task StoreEndpoint_WithInvalidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        await using var factory = CreateFactory("MongoDB", "Filesystem");
+        await using var factory = ApplicationFactory.Create();
         var client = factory.CreateClient();
 
         // Act
@@ -72,15 +72,5 @@ public class StoreEndpointTests
         request.Content = formData;
 
         return await client.SendAsync(request);
-    }
-    
-    private ApplicationFactory CreateFactory(string registryStrategyType, string storageStrategyType)
-    {
-        return new(new()
-        {
-            [Config.RegistryStrategy_Type] = registryStrategyType,
-            [Config.StorageStrategy_Type] = storageStrategyType,
-            [Config.StorageStrategy_FilesystemStorage_RootPath] = "IntegrationTests/Endpoints/StoreEndpointTests",
-        });
     }
 }

@@ -49,7 +49,7 @@ public class FilesystemStorageStrategyTests
     }
 
     [Test]
-    public async Task StoreAsync_WhenInvokedMultipleTimesWithTheSameKey_ShouldThrowException()
+    public async Task StoreAsync_WhenInvokedMultipleTimesWithTheSameKey_ShouldReturnError()
     {
         // Arrange
         var key = "test-key";
@@ -104,14 +104,14 @@ public class FilesystemStorageStrategyTests
     }
 
     [Test]
-    public async Task GetAsync_WhenKeyNotFound_ShouldThrow()
+    public async Task GetAsync_WhenKeyNotFound_ShouldReturnNotFoundError()
     {
         // Act
         var result = await _strategy.GetAsync("non-existing-key");
         
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Errors[0].Message.Should().Be("File not found.");
+        result.Errors[0].Message.Should().Be("Not found.");
     }
     
     private static async Task<string> GetTextFromStreamAsync(Stream stream)

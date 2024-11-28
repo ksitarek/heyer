@@ -1,4 +1,5 @@
 using FluentResults;
+using Heyer.Storage.API.Middleware;
 using Microsoft.Extensions.Options;
 
 namespace Heyer.Storage.API.Providers.Storage.Filesystem;
@@ -45,7 +46,7 @@ internal class FilesystemStorageStrategy : IStorageStrategy
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to create file.");
-            return Result.Fail(e.Message);
+            return new Error("Failed to create file.").CausedBy(e);
         }
     }
 
@@ -60,7 +61,7 @@ internal class FilesystemStorageStrategy : IStorageStrategy
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to delete file.");
-            return Task.FromResult(Result.Fail(e.Message));
+            return Task.FromResult(Result.Fail(new Error("Failed to delete file.").CausedBy(e)));
         }
     }
 
@@ -75,7 +76,7 @@ internal class FilesystemStorageStrategy : IStorageStrategy
         catch (FileNotFoundException e)
         {
             _logger.LogError(e, "File not found.");
-            return Task.FromResult(Result.Fail<Stream>("File not found."));
+            return Task.FromResult(Result.Fail<Stream>(new NotFoundError().CausedBy(e)));
         }
     }
 
