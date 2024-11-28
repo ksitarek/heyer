@@ -1,17 +1,17 @@
 using FluentResults;
-using Heyer.Storage.API.Endpoints.Store;
 using Heyer.Storage.API.Middleware;
 
 namespace Heyer.Storage.API.Endpoints;
 
 public static class ResponseErrorHandling
 {
-    public static IResult Handle(Result<StoreResult> response)
+    public static IResult Handle(IResultBase response)
     {
         var error = response.Errors[0];
 
         return error switch
         {
+            NotFoundError => Results.NotFound(),
             ValidationError => HandleValidationError(response.Errors),
 
             _ => Results.StatusCode(StatusCodes.Status500InternalServerError)
