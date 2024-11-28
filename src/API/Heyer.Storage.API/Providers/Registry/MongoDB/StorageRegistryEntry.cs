@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Heyer.Storage.API.Providers.Registry.MongoDB;
 
-public class StorageRegistryEntry
+public class StorageRegistryEntry : IFileProperties
 {
     [BsonId]
     [BsonRepresentation(BsonType.String)]

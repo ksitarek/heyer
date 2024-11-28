@@ -1,4 +1,5 @@
 using FluentResults;
+using Heyer.Storage.API.Middleware;
 using Heyer.Storage.API.Validators;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -54,13 +55,35 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
 
         try
         {
-            await _collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-            return Result.Ok();
+            var result = await _collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+
+            return result switch
+            {
+                { MatchedCount: 1 } => Result.Ok(),
+                { MatchedCount: 0 } => Result.Fail(new NotFoundError()),
+                _ => Result.Fail("Unknown error.")
+            };
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to set preserve flag.");
             return Result.Fail(e.Message);
         }
+    }
+
+    public async Task<Result> ValidateKeyAsync(string key, CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
+        return Result.OkIf(await _collection.Find(filter).AnyAsync(cancellationToken), "Key not found.");
+    }
+
+    public async Task<Result<IFileProperties>> GetAsync(string key, CancellationToken cancellationToken)
+    {
+        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
+        var entry = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+
+        return entry == null
+            ? Result.Fail(new NotFoundError())
+            : entry;
     }
 }

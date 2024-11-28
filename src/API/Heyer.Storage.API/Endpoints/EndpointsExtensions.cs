@@ -1,3 +1,5 @@
+using Heyer.Storage.API.Endpoints.Download;
+using Heyer.Storage.API.Endpoints.Preserve;
 using Heyer.Storage.API.Endpoints.Store;
 using MediatR;
 using Microsoft.AspNetCore.Antiforgery;
@@ -9,8 +11,37 @@ public static class EndpointsExtensions
 {
     public static WebApplication MapEndpoints(this WebApplication app)
     {
-        return app.MapStoreEndpoint()
+        return app
+            .MapDownloadEndpoint()
+            .MapPreserveEndpoint()
+            .MapStoreEndpoint()
             .MapAntiforgeryEndpoint();
+    }
+
+    private static WebApplication MapDownloadEndpoint(this WebApplication app)
+    {
+        app.MapGet("/download/{Key}", async (IMediator mediator, [AsParameters]DownloadRequest request) =>
+        {
+            var response = await mediator.Send(request);
+            return response.IsSuccess
+                ? Results.File(response.Value.FileContent, response.Value.ContentType, response.Value.FileName)
+                : ResponseErrorHandling.Handle(response);
+        }).RequireAuthorization();
+
+        return app;
+    }
+
+    private static WebApplication MapPreserveEndpoint(this WebApplication app)
+    {
+        app.MapPost("/preserve/{key}", async (IMediator mediator, [AsParameters]PreserveRequest request) =>
+        {
+            var response = await mediator.Send(request);
+            return response.IsSuccess
+                ? Results.Ok()
+                : ResponseErrorHandling.Handle(response);
+        });
+
+        return app;
     }
 
     private static WebApplication MapStoreEndpoint(this WebApplication app)
