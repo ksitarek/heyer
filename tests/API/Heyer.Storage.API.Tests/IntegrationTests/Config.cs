@@ -12,4 +12,11 @@ internal static class Config
     public const string RegistryStrategy_MongoDbRegistry_ConnectionString = "RegistryStrategy:MongoDbRegistry:ConnectionString";
     public const string RegistryStrategy_MongoDbRegistry_DatabaseName = "RegistryStrategy:MongoDbRegistry:DatabaseName";
     public const string RegistryStrategy_MongoDbRegistry_CollectionName = "RegistryStrategy:MongoDbRegistry:CollectionName";
+    
+    public const string Jwt_ValidateIssuer = "Jwt:ValidateIssuer";
+    public const string Jwt_ValidateAudience = "Jwt:ValidateAudience";
+    public const string Jwt_ValidateLifetime = "Jwt:ValidateLifetime";
+    public const string Jwt_ValidIssuer = "Jwt:ValidIssuer";
+    public const string Jwt_ValidAudience = "Jwt:ValidAudience";
+    public const string Jwt_Secret = "Jwt:Secret";
 }

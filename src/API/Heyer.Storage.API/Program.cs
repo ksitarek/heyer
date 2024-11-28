@@ -1,6 +1,8 @@
 using System.Reflection;
+using System.Text;
 using FluentValidation;
 using Heyer.Storage.API.Endpoints;
+using Heyer.Storage.API.Extensions;
 using Heyer.Storage.API.Middleware;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
@@ -8,6 +10,7 @@ using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddJwtAuthentication(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddStorageStrategy(builder.Configuration.GetSection("StorageStrategy"));
 builder.Services.AddRegistryStrategy(builder.Configuration.GetSection("RegistryStrategy"));
 
