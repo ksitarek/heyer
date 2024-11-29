@@ -9,4 +9,5 @@ public interface IRegistryStrategy
     Task<Result> SetPreserveAsync(string key, bool preserve, CancellationToken cancellationToken = default);
     Task<Result> ValidateKeyAsync(string key, CancellationToken cancellationToken = default);
     Task<Result<IFileProperties>> GetAsync(string key, CancellationToken cancellationToken);
+    Task<Result> DeleteAsync(string requestKey, CancellationToken cancellationToken);
 }

@@ -86,4 +86,18 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
             ? Result.Fail(new NotFoundError())
             : entry;
     }
+
+    public async Task<Result> DeleteAsync(string key, CancellationToken cancellationToken)
+    {
+        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
+        try
+        {
+            var r = await _collection.DeleteOneAsync(filter, cancellationToken);
+            return Result.Ok();
+        }
+        catch (Exception ex)
+        {
+            return new Error("Failed to delete storage registry entry.").CausedBy(ex);
+        }
+    }
 }

@@ -1,3 +1,4 @@
+using Heyer.Storage.API.Endpoints.Delete;
 using Heyer.Storage.API.Endpoints.Download;
 using Heyer.Storage.API.Endpoints.Preserve;
 using Heyer.Storage.API.Endpoints.Store;
@@ -12,10 +13,24 @@ public static class EndpointsExtensions
     public static WebApplication MapEndpoints(this WebApplication app)
     {
         return app
+            .MapDeleteEndpoint()
             .MapDownloadEndpoint()
             .MapPreserveEndpoint()
             .MapStoreEndpoint()
             .MapAntiforgeryEndpoint();
+    }
+
+    private static WebApplication MapDeleteEndpoint(this WebApplication app)
+    {
+        app.MapDelete("/delete/{Key}", async (IMediator mediator, [AsParameters]DeleteRequest request) =>
+        {
+            var response = await mediator.Send(request);
+            return response.IsSuccess
+                ? Results.Ok()
+                : ResponseErrorHandling.Handle(response);
+        }).RequireAuthorization();
+
+        return app;
     }
 
     private static WebApplication MapDownloadEndpoint(this WebApplication app)
