@@ -1,9 +1,7 @@
 using System.Net;
 using FluentAssertions;
-using Heyer.Storage.API.Client;
-using Heyer.Storage.API.Providers.Registry.MongoDB;
 using Heyer.Storage.API.Tests.Utils;
-using MongoDB.Driver;
+using Heyer.Storage.API.Tests.Utils.Validators;
 using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
@@ -21,11 +19,12 @@ public class PreserveEndpointTests : IntegrationTestsBase
         await client.Preserve(storeResult.FileHandle);
         
         // Assert
-        var collection = AppFactory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
-        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, storeResult.FileHandle);
-        var entry = await collection.Find(filter).FirstAsync();
-        entry.Should().NotBeNull();
-        entry.Preserve.Should().BeTrue();
+        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+            .ValidateFileIsPreserved(key: storeResult.FileHandle);
+        
+        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+            .ValidateFileIsPreserved(key: storeResult.FileHandle);
+        
     }
     
     [Test]
@@ -52,10 +51,10 @@ public class PreserveEndpointTests : IntegrationTestsBase
         await client.Preserve(storeResult.FileHandle);
         
         // Assert
-        var collection = AppFactory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
-        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, storeResult.FileHandle);
-        var entry = await collection.Find(filter).FirstAsync();
-        entry.Should().NotBeNull();
-        entry.Preserve.Should().BeTrue();
+        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+            .ValidateFileIsPreserved(key: storeResult.FileHandle);
+        
+        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+            .ValidateFileIsPreserved(key: storeResult.FileHandle);
     }
 }

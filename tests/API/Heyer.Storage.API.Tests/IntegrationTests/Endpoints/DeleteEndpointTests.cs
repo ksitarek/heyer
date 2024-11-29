@@ -1,10 +1,7 @@
 using System.Net;
 using FluentAssertions;
-using Heyer.Storage.API.Client;
-using Heyer.Storage.API.Client.PublishedLanguage;
-using Heyer.Storage.API.Providers.Registry.MongoDB;
 using Heyer.Storage.API.Tests.Utils;
-using MongoDB.Driver;
+using Heyer.Storage.API.Tests.Utils.Validators;
 using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
@@ -48,48 +45,10 @@ public class DeleteEndpointTests : IntegrationTestsBase
         await client.Delete(storeResult.FileHandle);
 
         // Assert
-        var collection = AppFactory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
-        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, storeResult.FileHandle);
-        var anyResult = await collection.Find(filter).AnyAsync();
-        anyResult.Should().BeFalse();
-    }
+        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+            .ValidateFileIsNotPresent(key: storeResult.FileHandle);
 
-    private async Task<HttpResponseMessage> Delete(HttpClient client, string fileHandle)
-    {
-        var request = new HttpRequestMessage();
-        request.Method = HttpMethod.Delete;
-        request.RequestUri = new Uri($"/delete/{fileHandle}", UriKind.Relative);
-
-        var response = await client.SendAsync(request);
-
-        return response;
-    }
-
-    private async Task<StoreResult> Store(HttpClient client, string filePath)
-    {
-        await using var testFile = File.OpenRead(filePath);
-        using var fileStream = new StreamContent(testFile);
-        using var formData = new MultipartFormDataContent();
-
-        formData.Add(fileStream, "file", testFile.Name);
-
-        var csrfToken = await client.GetCsrfToken();
-
-        var request = new HttpRequestMessage();
-        request.Method = HttpMethod.Post;
-        request.RequestUri = new Uri("/store", UriKind.Relative);
-        request.Headers.Add("RequestVerificationToken", csrfToken);
-        request.Content = formData;
-
-        var response = await client.SendAsync(request);
-
-        var storeResult = await response.ReadContentAs<StoreResult>();
-
-        if (storeResult == null)
-        {
-            throw new ApplicationException("Failed to store test file.");
-        }
-
-        return storeResult;
+        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+            .ValidateFileIsNotPresent(key: storeResult.FileHandle);
     }
 }

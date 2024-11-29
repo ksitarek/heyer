@@ -1,7 +1,6 @@
 using FluentResults;
 using Heyer.Storage.API.Middleware;
 using Heyer.Storage.API.Validators;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace Heyer.Storage.API.Providers.Registry.MongoDB;

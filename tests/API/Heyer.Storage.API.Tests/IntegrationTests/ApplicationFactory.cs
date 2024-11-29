@@ -2,21 +2,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Heyer.Storage.API.Client;
-using Heyer.Storage.API.Tests.IntegrationTests.Fixtures;
+using Heyer.Storage.API.Tests.Utils.Validators;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests;
-
-internal interface IApplicationFactory : IAsyncDisposable
-{
-    TService GetRequiredService<TService>() where TService : class;
-    IStorageApiClient CreateApiClient();
-    IStorageApiClient CreateAuthorizedApiClient();
-}
 
 internal class ApplicationFactory : WebApplicationFactory<Program>, IApplicationFactory
 {
@@ -46,6 +41,17 @@ internal class ApplicationFactory : WebApplicationFactory<Program>, IApplication
 
         return base.CreateHost(builder);
     }
+    
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureTestServices((services) =>
+        {
+            services.AddValidators();
+        });
+        
+        base.ConfigureWebHost(builder);
+    }
+
 
     public object? GetConfigValue(string key)
     {

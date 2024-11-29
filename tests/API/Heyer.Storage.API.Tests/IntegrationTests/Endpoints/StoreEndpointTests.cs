@@ -1,12 +1,9 @@
 using System.Net;
 using System.Text.Json;
 using FluentAssertions;
-using Heyer.Storage.API.Client;
-using Heyer.Storage.API.Endpoints.Store;
-using Heyer.Storage.API.Providers.Registry.MongoDB;
 using Heyer.Storage.API.Tests.Utils;
+using Heyer.Storage.API.Tests.Utils.Validators;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
@@ -26,16 +23,15 @@ public class StoreEndpointTests : IntegrationTestsBase
         storeResult.Should().NotBeNull();
         storeResult.FileHandle.Should().NotBeNull();
         
-        // TODO Validate file exists
+        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+            .ValidateFileIsPresent(key: storeResult.FileHandle);
 
-        var collection = AppFactory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
-        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, storeResult.FileHandle);
-        var entry = await collection.Find(filter).FirstAsync();
-        entry.Should().NotBeNull();
-        entry.Key.Should().Be(storeResult.FileHandle);
-        entry.FileName.Should().Be("test-file.png");
-        entry.ContentType.Should().Be("image/png");
-        entry.Size.Should().Be(2620);
+        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+            .ValidateFilePropertiesAsync(
+                key: storeResult.FileHandle,
+                expectedFileName: "test-file.png",
+                expectedContentType: "image/png",
+                expectedSize: 2620);
     }
 
     [Test]
