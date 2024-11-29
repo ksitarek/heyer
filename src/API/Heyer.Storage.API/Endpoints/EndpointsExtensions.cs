@@ -1,3 +1,4 @@
+using Heyer.Storage.API.Client.PublishedLanguage;
 using Heyer.Storage.API.Endpoints.Delete;
 using Heyer.Storage.API.Endpoints.Download;
 using Heyer.Storage.API.Endpoints.Preserve;
@@ -22,7 +23,7 @@ public static class EndpointsExtensions
 
     private static WebApplication MapDeleteEndpoint(this WebApplication app)
     {
-        app.MapDelete("/delete/{Key}", async (IMediator mediator, [AsParameters]DeleteRequest request) =>
+        app.MapDelete("/delete/{Key}", async (IMediator mediator, [AsParameters] DeleteRequest request) =>
         {
             var response = await mediator.Send(request);
             return response.IsSuccess
@@ -35,7 +36,7 @@ public static class EndpointsExtensions
 
     private static WebApplication MapDownloadEndpoint(this WebApplication app)
     {
-        app.MapGet("/download/{Key}", async (IMediator mediator, [AsParameters]DownloadRequest request) =>
+        app.MapGet("/download/{Key}", async (IMediator mediator, [AsParameters] DownloadRequest request) =>
         {
             var response = await mediator.Send(request);
             return response.IsSuccess
@@ -48,7 +49,7 @@ public static class EndpointsExtensions
 
     private static WebApplication MapPreserveEndpoint(this WebApplication app)
     {
-        app.MapPost("/preserve/{key}", async (IMediator mediator, [AsParameters]PreserveRequest request) =>
+        app.MapPost("/preserve/{key}", async (IMediator mediator, [AsParameters] PreserveRequest request) =>
         {
             var response = await mediator.Send(request);
             return response.IsSuccess

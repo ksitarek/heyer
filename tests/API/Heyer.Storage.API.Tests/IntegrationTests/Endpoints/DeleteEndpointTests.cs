@@ -1,73 +1,70 @@
 using System.Net;
 using FluentAssertions;
-using Heyer.Storage.API.Endpoints.Store;
+using Heyer.Storage.API.Client;
+using Heyer.Storage.API.Client.PublishedLanguage;
 using Heyer.Storage.API.Providers.Registry.MongoDB;
 using Heyer.Storage.API.Tests.Utils;
 using MongoDB.Driver;
+using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
-public class DeleteEndpointTests
+public class DeleteEndpointTests : IntegrationTestsBase
 {
     [Test]
     public async Task DownloadEndpoint_WithoutAuthorization_WillReturn401()
     {
         // Arrange
-        await using var factory = ApplicationFactory.Create();
-        var client = factory.CreateClient();
-        
+        var client = AppFactory.CreateApiClient();
+
         // Act
-        var response = await Delete(client, Guid.NewGuid().ToString());
-        
+        var action = async () => await client.Delete(Guid.NewGuid().ToString());
+
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
-    
+
     [Test]
     public async Task DownloadEndpoint_WithInvalidKey_WillReturnOk()
     {
         // Arrange
-        await using var factory = ApplicationFactory.Create();
-        var client = factory.CreateAuthorizedClient();
-        
+        var client = AppFactory.CreateAuthorizedApiClient();
+
         // Act
-        var response = await Delete(client, Guid.NewGuid().ToString());
-        
+        var action = async () => await client.Delete(Guid.NewGuid().ToString());
+
         // Assert
-        response.EnsureSuccessStatusCode();
+        await action.Should().NotThrowAsync();
     }
-    
+
     [Test]
     public async Task DownloadEndpoint_WithValidKey_WillReturnOk()
     {
         // Arrange
-        await using var factory = ApplicationFactory.Create();
-        var client = factory.CreateAuthorizedClient();
-        var storeResult = await Store(client, "IntegrationTests/Endpoints/test-file.png");
-        
+        var client = AppFactory.CreateAuthorizedApiClient();
+        var storeResult = await client.Store("IntegrationTests/Endpoints/test-file.png");
+
         // Act
-        var response = await Delete(client, storeResult.FileHandle);
-        
+        await client.Delete(storeResult.FileHandle);
+
         // Assert
-        response.EnsureSuccessStatusCode();
-        
-        var collection = factory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
+        var collection = AppFactory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
         var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, storeResult.FileHandle);
         var anyResult = await collection.Find(filter).AnyAsync();
         anyResult.Should().BeFalse();
     }
-    
+
     private async Task<HttpResponseMessage> Delete(HttpClient client, string fileHandle)
     {
         var request = new HttpRequestMessage();
         request.Method = HttpMethod.Delete;
         request.RequestUri = new Uri($"/delete/{fileHandle}", UriKind.Relative);
-        
+
         var response = await client.SendAsync(request);
-        
+
         return response;
     }
-    
+
     private async Task<StoreResult> Store(HttpClient client, string filePath)
     {
         await using var testFile = File.OpenRead(filePath);
@@ -75,7 +72,7 @@ public class DeleteEndpointTests
         using var formData = new MultipartFormDataContent();
 
         formData.Add(fileStream, "file", testFile.Name);
-        
+
         var csrfToken = await client.GetCsrfToken();
 
         var request = new HttpRequestMessage();
@@ -92,7 +89,7 @@ public class DeleteEndpointTests
         {
             throw new ApplicationException("Failed to store test file.");
         }
-        
+
         return storeResult;
     }
 }

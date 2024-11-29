@@ -1,37 +1,38 @@
 using System.Net;
+using System.Text.Json;
 using FluentAssertions;
+using Heyer.Storage.API.Client;
 using Heyer.Storage.API.Endpoints.Store;
 using Heyer.Storage.API.Providers.Registry.MongoDB;
 using Heyer.Storage.API.Tests.Utils;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
-public class StoreEndpointTests
+public class StoreEndpointTests : IntegrationTestsBase
 {
     [Test]
     public async Task StoreEndpoint_WithValidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        await using var factory = ApplicationFactory.Create();
-        var client = factory.CreateClient();
+        var client = AppFactory.CreateApiClient();
 
         // Act
-        var response = await Store(client, "IntegrationTests/Endpoints/test-file.png");
+        var storeResult = await client.Store("IntegrationTests/Endpoints/test-file.png");
 
         // Assert
-        response.EnsureSuccessStatusCode();
+        storeResult.Should().NotBeNull();
+        storeResult.FileHandle.Should().NotBeNull();
+        
+        // TODO Validate file exists
 
-        var content = await response.ReadContentAs<StoreResult>();
-        content.Should().NotBeNull();
-        content!.FileHandle.Should().NotBeNull();
-
-        var collection = factory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
-        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, content.FileHandle);
+        var collection = AppFactory.GetRequiredService<IMongoCollection<StorageRegistryEntry>>();
+        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, storeResult.FileHandle);
         var entry = await collection.Find(filter).FirstAsync();
         entry.Should().NotBeNull();
-        entry.Key.Should().Be(content.FileHandle);
+        entry.Key.Should().Be(storeResult.FileHandle);
         entry.FileName.Should().Be("test-file.png");
         entry.ContentType.Should().Be("image/png");
         entry.Size.Should().Be(2620);
@@ -41,36 +42,20 @@ public class StoreEndpointTests
     public async Task StoreEndpoint_WithInvalidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        await using var factory = ApplicationFactory.Create();
-        var client = factory.CreateClient();
+        var client = AppFactory.CreateApiClient();
 
         // Act
-        var response = await Store(client, "IntegrationTests/Endpoints/test-file.docx");
+        var action = async () => await client.Store("IntegrationTests/Endpoints/test-file.docx");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var exception = await action.Should().ThrowAsync<ApiException>()
+            .Where(e => e.StatusCode == HttpStatusCode.BadRequest);
+
+        var validationDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(exception.Which.Content!)!;
         
-        var validationDetails = (await response.ReadContentAs<ValidationProblemDetails>())!;
         validationDetails.Should().NotBeNull();
         validationDetails.Errors.Should().HaveCount(2).And.ContainKeys("File.FileName", "File");
         validationDetails.Errors["File"].Should().Contain("Invalid file format.");
         validationDetails.Errors["File.FileName"].Should().Contain("Invalid file extension.");
-    }
-
-    private async Task<HttpResponseMessage> Store(HttpClient client, string filePath)
-    {
-        await using var testFile = File.OpenRead(filePath);
-        using var fileStream = new StreamContent(testFile);
-        using var formData = new MultipartFormDataContent();
-
-        formData.Add(fileStream, "file", testFile.Name);
-
-        var request = new HttpRequestMessage();
-        request.Method = HttpMethod.Post;
-        request.RequestUri = new Uri("/store", UriKind.Relative);
-        request.Headers.Add("RequestVerificationToken", await client.GetCsrfToken());
-        request.Content = formData;
-
-        return await client.SendAsync(request);
     }
 }

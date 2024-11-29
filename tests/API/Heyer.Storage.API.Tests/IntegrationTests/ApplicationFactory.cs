@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Heyer.Storage.API.Client;
 using Heyer.Storage.API.Tests.IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +11,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests;
 
-internal class ApplicationFactory : WebApplicationFactory<Program>
+internal interface IApplicationFactory : IAsyncDisposable
+{
+    TService GetRequiredService<TService>() where TService : class;
+    IStorageApiClient CreateApiClient();
+    IStorageApiClient CreateAuthorizedApiClient();
+}
+
+internal class ApplicationFactory : WebApplicationFactory<Program>, IApplicationFactory
 {
     public static readonly Dictionary<string, string?> InMemoryConfiguration = new()
     {
@@ -19,11 +27,11 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
 
     private readonly Dictionary<string, string?> _instanceConfigOverrides = new();
 
-    public ApplicationFactory()
+    private ApplicationFactory()
     {
     }
 
-    public ApplicationFactory(Dictionary<string, string?> configOverrides)
+    private ApplicationFactory(Dictionary<string, string?> configOverrides)
     {
         _instanceConfigOverrides = configOverrides;
     }
@@ -61,22 +69,30 @@ internal class ApplicationFactory : WebApplicationFactory<Program>
         return base.DisposeAsync();
     }
 
-    public static ApplicationFactory Create()
+    public static IApplicationFactory Create()
     {
-        return new(new()
+        return new ApplicationFactory(new()
         {
             [Config.RegistryStrategy_Type] = "MongoDB",
             [Config.StorageStrategy_Type] = "Filesystem",
             [Config.StorageStrategy_FilesystemStorage_RootPath] = "IntegrationTests/Endpoints/StoreEndpointTests",
         });
     }
+    
+    public IStorageApiClient CreateApiClient()
+    {
+        var httpClient = CreateClient();
+        var apiClient = StorageApiClientFactory.Create(httpClient);
+        
+        return apiClient;
+    }
 
-    public HttpClient CreateAuthorizedClient()
+    public IStorageApiClient CreateAuthorizedApiClient()
     {
         var client = CreateClient();
         client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GenerateJwtToken());
 
-        return client;
+        return StorageApiClientFactory.Create(client);
     }
     
     private string GenerateJwtToken()

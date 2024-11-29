@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace Heyer.Storage.API.Tests.Utils;
 
-internal static class TestExtensions
+internal static class HttpClientExtensions
 {
     public static async Task<string> GetCsrfToken(this HttpClient client)
     {
