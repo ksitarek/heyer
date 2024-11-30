@@ -1,19 +1,27 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Application.Results;
+using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.Storage.API.Validators;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace Heyer.Storage.API.Providers.Registry.MongoDB;
 
 public class MongoDBRegistryStrategy : IRegistryStrategy
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IOptions<RegistryStrategyOptions> _options;
     private readonly IMongoCollection<StorageRegistryEntry> _collection;
     private readonly ILogger<MongoDBRegistryStrategy> _logger;
 
     public MongoDBRegistryStrategy(
+        IDateTimeProvider dateTimeProvider,
+        IOptions<RegistryStrategyOptions> options,
         IMongoCollection<StorageRegistryEntry> collection,
         ILogger<MongoDBRegistryStrategy> logger)
     {
+        _dateTimeProvider = dateTimeProvider;
+        _options = options;
         _collection = collection;
         _logger = logger;
     }
@@ -29,7 +37,7 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
             FileName = Path.GetFileName(file.FileName),
             ContentType = file.GetFileFormat()?.ToString() ?? "UNKNOWN",
             Size = file.Length,
-            CreatedAt = DateTimeOffset.UtcNow
+            CreatedAt = _dateTimeProvider.UtcNow()
         };
 
         try
@@ -98,5 +106,17 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
         {
             return new Error("Failed to delete storage registry entry.").CausedBy(ex);
         }
+    }
+
+    public async Task<Result<IEnumerable<IFileProperties>>> GetExpiredTempFiles(CancellationToken cancellationToken)
+    {
+        var refDate = _dateTimeProvider.UtcNow().AddSeconds(_options.Value.TempFileLifespan);
+        
+        var filter = Builders<StorageRegistryEntry>.Filter.And(
+            Builders<StorageRegistryEntry>.Filter.Lte(x => x.CreatedAt, refDate), 
+            Builders<StorageRegistryEntry>.Filter.Eq(x => x.Preserve, false));
+
+        return await _collection.Find(filter)
+            .ToListAsync(cancellationToken);
     }
 }

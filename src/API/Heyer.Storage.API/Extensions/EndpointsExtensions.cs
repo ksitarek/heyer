@@ -1,9 +1,10 @@
 using Heyer.Storage.API.Client.PublishedLanguage;
+using Heyer.Storage.API.Validators;
 using MediatR;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Heyer.Storage.API.Endpoints;
+namespace Heyer.Storage.API.Extensions;
 
 public static class EndpointsExtensions
 {

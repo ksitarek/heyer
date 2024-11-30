@@ -1,11 +1,11 @@
 using FluentValidation;
 using Heyer.Storage.API.Client.PublishedLanguage;
 
-namespace Heyer.Storage.API.Endpoints.Download;
+namespace Heyer.Storage.API.Preserve;
 
-public class DownloadRequestValidator : AbstractValidator<DownloadRequest>
+public class PreserveRequestValidator : AbstractValidator<PreserveRequest>
 {
-    public DownloadRequestValidator()
+    public PreserveRequestValidator()
     {
         RuleFor(x => x.Key)
             .NotEmpty()

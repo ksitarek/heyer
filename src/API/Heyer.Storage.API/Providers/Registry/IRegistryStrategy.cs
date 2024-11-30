@@ -10,4 +10,5 @@ public interface IRegistryStrategy
     Task<Result> ValidateKeyAsync(string key, CancellationToken cancellationToken = default);
     Task<Result<IFileProperties>> GetAsync(string key, CancellationToken cancellationToken);
     Task<Result> DeleteAsync(string requestKey, CancellationToken cancellationToken);
+    Task<Result<IEnumerable<IFileProperties>>> GetExpiredTempFiles(CancellationToken cancellationToken);
 }

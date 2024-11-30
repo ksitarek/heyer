@@ -1,7 +1,6 @@
 using System.Reflection;
 using FluentValidation;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
-using Heyer.Storage.API.Endpoints;
 using Heyer.Storage.API.Extensions;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;

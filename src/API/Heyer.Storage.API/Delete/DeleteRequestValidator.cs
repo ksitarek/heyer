@@ -1,11 +1,11 @@
 using FluentValidation;
 using Heyer.Storage.API.Client.PublishedLanguage;
 
-namespace Heyer.Storage.API.Endpoints.Preserve;
+namespace Heyer.Storage.API.Delete;
 
-public class PreserveRequestValidator : AbstractValidator<PreserveRequest>
+public class DeleteRequestValidator : AbstractValidator<DeleteRequest>
 {
-    public PreserveRequestValidator()
+    public DeleteRequestValidator()
     {
         RuleFor(x => x.Key)
             .NotEmpty()

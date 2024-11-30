@@ -1,7 +1,7 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Application.Results;
 
-namespace Heyer.Storage.API.Endpoints;
+namespace Heyer.Storage.API.Validators;
 
 public static class ResponseErrorHandling
 {

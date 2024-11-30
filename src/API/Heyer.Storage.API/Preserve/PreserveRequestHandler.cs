@@ -4,7 +4,7 @@ using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
 using MediatR;
 
-namespace Heyer.Storage.API.Endpoints.Preserve;
+namespace Heyer.Storage.API.Preserve;
 
 public class PreserveRequestHandler : IRequestHandler<PreserveRequest, Result>
 {

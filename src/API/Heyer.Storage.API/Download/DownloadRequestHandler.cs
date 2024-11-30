@@ -4,7 +4,7 @@ using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
 using MediatR;
 
-namespace Heyer.Storage.API.Endpoints.Download;
+namespace Heyer.Storage.API.Download;
 
 public class DownloadRequestHandler : IRequestHandler<DownloadRequest, Result<DownloadResponse>>
 {
