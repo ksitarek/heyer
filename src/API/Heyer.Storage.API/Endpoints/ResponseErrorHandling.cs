@@ -1,5 +1,5 @@
 using FluentResults;
-using Heyer.Storage.API.Middleware;
+using Heyer.BuildingBlocks.Application.Results;
 
 namespace Heyer.Storage.API.Endpoints;
 

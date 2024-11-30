@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{9EA5F468-489C-492A-AE8C-F5827C1393CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{20CBEDAE-8873-4600-B3F4-6100A5F2A750}"
@@ -18,6 +18,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Storage.API.Tests", "tests\API\Heyer.Storage.API.Tests\Heyer.Storage.API.Tests.csproj", "{256EC439-2FF1-4F2E-B927-4AC5F793DF49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Storage.API.Client", "src\API\Heyer.Storage.API.Client\Heyer.Storage.API.Client.csproj", "{59EFDDEB-B067-4149-B0C5-A4304D9146B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{17B28760-FB62-43DD-AF01-287DB6534B56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Application", "Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj", "{FFC13D8D-2783-4B96-AE18-69F3421E0628}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Infrastructure", "Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj", "{ACA2C947-36C0-4961-9752-AF6E2EF17B74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +45,14 @@ Global
 		{59EFDDEB-B067-4149-B0C5-A4304D9146B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59EFDDEB-B067-4149-B0C5-A4304D9146B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59EFDDEB-B067-4149-B0C5-A4304D9146B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFC13D8D-2783-4B96-AE18-69F3421E0628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC13D8D-2783-4B96-AE18-69F3421E0628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC13D8D-2783-4B96-AE18-69F3421E0628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC13D8D-2783-4B96-AE18-69F3421E0628}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA2C947-36C0-4961-9752-AF6E2EF17B74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA2C947-36C0-4961-9752-AF6E2EF17B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA2C947-36C0-4961-9752-AF6E2EF17B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA2C947-36C0-4961-9752-AF6E2EF17B74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9EA5F468-489C-492A-AE8C-F5827C1393CA} = {20CBEDAE-8873-4600-B3F4-6100A5F2A750}
@@ -47,5 +61,8 @@ Global
 		{50CAFB61-2A91-4E28-8219-EEE536338B75} = {8D8A76C3-5F89-42A3-88CC-16E7AD55F74C}
 		{256EC439-2FF1-4F2E-B927-4AC5F793DF49} = {50CAFB61-2A91-4E28-8219-EEE536338B75}
 		{59EFDDEB-B067-4149-B0C5-A4304D9146B1} = {215C5E2C-9B83-4BD7-A8AF-21FA1CEAD5A7}
+		{17B28760-FB62-43DD-AF01-287DB6534B56} = {E943B1BF-73FE-4E08-AE15-AC2837E0D5B7}
+		{FFC13D8D-2783-4B96-AE18-69F3421E0628} = {17B28760-FB62-43DD-AF01-287DB6534B56}
+		{ACA2C947-36C0-4961-9752-AF6E2EF17B74} = {17B28760-FB62-43DD-AF01-287DB6534B56}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,5 @@
 using FluentResults;
-using Heyer.Storage.API.Middleware;
+using Heyer.BuildingBlocks.Application.Results;
 using Microsoft.Extensions.Options;
 
 namespace Heyer.Storage.API.Providers.Storage.Filesystem;

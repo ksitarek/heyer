@@ -23,6 +23,8 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj" />
+    <ProjectReference Include="..\..\..\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Heyer.Storage.API.Client\Heyer.Storage.API.Client.csproj" />
   </ItemGroup>
 

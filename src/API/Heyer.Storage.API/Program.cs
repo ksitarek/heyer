@@ -1,8 +1,8 @@
 using System.Reflection;
 using FluentValidation;
+using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.Storage.API.Endpoints;
 using Heyer.Storage.API.Extensions;
-using Heyer.Storage.API.Middleware;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
 using MediatR;
@@ -14,8 +14,9 @@ builder.Services.AddStorageStrategy(builder.Configuration.GetSection("StorageStr
 builder.Services.AddRegistryStrategy(builder.Configuration.GetSection("RegistryStrategy"));
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(MediatorLoggingMiddleware<,>));
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(MediatorValidationMiddleware<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingMiddleware<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationMiddleware<,>));
+
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.AddEndpointsApiExplorer();

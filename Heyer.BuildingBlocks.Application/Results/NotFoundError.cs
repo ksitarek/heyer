@@ -1,6 +1,6 @@
 using FluentResults;
 
-namespace Heyer.Storage.API.Middleware;
+namespace Heyer.BuildingBlocks.Application.Results;
 
 public class NotFoundError : Error
 {

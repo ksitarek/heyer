@@ -1,16 +1,17 @@
 using FluentResults;
 using FluentValidation;
+using Heyer.BuildingBlocks.Application.Results;
 using MediatR;
 
-namespace Heyer.Storage.API.Middleware;
+namespace Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 
-public class MediatorValidationMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
+public class ValidationMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
     where TRequest : IRequest<TResult>
     where TResult : ResultBase, new()
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public MediatorValidationMiddleware(IEnumerable<IValidator<TRequest>> validators)
+    public ValidationMiddleware(IEnumerable<IValidator<TRequest>> validators)
     {
         _validators = validators;
     }

@@ -1,15 +1,16 @@
 using FluentResults;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
-namespace Heyer.Storage.API.Middleware;
+namespace Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 
-public class MediatorLoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
+public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
     where TRequest : IRequest<TResult>
     where TResult : ResultBase, new()
 {
-    private readonly ILogger<MediatorLoggingMiddleware<TRequest, TResult>> _logger;
+    private readonly ILogger<LoggingMiddleware<TRequest, TResult>> _logger;
 
-    public MediatorLoggingMiddleware(ILogger<MediatorLoggingMiddleware<TRequest, TResult>> logger)
+    public LoggingMiddleware(ILogger<LoggingMiddleware<TRequest, TResult>> logger)
     {
         _logger = logger;
     }
