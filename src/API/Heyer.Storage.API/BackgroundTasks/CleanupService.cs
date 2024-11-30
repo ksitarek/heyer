@@ -1,17 +1,20 @@
 using Heyer.Storage.API.CleanupTempFiles;
 using MediatR;
+using Microsoft.Extensions.Options;
 
-namespace Heyer.Storage.API;
+namespace Heyer.Storage.API.BackgroundTasks;
 
 public class CleanupService : IHostedService, IAsyncDisposable
 {
     private readonly ILogger<CleanupService> _logger;
+    private readonly IOptions<CleanupServiceOptions> _options;
     private readonly IMediator _mediator;
     private Timer? _timer = null;
 
-    public CleanupService(ILogger<CleanupService> logger, IMediator mediator)
+    public CleanupService(ILogger<CleanupService> logger, IOptions<CleanupServiceOptions> options, IMediator mediator)
     {
         _logger = logger;
+        _options = options;
         _mediator = mediator;
     }
 
