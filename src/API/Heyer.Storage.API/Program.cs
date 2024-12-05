@@ -1,5 +1,6 @@
 using System.Reflection;
 using FluentValidation;
+using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.Storage.API.BackgroundTasks;
 using Heyer.Storage.API.Extensions;
@@ -8,6 +9,8 @@ using Heyer.Storage.API.Providers.Storage;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IDateTimeProvider, SystemDateTime>();
 
 builder.Services.AddCleanupService(builder.Configuration.GetSection("CleanupService"));
 builder.Services.AddJwtAuthentication(builder.Configuration.GetSection("Jwt"));

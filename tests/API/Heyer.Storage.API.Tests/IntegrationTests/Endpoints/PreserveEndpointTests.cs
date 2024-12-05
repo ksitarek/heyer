@@ -6,6 +6,7 @@ using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
+[Category("Integration")]
 public class PreserveEndpointTests : IntegrationTestsBase
 {
     [Test]
@@ -13,7 +14,7 @@ public class PreserveEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = AppFactory.CreateApiClient();
-        var storeResult = await client.Store("IntegrationTests/Endpoints/test-file.png");
+        var storeResult = await client.Store("Utils/TestFiles/test-file.png");
         
         // Act
         await client.Preserve(storeResult.FileHandle);
@@ -45,7 +46,7 @@ public class PreserveEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = AppFactory.CreateApiClient();
-        var storeResult = await client.Store("IntegrationTests/Endpoints/test-file.png");
+        var storeResult = await client.Store("Utils/TestFiles/test-file.png");
         
         // Act
         await client.Preserve(storeResult.FileHandle);

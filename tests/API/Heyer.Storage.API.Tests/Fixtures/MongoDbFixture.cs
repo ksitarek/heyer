@@ -1,7 +1,7 @@
 using NUnit.Framework.Internal;
 using Testcontainers.MongoDb;
 
-namespace Heyer.Storage.API.Tests.IntegrationTests.Fixtures;
+namespace Heyer.Storage.API.Tests.Fixtures;
 
 public class MongoDbFixture
 {

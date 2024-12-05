@@ -5,9 +5,10 @@ public abstract class IntegrationTestsBase
     internal IApplicationFactory AppFactory;
 
     [SetUp]
-    public async Task SetUp()
+    public Task SetUp()
     {
         AppFactory = ApplicationFactory.Create();
+        return Task.CompletedTask;
     }
     
     [TearDown]

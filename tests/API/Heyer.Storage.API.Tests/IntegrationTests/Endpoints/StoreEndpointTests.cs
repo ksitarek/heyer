@@ -8,6 +8,7 @@ using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
+[Category("Integration")]
 public class StoreEndpointTests : IntegrationTestsBase
 {
     [Test]
@@ -17,7 +18,7 @@ public class StoreEndpointTests : IntegrationTestsBase
         var client = AppFactory.CreateApiClient();
 
         // Act
-        var storeResult = await client.Store("IntegrationTests/Endpoints/test-file.png");
+        var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Assert
         storeResult.Should().NotBeNull();
@@ -41,7 +42,7 @@ public class StoreEndpointTests : IntegrationTestsBase
         var client = AppFactory.CreateApiClient();
 
         // Act
-        var action = async () => await client.Store("IntegrationTests/Endpoints/test-file.docx");
+        var action = async () => await client.Store("Utils/TestFiles/test-file.docx");
 
         // Assert
         var exception = await action.Should().ThrowAsync<ApiException>()

@@ -22,10 +22,6 @@ internal class ApplicationFactory : WebApplicationFactory<Program>, IApplication
 
     private readonly Dictionary<string, string?> _instanceConfigOverrides = new();
 
-    private ApplicationFactory()
-    {
-    }
-
     private ApplicationFactory(Dictionary<string, string?> configOverrides)
     {
         _instanceConfigOverrides = configOverrides;

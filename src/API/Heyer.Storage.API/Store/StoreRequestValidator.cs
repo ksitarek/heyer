@@ -6,11 +6,11 @@ namespace Heyer.Storage.API.Store;
 
 public class StoreRequestValidator : AbstractValidator<StoreRequest>
 {
-    public StoreRequestValidator()
+    public StoreRequestValidator(IValidator<IFormFile> fileValidator)
     {
         RuleFor(x => x.File)
             .NotNull()
             .WithMessage("File is required.")
-            .SetValidator(new FileValidator());
+            .SetValidator(fileValidator);
     }
 }

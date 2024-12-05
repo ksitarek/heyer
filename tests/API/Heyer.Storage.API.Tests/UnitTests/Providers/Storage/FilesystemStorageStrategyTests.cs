@@ -1,11 +1,14 @@
 using System.Reflection;
 using FluentAssertions;
+using FluentResults;
 using Heyer.Storage.API.Providers.Storage.Filesystem;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using NUnit.Framework.Internal;
 
-namespace Heyer.Storage.API.Tests.UnitTests.Providers.Filesystem;
+namespace Heyer.Storage.API.Tests.UnitTests.Providers.Storage;
 
+[Category("Unit")]
 public class FilesystemStorageStrategyTests
 {
     private FilesystemStorageStrategy _strategy;
@@ -15,17 +18,18 @@ public class FilesystemStorageStrategyTests
     public void Setup()
     {
         var testRootPath = Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, 
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
             "testRootPath");
-        
+
         _options = new FilesystemStorageOptions()
         {
             RootPath = testRootPath
         };
 
-        _strategy = new FilesystemStorageStrategy(Options.Create(_options), new NullLogger<FilesystemStorageStrategy>());
+        _strategy = new FilesystemStorageStrategy(Options.Create(_options),
+                                                  new NullLogger<FilesystemStorageStrategy>());
     }
-    
+
     [TearDown]
     public void TearDown()
     {
@@ -55,18 +59,36 @@ public class FilesystemStorageStrategyTests
         var key = "test-key";
         var stream1 = new MemoryStream("test-data1"u8.ToArray());
         var stream2 = new MemoryStream("test-data2"u8.ToArray());
-        
+
         await _strategy.StoreAsync(key, stream1);
 
         // Act
         var result = await _strategy.StoreAsync(key, stream2);
-        
+
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.Errors[0].Message.Should().Be("File already exists.");
-        
+
         var filePath = Path.Combine(_options.RootPath, key);
         Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data1"));
+    }
+
+    [Test]
+    public async Task StoreAsync_ShouldHandleExceptions()
+    {
+        // Arrange
+        var randomizer = new Randomizer();
+        var key = randomizer.GetString(1024);
+        var stream = new MemoryStream("test-data1"u8.ToArray());
+
+        // Act
+        Result? result = null;
+        var action = async () => result = await _strategy.StoreAsync(key, stream);
+
+        // Assert
+        await action.Should().NotThrowAsync();
+        result!.Should().NotBeNull();
+        result!.IsSuccess.Should().BeFalse();
     }
 
     [Test]
@@ -86,6 +108,23 @@ public class FilesystemStorageStrategyTests
     }
 
     [Test]
+    public async Task DeleteAsync_ShouldHandleExceptions()
+    {
+        // Arrange
+        var randomizer = new Randomizer();
+        var key = randomizer.GetString(1024);
+
+        // Act
+        Result? result = null;
+        var action = async () => result = await _strategy.DeleteAsync(key);
+
+        // Assert
+        await action.Should().NotThrowAsync();
+        result!.Should().NotBeNull();
+        result!.IsSuccess.Should().BeFalse();
+    }
+
+    [Test]
     public async Task GetAsync_WhenInvokedWithKey_ShouldReturnStream()
     {
         // Arrange
@@ -98,7 +137,7 @@ public class FilesystemStorageStrategyTests
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        
+
         var resultText = await GetTextFromStreamAsync(result.Value);
         Assert.That(resultText, Is.EqualTo("test-data"));
     }
@@ -108,12 +147,22 @@ public class FilesystemStorageStrategyTests
     {
         // Act
         var result = await _strategy.GetAsync("non-existing-key");
-        
+
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.Errors[0].Message.Should().Be("Not found.");
     }
     
+    [Test]
+    public async Task PreserveAsync_ShouldAlwaysReturnOk()
+    {
+        // Act
+        var result = await _strategy.PreserveAsync(Guid.NewGuid().ToString());
+        
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+    }
+
     private static async Task<string> GetTextFromStreamAsync(Stream stream)
     {
         stream.Seek(0, SeekOrigin.Begin); // Ensure the stream position is at the beginning

@@ -86,12 +86,19 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
 
     public async Task<Result<IFileProperties>> GetAsync(string key, CancellationToken cancellationToken)
     {
-        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
-        var entry = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+        try
+        {
+            var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
+            var entry = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
 
-        return entry == null
-            ? Result.Fail(new NotFoundError())
-            : entry;
+            return entry == null
+                ? Result.Fail(new NotFoundError())
+                : entry;
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
     }
 
     public async Task<Result> DeleteAsync(string key, CancellationToken cancellationToken)
@@ -99,7 +106,7 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
         var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
         try
         {
-            var r = await _collection.DeleteOneAsync(filter, cancellationToken);
+            await _collection.DeleteOneAsync(filter, cancellationToken);
             return Result.Ok();
         }
         catch (Exception ex)
@@ -110,7 +117,7 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
 
     public async Task<Result<IEnumerable<IFileProperties>>> GetExpiredTempFiles(CancellationToken cancellationToken)
     {
-        var refDate = _dateTimeProvider.UtcNow().AddSeconds(_options.Value.TempFileLifespan);
+        var refDate = _dateTimeProvider.UtcNow().AddSeconds(- _options.Value.TempFileLifespan);
         
         var filter = Builders<StorageRegistryEntry>.Filter.And(
             Builders<StorageRegistryEntry>.Filter.Lte(x => x.CreatedAt, refDate), 

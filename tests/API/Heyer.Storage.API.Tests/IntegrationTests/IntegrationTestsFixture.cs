@@ -1,24 +1,24 @@
-using Heyer.Storage.API.Tests.IntegrationTests.Fixtures;
+using Heyer.Storage.API.Tests.Fixtures;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests;
 
 [SetUpFixture]
 public class IntegrationTestsFixture
 {
-    private static readonly MongoDbFixture MongoDbFixture = new();
+    private MongoDbFixture _mongoDbFixture = new();
     
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
-        await MongoDbFixture.InitializeAsync();
+        await _mongoDbFixture.InitializeAsync();
 
         ApplicationFactory.InMemoryConfiguration[Config.RegistryStrategy_MongoDbRegistry_ConnectionString]
-            = MongoDbFixture.ConnectionString;
+            =  _mongoDbFixture.ConnectionString;
     }
     
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        await MongoDbFixture.DisposeAsync();
+        await _mongoDbFixture.DisposeAsync();
     }
 }

@@ -6,6 +6,7 @@ using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
+[Category("Integration")]
 public class DeleteEndpointTests : IntegrationTestsBase
 {
     [Test]
@@ -39,7 +40,7 @@ public class DeleteEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = AppFactory.CreateAuthorizedApiClient();
-        var storeResult = await client.Store("IntegrationTests/Endpoints/test-file.png");
+        var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Act
         await client.Delete(storeResult.FileHandle);

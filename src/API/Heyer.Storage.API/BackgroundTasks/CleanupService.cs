@@ -9,7 +9,7 @@ public class CleanupService : IHostedService, IAsyncDisposable
     private readonly ILogger<CleanupService> _logger;
     private readonly IOptions<CleanupServiceOptions> _options;
     private readonly IMediator _mediator;
-    private Timer? _timer = null;
+    private Timer? _timer;
 
     public CleanupService(ILogger<CleanupService> logger, IOptions<CleanupServiceOptions> options, IMediator mediator)
     {
@@ -21,7 +21,7 @@ public class CleanupService : IHostedService, IAsyncDisposable
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Cleanup Service is starting.");
-        _timer = new Timer(Cleanup, null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+        _timer = new Timer(Cleanup, null, TimeSpan.Zero, TimeSpan.FromSeconds(_options.Value.Interval));
         return Task.CompletedTask;
     }
 
@@ -34,15 +34,24 @@ public class CleanupService : IHostedService, IAsyncDisposable
 
     private async void Cleanup(object? state)
     {
-        _logger.LogTrace("Cleanup Service is working.");
+        try
+        {
+            _logger.LogTrace("Cleanup Service is working.");
 
-        var cleanupResult = await _mediator.Send(new CleanupTempFilesRequest(), CancellationToken.None);
+            var cleanupResult = await _mediator.Send(
+                new CleanupTempFilesRequest(),
+                CancellationToken.None);
 
-        _logger.Log(
-            cleanupResult.IsSuccess ? LogLevel.Information : LogLevel.Error,
-            "Deleted {sCnt} temp files. {fCnt} files failed to delete.",
-            cleanupResult.Successes.Count,
-            cleanupResult.Errors.Count);
+            _logger.Log(
+                cleanupResult.IsSuccess ? LogLevel.Information : LogLevel.Error,
+                "Deleted {sCnt} temp files. {fCnt} files failed to delete.",
+                cleanupResult.Successes.Count,
+                cleanupResult.Errors.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred during cleanup.");
+        }
     }
 
     public async ValueTask DisposeAsync()

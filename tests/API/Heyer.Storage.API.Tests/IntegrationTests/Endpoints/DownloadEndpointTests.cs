@@ -5,6 +5,7 @@ using RestEase;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
+[Category("Integration")]
 public class DownloadEndpointTests : IntegrationTestsBase
 {
     [Test]
@@ -38,7 +39,7 @@ public class DownloadEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = AppFactory.CreateAuthorizedApiClient();
-        var filePath = "IntegrationTests/Endpoints/test-file.png";
+        var filePath = "Utils/TestFiles/test-file.png";
         var storeResult = await client.Store(filePath);
 
         // Act

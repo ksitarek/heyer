@@ -1,33 +1,75 @@
+using Microsoft.Identity.Client.Extensions.Msal;
 using Nuke.Common;
+using Nuke.Common.ProjectModel;
+using Nuke.Common.Tools.DotNet;
+// ReSharper disable AllUnderscoreLocalParameterName
 
 class Build : NukeBuild
 {
-    /// Support plugins are available for:
-    ///   - JetBrains ReSharper        https://nuke.build/resharper
-    ///   - JetBrains Rider            https://nuke.build/rider
-    ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
-    ///   - Microsoft VSCode           https://nuke.build/vscode
-
-    public static int Main () => Execute<Build>(x => x.Compile);
+    public static int Main () => Execute<Build>(x => x.RunAllTests);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    
+    [Solution] readonly Solution Solution;
 
     Target Clean => _ => _
-        .Before(Restore)
         .Executes(() =>
         {
+            DotNetTasks.DotNetClean(t => t
+                                       .SetConfiguration(Configuration)
+                                       .SetProject(Solution));
         });
 
     Target Restore => _ => _
+        .DependsOn(Clean)
         .Executes(() =>
         {
+            DotNetTasks.DotNetRestore(t => t.SetProjectFile(Solution));
         });
 
     Target Compile => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
+            DotNetTasks.DotNetBuild(t => t
+                                       .SetConfiguration(Configuration)
+                                       .SetProjectFile(Solution)
+                                       .SetNoRestore(true));
         });
 
+    Target UnitTests => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTasks.DotNetTest(t => t
+                                       .SetConfiguration(Configuration)
+                                       .SetProjectFile(Solution)
+                                       .SetNoRestore(true)
+                                       .SetNoBuild(true)
+                                       .SetFilter("TestCategory=Unit"));
+        });
+
+    Target IntegrationTests => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTasks.DotNetTest(t => t
+                                       .SetConfiguration(Configuration)
+                                       .SetProjectFile(Solution)
+                                       .SetNoRestore(true)
+                                       .SetNoBuild(true)
+                                       .SetFilter("TestCategory=Integration"));
+        });
+
+    Target RunAllTests => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTasks.DotNetTest(t => t
+                                       .SetConfiguration(Configuration)
+                                       .SetProjectFile(Solution)
+                                       .SetNoRestore(true)
+                                       .SetNoBuild(true));
+        });
 }
