@@ -21,9 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Storage.API.Client", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{17B28760-FB62-43DD-AF01-287DB6534B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Application", "Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj", "{FFC13D8D-2783-4B96-AE18-69F3421E0628}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Application", "src/BuildingBlocks/Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj", "{FFC13D8D-2783-4B96-AE18-69F3421E0628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Infrastructure", "Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj", "{ACA2C947-36C0-4961-9752-AF6E2EF17B74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Infrastructure", "src/BuildingBlocks/Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj", "{ACA2C947-36C0-4961-9752-AF6E2EF17B74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
