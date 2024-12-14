@@ -7,15 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentResults" Version="3.16.0" />
-      <PackageReference Include="FluentValidation" Version="11.11.0" />
       <PackageReference Include="MediatR" Version="12.4.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+      <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.2.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj" />
-      <ProjectReference Include="..\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

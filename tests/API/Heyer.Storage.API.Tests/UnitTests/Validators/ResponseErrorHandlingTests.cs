@@ -4,7 +4,6 @@ using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Storage.API.Validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Result = FluentResults.Result;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Validators;
