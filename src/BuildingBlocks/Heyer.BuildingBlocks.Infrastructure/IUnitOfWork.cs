@@ -1,6 +1,8 @@
+using FluentResults;
+
 namespace Heyer.BuildingBlocks.Infrastructure;
 
 public interface IUnitOfWork
 {
-    Task<int> CommitAsync(CancellationToken cancellationToken);
+    Task<Result<int>> CommitAsync(CancellationToken cancellationToken);
 }

@@ -17,5 +17,10 @@
       <ProjectReference Include="..\Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj" />
       <ProjectReference Include="..\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj" />
     </ItemGroup>
-
+    
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Heyer.BuildingBlocks.Infrastructure.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 </Project>

@@ -32,7 +32,7 @@ public class CandidateTests
         var domainEvent = candidate.DomainEvents.Should().HaveCount(1).And.Subject.SingleOrDefault();
 
         domainEvent.Should().NotBeNull().And.BeOfType<CandidateCreated>();
-        domainEvent!.Id.Should().NotBeEmpty();
+        domainEvent!.EventId.Should().NotBeEmpty();
         domainEvent.OccurredOn.Should().BeWithin(TimeSpan.FromMilliseconds(1));
         ((CandidateCreated)domainEvent).CandidateId.Should().BeSameAs(candidate.Id);
     }

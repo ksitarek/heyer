@@ -1,8 +1,7 @@
 using FluentResults;
-using Heyer.BuildingBlocks.Infrastructure;
 using MediatR;
 
-namespace Heyer.Modules.Candidates.Infrastructure.Mediator.Middleware;
+namespace Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 
 public class UnitOfWorkMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
     where TRequest : IRequest<TResult>

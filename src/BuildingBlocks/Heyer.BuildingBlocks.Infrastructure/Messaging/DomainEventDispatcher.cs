@@ -1,3 +1,4 @@
+using FluentResults;
 using MediatR;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Messaging;
@@ -15,17 +16,24 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
         _domainEventsAccessor = domainEventsAccessor;
     }
     
-    public Task DispatchEventsAsync(CancellationToken cancellationToken = default)
+    public async Task<Result> DispatchEventsAsync(CancellationToken cancellationToken = default)
     {
-        var domainEvents = _domainEventsAccessor.GetAllDomainEvents();
-        
-        foreach (var domainEvent in domainEvents)
+        try
         {
-            _mediator.Publish(domainEvent);
+            var domainEvents = _domainEventsAccessor.GetAllDomainEvents();
+
+            foreach (var domainEvent in domainEvents)
+            {
+                await _mediator.Publish(domainEvent, cancellationToken);
+            }
+
+            _domainEventsAccessor.ClearAllDomainEvents();
         }
-        
-        _domainEventsAccessor.ClearAllDomainEvents();
-        
-        return Task.CompletedTask;
+        catch (Exception e)
+        {
+            return Result.Fail(e.Message);
+        }
+
+        return Result.Ok();
     }
 }

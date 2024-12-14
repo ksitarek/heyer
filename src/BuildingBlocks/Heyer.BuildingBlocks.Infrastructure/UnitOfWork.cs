@@ -1,3 +1,4 @@
+using FluentResults;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,9 +15,21 @@ public class UnitOfWork : IUnitOfWork
         _domainEventDispatcher = domainEventDispatcher;
     }
     
-    public async Task<int> CommitAsync(CancellationToken cancellationToken)
+    public async Task<Result<int>> CommitAsync(CancellationToken cancellationToken)
     {
-        await _domainEventDispatcher.DispatchEventsAsync(cancellationToken);
-        return await _context.SaveChangesAsync(cancellationToken);
+        var result = await _domainEventDispatcher.DispatchEventsAsync(cancellationToken);
+        if (result.IsFailed)
+        {
+            return Result.Fail<int>(result.Errors);
+        }
+
+        try
+        {
+            return await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            return Result.Fail<int>(e.Message);
+        }
     }
 }

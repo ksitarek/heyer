@@ -1,6 +1,8 @@
+using FluentResults;
+
 namespace Heyer.BuildingBlocks.Infrastructure.Messaging;
 
 public interface IDomainEventDispatcher
 {
-    Task DispatchEventsAsync(CancellationToken cancellationToken = default);
+    Task<Result> DispatchEventsAsync(CancellationToken cancellationToken = default);
 }
