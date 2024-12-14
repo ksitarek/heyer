@@ -15,7 +15,7 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
         _domainEventsAccessor = domainEventsAccessor;
     }
     
-    public Task DispatchEventsAsync()
+    public Task DispatchEventsAsync(CancellationToken cancellationToken = default)
     {
         var domainEvents = _domainEventsAccessor.GetAllDomainEvents();
         
