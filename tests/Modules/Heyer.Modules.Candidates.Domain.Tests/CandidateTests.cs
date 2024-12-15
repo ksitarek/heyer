@@ -12,7 +12,7 @@ public class CandidateTests
         // Arrange
         
         // Act
-        var candidate = Candidate.CreateNew("John", "Doe", "john.doe@example.com", "123456789", DateTime.UtcNow, new());
+        var candidate = Candidate.CreateNew("John", "Doe", "john.doe@example.com", "123456789", true, DateTime.UtcNow, new());
 
         // Assert
         candidate.Should().NotBeNull();
@@ -26,7 +26,7 @@ public class CandidateTests
         // Arrange
         
         // Act
-        var candidate = Candidate.CreateNew("John", "Doe", "john.doe@example.com", "123456789", DateTime.UtcNow, new());
+        var candidate = Candidate.CreateNew("John", "Doe", "john.doe@example.com", "123456789", true, DateTime.UtcNow, new());
 
         // Assert
         var domainEvent = candidate.DomainEvents.Should().HaveCount(1).And.Subject.SingleOrDefault();

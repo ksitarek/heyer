@@ -4,6 +4,22 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Modules\Candidates\Heyer.Modules.Candidates.Infrastructure\Heyer.Modules.Candidates.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    </ItemGroup>
 
 </Project>

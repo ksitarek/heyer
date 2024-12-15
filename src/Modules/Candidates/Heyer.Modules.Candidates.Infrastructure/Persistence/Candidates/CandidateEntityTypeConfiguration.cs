@@ -17,6 +17,7 @@ public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candida
         builder.Property("_lastName").HasElementName("LastName").IsRequired();
         builder.Property("_email").HasElementName("Email").IsRequired();
         builder.Property("_resumeKey").HasElementName("ResumeKey").IsRequired();
+        builder.Property("_includeInCandidatePool").HasElementName("IncludeInCandidatePool").IsRequired();
 
         builder.HasIndex("Email");
     }

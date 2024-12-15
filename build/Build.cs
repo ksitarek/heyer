@@ -3,7 +3,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
 // ReSharper disable AllUnderscoreLocalParameterName
 
-class Build : NukeBuild
+partial class Build : NukeBuild
 {
     public static int Main () => Execute<Build>(x => x.RunAllTests);
 

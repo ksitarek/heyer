@@ -16,11 +16,21 @@ public class UnitOfWorkMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
 
     public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next, CancellationToken cancellationToken)
     {
-        var result = await next();
+        try
+        {
+            var result = await next();
 
-        if(result.IsSuccess)
-            await _unitOfWork.CommitAsync(cancellationToken);
+            if (result.IsSuccess)
+                await _unitOfWork.CommitAsync(cancellationToken);
 
-        return result;
+            return result;
+        }
+        catch (Exception e)
+        {
+            var result = new TResult();
+            result.Reasons.Add(new Error(e.Message));
+
+            return result;
+        }
     }
 }

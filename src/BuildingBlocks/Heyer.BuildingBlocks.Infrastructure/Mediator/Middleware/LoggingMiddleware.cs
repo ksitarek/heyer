@@ -18,11 +18,21 @@ public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, 
     public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next,
                                       CancellationToken cancellationToken)
     {
-        using (_logger.BeginScope($"Handling {typeof(TRequest).Name}"))
+        using (_logger.BeginScope("Handling {RequestName}", typeof(TRequest).Name))
         {
             var result = await next();
 
-            _logger.LogInformation($"Handled {typeof(TRequest).Name}");
+            if (result.IsSuccess)
+            {
+                _logger.LogInformation("Handled {RequestName}", typeof(TRequest).Name);
+            }
+            else
+            {
+                _logger.LogError("Error when handling {RequestName}: {Message}",
+                                 typeof(TRequest).Name,
+                                 string.Join(", ",
+                                             result.Errors.Select(e => e.Message)));
+            }
 
             return result;
         }

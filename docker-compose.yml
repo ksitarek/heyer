@@ -5,7 +5,30 @@ services:
     image: mongo:8
     restart: always
     ports:
-      - 27017:27017
-
+      - "27017:27017"
     volumes:
       - .docker/v/mongo/data/db:/data/db
+
+  heyer_api:
+    build:
+      context: .
+      dockerfile: ./src/API/Heyer.API/Dockerfile
+    restart: always
+    ports:
+      - "3001:8080"
+    depends_on:
+      - mongo
+    environment:
+      - RegistryStrategy__MongoDbRegistry__ConnectionString=mongodb://mongo:27017
+    
+  heyer_storage_api:
+    build:
+      context: .
+      dockerfile: ./src/API/Heyer.Storage.API/Dockerfile
+    restart: always
+    ports:
+      - "3002:8080"
+    depends_on:
+      - mongo
+    environment:
+      - RegistryStrategy__MongoDbRegistry__ConnectionString=mongodb://mongo:27017

@@ -22,7 +22,7 @@ public class MongoDBRegistryStrategyTests
     private IDateTimeProvider _dateTimeProvider;
     private RegistryStrategyOptions _options;
     private MongoDBRegistryStrategy _strategy;
-    private DateTimeOffset _refDate;
+    private DateTime _refDate;
     private MongoDbFixture _mongoDbFixture = new();
 
     [OneTimeSetUp]
@@ -55,7 +55,7 @@ public class MongoDBRegistryStrategyTests
 
     private void SetupDateTimeProvider()
     {
-        _refDate = new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        _refDate = new DateTime(2024, 1, 1, 0, 0, 0);
         _dateTimeProvider = Substitute.For<IDateTimeProvider>();
         _dateTimeProvider.UtcNow().Returns(_refDate);
     }
