@@ -55,7 +55,7 @@ public class MongoDBRegistryStrategyTests
 
     private void SetupDateTimeProvider()
     {
-        _refDate = new DateTime(2024, 1, 1, 0, 0, 0);
+        _refDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         _dateTimeProvider = Substitute.For<IDateTimeProvider>();
         _dateTimeProvider.UtcNow().Returns(_refDate);
     }
@@ -86,7 +86,7 @@ public class MongoDBRegistryStrategyTests
             FileName = "test-file.txt",
             ContentType = "UNKNOWN",
             Size = "test-data"u8.ToArray().Length,
-            CreatedAt = new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero)
+            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0)
         };
         
         // Act
@@ -268,7 +268,7 @@ public class MongoDBRegistryStrategyTests
             FileName = "test-file.txt",
             ContentType = "UNKNOWN",
             Size = content.Length,
-            CreatedAt = new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero)
+            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0)
         };
 
         // Act

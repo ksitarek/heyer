@@ -2,13 +2,13 @@ using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
-using Heyer.Modules.Candidates.Infrastructure;
+using Heyer.Modules.JobBoard.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var modules = new IModule[]
 {
-    new CandidatesModule(builder.Configuration)
+    new JobBoardModule(builder.Configuration)
 };
 
 builder.Services.AddEndpointsApiExplorer();

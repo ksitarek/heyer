@@ -27,25 +27,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Infras
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.API", "src\API\Heyer.API\Heyer.API.csproj", "{368CA0EE-9DB7-4CCF-9909-5484C50A30EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Candidates.Application.Tests", "tests\Modules\Heyer.Modules.Candidates.Application.Tests\Heyer.Modules.Candidates.Application.Tests.csproj", "{0CC20B2A-0A75-4CE7-972D-0CFFE667D50F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.Application.Tests", "tests\Modules\Heyer.Modules.JobBoard.Application.Tests\Heyer.Modules.JobBoard.Application.Tests.csproj", "{0CC20B2A-0A75-4CE7-972D-0CFFE667D50F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A5A7F993-11ED-4FC2-A82A-A3FD48FD5C09}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{259AC0C7-1E11-4C38-878A-B8677C7125A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Candidates.Application", "src\Modules\Candidates\Heyer.Modules.Candidates.Application\Heyer.Modules.Candidates.Application.csproj", "{186D8343-0CB5-4255-8A43-178DBA7BC52B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.Application", "src\Modules\JobBoard\Heyer.Modules.JobBoard.Application\Heyer.Modules.JobBoard.Application.csproj", "{186D8343-0CB5-4255-8A43-178DBA7BC52B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Candidates.Domain", "src\Modules\Candidates\Heyer.Modules.Candidates.Domain\Heyer.Modules.Candidates.Domain.csproj", "{240E9583-C90B-40A2-BBE9-74D68260056A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.Domain", "src\Modules\JobBoard\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj", "{240E9583-C90B-40A2-BBE9-74D68260056A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Candidates.IntegrationEvents", "src\Modules\Candidates\Heyer.Modules.Candidates.IntegrationEvents\Heyer.Modules.Candidates.IntegrationEvents.csproj", "{EFA52A9B-3797-4997-BCD7-6236930E22F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.IntegrationEvents", "src\Modules\JobBoard\Heyer.Modules.JobBoard.IntegrationEvents\Heyer.Modules.JobBoard.IntegrationEvents.csproj", "{EFA52A9B-3797-4997-BCD7-6236930E22F1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Candidates", "Candidates", "{792152C2-1372-4AED-9772-156B90BB3357}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JobBoard", "JobBoard", "{792152C2-1372-4AED-9772-156B90BB3357}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Domain", "src\BuildingBlocks\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj", "{4EFBDAAA-729E-4E95-B636-1BFAF525A566}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Candidates.Domain.Tests", "tests\Modules\Heyer.Modules.Candidates.Domain.Tests\Heyer.Modules.Candidates.Domain.Tests.csproj", "{D729FBBD-3967-4C1A-A652-14AA7EAD1BC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.Domain.Tests", "tests\Modules\Heyer.Modules.JobBoard.Domain.Tests\Heyer.Modules.JobBoard.Domain.Tests.csproj", "{D729FBBD-3967-4C1A-A652-14AA7EAD1BC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Candidates.Infrastructure", "src\Modules\Candidates\Heyer.Modules.Candidates.Infrastructure\Heyer.Modules.Candidates.Infrastructure.csproj", "{99F342BB-A7AC-490B-8717-D5190BB78C03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.Infrastructure", "src\Modules\JobBoard\Heyer.Modules.JobBoard.Infrastructure\Heyer.Modules.JobBoard.Infrastructure.csproj", "{99F342BB-A7AC-490B-8717-D5190BB78C03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{B4F8E1CA-386D-423B-AEA9-ABDCCFF6ACB1}"
 EndProject

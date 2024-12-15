@@ -11,6 +11,6 @@ public class StorageRegistryEntry : IFileProperties
     public string FileName { get; set; } = default!;
     public string ContentType { get; set; } = default!;
     public long Size { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
     public bool Preserve { get; set; } = false;
 }

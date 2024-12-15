@@ -8,7 +8,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddMediator(this IServiceCollection services, params Type[] pipelineBehaviors)
     {
-        services.AddMediatR(c => c.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        var assembly = Assembly.GetCallingAssembly();
+        
+        services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 
         foreach (var pipelineBehavior in pipelineBehaviors)
         {
