@@ -1,7 +1,7 @@
 using Heyer.Modules.Candidates.Domain.Candidates;
 using Microsoft.EntityFrameworkCore;
 
-namespace Heyer.Modules.Candidates.IntegrationEvents.Persistence.Candidates;
+namespace Heyer.Modules.Candidates.Infrastructure.Persistence.Candidates;
 
 
 internal class CandidateRepository : ICandidateRepository

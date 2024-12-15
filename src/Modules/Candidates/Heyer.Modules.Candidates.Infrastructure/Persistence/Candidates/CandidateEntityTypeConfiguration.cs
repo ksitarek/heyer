@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-namespace Heyer.Modules.Candidates.IntegrationEvents.Persistence.Candidates;
+namespace Heyer.Modules.Candidates.Infrastructure.Persistence.Candidates;
 
 public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candidate>
 {
@@ -17,7 +17,7 @@ public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candida
         builder.Property("_lastName").HasElementName("LastName").IsRequired();
         builder.Property("_email").HasElementName("Email").IsRequired();
         builder.Property("_resumeKey").HasElementName("ResumeKey").IsRequired();
-        
-        builder.HasIndex("Email").IsUnique();
+
+        builder.HasIndex("Email");
     }
 }
