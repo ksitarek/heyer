@@ -1,0 +1,118 @@
+using FluentResults;
+using Heyer.BuildingBlocks.Domain;
+using Heyer.Modules.JobBoard.Domain.JobOffers.Rules;
+
+namespace Heyer.Modules.JobBoard.Domain.JobOffers;
+
+public class JobOffer : Entity
+{
+    public JobOfferId Id { get; }
+
+    private string _offerSummary;
+    private string _jobDescription;
+    private CompanyDetails _companyDetails;
+    private OfficeLocation? _location;
+    private Requirements? _requirements;
+
+    private Dictionary<EmploymentType, ContractDetails>? _contractsDetails;
+    private RemoteWork _remoteWork;
+
+    private DateTimeOffset? _publishedAt;
+    private DateTimeOffset? _publishedUntil;
+
+    public JobOffer(CompanyDetails companyDetails, string offerSummary, string jobDescription, RemoteWork remoteWork)
+    {
+        Id = JobOfferId.CreateNew();
+
+        _companyDetails = companyDetails;
+        _offerSummary = offerSummary;
+        _jobDescription = jobDescription;
+        _remoteWork = remoteWork;
+
+        AddDomainEvent(new JobOfferCreated(Id));
+    }
+
+    public Result AddContractDetails(
+        EmploymentType employmentType,
+        ContractDetails contractDetails)
+    {
+        var validationResult = ChallengeBusinessRules(
+            new JobOfferMustHaveUniqueEmploymentTypes(_contractsDetails, employmentType));
+        
+        if (validationResult.IsFailed)
+        {
+            return validationResult;
+        }
+        
+        _contractsDetails ??= new Dictionary<EmploymentType, ContractDetails>();
+
+        _contractsDetails.Add(employmentType, contractDetails);
+
+        return Result.Ok();
+    }
+
+
+    public Result SetOfficeLocation(OfficeLocation location)
+    {
+        _location = location;
+        
+        return Result.Ok();
+    }
+
+    public Result SetRequirements(ExperienceLevel experienceLevel, IDictionary<string, SkillLevel> skills)
+    {
+        _requirements = new Requirements(
+            experienceLevel,
+            skills.Select(x => new Skill(x.Key, x.Value)));
+        
+        return Result.Ok();
+    }
+
+    public Result UpdateDescription(string offerSummary, string jobDescription)
+    {
+        _offerSummary = offerSummary;
+        _jobDescription = jobDescription;
+
+        AddDomainEvent(new JobOfferDescriptionUpdated(Id));
+        
+        return Result.Ok();
+    }
+
+    public Result Publish(DateTimeOffset? publishedUntil)
+    {
+        var validationResult = ChallengeBusinessRules(
+            new PublishedUntilMustNotBeInPast(publishedUntil),
+            new JobOfferMustHaveRequirementsWhenPublishing(_requirements),
+            new JobOfferMustHaveLocationWhenPublishing(_location));
+
+        if (validationResult.IsFailed)
+        {
+            return validationResult;
+        }
+
+        _publishedAt = DateTimeOffset.UtcNow;
+        _publishedUntil = publishedUntil;
+
+        AddDomainEvent(new JobOfferPublished(Id));
+        
+        return Result.Ok();
+    }
+
+    public Result TakeDown()
+    {
+        var validationResult = ChallengeBusinessRules(
+            new JobOfferMustBePublishedToTakeDown(_publishedAt));
+
+        if (validationResult.IsFailed)
+        {
+            return validationResult;
+        }
+
+        _publishedAt = null;
+        _publishedUntil = null;
+
+        AddDomainEvent(new JobOfferTakenDown(Id));
+        
+        return Result.Ok();
+    }
+}
