@@ -1,5 +1,9 @@
 using Heyer.API.Client;
+using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Tests;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.API.Tests.IntegrationTests;
 
@@ -27,6 +31,15 @@ public class ApplicationFactory : AbstractApplicationFactory<Program, IApiClient
         return ApiClientFactory.Create(client);
     }
     
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureTestServices((services) =>
+        {
+            services.AddScoped<JobOfferValidator>();
+        });
+
+        base.ConfigureWebHost(builder);
+    }
     
     private string GenerateJwtToken(string[] permissions)
     {

@@ -1,6 +1,7 @@
 using Heyer.Modules.JobBoard.Domain.Candidates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MongoDB.Bson;
 using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace Heyer.Modules.JobBoard.Infrastructure.Persistence.EntityConfigurations;
@@ -25,20 +26,18 @@ public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candida
             .IsRequired()
             .HasMaxLength(50);
 
-        // builder.Property("_email")
-        //     .HasElementName("Email")
-        //     .IsRequired()
-        //     .HasMaxLength(100);
-        
-        // builder.Property("_resumeKey")
-        //     .HasElementName("ResumeKey")
-        //     .IsRequired();
-
         builder.Property("_includeInCandidatePool")
             .HasElementName("IncludeInCandidatePool")
             .IsRequired();
 
-        builder.OwnsOne<Email>("_email");
-        builder.OwnsOne<ResumeKey>("_resumeKey");
+        builder.OwnsOne<Email>("_email", e =>
+        {
+            e.HasElementName("Email");
+        });
+        
+        builder.OwnsOne<ResumeKey>("_resumeKey", rk =>
+        {
+            rk.HasElementName("ResumeKey");
+        });
     }
 }

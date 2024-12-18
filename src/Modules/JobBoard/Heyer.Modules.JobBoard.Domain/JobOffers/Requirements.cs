@@ -2,8 +2,8 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public record Requirements
 {
-    private ExperienceLevel _experienceLevel;
-    private IEnumerable<Skill> _skills;
+    public ExperienceLevel ExperienceLevel { get; private set; }
+    public IEnumerable<Skill> Skills { get; private set; }
 
     private Requirements()
     {
@@ -12,7 +12,7 @@ public record Requirements
     
     public Requirements(ExperienceLevel experienceLevel, IEnumerable<Skill> skills)
     {
-        _experienceLevel = experienceLevel;
-        _skills = skills;
+        ExperienceLevel = experienceLevel;
+        Skills = skills;
     }
 }

@@ -14,6 +14,7 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
     where TProgram : class
 {
     private readonly Dictionary<string, string?> _instanceConfigOverrides = new();
+    private IServiceScope? _testServiceScope;
 
     protected AbstractApplicationFactory(Dictionary<string, string?> configOverrides)
     {
@@ -38,7 +39,9 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
 
     public TService GetRequiredService<TService>() where TService : class
     {
-        var svc = Services.GetRequiredService(typeof(TService));
+        _testServiceScope ??= Services.CreateScope();
+        
+        var svc = _testServiceScope.ServiceProvider.GetRequiredService(typeof(TService));
 
         return svc as TService ?? throw new InvalidOperationException($"Service of type {typeof(TService)} not found.");
     }
@@ -68,5 +71,12 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public override ValueTask DisposeAsync()
+    {
+        _testServiceScope?.Dispose();
+
+        return base.DisposeAsync();
     }
 }

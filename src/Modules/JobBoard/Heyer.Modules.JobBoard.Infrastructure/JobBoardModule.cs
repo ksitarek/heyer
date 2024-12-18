@@ -34,6 +34,8 @@ public class JobBoardModule : IModule
         var client = new MongoClient(_configuration["MongoDb:ConnectionString"]!);
         var db = client.GetDatabase(_configuration["MongoDb:DatabaseName"]!);
 
+        services.AddSingleton(db);
+        
         services.AddDbContext<JobBoardContext>(o => 
             o.UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName));
 

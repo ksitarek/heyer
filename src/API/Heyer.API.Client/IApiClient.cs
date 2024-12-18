@@ -6,5 +6,5 @@ namespace Heyer.API.Client;
 public interface IApiClient
 {
     [Post("/job-offers/create")]
-    Task CreateJobOffer([Body]CreateJobOfferRequest createJobOfferRequestRequest);
+    Task<Guid> CreateJobOffer([Body]CreateJobOfferRequest createJobOfferRequestRequest);
 }

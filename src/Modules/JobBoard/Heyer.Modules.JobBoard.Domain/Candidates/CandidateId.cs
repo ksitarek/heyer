@@ -1,6 +1,17 @@
 namespace Heyer.Modules.JobBoard.Domain.Candidates;
 
-public record CandidateId(Guid Guid)
+public record CandidateId
 {
+    public Guid Guid { get; private set; }
+
+    private CandidateId()
+    {
+    }
+
+    public CandidateId(Guid guid)
+    {
+        Guid = guid;
+    }
+    
     public static CandidateId CreateNew() => new(Guid.NewGuid());
 }

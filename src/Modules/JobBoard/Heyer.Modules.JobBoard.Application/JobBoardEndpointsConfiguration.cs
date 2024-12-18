@@ -31,7 +31,7 @@ public class JobBoardEndpointsConfiguration
             var result = await mediator.Send(command);
             
             return result.IsSuccess
-                ? Results.Ok()
+                ? Results.Ok(result.Value)
                 : Results.StatusCode(500); // TODO
         }).RequirePermission(JobBoardPermissions.CreateJobOffer);
     }

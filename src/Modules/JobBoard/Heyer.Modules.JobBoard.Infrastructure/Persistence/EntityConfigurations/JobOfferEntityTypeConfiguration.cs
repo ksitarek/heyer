@@ -29,17 +29,23 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
         
         builder.OwnsOne<CompanyDetails>("_companyDetails", cd =>
         {
+            cd.HasElementName("CompanyDetails");
             cd.Property(x => x.CompanyId)
                 .HasConversion(x => x.Id, x => new CompanyId(x));
         });
-        builder.OwnsOne<OfficeLocation>("_location");
+        
+        builder.OwnsOne<OfficeLocation>("_location", l =>
+        {
+            l.HasElementName("Location");
+        });
+        
         builder.OwnsOne<Requirements>("_requirements", r =>
         {
-            r.Property("_experienceLevel")
-                .HasElementName("ExperienceLevel")
+            r.HasElementName("Requirements");
+            r.Property("ExperienceLevel")
                 .IsRequired();
             
-            r.OwnsMany<Skill>("_skills", s =>
+            r.OwnsMany<Skill>("Skills", s =>
             {
                 s.Property(x => x.Label)
                     .IsRequired();
@@ -49,6 +55,9 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
             });
         });
         
-        builder.OwnsMany<CandidateId>("_candidates");
+        builder.OwnsMany<CandidateId>("_candidates", c =>
+        {
+            c.HasElementName("Candidates");
+        });
     }
 }

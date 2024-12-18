@@ -1,7 +1,11 @@
 using System.Net;
 using FluentAssertions;
 using Heyer.API.Client.PublishedLanguage;
+using Heyer.API.Tests.Utils;
 using Heyer.Modules.JobBoard.Application;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using RestEase;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
@@ -45,10 +49,11 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
         var request = CreateJobOfferRequest();
 
         // Act
-        var action = async () => await client.CreateJobOffer(request);
+        var jobOfferId = await client.CreateJobOffer(request);
 
         // Assert
-        await action.Should().NotThrowAsync<ApiException>();
+        await AppFactory.GetRequiredService<JobOfferValidator>()
+            .ValidateJobOfferIsSavedAsync(jobOfferId);
     }
 
     private static CreateJobOfferRequest CreateJobOfferRequest()

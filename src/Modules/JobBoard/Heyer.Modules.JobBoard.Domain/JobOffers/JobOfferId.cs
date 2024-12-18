@@ -1,7 +1,20 @@
 namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
-public record JobOfferId(Guid Guid)
+public record JobOfferId
 {
+
+    public Guid Guid { get; private set; }
+
+    private JobOfferId()
+    {
+        
+    }
+
+    public JobOfferId(Guid guid)
+    {
+        Guid = guid;
+    }
+    
     public static JobOfferId CreateNew()
     {
         return new JobOfferId(Guid.NewGuid());

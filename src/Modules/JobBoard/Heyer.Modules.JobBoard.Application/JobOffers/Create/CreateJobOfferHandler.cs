@@ -6,7 +6,7 @@ using Heyer.Modules.JobBoard.Domain.JobOffers;
 
 namespace Heyer.Modules.JobBoard.Application.JobOffers.Create;
 
-public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer>
+public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
 {
     private readonly IUserDataProvider _userDataProvider;
     private readonly IJobOffersRepository _jobOffersRepository;
@@ -17,7 +17,7 @@ public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer>
         _jobOffersRepository = jobOffersRepository;
     }
     
-    public async Task<Result> Handle(CreateJobOffer request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateJobOffer request, CancellationToken cancellationToken)
     {
         var companyDetails = new CompanyDetails(
             new CompanyId(_userDataProvider.CompanyId),
@@ -30,6 +30,11 @@ public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer>
             request.RemoteWork);
 
         var addResult = await _jobOffersRepository.AddAsync(jobOffer, cancellationToken);
+
+        if (addResult.IsSuccess)
+        {
+            return jobOffer.Id.Guid;
+        }
 
         return addResult;
     }

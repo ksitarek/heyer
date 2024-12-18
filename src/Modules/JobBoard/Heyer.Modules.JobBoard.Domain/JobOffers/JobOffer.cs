@@ -7,7 +7,7 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public class JobOffer : Entity
 {
-    public JobOfferId Id { get; }
+    public JobOfferId Id { get; private set; }
 
     private string _offerSummary;
     private string _jobDescription;
