@@ -1,0 +1,36 @@
+using FluentResults;
+using Heyer.Modules.JobBoard.Domain.JobOffers;
+using Microsoft.EntityFrameworkCore;
+
+namespace Heyer.Modules.JobBoard.Infrastructure.Persistence;
+
+internal class JobOffersRepository : IJobOffersRepository
+{
+    private readonly JobBoardContext _context;
+
+    public JobOffersRepository(JobBoardContext context)
+    {
+        _context = context;
+    }
+    
+    public Task<JobOffer?> GetJobOfferById(JobOfferId jobOfferId, CancellationToken cancellationToken = default)
+    {
+        return _context.JobOffers
+            .Where(x => x.Id == jobOfferId)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<Result> AddAsync(JobOffer jobOffer, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await _context.JobOffers.AddAsync(jobOffer, cancellationToken);
+            
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            return Result.Fail(e.Message);
+        }
+    }
+}

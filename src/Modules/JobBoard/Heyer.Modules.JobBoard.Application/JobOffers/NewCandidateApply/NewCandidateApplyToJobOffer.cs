@@ -1,9 +1,9 @@
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 
-namespace Heyer.Modules.JobBoard.Application.JobOffers.Apply;
+namespace Heyer.Modules.JobBoard.Application.JobOffers.NewCandidateApply;
 
-public record ApplyToJobOffer(
+public record NewCandidateApplyToJobOffer(
     JobOfferId JobOfferId,
     string FirstName,
     string LastName,

@@ -1,3 +1,4 @@
+using Heyer.BuildingBlocks.Tests;
 using Heyer.Storage.API.Tests.Fixtures;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests;
@@ -12,7 +13,7 @@ public class IntegrationTestsFixture
     {
         await _mongoDbFixture.InitializeAsync();
 
-        ApplicationFactory.InMemoryConfiguration[Config.RegistryStrategy_MongoDbRegistry_ConnectionString]
+        ApplicationFactoryConfiguration.InMemoryConfiguration[Config.RegistryStrategy_MongoDbRegistry_ConnectionString]
             =  _mongoDbFixture.ConnectionString;
     }
     

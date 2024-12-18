@@ -16,7 +16,7 @@ public static class ModulesExtensions
         return applicationBuilder;
     }
 
-    public static IApplicationBuilder UseModules(this IApplicationBuilder app, IEnumerable<IModule> modules)
+    public static IApplicationBuilder UseModules(this WebApplication app, IEnumerable<IModule> modules)
     {
         foreach (var module in modules)
         {

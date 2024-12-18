@@ -1,5 +1,6 @@
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
+using Heyer.Modules.JobBoard.Domain.Candidates;
 using Heyer.Modules.JobBoard.Domain.Companies;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 
@@ -215,6 +216,57 @@ public class JobOfferTests
             domainEvent => domainEvent.GetType() == typeof(JobOfferTakenDown)
             && ((JobOfferTakenDown)domainEvent).JobOfferId == jobOffer.Id);
     }
+    
+    [Test]
+    public void TakeDown_ShouldNotTakeDownTwice()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
+        jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
+        jobOffer.Publish(DateTimeOffset.UtcNow.AddDays(1));
+        jobOffer.TakeDown();
+        
+        // Act
+        var result = jobOffer.TakeDown();
+        
+        // Assert
+        result.Should().BeFailure();
+    }
+    
+    [Test]
+    public void AddCandidate_ShouldAddCandidate()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        var candidateId = CandidateId.CreateNew();
+        
+        // Act
+        var result = jobOffer.AddCandidate(candidateId);
+        
+        // Assert
+        result.Should().BeSuccess();
+        jobOffer.DomainEvents.Should().ContainSingle(
+            domainEvent => domainEvent.GetType() == typeof(CandidateApplied)
+            && ((CandidateApplied)domainEvent).JobOfferId == jobOffer.Id
+            && ((CandidateApplied)domainEvent).CandidateId == candidateId);
+    }
+    
+    [Test]
+    public void AddCandidate_ShouldNotAddSameCandidateTwice()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        var candidateId = CandidateId.CreateNew();
+        jobOffer.AddCandidate(candidateId);
+        
+        // Act
+        var result = jobOffer.AddCandidate(candidateId);
+        
+        // Assert
+        result.Should().BeFailure()
+            .Which.Should().HaveError($"Candidate with id: {candidateId} has already applied for this job offer.");
+    }
 
     private JobOffer CreateTestJobOffer()
     {
@@ -223,6 +275,6 @@ public class JobOfferTests
         var jobDescription = "JobDescription";
         var remoteWork = RemoteWork.Yes;
         
-        return new JobOffer(companyDetails, offerSummary, jobDescription, remoteWork);
+        return JobOffer.CreateNew(companyDetails, offerSummary, jobDescription, remoteWork);
     }
 }

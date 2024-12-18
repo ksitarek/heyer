@@ -1,41 +1,20 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Heyer.BuildingBlocks.Tests;
 using Heyer.Storage.API.Client;
 using Heyer.Storage.API.Tests.Utils.Validators;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests;
 
-internal class ApplicationFactory : WebApplicationFactory<Program>, IApplicationFactory
+internal class ApplicationFactory : AbstractApplicationFactory<Program, IStorageApiClient>
 {
-    public static readonly Dictionary<string, string?> InMemoryConfiguration = new()
-    {
-        [Config.RegistryStrategy_MongoDbRegistry_ConnectionString] = "",
-    };
-
-    private readonly Dictionary<string, string?> _instanceConfigOverrides = new();
-
     private ApplicationFactory(Dictionary<string, string?> configOverrides)
+        : base(configOverrides)
     {
-        _instanceConfigOverrides = configOverrides;
-    }
-
-    protected override IHost CreateHost(IHostBuilder builder)
-    {
-        builder.ConfigureHostConfiguration(config =>
-        {
-            config.AddInMemoryCollection(InMemoryConfiguration);
-            config.AddInMemoryCollection(_instanceConfigOverrides);
-        });
-
-        return base.CreateHost(builder);
     }
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -48,19 +27,6 @@ internal class ApplicationFactory : WebApplicationFactory<Program>, IApplication
         base.ConfigureWebHost(builder);
     }
 
-
-    public object? GetConfigValue(string key)
-    {
-        return Services.GetRequiredService<IConfiguration>()[key];
-    }
-
-    public TService GetRequiredService<TService>() where TService : class
-    {
-        var svc = Services.GetRequiredService(typeof(TService));
-
-        return svc as TService ?? throw new InvalidOperationException($"Service of type {typeof(TService)} not found.");
-    }
-
     public override ValueTask DisposeAsync()
     {
         // cleanup test files
@@ -71,7 +37,7 @@ internal class ApplicationFactory : WebApplicationFactory<Program>, IApplication
         return base.DisposeAsync();
     }
 
-    public static IApplicationFactory Create()
+    public static IApplicationFactory<IStorageApiClient> Create()
     {
         return new ApplicationFactory(new()
         {
@@ -81,7 +47,7 @@ internal class ApplicationFactory : WebApplicationFactory<Program>, IApplication
         });
     }
     
-    public IStorageApiClient CreateApiClient()
+    public override IStorageApiClient CreateApiClient()
     {
         var httpClient = CreateClient();
         var apiClient = StorageApiClientFactory.Create(httpClient);
@@ -89,7 +55,7 @@ internal class ApplicationFactory : WebApplicationFactory<Program>, IApplication
         return apiClient;
     }
 
-    public IStorageApiClient CreateAuthorizedApiClient()
+    public override IStorageApiClient CreateAuthorizedApiClient()
     {
         var client = CreateClient();
         client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GenerateJwtToken());

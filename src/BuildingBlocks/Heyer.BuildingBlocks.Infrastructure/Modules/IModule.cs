@@ -7,5 +7,5 @@ namespace Heyer.BuildingBlocks.Infrastructure.Modules;
 public interface IModule
 {
     void ConfigureDependencyInjection(IServiceCollection services);
-    void ConfigureModule(IApplicationBuilder app);
+    void ConfigureModule(WebApplication app);
 }

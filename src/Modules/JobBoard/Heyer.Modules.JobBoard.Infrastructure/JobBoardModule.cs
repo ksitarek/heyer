@@ -1,6 +1,6 @@
 using FluentValidation;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
-using Heyer.Modules.JobBoard.Application.JobOffers.Apply;
+using Heyer.Modules.JobBoard.Application;
 using Heyer.Storage.API.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +20,12 @@ public class JobBoardModule : IModule
     public void ConfigureDependencyInjection(IServiceCollection services)
     {
         services.AddStorageApiClient(_configuration["StorageApi:Url"]);
-        services.AddValidatorsFromAssemblyContaining<ApplyToJobOffer>();
+        services.AddValidatorsFromAssemblyContaining<JobBoardEndpointsConfiguration>();
     }
 
-    public void ConfigureModule(IApplicationBuilder app)
+    public void ConfigureModule(WebApplication app)
     {
+        var endpointsConfiguration = new JobBoardEndpointsConfiguration();
+        endpointsConfiguration.MapJobBoardEndpoints(app);
     }
-
 }
