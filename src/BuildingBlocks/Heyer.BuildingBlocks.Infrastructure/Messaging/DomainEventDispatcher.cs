@@ -1,6 +1,5 @@
 using FluentResults;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Messaging;
 
@@ -36,15 +35,5 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
         }
 
         return Result.Ok();
-    }
-}
-
-public static class MessagingExtensions
-{
-    public static IServiceCollection AddDomainEventDispatcher(this IServiceCollection services)
-    {
-        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-        services.AddScoped<IDomainEventsAccessor, DomainEventsAccessor>();
-        return services;
     }
 }

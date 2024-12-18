@@ -9,7 +9,7 @@ using RestEase;
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
 [Category("Integration")]
-public class StoreEndpointTests : IntegrationTestsBase
+public class StoreEndpointTests : StorageApiIntegrationTestsBase
 {
     [Test]
     public async Task StoreEndpoint_WithValidFile_ReturnsOkWithFileHandle()

@@ -7,7 +7,7 @@ using RestEase;
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
 [Category("Integration")]
-public class PreserveEndpointTests : IntegrationTestsBase
+public class PreserveEndpointTests : StorageApiIntegrationTestsBase
 {
     [Test]
     public async Task PreserveEndpoint_WithValidKey_ReturnsOk()

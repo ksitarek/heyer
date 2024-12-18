@@ -7,7 +7,7 @@ using RestEase;
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 [Category("Integration")]
-public class CreateJobOfferEndpointTests : IntegrationTestsBase
+public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
 {
     [Test]
     public async Task CreateJobOfferEndpoint_WithoutAuthorization_WillReturn401()

@@ -1,11 +1,11 @@
-using Heyer.API.Client;
 using Heyer.BuildingBlocks.Tests;
+using Heyer.Storage.API.Client;
 
-namespace Heyer.API.Tests.IntegrationTests.Endpoints;
+namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
-public abstract class IntegrationTestsBase
+public abstract class StorageApiIntegrationTestsBase
 {
-    internal IApplicationFactory<IApiClient> AppFactory;
+    internal IApplicationFactory<IStorageApiClient> AppFactory;
 
     [SetUp]
     public Task SetUp()

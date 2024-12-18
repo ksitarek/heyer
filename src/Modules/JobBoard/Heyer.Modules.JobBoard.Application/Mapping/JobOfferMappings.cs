@@ -10,7 +10,6 @@ public static class JobOfferMappings
 {
     public static CreateJobOffer MapToCommand(this CreateJobOfferRequest request) =>
         new(
-            new CompanyDetails(CompanyId.CreateNew(), "test-company"), // TODO: Get company details from the user
             request.OfferSummary,
             request.JobDescription,
             request.RemoteWork.MapRemoteWork());

@@ -7,7 +7,7 @@ using RestEase;
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
 [Category("Integration")]
-public class DeleteEndpointTests : IntegrationTestsBase
+public class DeleteEndpointTests : StorageApiIntegrationTestsBase
 {
     [Test]
     public async Task DownloadEndpoint_WithoutAuthorization_WillReturn401()

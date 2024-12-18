@@ -51,6 +51,8 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("CompanyId", Guid.Parse("A62C048C-8E0F-41E2-84D4-BD061F9DDE97").ToString()),
+            new Claim("CompanyName", "ACME Corporation"),
         };
         
         claims = claims.Concat(permissions.Select(permission => new Claim("permissions", permission))).ToArray();

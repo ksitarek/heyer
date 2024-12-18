@@ -4,7 +4,7 @@ using Heyer.BuildingBlocks.Tests.Fixtures;
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 [SetUpFixture]
-public class IntegrationTestsFixture
+public class JobBoardIntegrationTestsFixture
 {
     private MongoDbFixture _mongoDbFixture = new();
     
