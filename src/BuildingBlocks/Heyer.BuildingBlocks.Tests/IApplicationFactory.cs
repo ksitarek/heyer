@@ -4,5 +4,5 @@ public interface IApplicationFactory<TApiClient> : IAsyncDisposable
 {
     TService GetRequiredService<TService>() where TService : class;
     TApiClient CreateApiClient();
-    TApiClient CreateAuthorizedApiClient();
+    TApiClient CreateAuthorizedApiClient(params string[]? permissions);
 }

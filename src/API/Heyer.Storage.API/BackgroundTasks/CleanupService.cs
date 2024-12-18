@@ -48,9 +48,9 @@ public class CleanupService : IHostedService, IAsyncDisposable
                 cleanupResult.Successes.Count,
                 cleanupResult.Errors.Count);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            _logger.LogError(ex, "An error occurred during cleanup.");
+            _logger.LogError(e, "An error occurred during cleanup.");
         }
     }
 

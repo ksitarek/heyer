@@ -30,7 +30,7 @@ internal class JobOffersRepository : IJobOffersRepository
         }
         catch (Exception e)
         {
-            return Result.Fail(e.Message);
+            return Result.Fail(new Error("Could not add job offer").CausedBy(e));
         }
     }
 }

@@ -1,5 +1,6 @@
 using FluentResults;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Messaging;
 
@@ -16,7 +17,7 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
         _domainEventsAccessor = domainEventsAccessor;
     }
     
-    public async Task<Result> DispatchEventsAsync(CancellationToken cancellationToken = default)
+    public async Task<Result> DispatchDomainEventsAsync(CancellationToken cancellationToken = default)
     {
         try
         {
@@ -31,9 +32,19 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
         }
         catch (Exception e)
         {
-            return Result.Fail(e.Message);
+            return Result.Fail(new Error("Failed to dispatch domain events.").CausedBy(e));
         }
 
         return Result.Ok();
+    }
+}
+
+public static class MessagingExtensions
+{
+    public static IServiceCollection AddDomainEventDispatcher(this IServiceCollection services)
+    {
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+        services.AddScoped<IDomainEventsAccessor, DomainEventsAccessor>();
+        return services;
     }
 }

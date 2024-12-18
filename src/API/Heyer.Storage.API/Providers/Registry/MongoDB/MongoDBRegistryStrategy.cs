@@ -48,7 +48,7 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to register new file.");
-            return Result.Fail(e.Message);
+            return Result.Fail(new Error("Failed to register new file").CausedBy(e));
         }
     }
 
@@ -74,7 +74,7 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to set preserve flag.");
-            return Result.Fail(e.Message);
+            return Result.Fail(new Error("Failed to set preserve flag.").CausedBy(e));
         }
     }
 
@@ -95,9 +95,9 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
                 ? Result.Fail(new NotFoundError())
                 : entry;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return Result.Fail(ex.Message);
+            return Result.Fail(new Error("Failed to get storage registry entry.").CausedBy(e));
         }
     }
 
@@ -109,9 +109,9 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
             await _collection.DeleteOneAsync(filter, cancellationToken);
             return Result.Ok();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            return new Error("Failed to delete storage registry entry.").CausedBy(ex);
+            return new Error("Failed to delete storage registry entry.").CausedBy(e);
         }
     }
 

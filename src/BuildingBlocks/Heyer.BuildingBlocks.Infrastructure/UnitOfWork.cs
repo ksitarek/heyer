@@ -17,7 +17,7 @@ public class UnitOfWork : IUnitOfWork
     
     public async Task<Result<int>> CommitAsync(CancellationToken cancellationToken)
     {
-        var result = await _domainEventDispatcher.DispatchEventsAsync(cancellationToken);
+        var result = await _domainEventDispatcher.DispatchDomainEventsAsync(cancellationToken);
         if (result.IsFailed)
         {
             return Result.Fail<int>(result.Errors);
@@ -29,7 +29,7 @@ public class UnitOfWork : IUnitOfWork
         }
         catch (Exception e)
         {
-            return Result.Fail<int>(e.Message);
+            return Result.Fail<int>(new Error("An error occurred while saving changes to the database.").CausedBy(e));
         }
     }
 }

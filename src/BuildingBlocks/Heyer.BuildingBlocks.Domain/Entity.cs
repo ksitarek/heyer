@@ -1,12 +1,15 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using FluentResults;
 
 namespace Heyer.BuildingBlocks.Domain;
 
 public abstract class Entity
 {
+    [NotMapped]
     private List<DomainEvent>? _domainEvents;
 
+    [NotMapped]
     public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents?.AsReadOnly() ?? ReadOnlyCollection<DomainEvent>.Empty;
 
     protected void AddDomainEvent(DomainEvent @event)

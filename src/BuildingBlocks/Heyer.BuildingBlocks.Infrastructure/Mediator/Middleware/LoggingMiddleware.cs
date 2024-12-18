@@ -28,10 +28,18 @@ public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, 
             }
             else
             {
-                _logger.LogError("Error when handling {RequestName}: {Message}",
-                                 typeof(TRequest).Name,
-                                 string.Join(", ",
-                                             result.Errors.Select(e => e.Message)));
+                foreach (var error in result.Errors)
+                {
+                    _logger.LogError("Error when handling {RequestName}: {Message}",
+                                     typeof(TRequest).Name,
+                                     error.Message);
+
+                    foreach (var reason in error.Reasons)
+                    {
+                        _logger.LogError(reason.ToString());
+                    }
+                    
+                }
             }
 
             return result;

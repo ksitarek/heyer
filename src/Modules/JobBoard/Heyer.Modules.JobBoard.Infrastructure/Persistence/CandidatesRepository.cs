@@ -30,7 +30,7 @@ internal class CandidatesRepository : ICandidatesRepository
         }
         catch (Exception e)
         {
-            return Result.Fail(e.Message);
+            return Result.Fail(new Error("Failed to add candidate").CausedBy(e));
         }
     }
 }

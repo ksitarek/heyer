@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentResults;
 using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Domain;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
@@ -43,7 +44,7 @@ public class DomainEventDispatcherTests
     public async Task DispatchEventsAsync_WhenCalled_ShouldPublishAllDomainEvents()
     {
         // Act
-        var result = await _domainEventDispatcher.DispatchEventsAsync(_cancellationToken);
+        var result = await _domainEventDispatcher.DispatchDomainEventsAsync(_cancellationToken);
         
         // Assert
         result.Should().BeSuccess();
@@ -61,10 +62,12 @@ public class DomainEventDispatcherTests
             .ThrowsForAnyArgs(new Exception("Test Exception"));
         
         // Act
-        var result = await _domainEventDispatcher.DispatchEventsAsync(_cancellationToken);
+        var result = await _domainEventDispatcher.DispatchDomainEventsAsync(_cancellationToken);
         
         // Assert
-        result.Should().BeFailure().And.HaveError("Test Exception");
+        result.Should().BeFailure().And.HaveError("Failed to dispatch domain events.")
+            .Which.HasException<Exception>(x => x.Message=="Test Exception").Should().BeTrue();
+        
         _domainEventsAccessor.DidNotReceive().ClearAllDomainEvents();
     }
 

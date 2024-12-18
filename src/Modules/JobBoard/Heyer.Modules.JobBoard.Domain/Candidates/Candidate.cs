@@ -12,6 +12,11 @@ public class Candidate : Entity
     private ResumeKey _resumeKey;
     private bool _includeInCandidatePool;
     private Dictionary<string, object> _attributes;
+
+    // For EF Core
+    private Candidate()
+    {
+    }
     
     private Candidate(string firstName, string lastName, Email email, ResumeKey resumeKey, bool includeInCandidatePool, Dictionary<string, object> attributes)
     {

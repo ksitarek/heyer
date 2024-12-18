@@ -1,41 +1,39 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Heyer.API.Client;
+using Heyer.BuildingBlocks.Tests;
 
 namespace Heyer.API.Tests.IntegrationTests;
 
-public class ApplicationFactory : WebApplicationFactory<Program>, IApplicationFactory
+public class ApplicationFactory : AbstractApplicationFactory<Program, IApiClient>
 {
-    public static readonly Dictionary<string, string?> InMemoryConfiguration = new()
+    protected ApplicationFactory(Dictionary<string, string?> configOverrides) : base(configOverrides)
     {
-    };
-
-    private readonly Dictionary<string, string?> _instanceConfigOverrides = new();
-    protected override IHost CreateHost(IHostBuilder builder)
-    {
-        builder.ConfigureHostConfiguration(config =>
-        {
-            config.AddInMemoryCollection(InMemoryConfiguration);
-            config.AddInMemoryCollection(_instanceConfigOverrides);
-        });
-
-        return base.CreateHost(builder);
     }
     
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    public static IApplicationFactory<IApiClient> Create()
     {
-        builder.ConfigureTestServices((services) =>
-        {
-        });
+        return new ApplicationFactory(new Dictionary<string, string?>());
+    }
+
+    public override IApiClient CreateApiClient()
+    {
+        return ApiClientFactory.Create(CreateClient());
+    }
+
+    public override IApiClient CreateAuthorizedApiClient(params string[] permissions)
+    {
+        var client = CreateClient();
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GenerateJwtToken(permissions));
+
+        return ApiClientFactory.Create(client);
+    }
+    
+    
+    private string GenerateJwtToken(string[] permissions)
+    {
+        var issuer = GetConfigValue(Config.Jwt_ValidIssuer)!.ToString()!;
+        var audience = GetConfigValue(Config.Jwt_ValidAudience)!.ToString()!;
+        var secret = GetConfigValue(Config.Jwt_Secret)!.ToString()!;
         
-        base.ConfigureWebHost(builder);
-    }
-    
-    public object? GetConfigValue(string key)
-    {
-        return Services.GetRequiredService<IConfiguration>()[key];
+        return GenerateJwtToken(issuer, audience, secret, permissions);
     }
 }

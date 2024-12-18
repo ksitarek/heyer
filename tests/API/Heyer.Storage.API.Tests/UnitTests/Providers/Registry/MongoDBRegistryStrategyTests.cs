@@ -3,9 +3,9 @@ using FluentResults;
 using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Infrastructure;
+using Heyer.BuildingBlocks.Tests.Fixtures;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Registry.MongoDB;
-using Heyer.Storage.API.Tests.Fixtures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -170,7 +170,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.SetPreserveAsync("test-key", true);
         
         // Assert
-        result.Should().BeFailure().And.HaveReason("Test exception");
+        result.Should().BeFailure().And.HaveReason("Failed to set preserve flag.")
+            .Which.HasException<Exception>(x => x.Message=="Test exception").Should().BeTrue();
     }
     
     [Test]
@@ -226,7 +227,7 @@ public class MongoDBRegistryStrategyTests
         // Assert
         result.Should().BeFailure()
             .And.HaveError("Failed to delete storage registry entry.")
-                .Which.HasException<Exception>(e => e.Message == "Test exception");
+                .Which.HasException<Exception>(e => e.Message == "Test exception").Should().BeTrue();
     }
     
     [Test] 
@@ -313,7 +314,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.GetAsync("test-key", CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveReason("Test exception");
+        result.Should().BeFailure().And.HaveReason("Failed to get storage registry entry.")
+            .Which.HasException<Exception>(x => x.Message=="Test exception").Should().BeTrue();
     }
     
     [Test]

@@ -44,14 +44,16 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
     }
     
     public abstract TApiClient CreateApiClient();
-    public abstract TApiClient CreateAuthorizedApiClient();
+    public abstract TApiClient CreateAuthorizedApiClient(params string[] permissions);
     
-    private string GenerateJwtToken(string jwtIssuer, string jwtAudience, string jwtSecret)
+    protected string GenerateJwtToken(string jwtIssuer, string jwtAudience, string jwtSecret, string[] permissions)
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
+        
+        claims = claims.Concat(permissions.Select(permission => new Claim("permissions", permission))).ToArray();
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

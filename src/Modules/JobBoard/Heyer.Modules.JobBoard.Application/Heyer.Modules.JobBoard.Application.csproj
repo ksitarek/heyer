@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\API\Heyer.API.Client\Heyer.API.Client.csproj" />
     <ProjectReference Include="..\..\..\API\Heyer.Storage.API.Client\Heyer.Storage.API.Client.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj" />

@@ -23,6 +23,7 @@ public class JobOffer : Entity
 
     private HashSet<CandidateId>? _candidates;
     
+    
     public static JobOffer CreateNew(
         CompanyDetails companyDetails,
         string offerSummary,
@@ -32,6 +33,11 @@ public class JobOffer : Entity
         return new JobOffer(companyDetails, offerSummary, jobDescription, remoteWork);
     }
 
+    // For EF Core
+    private JobOffer()
+    {
+    }
+    
     private JobOffer(CompanyDetails companyDetails, string offerSummary, string jobDescription, RemoteWork remoteWork)
     {
         Id = JobOfferId.CreateNew();

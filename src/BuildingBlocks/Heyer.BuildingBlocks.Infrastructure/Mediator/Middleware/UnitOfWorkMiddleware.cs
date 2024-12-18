@@ -5,7 +5,7 @@ namespace Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 
 public class UnitOfWorkMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
     where TRequest : IRequest<TResult>
-    where TResult : ResultBase, new()
+    where TResult : Result, new()
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -18,17 +18,23 @@ public class UnitOfWorkMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
     {
         try
         {
-            var result = await next();
+            var handleResult = await next();
 
-            if (result.IsSuccess)
-                await _unitOfWork.CommitAsync(cancellationToken);
+            if (handleResult.IsSuccess)
+            {
+                var uowResult = await _unitOfWork.CommitAsync(cancellationToken);
+                if(uowResult.IsFailed)
+                {
+                    handleResult.WithErrors(uowResult.Errors);
+                }
+            }
 
-            return result;
+            return handleResult;
         }
         catch (Exception e)
         {
             var result = new TResult();
-            result.Reasons.Add(new Error(e.Message));
+            result.Errors.Add(new Error(e.Message).CausedBy(e));
 
             return result;
         }

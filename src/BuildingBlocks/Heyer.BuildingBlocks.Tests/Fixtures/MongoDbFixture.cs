@@ -1,7 +1,7 @@
 using NUnit.Framework.Internal;
 using Testcontainers.MongoDb;
 
-namespace Heyer.Storage.API.Tests.Fixtures;
+namespace Heyer.BuildingBlocks.Tests.Fixtures;
 
 public class MongoDbFixture
 {
@@ -19,7 +19,6 @@ public class MongoDbFixture
         _mongoDbContainer = new MongoDbBuilder()
             .WithImage("mongo:8")
             .WithUsername(username)
-            .WithPassword(password)
             .WithPortBinding(port, 27017)
             .Build();
     }

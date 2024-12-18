@@ -5,6 +5,11 @@ public record Requirements
     private ExperienceLevel _experienceLevel;
     private IEnumerable<Skill> _skills;
 
+    private Requirements()
+    {
+        
+    }
+    
     public Requirements(ExperienceLevel experienceLevel, IEnumerable<Skill> skills)
     {
         _experienceLevel = experienceLevel;

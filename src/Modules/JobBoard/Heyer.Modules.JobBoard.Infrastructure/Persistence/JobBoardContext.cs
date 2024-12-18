@@ -9,6 +9,10 @@ internal class JobBoardContext : DbContext
     public DbSet<JobOffer> JobOffers { get; set; }
     public DbSet<Candidate> Candidates { get; set; }
 
+    public JobBoardContext(DbContextOptions<JobBoardContext> options) : base(options)
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

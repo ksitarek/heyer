@@ -2,6 +2,7 @@ using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
+using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.JobBoard.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -16,29 +17,27 @@ var modules = new IModule[]
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSingleton<IDateTimeProvider, SystemDateTime>();
-builder.Services.AddMediator(
+builder.Services.AddMediator(modules,
     typeof(LoggingMiddleware<,>),
     typeof(ValidationMiddleware<,>),
     typeof(UnitOfWorkMiddleware<,>));
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("HasPermission", policy =>
-    {
-        // policy.Requirements.Add(new HasPermissionAuthorizationRequirement());
-        policy.AddAuthenticationSchemes("Bearer");
-    });
-    
-});
+builder.Services.AddAuthenticationAndAuthorization(builder.Configuration.GetSection("Jwt"));
 
-builder.Services.AddScoped<IAuthorizationHandler, HasPermissionAuthorizationHandler>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddDomainEventDispatcher();
 
 builder.AddModules(modules);
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseModules(modules);
 
 await app.RunAsync();
 
-public partial class Program {}
+namespace Heyer.API
+{
+    public class Program {}
+}

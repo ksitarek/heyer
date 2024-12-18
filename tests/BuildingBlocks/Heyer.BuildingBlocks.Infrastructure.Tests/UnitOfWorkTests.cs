@@ -25,7 +25,7 @@ public class UnitOfWorkTests
             .Returns(3);
         
         _domainEventDispatcher = Substitute.For<IDomainEventDispatcher>();
-        _domainEventDispatcher.Configure().DispatchEventsAsync(_cancellationToken)
+        _domainEventDispatcher.Configure().DispatchDomainEventsAsync(_cancellationToken)
             .Returns(Result.Ok());
 
         _unitOfWork = new UnitOfWork(_context, _domainEventDispatcher);
@@ -48,7 +48,7 @@ public class UnitOfWorkTests
         // Assert
         result.Should().BeSuccess().Which.Value.Should().Be(3);
         
-        await _domainEventDispatcher.Received(1).DispatchEventsAsync(_cancellationToken);
+        await _domainEventDispatcher.Received(1).DispatchDomainEventsAsync(_cancellationToken);
         await _context.Received(1).SaveChangesAsync(_cancellationToken);
     }
     
@@ -56,7 +56,7 @@ public class UnitOfWorkTests
     public async Task UnitOfWork_ShouldFail_WhenDispatchEventsAsyncFails()
     {
         // Arrange
-        _domainEventDispatcher.Configure().DispatchEventsAsync(_cancellationToken)
+        _domainEventDispatcher.Configure().DispatchDomainEventsAsync(_cancellationToken)
             .Returns(Result.Fail("Error"));
         
         // Act
@@ -65,7 +65,7 @@ public class UnitOfWorkTests
         // Assert
         result.Should().BeFailure().Which.Errors.Should().ContainSingle().Which.Message.Should().Be("Error");
         
-        await _domainEventDispatcher.Received(1).DispatchEventsAsync(_cancellationToken);
+        await _domainEventDispatcher.Received(1).DispatchDomainEventsAsync(_cancellationToken);
         await _context.DidNotReceive().SaveChangesAsync(_cancellationToken);
     }
     
@@ -80,9 +80,10 @@ public class UnitOfWorkTests
         var result = await _unitOfWork.CommitAsync(_cancellationToken);
         
         // Assert
-        result.Should().BeFailure().Which.Errors.Should().ContainSingle().Which.Message.Should().Be("Error.");
+        result.Should().BeFailure().And.HaveError("An error occurred while saving changes to the database.")
+            .Which.HasException<Exception>(x => x.Message=="Error.").Should().BeTrue();
         
-        await _domainEventDispatcher.Received(1).DispatchEventsAsync(_cancellationToken);
+        await _domainEventDispatcher.Received(1).DispatchDomainEventsAsync(_cancellationToken);
         await _context.Received(1).SaveChangesAsync(_cancellationToken);
     }
 }

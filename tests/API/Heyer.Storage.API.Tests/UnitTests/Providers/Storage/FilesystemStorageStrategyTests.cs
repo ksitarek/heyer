@@ -48,7 +48,7 @@ public class FilesystemStorageStrategyTests
 
         // Assert
         var filePath = Path.Combine(_options.RootPath, key);
-        Assert.True(File.Exists(filePath));
+        File.Exists(filePath).Should().BeTrue();
         Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data"));
     }
 
@@ -104,7 +104,7 @@ public class FilesystemStorageStrategyTests
 
         // Assert
         var filePath = Path.Combine(_options.RootPath, key);
-        Assert.False(File.Exists(filePath));
+        File.Exists(filePath).Should().BeFalse();
     }
 
     [Test]

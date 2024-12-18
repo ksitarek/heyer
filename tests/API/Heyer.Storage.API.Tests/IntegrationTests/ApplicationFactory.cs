@@ -16,14 +16,11 @@ internal class ApplicationFactory : AbstractApplicationFactory<Program, IStorage
         : base(configOverrides)
     {
     }
-    
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureTestServices((services) =>
-        {
-            services.AddValidators();
-        });
-        
+        builder.ConfigureTestServices((services) => { services.AddValidators(); });
+
         base.ConfigureWebHost(builder);
     }
 
@@ -46,40 +43,29 @@ internal class ApplicationFactory : AbstractApplicationFactory<Program, IStorage
             [Config.StorageStrategy_FilesystemStorage_RootPath] = "IntegrationTests/Endpoints/StoreEndpointTests",
         });
     }
-    
+
     public override IStorageApiClient CreateApiClient()
     {
         var httpClient = CreateClient();
         var apiClient = StorageApiClientFactory.Create(httpClient);
-        
+
         return apiClient;
     }
 
-    public override IStorageApiClient CreateAuthorizedApiClient()
+    public override IStorageApiClient CreateAuthorizedApiClient(params string[] permissions)
     {
         var client = CreateClient();
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GenerateJwtToken());
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GenerateJwtToken(permissions));
 
         return StorageApiClientFactory.Create(client);
     }
     
-    private string GenerateJwtToken()
+    private string GenerateJwtToken(string[] permissions)
     {
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GetConfigValue(Config.Jwt_Secret)!.ToString()!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: GetConfigValue(Config.Jwt_ValidIssuer)!.ToString(),
-            audience: GetConfigValue(Config.Jwt_ValidAudience)!.ToString(),
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: creds);
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var issuer = GetConfigValue(Config.Jwt_ValidIssuer)!.ToString()!;
+        var audience = GetConfigValue(Config.Jwt_ValidAudience)!.ToString()!;
+        var secret = GetConfigValue(Config.Jwt_Secret)!.ToString()!;
+        
+        return base.GenerateJwtToken(issuer, audience, secret, permissions);
     }
 }
