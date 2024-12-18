@@ -17,6 +17,7 @@ public static class JobOfferMappings
     private static RemoteWork MapRemoteWork(this API.Client.PublishedLanguage.RemoteWork remoteWork) =>
         remoteWork switch
         {
+            API.Client.PublishedLanguage.RemoteWork.Unknown => RemoteWork.Unknown,
             API.Client.PublishedLanguage.RemoteWork.No => RemoteWork.No,
             API.Client.PublishedLanguage.RemoteWork.Hybrid => RemoteWork.Hybrid,
             API.Client.PublishedLanguage.RemoteWork.Yes => RemoteWork.Yes,

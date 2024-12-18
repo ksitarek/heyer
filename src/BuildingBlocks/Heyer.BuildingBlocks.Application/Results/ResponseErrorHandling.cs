@@ -1,7 +1,7 @@
 using FluentResults;
-using Heyer.BuildingBlocks.Application.Results;
+using Microsoft.AspNetCore.Http;
 
-namespace Heyer.Storage.API.Validators;
+namespace Heyer.BuildingBlocks.Application.Results;
 
 public static class ResponseErrorHandling
 {
@@ -11,10 +11,10 @@ public static class ResponseErrorHandling
 
         return error switch
         {
-            NotFoundError => Results.NotFound(),
+            NotFoundError => Microsoft.AspNetCore.Http.Results.NotFound(),
             ValidationError => HandleValidationError(response.Errors),
 
-            _ => Results.StatusCode(StatusCodes.Status500InternalServerError)
+            _ => Microsoft.AspNetCore.Http.Results.StatusCode(StatusCodes.Status500InternalServerError)
         };
     }
 
@@ -39,6 +39,7 @@ public static class ResponseErrorHandling
             }
         }
 
-        return Results.ValidationProblem(validationProblems.ToDictionary(x => x.Key, x => x.Value.ToArray()));
+        return Microsoft.AspNetCore.Http.Results.ValidationProblem(
+            validationProblems.ToDictionary(x => x.Key, x => x.Value.ToArray()));
     }
 }

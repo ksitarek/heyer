@@ -1,6 +1,7 @@
 using Heyer.API.Client;
 using Heyer.API.Client.PublishedLanguage;
 using Heyer.BuildingBlocks.Application.Authorization;
+using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.JobBoard.Application.JobOffers.Create;
 using Heyer.Modules.JobBoard.Application.JobOffers.NewCandidateApply;
 using Heyer.Modules.JobBoard.Application.Mapping;
@@ -29,10 +30,10 @@ public class JobBoardEndpointsConfiguration
             var command = request.MapToCommand();
             
             var result = await mediator.Send(command);
-            
+
             return result.IsSuccess
                 ? Results.Ok(result.Value)
-                : Results.StatusCode(500); // TODO
+                : ResponseErrorHandling.Handle(result);
         }).RequirePermission(JobBoardPermissions.CreateJobOffer);
     }
 
@@ -44,7 +45,7 @@ public class JobBoardEndpointsConfiguration
             
             return result.IsSuccess
                 ? Results.Ok()
-                : Results.StatusCode(500); // TODO
+                : ResponseErrorHandling.Handle(result);
         });
     }
     
