@@ -6,17 +6,17 @@ namespace Heyer.Modules.JobBoard.Infrastructure.Persistence;
 
 internal class JobBoardContext : DbContext
 {
-    public DbSet<JobOffer> JobOffers { get; set; }
-    public DbSet<Candidate> Candidates { get; set; }
-
     public JobBoardContext(DbContextOptions<JobBoardContext> options) : base(options)
     {
     }
+
+    public DbSet<Candidate> Candidates { get; set; }
+    public DbSet<JobOffer> JobOffers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly((typeof(JobBoardContext).Assembly));
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(JobBoardContext).Assembly);
     }
 }

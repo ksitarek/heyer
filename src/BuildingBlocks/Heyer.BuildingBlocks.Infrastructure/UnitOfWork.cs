@@ -14,7 +14,7 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
         _domainEventDispatcher = domainEventDispatcher;
     }
-    
+
     public async Task<Result<int>> CommitAsync(CancellationToken cancellationToken)
     {
         var result = await _domainEventDispatcher.DispatchDomainEventsAsync(cancellationToken);

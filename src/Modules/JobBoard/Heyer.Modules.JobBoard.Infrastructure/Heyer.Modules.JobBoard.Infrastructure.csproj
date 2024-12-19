@@ -1,23 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <RootNamespace>Heyer.Modules.JobBoard.Infrastructure</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Heyer.Modules.JobBoard.Infrastructure</RootNamespace>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
-      <PackageReference Include="MediatR" Version="12.4.1" />
-      <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.2.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0"/>
+    <PackageReference Include="MediatR" Version="12.4.1"/>
+    <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.2.1"/>
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\API\Heyer.Storage.API.Client\Heyer.Storage.API.Client.csproj" />
-      <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj" />
-      <ProjectReference Include="..\Heyer.Modules.JobBoard.Application\Heyer.Modules.JobBoard.Application.csproj" />
-      <ProjectReference Include="..\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\API\Heyer.Storage.API.Client\Heyer.Storage.API.Client.csproj"/>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj"/>
+    <ProjectReference Include="..\Heyer.Modules.JobBoard.Application\Heyer.Modules.JobBoard.Application.csproj"/>
+    <ProjectReference Include="..\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj"/>
+  </ItemGroup>
 
 </Project>

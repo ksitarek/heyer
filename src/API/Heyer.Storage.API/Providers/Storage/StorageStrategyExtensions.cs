@@ -12,18 +12,18 @@ public static class StorageStrategyExtensions
 
         switch (storageStrategyOptions.Type)
         {
-            case StorageStrategyOptions.StorageStrategyType.Filesystem:        
+            case StorageStrategyOptions.StorageStrategyType.Filesystem:
                 services.AddFilesystemProvider(storageStrategyOptions.FilesystemStorage);
                 break;
             case StorageStrategyOptions.StorageStrategyType.Unknown:
             default:
                 throw new ArgumentOutOfRangeException(
-                    nameof(storageStrategyOptions.Type), 
-                    storageStrategyOptions.Type, 
+                    nameof(storageStrategyOptions.Type),
+                    storageStrategyOptions.Type,
                     "Unknown storage strategy type.");
         }
-        
-        
+
+
         return services;
     }
 }

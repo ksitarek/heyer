@@ -15,10 +15,7 @@ public abstract class JobModuleIntegrationTestsBase
         AppFactory = ApplicationFactory.Create();
         return Task.CompletedTask;
     }
-    
+
     [TearDown]
-    public async Task TearDown()
-    {
-        await AppFactory.DisposeAsync();
-    }
+    public async Task TearDown() => await AppFactory.DisposeAsync();
 }

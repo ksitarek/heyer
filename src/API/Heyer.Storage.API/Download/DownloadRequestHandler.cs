@@ -16,17 +16,21 @@ public class DownloadRequestHandler : IRequestHandler<DownloadRequest, Result<Do
         _registryStrategy = registryStrategy;
         _storageStrategy = storageStrategy;
     }
-    
+
     public async Task<Result<DownloadResponse>> Handle(DownloadRequest request, CancellationToken cancellationToken)
     {
         var entry = await _registryStrategy.GetAsync(request.Key, cancellationToken);
         if (entry.IsFailed)
+        {
             return Result.Fail(entry.Errors);
-        
+        }
+
         var file = await _storageStrategy.GetAsync(request.Key, cancellationToken);
-        if(file.IsFailed)
+        if (file.IsFailed)
+        {
             return Result.Fail(file.Errors);
-        
+        }
+
         return new DownloadResponse(entry.Value.FileName, entry.Value.ContentType, file.Value);
     }
 }

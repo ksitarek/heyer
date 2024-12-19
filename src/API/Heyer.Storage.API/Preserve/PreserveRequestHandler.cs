@@ -8,8 +8,8 @@ namespace Heyer.Storage.API.Preserve;
 
 public class PreserveRequestHandler : IRequestHandler<PreserveRequest, Result>
 {
-    private readonly IStorageStrategy _storageStrategy;
     private readonly IRegistryStrategy _registryStrategy;
+    private readonly IStorageStrategy _storageStrategy;
 
     public PreserveRequestHandler(IStorageStrategy storageStrategy, IRegistryStrategy registryStrategy)
     {

@@ -4,24 +4,24 @@ namespace Heyer.Modules.JobBoard.Domain.Candidates;
 
 public class Candidate : Entity
 {
-    public CandidateId Id { get; } = null!;
+    private Dictionary<string, object> _attributes = null!;
+    private Email _email = null!;
 
     private string _firstName = null!;
-    private string _lastName = null!;
-    private Email _email = null!;
-    private ResumeKey _resumeKey = null!;
     private bool _includeInCandidatePool;
-    private Dictionary<string, object> _attributes = null!;
+    private string _lastName = null!;
+    private ResumeKey _resumeKey = null!;
 
     // For EF Core
     private Candidate()
     {
     }
-    
-    private Candidate(string firstName, string lastName, Email email, ResumeKey resumeKey, bool includeInCandidatePool, Dictionary<string, object> attributes)
+
+    private Candidate(string firstName, string lastName, Email email, ResumeKey resumeKey, bool includeInCandidatePool,
+                      Dictionary<string, object> attributes)
     {
         Id = CandidateId.CreateNew();
-        
+
         _firstName = firstName;
         _lastName = lastName;
         _email = email;
@@ -31,15 +31,10 @@ public class Candidate : Entity
 
         AddDomainEvent(new CandidateCreated(Id));
     }
-    
-    public static Candidate Create(
-        string firstName,
-        string lastName, 
-        Email email, 
-        ResumeKey resumeKey,
-        bool includeInCandidatePool, 
-        Dictionary<string, object> attributes)
-    {
-        return new Candidate(firstName, lastName, email, resumeKey, includeInCandidatePool, attributes);
-    }
+
+    public CandidateId Id { get; } = null!;
+
+    public static Candidate Create(string firstName, string lastName, Email email, ResumeKey resumeKey,
+                                   bool includeInCandidatePool, Dictionary<string, object> attributes) =>
+        new(firstName, lastName, email, resumeKey, includeInCandidatePool, attributes);
 }

@@ -9,7 +9,6 @@ public record CompanyDetails
 
     private CompanyDetails()
     {
-        
     }
 
     public CompanyDetails(CompanyId companyId, string name)
@@ -17,4 +16,4 @@ public record CompanyDetails
         CompanyId = companyId;
         Name = name;
     }
-};
+}

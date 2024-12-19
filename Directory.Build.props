@@ -16,10 +16,11 @@
 
   <PropertyGroup Label="ConfigFiles">
     <EditorConfigFile Condition=" '$(EditorConfigFile)' == '' ">$([MSBuild]::GetPathOfFileAbove('.editorconfig',
-      $(MSBuildProjectDirectory)))</EditorConfigFile>
+      $(MSBuildProjectDirectory)))
+    </EditorConfigFile>
   </PropertyGroup>
 
   <ItemGroup Label="ConfigFiles">
-    <None Condition="Exists('$(EditorConfigFile)')" Include="$(EditorConfigFile)" Visible="false" />
+    <None Condition="Exists('$(EditorConfigFile)')" Include="$(EditorConfigFile)" Visible="false"/>
   </ItemGroup>
 </Project>

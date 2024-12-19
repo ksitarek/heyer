@@ -6,13 +6,11 @@ internal class ClaimsPermissionChecker : IUserPermissionChecker
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ClaimsPermissionChecker(IHttpContextAccessor httpContextAccessor)
-    {
+    public ClaimsPermissionChecker(IHttpContextAccessor httpContextAccessor) =>
         _httpContextAccessor = httpContextAccessor;
-    }
-    
+
     public Task<bool> HasPermissionAsync(
-        string permissionName, 
+        string permissionName,
         CancellationToken cancellationToken = default)
     {
         var httpContext = _httpContextAccessor.HttpContext;

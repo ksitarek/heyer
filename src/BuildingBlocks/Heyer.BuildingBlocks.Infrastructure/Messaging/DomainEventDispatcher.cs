@@ -5,17 +5,17 @@ namespace Heyer.BuildingBlocks.Infrastructure.Messaging;
 
 internal class DomainEventDispatcher : IDomainEventDispatcher
 {
-    private readonly IMediator _mediator;
     private readonly IDomainEventsAccessor _domainEventsAccessor;
+    private readonly IMediator _mediator;
 
     public DomainEventDispatcher(
-        IMediator mediator, 
+        IMediator mediator,
         IDomainEventsAccessor domainEventsAccessor)
     {
         _mediator = mediator;
         _domainEventsAccessor = domainEventsAccessor;
     }
-    
+
     public async Task<Result> DispatchDomainEventsAsync(CancellationToken cancellationToken = default)
     {
         try

@@ -18,11 +18,11 @@ public static class RegistryStrategyExtensions
             case RegistryStrategyOptions.RegistryStrategyType.Unknown:
             default:
                 throw new ArgumentOutOfRangeException(
-                    nameof(registryStrategyOptions.Type), 
-                    registryStrategyOptions.Type, 
+                    nameof(registryStrategyOptions.Type),
+                    registryStrategyOptions.Type,
                     "Unknown registry strategy type.");
         }
-        
+
         return services;
     }
 }

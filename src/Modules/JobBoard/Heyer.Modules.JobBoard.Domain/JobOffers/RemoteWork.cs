@@ -5,5 +5,5 @@ public enum RemoteWork
     Unknown,
     No,
     Hybrid,
-    Yes,
+    Yes
 }

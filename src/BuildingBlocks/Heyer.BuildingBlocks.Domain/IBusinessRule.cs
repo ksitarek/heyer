@@ -2,6 +2,7 @@ using FluentResults;
 
 namespace Heyer.BuildingBlocks.Domain;
 
-public interface IBusinessRule {
+public interface IBusinessRule
+{
     Result Challenge();
 }

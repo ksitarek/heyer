@@ -12,10 +12,10 @@ namespace Heyer.BuildingBlocks.Infrastructure.Tests;
 [Category("Unit")]
 public class UnitOfWorkTests
 {
+    private static readonly CancellationToken _cancellationToken = CancellationToken.None;
     private DbContext _context;
     private IDomainEventDispatcher _domainEventDispatcher;
     private UnitOfWork _unitOfWork;
-    private static CancellationToken _cancellationToken = CancellationToken.None;
 
     [SetUp]
     public void Setup()
@@ -23,7 +23,7 @@ public class UnitOfWorkTests
         _context = Substitute.For<DbContext>();
         _context.Configure().SaveChangesAsync(_cancellationToken)
             .Returns(3);
-        
+
         _domainEventDispatcher = Substitute.For<IDomainEventDispatcher>();
         _domainEventDispatcher.Configure().DispatchDomainEventsAsync(_cancellationToken)
             .Returns(Result.Ok());
@@ -32,57 +32,54 @@ public class UnitOfWorkTests
     }
 
     [TearDown]
-    public void TearDown()
-    {
-        _context.Dispose();
-    }
+    public void TearDown() => _context.Dispose();
 
-    [Test]
-    public async Task UnitOfWork_ShouldSucceed_WhenCommitAsyncCalled()
-    {
-        // Arrange
-        
-        // Act
-        var result = await _unitOfWork.CommitAsync(_cancellationToken);
-        
-        // Assert
-        result.Should().BeSuccess().Which.Value.Should().Be(3);
-        
-        await _domainEventDispatcher.Received(1).DispatchDomainEventsAsync(_cancellationToken);
-        await _context.Received(1).SaveChangesAsync(_cancellationToken);
-    }
-    
     [Test]
     public async Task UnitOfWork_ShouldFail_WhenDispatchEventsAsyncFails()
     {
         // Arrange
         _domainEventDispatcher.Configure().DispatchDomainEventsAsync(_cancellationToken)
             .Returns(Result.Fail("Error"));
-        
+
         // Act
         var result = await _unitOfWork.CommitAsync(_cancellationToken);
-        
+
         // Assert
         result.Should().BeFailure().Which.Errors.Should().ContainSingle().Which.Message.Should().Be("Error");
-        
+
         await _domainEventDispatcher.Received(1).DispatchDomainEventsAsync(_cancellationToken);
         await _context.DidNotReceive().SaveChangesAsync(_cancellationToken);
     }
-    
+
     [Test]
     public async Task UnitOfWork_ShouldFail_WhenSaveChangesAsyncFails()
     {
         // Arrange
         _context.Configure().SaveChangesAsync(_cancellationToken)
             .ThrowsAsync(new Exception("Error."));
-        
+
         // Act
         var result = await _unitOfWork.CommitAsync(_cancellationToken);
-        
+
         // Assert
         result.Should().BeFailure().And.HaveError("An error occurred while saving changes to the database.")
-            .Which.HasException<Exception>(x => x.Message=="Error.").Should().BeTrue();
-        
+            .Which.HasException<Exception>(x => x.Message == "Error.").Should().BeTrue();
+
+        await _domainEventDispatcher.Received(1).DispatchDomainEventsAsync(_cancellationToken);
+        await _context.Received(1).SaveChangesAsync(_cancellationToken);
+    }
+
+    [Test]
+    public async Task UnitOfWork_ShouldSucceed_WhenCommitAsyncCalled()
+    {
+        // Arrange
+
+        // Act
+        var result = await _unitOfWork.CommitAsync(_cancellationToken);
+
+        // Assert
+        result.Should().BeSuccess().Which.Value.Should().Be(3);
+
         await _domainEventDispatcher.Received(1).DispatchDomainEventsAsync(_cancellationToken);
         await _context.Received(1).SaveChangesAsync(_cancellationToken);
     }

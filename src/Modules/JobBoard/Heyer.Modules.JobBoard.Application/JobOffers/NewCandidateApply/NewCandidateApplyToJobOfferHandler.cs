@@ -9,8 +9,8 @@ namespace Heyer.Modules.JobBoard.Application.JobOffers.NewCandidateApply;
 
 public class NewCandidateApplyToJobOfferHandler : ICommandHandler<NewCandidateApplyToJobOffer>
 {
-    private readonly IJobOffersRepository _jobOffersRepository;
     private readonly ICandidatesRepository _candidatesRepository;
+    private readonly IJobOffersRepository _jobOffersRepository;
     private readonly IStorageApiClient _storageApiClient;
 
     public NewCandidateApplyToJobOfferHandler(
@@ -22,11 +22,11 @@ public class NewCandidateApplyToJobOfferHandler : ICommandHandler<NewCandidateAp
         _candidatesRepository = candidatesRepository;
         _storageApiClient = storageApiClient;
     }
-    
+
     public async Task<Result> Handle(NewCandidateApplyToJobOffer request, CancellationToken cancellationToken)
     {
         var jobOffer = await _jobOffersRepository.GetJobOfferById(request.JobOfferId, cancellationToken);
-        
+
         if (jobOffer is null)
         {
             return new NotFoundError();
@@ -53,7 +53,8 @@ public class NewCandidateApplyToJobOfferHandler : ICommandHandler<NewCandidateAp
         return Result.Fail(createCandidateResult.Errors);
     }
 
-    private async Task<Result<Candidate>> CreateCandidate(NewCandidateApplyToJobOffer request, CancellationToken cancellationToken)
+    private async Task<Result<Candidate>> CreateCandidate(NewCandidateApplyToJobOffer request,
+                                                          CancellationToken cancellationToken)
     {
         var candidate = Candidate.Create(
             request.FirstName,

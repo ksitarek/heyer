@@ -7,8 +7,8 @@ public class FileValidator : AbstractValidator<IFormFile>
 {
     private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".pdf" };
     private static readonly Type[] AllowedFormats = { typeof(Image), typeof(Pdf) };
-    
-    
+
+
     public FileValidator()
     {
         RuleFor(x => x.Length)
@@ -16,12 +16,12 @@ public class FileValidator : AbstractValidator<IFormFile>
             .WithMessage("File is empty.")
             .LessThanOrEqualTo(10 * 1024 * 1024)
             .WithMessage("Max file size is 10MB.");
-        
+
         RuleFor(x => x.FileName)
             .NotNull()
             .Must(x => AllowedExtensions.Contains(Path.GetExtension(x).ToLower()))
             .WithMessage("Invalid file extension.");
-        
+
         RuleFor(x => x)
             .Must(BeOfAllowedType)
             .WithMessage("Invalid file format.");

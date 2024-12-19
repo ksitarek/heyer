@@ -1,7 +1,5 @@
 using Heyer.API.Client.PublishedLanguage;
 using Heyer.Modules.JobBoard.Application.JobOffers.Create;
-using Heyer.Modules.JobBoard.Domain.Companies;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
 using RemoteWork = Heyer.Modules.JobBoard.Domain.JobOffers.RemoteWork;
 
 namespace Heyer.Modules.JobBoard.Application.Mapping;
@@ -13,7 +11,7 @@ public static class JobOfferMappings
             request.OfferSummary,
             request.JobDescription,
             request.RemoteWork.MapRemoteWork());
-    
+
     private static RemoteWork MapRemoteWork(this API.Client.PublishedLanguage.RemoteWork remoteWork) =>
         remoteWork switch
         {

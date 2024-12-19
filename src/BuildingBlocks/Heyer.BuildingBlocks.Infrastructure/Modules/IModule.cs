@@ -7,7 +7,7 @@ namespace Heyer.BuildingBlocks.Infrastructure.Modules;
 public interface IModule
 {
     Assembly ModuleApplicationAssembly { get; }
-    
+
     void ConfigureDependencyInjection(IServiceCollection services);
     void ConfigureModule(WebApplication app);
 }

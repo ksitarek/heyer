@@ -6,12 +6,11 @@ public class HasPermissionAuthorizationHandler : AuthorizationHandler<HasPermiss
 {
     private readonly IUserPermissionChecker _userPermissionChecker;
 
-    public HasPermissionAuthorizationHandler(IUserPermissionChecker userPermissionChecker)
-    {
+    public HasPermissionAuthorizationHandler(IUserPermissionChecker userPermissionChecker) =>
         _userPermissionChecker = userPermissionChecker;
-    }
-    
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, HasPermissionAuthorizationRequirement requirement)
+
+    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
+                                                         HasPermissionAuthorizationRequirement requirement)
     {
         var checkResult = await _userPermissionChecker.HasPermissionAsync(requirement.PermissionName);
 

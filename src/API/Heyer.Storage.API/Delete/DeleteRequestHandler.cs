@@ -16,7 +16,7 @@ public class DeleteRequestHandler : IRequestHandler<DeleteRequest, Result>
         _registryStrategy = registryStrategy;
         _storageStrategy = storageStrategy;
     }
-    
+
     public async Task<Result> Handle(DeleteRequest request, CancellationToken cancellationToken)
     {
         var storageResult = await _storageStrategy.DeleteAsync(request.Key, cancellationToken);
@@ -24,13 +24,13 @@ public class DeleteRequestHandler : IRequestHandler<DeleteRequest, Result>
         {
             return Result.Fail(storageResult.Errors);
         }
-        
+
         var registryResult = await _registryStrategy.DeleteAsync(request.Key, cancellationToken);
         if (registryResult.IsFailed)
         {
             return Result.Fail(registryResult.Errors);
         }
-        
+
         return Result.Ok();
     }
 }

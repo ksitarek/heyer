@@ -9,12 +9,10 @@ public class UnitOfWorkMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public UnitOfWorkMiddleware(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
+    public UnitOfWorkMiddleware(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next, CancellationToken cancellationToken)
+    public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next,
+                                      CancellationToken cancellationToken)
     {
         try
         {
@@ -23,7 +21,7 @@ public class UnitOfWorkMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
             if (handleResult.IsSuccess)
             {
                 var uowResult = await _unitOfWork.CommitAsync(cancellationToken);
-                if(uowResult.IsFailed)
+                if (uowResult.IsFailed)
                 {
                     handleResult.Reasons.AddRange(uowResult.Errors);
                 }

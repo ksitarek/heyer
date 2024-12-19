@@ -8,10 +8,7 @@ public record CandidateId
     {
     }
 
-    public CandidateId(Guid guid)
-    {
-        Guid = guid;
-    }
-    
+    public CandidateId(Guid guid) => Guid = guid;
+
     public static CandidateId CreateNew() => new(Guid.NewGuid());
 }

@@ -6,14 +6,15 @@ namespace Heyer.Storage.API.Extensions;
 
 public static class JwtExtensions
 {
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services,
+                                                          IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = GetTokenValidationParameters(configuration);
             });
-        
+
         services.AddAuthorization();
 
         return services;
@@ -26,7 +27,7 @@ public static class JwtExtensions
             throw new ArgumentException("Secret is required for JWT authentication.");
         }
 
-        return new TokenValidationParameters()
+        return new TokenValidationParameters
         {
             ValidateIssuer = bool.Parse(configuration["ValidateIssuer"] ?? "true"),
             ValidateAudience = bool.Parse(configuration["ValidateAudience"] ?? "true"),

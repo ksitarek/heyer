@@ -12,7 +12,7 @@ public static class RouteHandlerBuilderExtensions
             x.RequireAuthenticatedUser();
             x.Requirements.Add(new HasPermissionAuthorizationRequirement(permissionName));
         });
-        
+
         return builder;
     }
 }

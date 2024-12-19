@@ -5,10 +5,8 @@ namespace Heyer.Storage.API.Delete;
 
 public class DeleteRequestValidator : AbstractValidator<DeleteRequest>
 {
-    public DeleteRequestValidator()
-    {
+    public DeleteRequestValidator() =>
         RuleFor(x => x.Key)
             .NotEmpty()
             .WithMessage("Key is required.");
-    }
 }

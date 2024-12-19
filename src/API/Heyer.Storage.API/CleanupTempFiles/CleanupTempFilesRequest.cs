@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Heyer.Storage.API.CleanupTempFiles;
 
-public record CleanupTempFilesRequest() : IRequest<Result>;
+public record CleanupTempFilesRequest : IRequest<Result>;

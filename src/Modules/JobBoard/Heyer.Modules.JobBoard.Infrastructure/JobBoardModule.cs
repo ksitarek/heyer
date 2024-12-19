@@ -1,6 +1,5 @@
 using System.Reflection;
 using FluentValidation;
-using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.JobBoard.Application;
 using Heyer.Modules.JobBoard.Domain.Candidates;
@@ -19,10 +18,7 @@ public class JobBoardModule : IModule
 {
     private readonly IConfiguration _configuration;
 
-    public JobBoardModule(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
+    public JobBoardModule(IConfiguration configuration) => _configuration = configuration;
 
     public Assembly ModuleApplicationAssembly => typeof(JobBoardEndpointsConfiguration).Assembly;
 
@@ -35,11 +31,11 @@ public class JobBoardModule : IModule
         var db = client.GetDatabase(_configuration["MongoDb:DatabaseName"]!);
 
         services.AddSingleton(db);
-        
-        services.AddDbContext<JobBoardContext>(o => 
-            o.UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName));
 
-        services.AddScoped<DbContext>((sp) => sp.GetRequiredService<JobBoardContext>());
+        services.AddDbContext<JobBoardContext>(o =>
+                                                   o.UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName));
+
+        services.AddScoped<DbContext>(sp => sp.GetRequiredService<JobBoardContext>());
 
         services.AddScoped<ICandidatesRepository, CandidatesRepository>();
         services.AddScoped<IJobOffersRepository, JobOffersRepository>();

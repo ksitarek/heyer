@@ -5,22 +5,18 @@ using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.JobBoard.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var modules = new IModule[]
-{
-    new JobBoardModule(builder.Configuration)
-};
+var modules = new IModule[] { new JobBoardModule(builder.Configuration) };
 
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSingleton<IDateTimeProvider, SystemDateTime>();
 builder.Services.AddMediator(modules,
-    typeof(LoggingMiddleware<,>),
-    typeof(ValidationMiddleware<,>),
-    typeof(UnitOfWorkMiddleware<,>));
+                             typeof(LoggingMiddleware<,>),
+                             typeof(ValidationMiddleware<,>),
+                             typeof(UnitOfWorkMiddleware<,>));
 
 builder.Services.AddAuthenticationAndAuthorization(builder.Configuration.GetSection("Jwt"));
 
@@ -39,5 +35,7 @@ await app.RunAsync();
 
 namespace Heyer.API
 {
-    public class Program {}
+    public class Program
+    {
+    }
 }

@@ -5,7 +5,8 @@ namespace Heyer.Storage.API.Providers.Registry.MongoDB;
 
 internal static class MongoDBRegistryStrategyExtensions
 {
-    public static IServiceCollection AddMongoDBRegistryProvider(this IServiceCollection services, MongoDBRegistryOptions options)
+    public static IServiceCollection AddMongoDBRegistryProvider(this IServiceCollection services,
+                                                                MongoDBRegistryOptions options)
     {
         services.AddSingleton(Options.Create(options));
         services.AddSingleton<IRegistryStrategy, MongoDBRegistryStrategy>();
@@ -18,7 +19,7 @@ internal static class MongoDBRegistryStrategyExtensions
     private static IServiceCollection ConfigureMongoDB(this IServiceCollection services, MongoDBRegistryOptions options)
     {
         services.AddSingleton<MongoClient>(_ => new MongoClient(options.ConnectionString));
-        
+
         services.AddSingleton<IMongoDatabase>(p =>
         {
             var client = p.GetRequiredService<MongoClient>();

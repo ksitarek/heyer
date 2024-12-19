@@ -6,23 +6,20 @@ namespace Heyer.BuildingBlocks.Domain;
 
 public abstract class Entity
 {
-    [NotMapped]
-    private List<DomainEvent>? _domainEvents;
+    [NotMapped] private List<DomainEvent>? _domainEvents;
 
     [NotMapped]
-    public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents?.AsReadOnly() ?? ReadOnlyCollection<DomainEvent>.Empty;
+    public IReadOnlyCollection<DomainEvent> DomainEvents =>
+        _domainEvents?.AsReadOnly() ?? ReadOnlyCollection<DomainEvent>.Empty;
+
+    public void ClearDomainEvents() => _domainEvents?.Clear();
 
     protected void AddDomainEvent(DomainEvent @event)
     {
-        _domainEvents ??= new();
+        _domainEvents ??= new List<DomainEvent>();
         _domainEvents.Add(@event);
     }
 
-    public void ClearDomainEvents()
-    {
-        _domainEvents?.Clear();
-    }
-    
     protected Result ChallengeBusinessRules(params IBusinessRule[] businessRules)
     {
         var validationResult = new Result();

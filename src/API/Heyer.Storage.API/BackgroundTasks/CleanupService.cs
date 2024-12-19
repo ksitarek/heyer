@@ -7,8 +7,8 @@ namespace Heyer.Storage.API.BackgroundTasks;
 public class CleanupService : IHostedService, IAsyncDisposable
 {
     private readonly ILogger<CleanupService> _logger;
-    private readonly IOptions<CleanupServiceOptions> _options;
     private readonly IMediator _mediator;
+    private readonly IOptions<CleanupServiceOptions> _options;
     private Timer? _timer;
 
     public CleanupService(ILogger<CleanupService> logger, IOptions<CleanupServiceOptions> options, IMediator mediator)
@@ -16,6 +16,14 @@ public class CleanupService : IHostedService, IAsyncDisposable
         _logger = logger;
         _options = options;
         _mediator = mediator;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_timer != null)
+        {
+            await _timer.DisposeAsync();
+        }
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -52,10 +60,5 @@ public class CleanupService : IHostedService, IAsyncDisposable
         {
             _logger.LogError(e, "An error occurred during cleanup.");
         }
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (_timer != null) await _timer.DisposeAsync();
     }
 }

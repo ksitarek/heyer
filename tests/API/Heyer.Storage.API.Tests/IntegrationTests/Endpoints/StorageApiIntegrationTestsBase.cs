@@ -13,10 +13,7 @@ public abstract class StorageApiIntegrationTestsBase
         AppFactory = ApplicationFactory.Create();
         return Task.CompletedTask;
     }
-    
+
     [TearDown]
-    public async Task TearDown()
-    {
-        await AppFactory.DisposeAsync();
-    }
+    public async Task TearDown() => await AppFactory.DisposeAsync();
 }

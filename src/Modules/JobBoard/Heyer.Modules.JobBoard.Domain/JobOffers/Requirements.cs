@@ -7,9 +7,8 @@ public record Requirements
 
     private Requirements()
     {
-        
     }
-    
+
     public Requirements(ExperienceLevel experienceLevel, IEnumerable<Skill> skills)
     {
         ExperienceLevel = experienceLevel;

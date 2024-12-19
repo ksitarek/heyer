@@ -9,16 +9,14 @@ namespace Heyer.Storage.API.Tests.Utils.Validators;
 
 internal static class StrategyValidatorsExtensions
 {
-    internal static IServiceCollection AddValidators(this IServiceCollection services)
-    {
-        return services
+    internal static IServiceCollection AddValidators(this IServiceCollection services) =>
+        services
             .AddStorageStrategyValidator()
             .AddRegistryStrategyValidator();
-    }
 
     private static IServiceCollection AddRegistryStrategyValidator(this IServiceCollection services)
     {
-        services.AddSingleton<IRegistryStrategyValidator>((sp) =>
+        services.AddSingleton<IRegistryStrategyValidator>(sp =>
         {
             var registryStrategyOptions = sp.GetRequiredService<IOptions<RegistryStrategyOptions>>().Value;
 
@@ -42,7 +40,7 @@ internal static class StrategyValidatorsExtensions
 
     private static IServiceCollection AddStorageStrategyValidator(this IServiceCollection services)
     {
-        services.AddSingleton<IStorageStrategyValidator>((sp) =>
+        services.AddSingleton<IStorageStrategyValidator>(sp =>
         {
             var storageStrategyOptions = sp.GetRequiredService<IOptions<StorageStrategyOptions>>().Value;
 

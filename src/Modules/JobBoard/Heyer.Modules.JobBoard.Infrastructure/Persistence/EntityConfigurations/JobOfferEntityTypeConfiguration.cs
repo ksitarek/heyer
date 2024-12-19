@@ -12,12 +12,12 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
     public void Configure(EntityTypeBuilder<JobOffer> builder)
     {
         builder.ToCollection("JobOffers");
-        
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
             .HasConversion(x => x.Guid, x => new JobOfferId(x));
-        
+
         builder.Property("_offerSummary")
             .HasElementName("OfferSummary")
             .IsRequired()
@@ -26,25 +26,22 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
         builder.Property("_jobDescription")
             .HasElementName("JobDescription")
             .IsRequired();
-        
+
         builder.OwnsOne<CompanyDetails>("_companyDetails", cd =>
         {
             cd.HasElementName("CompanyDetails");
             cd.Property(x => x.CompanyId)
                 .HasConversion(x => x.Id, x => new CompanyId(x));
         });
-        
-        builder.OwnsOne<OfficeLocation>("_location", l =>
-        {
-            l.HasElementName("Location");
-        });
-        
+
+        builder.OwnsOne<OfficeLocation>("_location", l => { l.HasElementName("Location"); });
+
         builder.OwnsOne<Requirements>("_requirements", r =>
         {
             r.HasElementName("Requirements");
             r.Property("ExperienceLevel")
                 .IsRequired();
-            
+
             r.OwnsMany<Skill>("Skills", s =>
             {
                 s.Property(x => x.Label)
@@ -54,10 +51,7 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
                     .IsRequired();
             });
         });
-        
-        builder.OwnsMany<CandidateId>("_candidates", c =>
-        {
-            c.HasElementName("Candidates");
-        });
+
+        builder.OwnsMany<CandidateId>("_candidates", c => { c.HasElementName("Candidates"); });
     }
 }

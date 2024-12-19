@@ -4,6 +4,6 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public interface IJobOffersRepository
 {
-    Task<JobOffer?> GetJobOfferById(JobOfferId jobOfferId, CancellationToken cancellationToken = default);
     Task<Result> AddAsync(JobOffer jobOffer, CancellationToken cancellationToken = default);
+    Task<JobOffer?> GetJobOfferById(JobOfferId jobOfferId, CancellationToken cancellationToken = default);
 }

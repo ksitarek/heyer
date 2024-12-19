@@ -17,39 +17,6 @@ internal class FilesystemStorageStrategy : IStorageStrategy
         EnsureRootPathExists();
     }
 
-    private void EnsureRootPathExists()
-    {
-        if (!Directory.Exists(_rootPath))
-        {
-            Directory.CreateDirectory(_rootPath);
-        }
-    }
-
-    public async Task<Result> StoreAsync(string key, Stream stream, CancellationToken cancellationToken = default)
-    {
-        var path = Path.Combine(_rootPath, key);
-
-        if (File.Exists(path))
-        {
-            _logger.LogError("File already exists.");
-            return Result.Fail("File already exists.");
-        }
-
-        try
-        {
-            await using var fileStream = File.Create(path);
-            stream.Seek(0, SeekOrigin.Begin);
-            await stream.CopyToAsync(fileStream, cancellationToken);
-
-            return Result.Ok();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Failed to create file.");
-            return new Error("Failed to create file.").CausedBy(e);
-        }
-    }
-
     public Task<Result> DeleteAsync(string key, CancellationToken cancellationToken = default)
     {
         try
@@ -80,8 +47,39 @@ internal class FilesystemStorageStrategy : IStorageStrategy
         }
     }
 
-    public Task<Result> PreserveAsync(string key, CancellationToken cancellationToken = default)
+    public Task<Result> PreserveAsync(string key, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Result.Ok());
+
+    public async Task<Result> StoreAsync(string key, Stream stream, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(Result.Ok());
+        var path = Path.Combine(_rootPath, key);
+
+        if (File.Exists(path))
+        {
+            _logger.LogError("File already exists.");
+            return Result.Fail("File already exists.");
+        }
+
+        try
+        {
+            await using var fileStream = File.Create(path);
+            stream.Seek(0, SeekOrigin.Begin);
+            await stream.CopyToAsync(fileStream, cancellationToken);
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to create file.");
+            return new Error("Failed to create file.").CausedBy(e);
+        }
+    }
+
+    private void EnsureRootPathExists()
+    {
+        if (!Directory.Exists(_rootPath))
+        {
+            Directory.CreateDirectory(_rootPath);
+        }
     }
 }

@@ -13,17 +13,14 @@ namespace Heyer.Storage.API.Tests.UnitTests.BackgroundTasks;
 [Category("Unit")]
 public class CleanupServiceTests
 {
-    private CleanupServiceOptions _options;
     private IMediator _mediatorMock;
+    private CleanupServiceOptions _options;
     private CleanupService _service;
 
     [SetUp]
     public Task SetUp()
     {
-        _options = new CleanupServiceOptions()
-        {
-            Interval = 1
-        };
+        _options = new CleanupServiceOptions { Interval = 1 };
 
         _mediatorMock = Substitute.For<IMediator>();
 
@@ -35,10 +32,23 @@ public class CleanupServiceTests
         return Task.CompletedTask;
     }
 
-    [TearDown]
-    public async Task TearDown()
+    [Test]
+    [Parallelizable(ParallelScope.None)]
+    public async Task ShouldHandleAllExceptions()
     {
-        await _service.DisposeAsync();
+        // Arrange
+        _mediatorMock.Send(Arg.Any<CleanupTempFilesRequest>(), Arg.Any<CancellationToken>())
+            .Throws(new Exception("Test exception"));
+
+        // Act
+        var action = async () =>
+        {
+            await _service.StartAsync(CancellationToken.None);
+            await Task.Delay(TimeSpan.FromSeconds(_options.Interval * 2));
+        };
+
+        // Assert
+        await action.Should().NotThrowAsync();
     }
 
     [Test]
@@ -70,29 +80,13 @@ public class CleanupServiceTests
         await _service.StartAsync(CancellationToken.None);
         await Task.Delay(TimeSpan.FromMilliseconds(100));
         await _service.StopAsync(CancellationToken.None);
-        await Task.Delay(TimeSpan.FromSeconds(_options.Interval*2));
+        await Task.Delay(TimeSpan.FromSeconds(_options.Interval * 2));
 
         // Assert
         await _mediatorMock
             .Received(1).Send(Arg.Any<CleanupTempFilesRequest>(), Arg.Any<CancellationToken>());
     }
 
-    [Test]
-    [Parallelizable(ParallelScope.None)]
-    public async Task ShouldHandleAllExceptions()
-    {
-        // Arrange
-        _mediatorMock.Send(Arg.Any<CleanupTempFilesRequest>(), Arg.Any<CancellationToken>())
-            .Throws(new Exception("Test exception"));
-
-        // Act
-        var action = async () =>
-        {
-            await _service.StartAsync(CancellationToken.None);
-            await Task.Delay(TimeSpan.FromSeconds(_options.Interval * 2));
-        };
-            
-        // Assert
-        await action.Should().NotThrowAsync();
-    }
+    [TearDown]
+    public async Task TearDown() => await _service.DisposeAsync();
 }

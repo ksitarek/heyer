@@ -11,8 +11,8 @@ namespace Heyer.Storage.API.Tests.UnitTests.Store;
 [Category("Unit")]
 public class StoreRequestValidatorTests
 {
-    private StoreRequestValidator _validator;
     private IValidator<IFormFile> _fileValidator;
+    private StoreRequestValidator _validator;
 
     [SetUp]
     public void Setup()
@@ -20,6 +20,13 @@ public class StoreRequestValidatorTests
         _fileValidator = Substitute.For<IValidator<IFormFile>>();
         _validator = new StoreRequestValidator(_fileValidator);
     }
+
+    [Test]
+    public void ShouldHaveErrorWhenFileIsInvalid() =>
+        // Arrange
+        // Act
+        // Assert
+        _validator.ShouldHaveChildValidator(x => x.File, typeof(IValidator<IFormFile>));
 
     [Test]
     public void ShouldHaveErrorWhenFileIsNull()
@@ -33,17 +40,6 @@ public class StoreRequestValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().ContainSingle(e => e.ErrorMessage == "File is required.");
-    }
-
-    [Test]
-    public void ShouldHaveErrorWhenFileIsInvalid()
-    {
-        // Arrange
-
-        // Act
-
-        // Assert
-        _validator.ShouldHaveChildValidator(x => x.File, typeof(IValidator<IFormFile>));
     }
 
     [Test]

@@ -11,16 +11,13 @@ public class ValidationMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public ValidationMiddleware(IEnumerable<IValidator<TRequest>> validators)
-    {
-        _validators = validators;
-    }
+    public ValidationMiddleware(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
 
     public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next,
                                       CancellationToken cancellationToken)
     {
         var validationResult = await ValidateAsync(request, cancellationToken);
-        
+
         return validationResult.IsSuccess
             ? await next()
             : BuildFailResult(validationResult);
@@ -29,9 +26,11 @@ public class ValidationMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
     private static TResult BuildFailResult(Result validationResult)
     {
         var result = new TResult();
-        
+
         foreach (var reason in validationResult.Reasons)
+        {
             result.Reasons.Add(reason);
+        }
 
         return result;
     }
@@ -39,7 +38,9 @@ public class ValidationMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
     private async Task<Result> ValidateAsync(TRequest request, CancellationToken cancellationToken)
     {
         if (!_validators.Any())
+        {
             return Result.Ok();
+        }
 
         var context = new ValidationContext<TRequest>(request);
         var validationTasks = _validators.Select(x => x.ValidateAsync(context, cancellationToken));

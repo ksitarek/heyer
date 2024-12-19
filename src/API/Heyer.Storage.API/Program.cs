@@ -35,7 +35,7 @@ await app.RunAsync();
 // For Integration Testing
 namespace Heyer.Storage.API
 {
-    public partial class Program
+    public class Program
     {
     };
 }

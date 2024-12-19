@@ -11,34 +11,25 @@ namespace Heyer.Storage.API.Tests.UnitTests.Delete;
 [Category("Unit")]
 public class DeleteRequestHandlerTests
 {
-    private IStorageStrategy _storageStrategy;
-    private IRegistryStrategy _registryStrategy;
-    
     private DeleteRequestHandler _handler;
+    private IRegistryStrategy _registryStrategy;
+    private IStorageStrategy _storageStrategy;
 
-    [SetUp]
-    public void Setup()
-    {
-        _storageStrategy = Substitute.For<IStorageStrategy>();
-        _registryStrategy = Substitute.For<IRegistryStrategy>();
-
-        _handler = new DeleteRequestHandler(_registryStrategy, _storageStrategy);
-    }
-    
     [Test]
-    public async Task DeleteRequestHandler_WhenStorageStrategyFails_ShouldReturnFailedResult()
+    public async Task DeleteRequestHandler_WhenBothStrategiesSucceed_ShouldReturnOkResult()
     {
         // Arrange
         var request = new DeleteRequest("key");
-        _storageStrategy.DeleteAsync("key", Arg.Any<CancellationToken>()).Returns(Result.Fail("error"));
+        _storageStrategy.DeleteAsync("key", Arg.Any<CancellationToken>()).Returns(Result.Ok());
+        _registryStrategy.DeleteAsync("key", Arg.Any<CancellationToken>()).Returns(Result.Ok());
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("error");
+        result.Should().BeSuccess();
     }
-    
+
     [Test]
     public async Task DeleteRequestHandler_WhenRegistryStrategyFails_ShouldReturnFailedResult()
     {
@@ -53,19 +44,27 @@ public class DeleteRequestHandlerTests
         // Assert
         result.Should().BeFailure().And.HaveError("error");
     }
-    
+
     [Test]
-    public async Task DeleteRequestHandler_WhenBothStrategiesSucceed_ShouldReturnOkResult()
+    public async Task DeleteRequestHandler_WhenStorageStrategyFails_ShouldReturnFailedResult()
     {
         // Arrange
         var request = new DeleteRequest("key");
-        _storageStrategy.DeleteAsync("key", Arg.Any<CancellationToken>()).Returns(Result.Ok());
-        _registryStrategy.DeleteAsync("key", Arg.Any<CancellationToken>()).Returns(Result.Ok());
+        _storageStrategy.DeleteAsync("key", Arg.Any<CancellationToken>()).Returns(Result.Fail("error"));
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
+        result.Should().BeFailure().And.HaveError("error");
+    }
+
+    [SetUp]
+    public void Setup()
+    {
+        _storageStrategy = Substitute.For<IStorageStrategy>();
+        _registryStrategy = Substitute.For<IRegistryStrategy>();
+
+        _handler = new DeleteRequestHandler(_registryStrategy, _storageStrategy);
     }
 }

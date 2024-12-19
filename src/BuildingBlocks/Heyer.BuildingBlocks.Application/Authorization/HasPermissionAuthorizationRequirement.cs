@@ -4,10 +4,6 @@ namespace Heyer.BuildingBlocks.Application.Authorization;
 
 public class HasPermissionAuthorizationRequirement : IAuthorizationRequirement
 {
+    public HasPermissionAuthorizationRequirement(string permissionName) => PermissionName = permissionName;
     public string PermissionName { get; }
-
-    public HasPermissionAuthorizationRequirement(string permissionName)
-    {
-        PermissionName = permissionName;
-    }
 }

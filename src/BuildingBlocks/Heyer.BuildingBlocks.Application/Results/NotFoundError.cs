@@ -6,6 +6,5 @@ public class NotFoundError : Error
 {
     public NotFoundError() : base("Not found.")
     {
-        
     }
 }

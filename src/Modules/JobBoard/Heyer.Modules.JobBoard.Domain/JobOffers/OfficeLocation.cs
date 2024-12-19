@@ -4,10 +4,9 @@ public record OfficeLocation
 {
     public string City { get; private set; } = null!;
     public string Country { get; private set; } = null!;
-    
+
     private OfficeLocation()
     {
-        
     }
 
     public OfficeLocation(string city, string country)
@@ -15,4 +14,4 @@ public record OfficeLocation
         City = city;
         Country = country;
     }
-};
+}

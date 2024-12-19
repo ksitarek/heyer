@@ -8,18 +8,8 @@ internal class CandidatesRepository : ICandidatesRepository
 {
     private readonly JobBoardContext _context;
 
-    public CandidatesRepository(JobBoardContext context)
-    {
-        _context = context;
-    }
-    
-    public Task<Candidate?> GetCandidateById(CandidateId candidateId, CancellationToken cancellationToken = default)
-    {
-        return _context.Candidates
-            .Where(x => x.Id == candidateId)
-            .FirstOrDefaultAsync(cancellationToken);
-    }
-    
+    public CandidatesRepository(JobBoardContext context) => _context = context;
+
     public async Task<Result> AddCandidate(Candidate candidate, CancellationToken cancellationToken = default)
     {
         try
@@ -33,4 +23,9 @@ internal class CandidatesRepository : ICandidatesRepository
             return Result.Fail(new Error("Failed to add candidate").CausedBy(e));
         }
     }
+
+    public Task<Candidate?> GetCandidateById(CandidateId candidateId, CancellationToken cancellationToken = default) =>
+        _context.Candidates
+            .Where(x => x.Id == candidateId)
+            .FirstOrDefaultAsync(cancellationToken);
 }

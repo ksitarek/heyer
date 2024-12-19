@@ -8,8 +8,8 @@ namespace Heyer.Modules.JobBoard.Application.JobOffers.Create;
 
 public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
 {
-    private readonly IUserDataProvider _userDataProvider;
     private readonly IJobOffersRepository _jobOffersRepository;
+    private readonly IUserDataProvider _userDataProvider;
 
     public CreateJobOfferHandler(IUserDataProvider userDataProvider, IJobOffersRepository jobOffersRepository)
     {

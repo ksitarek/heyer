@@ -9,10 +9,10 @@ namespace Heyer.Storage.API.Providers.Registry.MongoDB;
 
 public class MongoDBRegistryStrategy : IRegistryStrategy
 {
-    private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IOptions<RegistryStrategyOptions> _options;
     private readonly IMongoCollection<StorageRegistryEntry> _collection;
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILogger<MongoDBRegistryStrategy> _logger;
+    private readonly IOptions<RegistryStrategyOptions> _options;
 
     public MongoDBRegistryStrategy(
         IDateTimeProvider dateTimeProvider,
@@ -24,6 +24,49 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
         _options = options;
         _collection = collection;
         _logger = logger;
+    }
+
+    public async Task<Result> DeleteAsync(string key, CancellationToken cancellationToken)
+    {
+        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
+        try
+        {
+            await _collection.DeleteOneAsync(filter, cancellationToken);
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            return new Error("Failed to delete storage registry entry.").CausedBy(e);
+        }
+    }
+
+    public async Task<Result<IFileProperties>> GetAsync(string key, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
+            var entry = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+
+            return entry == null
+                ? Result.Fail(new NotFoundError())
+                : entry;
+        }
+        catch (Exception e)
+        {
+            return Result.Fail(new Error("Failed to get storage registry entry.").CausedBy(e));
+        }
+    }
+
+    public async Task<Result<IEnumerable<IFileProperties>>> GetExpiredTempFiles(CancellationToken cancellationToken)
+    {
+        var refDate = _dateTimeProvider.UtcNow().AddSeconds(-_options.Value.TempFileLifespan);
+
+        var filter = Builders<StorageRegistryEntry>.Filter.And(
+            Builders<StorageRegistryEntry>.Filter.Lte(x => x.CreatedAt, refDate),
+            Builders<StorageRegistryEntry>.Filter.Eq(x => x.Preserve, false));
+
+        return await _collection.Find(filter)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Result> RegisterNewFileAsync(
@@ -82,48 +125,5 @@ public class MongoDBRegistryStrategy : IRegistryStrategy
     {
         var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
         return Result.OkIf(await _collection.Find(filter).AnyAsync(cancellationToken), "Key not found.");
-    }
-
-    public async Task<Result<IFileProperties>> GetAsync(string key, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
-            var entry = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
-
-            return entry == null
-                ? Result.Fail(new NotFoundError())
-                : entry;
-        }
-        catch (Exception e)
-        {
-            return Result.Fail(new Error("Failed to get storage registry entry.").CausedBy(e));
-        }
-    }
-
-    public async Task<Result> DeleteAsync(string key, CancellationToken cancellationToken)
-    {
-        var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
-        try
-        {
-            await _collection.DeleteOneAsync(filter, cancellationToken);
-            return Result.Ok();
-        }
-        catch (Exception e)
-        {
-            return new Error("Failed to delete storage registry entry.").CausedBy(e);
-        }
-    }
-
-    public async Task<Result<IEnumerable<IFileProperties>>> GetExpiredTempFiles(CancellationToken cancellationToken)
-    {
-        var refDate = _dateTimeProvider.UtcNow().AddSeconds(- _options.Value.TempFileLifespan);
-        
-        var filter = Builders<StorageRegistryEntry>.Filter.And(
-            Builders<StorageRegistryEntry>.Filter.Lte(x => x.CreatedAt, refDate), 
-            Builders<StorageRegistryEntry>.Filter.Eq(x => x.Preserve, false));
-
-        return await _collection.Find(filter)
-            .ToListAsync(cancellationToken);
     }
 }

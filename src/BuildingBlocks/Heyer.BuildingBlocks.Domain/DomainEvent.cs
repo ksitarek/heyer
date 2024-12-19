@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Heyer.BuildingBlocks.Domain;
 
-public abstract record DomainEvent : INotification {
+public abstract record DomainEvent : INotification
+{
     public Guid EventId { get; }
     public DateTime OccurredOn { get; }
 

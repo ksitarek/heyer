@@ -5,10 +5,8 @@ namespace Heyer.Storage.API.Preserve;
 
 public class PreserveRequestValidator : AbstractValidator<PreserveRequest>
 {
-    public PreserveRequestValidator()
-    {
+    public PreserveRequestValidator() =>
         RuleFor(x => x.Key)
             .NotEmpty()
             .WithMessage("Key is required.");
-    }
 }

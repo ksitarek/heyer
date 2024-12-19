@@ -29,6 +29,10 @@ csharp_new_line_before_finally = true
 csharp_new_line_before_members_in_object_initializers = true
 csharp_new_line_before_members_in_anonymous_types = true
 csharp_new_line_between_query_expression_clauses = true
+csharp_wrap_arguments_style = chop_if_long
+csharp_wrap_parameters_style = chop_if_long
+wrap_arguments_style = chop_if_long
+wrap_parameters_style = chop_if_long
 
 # Indentation preferences
 csharp_indent_block_contents = true

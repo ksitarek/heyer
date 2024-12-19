@@ -1,6 +1,5 @@
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Storage.API.Client.PublishedLanguage;
-using Heyer.Storage.API.Validators;
 using MediatR;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +8,24 @@ namespace Heyer.Storage.API.Extensions;
 
 public static class EndpointsExtensions
 {
-    public static WebApplication MapEndpoints(this WebApplication app)
-    {
-        return app
+    public static WebApplication MapEndpoints(this WebApplication app) =>
+        app
             .MapDeleteEndpoint()
             .MapDownloadEndpoint()
             .MapPreserveEndpoint()
             .MapStoreEndpoint()
             .MapAntiforgeryEndpoint();
+
+    private static WebApplication MapAntiforgeryEndpoint(this WebApplication app)
+    {
+        app.MapGet("csrf", (IAntiforgery forgeryService, HttpContext context) =>
+        {
+            var tokens = forgeryService.GetAndStoreTokens(context);
+            var xsrfToken = tokens.RequestToken!;
+            return TypedResults.Content(xsrfToken, "text/plain");
+        });
+
+        return app;
     }
 
     private static WebApplication MapDeleteEndpoint(this WebApplication app)
@@ -66,18 +75,6 @@ public static class EndpointsExtensions
             return response.IsSuccess
                 ? Results.Ok(response.ValueOrDefault)
                 : ResponseErrorHandling.Handle(response);
-        });
-
-        return app;
-    }
-
-    private static WebApplication MapAntiforgeryEndpoint(this WebApplication app)
-    {
-        app.MapGet("csrf", (IAntiforgery forgeryService, HttpContext context) =>
-        {
-            var tokens = forgeryService.GetAndStoreTokens(context);
-            var xsrfToken = tokens.RequestToken!;
-            return TypedResults.Content(xsrfToken, "text/plain");
         });
 
         return app;

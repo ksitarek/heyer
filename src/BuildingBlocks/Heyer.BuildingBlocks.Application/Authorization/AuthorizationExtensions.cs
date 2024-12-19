@@ -9,18 +9,19 @@ namespace Heyer.BuildingBlocks.Application.Authorization;
 
 public static class AuthorizationExtensions
 {
-    public static void AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration jwtConfiguration)
+    public static void AddAuthenticationAndAuthorization(this IServiceCollection services,
+                                                         IConfiguration jwtConfiguration)
     {
         services.AddHttpContextAccessor();
         services.AddSingleton<IUserPermissionChecker, ClaimsPermissionChecker>();
         services.AddScoped<IUserDataProvider, ClaimsUserDataProvider>();
-        
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = GetTokenValidationParameters(jwtConfiguration);
             });
-        
+
         services.AddAuthorization(options =>
         {
             options.AddPolicy("HasPermission", policy =>
@@ -29,7 +30,6 @@ public static class AuthorizationExtensions
                 policy.RequireAuthenticatedUser();
                 policy.AddAuthenticationSchemes("Bearer");
             });
-    
         });
 
         services.AddScoped<IAuthorizationHandler, HasPermissionAuthorizationHandler>();
@@ -42,7 +42,7 @@ public static class AuthorizationExtensions
             throw new ArgumentException("Secret is required for JWT authentication.");
         }
 
-        return new TokenValidationParameters()
+        return new TokenValidationParameters
         {
             ValidateIssuer = bool.Parse(configuration["ValidateIssuer"] ?? "true"),
             ValidateAudience = bool.Parse(configuration["ValidateAudience"] ?? "true"),

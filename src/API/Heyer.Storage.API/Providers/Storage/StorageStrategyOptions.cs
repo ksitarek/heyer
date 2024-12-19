@@ -4,12 +4,12 @@ namespace Heyer.Storage.API.Providers.Storage;
 
 public class StorageStrategyOptions
 {
-    public StorageStrategyType Type { get; set; }
-    public FilesystemStorageOptions FilesystemStorage { get; set; } = new();
-    
     public enum StorageStrategyType
     {
         Unknown,
         Filesystem
     }
+
+    public FilesystemStorageOptions FilesystemStorage { get; set; } = new();
+    public StorageStrategyType Type { get; set; }
 }

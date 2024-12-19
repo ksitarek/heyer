@@ -8,8 +8,6 @@ public class MongoDbFixture
     private static readonly Randomizer Randomizer = new();
     private readonly MongoDbContainer _mongoDbContainer;
 
-    public string ConnectionString => _mongoDbContainer.GetConnectionString();
-
     public MongoDbFixture()
     {
         var port = Randomizer.Next(27100, 27200);
@@ -23,13 +21,9 @@ public class MongoDbFixture
             .Build();
     }
 
-    public async Task InitializeAsync()
-    {
-        await _mongoDbContainer.StartAsync();
-    }
+    public string ConnectionString => _mongoDbContainer.GetConnectionString();
 
-    public async Task DisposeAsync()
-    {
-        await _mongoDbContainer.StopAsync();
-    }
+    public async Task DisposeAsync() => await _mongoDbContainer.StopAsync();
+
+    public async Task InitializeAsync() => await _mongoDbContainer.StartAsync();
 }

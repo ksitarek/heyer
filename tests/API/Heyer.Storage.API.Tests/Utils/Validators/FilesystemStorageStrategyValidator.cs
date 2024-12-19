@@ -8,23 +8,7 @@ internal class FilesystemStorageStrategyValidator : IStorageStrategyValidator
 {
     private readonly IOptions<FilesystemStorageOptions> _options;
 
-    public FilesystemStorageStrategyValidator(IOptions<FilesystemStorageOptions> options)
-    {
-        _options = options;
-    }
-    
-    public Task ValidateFileIsPresent(string key)
-    {
-        File.Exists($"{_options.Value.RootPath}/{key}")
-            .Should().BeTrue();
-
-        return Task.CompletedTask;
-    }
-
-    public Task ValidateFileIsPreserved(string key)
-    {
-        return ValidateFileIsPresent(key);
-    }
+    public FilesystemStorageStrategyValidator(IOptions<FilesystemStorageOptions> options) => _options = options;
 
     public Task ValidateFileIsNotPresent(string key)
     {
@@ -33,4 +17,14 @@ internal class FilesystemStorageStrategyValidator : IStorageStrategyValidator
 
         return Task.CompletedTask;
     }
+
+    public Task ValidateFileIsPresent(string key)
+    {
+        File.Exists($"{_options.Value.RootPath}/{key}")
+            .Should().BeTrue();
+
+        return Task.CompletedTask;
+    }
+
+    public Task ValidateFileIsPreserved(string key) => ValidateFileIsPresent(key);
 }

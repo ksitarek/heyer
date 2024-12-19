@@ -13,8 +13,8 @@ namespace Heyer.Storage.API.Tests.UnitTests.Store;
 public class StoreRequestHandlerTests
 {
     private StoreRequestHandler _handler;
-    private IStorageStrategy _storageStrategy;
     private IRegistryStrategy _registryStrategy;
+    private IStorageStrategy _storageStrategy;
 
     [SetUp]
     public void SetUp()
@@ -37,32 +37,36 @@ public class StoreRequestHandlerTests
     }
 
     [Test]
-    public async Task ShouldStoreFileAndRegisterNewFile()
+    public async Task ShouldReturnErrorWhenRegistryStrategyFails()
     {
         // Arrange
         var request = new StoreRequest(Substitute.For<IFormFile>());
+        _registryStrategy
+            .RegisterNewFileAsync(Arg.Any<string>(), Arg.Any<IFormFile>(), Arg.Any<CancellationToken>())
+            .Returns(Result.Fail("Registry strategy failed"));
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
-        
+        result.Should().BeFailure()
+            .Which.HasError(e => e.Message == "Registry strategy failed");
+
         await _storageStrategy
             .Received(1)
             .StoreAsync(
-                key: Arg.Any<string>(),
-                stream: Arg.Any<Stream>(),
-                cancellationToken: Arg.Any<CancellationToken>());
+                Arg.Any<string>(),
+                Arg.Any<Stream>(),
+                Arg.Any<CancellationToken>());
 
         await _registryStrategy
             .Received(1)
             .RegisterNewFileAsync(
-                key: Arg.Any<string>(), 
-                file: request.File, 
-                cancellationToken: Arg.Any<CancellationToken>());
+                Arg.Any<string>(),
+                request.File,
+                Arg.Any<CancellationToken>());
     }
-    
+
     [Test]
     public async Task ShouldReturnErrorWhenStorageStrategyFails()
     {
@@ -78,50 +82,46 @@ public class StoreRequestHandlerTests
         // Assert
         result.Should().BeFailure()
             .Which.HasError(e => e.Message == "Storage strategy failed");
-        
+
         await _storageStrategy
             .Received(1)
             .StoreAsync(
-                key: Arg.Any<string>(),
-                stream: Arg.Any<Stream>(),
-                cancellationToken: Arg.Any<CancellationToken>());
+                Arg.Any<string>(),
+                Arg.Any<Stream>(),
+                Arg.Any<CancellationToken>());
 
         await _registryStrategy
             .DidNotReceive()
             .RegisterNewFileAsync(
-                key: Arg.Any<string>(), 
-                file: request.File, 
-                cancellationToken: Arg.Any<CancellationToken>());
+                Arg.Any<string>(),
+                request.File,
+                Arg.Any<CancellationToken>());
     }
-    
+
     [Test]
-    public async Task ShouldReturnErrorWhenRegistryStrategyFails()
+    public async Task ShouldStoreFileAndRegisterNewFile()
     {
         // Arrange
         var request = new StoreRequest(Substitute.For<IFormFile>());
-        _registryStrategy
-            .RegisterNewFileAsync(Arg.Any<string>(), Arg.Any<IFormFile>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Fail("Registry strategy failed"));
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure()
-            .Which.HasError(e => e.Message == "Registry strategy failed");
-        
+        result.Should().BeSuccess();
+
         await _storageStrategy
             .Received(1)
             .StoreAsync(
-                key: Arg.Any<string>(),
-                stream: Arg.Any<Stream>(),
-                cancellationToken: Arg.Any<CancellationToken>());
+                Arg.Any<string>(),
+                Arg.Any<Stream>(),
+                Arg.Any<CancellationToken>());
 
         await _registryStrategy
             .Received(1)
             .RegisterNewFileAsync(
-                key: Arg.Any<string>(), 
-                file: request.File, 
-                cancellationToken: Arg.Any<CancellationToken>());
+                Arg.Any<string>(),
+                request.File,
+                Arg.Any<CancellationToken>());
     }
 }

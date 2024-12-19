@@ -10,10 +10,7 @@ public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, 
 {
     private readonly ILogger<LoggingMiddleware<TRequest, TResult>> _logger;
 
-    public LoggingMiddleware(ILogger<LoggingMiddleware<TRequest, TResult>> logger)
-    {
-        _logger = logger;
-    }
+    public LoggingMiddleware(ILogger<LoggingMiddleware<TRequest, TResult>> logger) => _logger = logger;
 
     public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next,
                                       CancellationToken cancellationToken)
@@ -38,7 +35,6 @@ public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, 
                     {
                         _logger.LogError(reason.ToString());
                     }
-                    
                 }
             }
 

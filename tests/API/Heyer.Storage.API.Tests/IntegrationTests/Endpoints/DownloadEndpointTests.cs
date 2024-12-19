@@ -9,19 +9,6 @@ namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 public class DownloadEndpointTests : StorageApiIntegrationTestsBase
 {
     [Test]
-    public async Task DownloadEndpoint_WithoutAuthorization_WillReturn401()
-    {
-        // Arrange
-        var client = AppFactory.CreateApiClient();
-
-        // Act
-        var action = async () => await client.Download(Guid.NewGuid().ToString());
-
-        // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    }
-
-    [Test]
     public async Task DownloadEndpoint_WithInvalidKey_WillReturn404()
     {
         // Arrange
@@ -32,6 +19,19 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
 
         // Assert
         (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Test]
+    public async Task DownloadEndpoint_WithoutAuthorization_WillReturn401()
+    {
+        // Arrange
+        var client = AppFactory.CreateApiClient();
+
+        // Act
+        var action = async () => await client.Download(Guid.NewGuid().ToString());
+
+        // Assert
+        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
         downloadedFileStream.Length.Should().Be(fromDisk.Headers.ContentLength);
 
         AreStreamsEqual(
-            downloadedFileStream, 
+            downloadedFileStream,
             await fromDisk.ReadAsStreamAsync()).Should().BeTrue();
     }
 
@@ -68,8 +68,8 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
             return false;
         }
 
-        byte[] buffer = new byte[bufferSize];
-        byte[] otherBuffer = new byte[bufferSize];
+        var buffer = new byte[bufferSize];
+        var otherBuffer = new byte[bufferSize];
         while ((_ = stream.Read(buffer, 0, buffer.Length)) > 0)
         {
             var _ = other.Read(otherBuffer, 0, otherBuffer.Length);

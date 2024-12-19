@@ -10,10 +10,10 @@ public class EntityTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        
+
         // Act
         var testEntity = new TestEntity(id);
-        
+
         // Assert
         var @event = testEntity.DomainEvents.Should().HaveCount(1).And.Subject.Single();
         @event.Should().BeOfType<TestEntityCreated>();
@@ -21,27 +21,24 @@ public class EntityTests
         @event.As<TestEntityCreated>().OccurredOn.Should().BeWithin(TimeSpan.FromMilliseconds(10));
         @event.As<TestEntityCreated>().TestEntityId.Should().Be(id);
     }
-    
+
     [Test]
     public void TestEntity_ShouldRemoveAllEvents_WhenClearDomainEventsCalled()
     {
         // Arrange
         var id = Guid.NewGuid();
-        
+
         // Act
         var testEntity = new TestEntity(id);
         testEntity.ClearDomainEvents();
-        
+
         // Assert
         var @event = testEntity.DomainEvents.Should().HaveCount(0);
     }
 
     internal class TestEntity : Entity
     {
-        public TestEntity(Guid id)
-        {
-            AddDomainEvent(new TestEntityCreated(id));
-        }
+        public TestEntity(Guid id) => AddDomainEvent(new TestEntityCreated(id));
     }
 
     internal record TestEntityCreated(Guid TestEntityId) : DomainEvent;

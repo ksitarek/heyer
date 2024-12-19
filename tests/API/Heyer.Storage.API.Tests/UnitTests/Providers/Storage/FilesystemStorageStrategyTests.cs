@@ -11,79 +11,19 @@ namespace Heyer.Storage.API.Tests.UnitTests.Providers.Storage;
 [Category("Unit")]
 public class FilesystemStorageStrategyTests
 {
-    private FilesystemStorageStrategy _strategy;
     private FilesystemStorageOptions _options;
-
-    [SetUp]
-    public void Setup()
-    {
-        var testRootPath = Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
-            "testRootPath");
-
-        _options = new FilesystemStorageOptions()
-        {
-            RootPath = testRootPath
-        };
-
-        _strategy = new FilesystemStorageStrategy(Options.Create(_options),
-                                                  new NullLogger<FilesystemStorageStrategy>());
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        Directory.Delete(_options.RootPath, true);
-    }
+    private FilesystemStorageStrategy _strategy;
 
     [Test]
-    public async Task StoreAsync_WhenInvokedWithStreamAndKey_ShouldStoreStream()
-    {
-        // Arrange
-        var key = "test-key";
-        var stream = new MemoryStream("test-data"u8.ToArray());
-
-        // Act
-        await _strategy.StoreAsync(key, stream);
-
-        // Assert
-        var filePath = Path.Combine(_options.RootPath, key);
-        File.Exists(filePath).Should().BeTrue();
-        Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data"));
-    }
-
-    [Test]
-    public async Task StoreAsync_WhenInvokedMultipleTimesWithTheSameKey_ShouldReturnError()
-    {
-        // Arrange
-        var key = "test-key";
-        var stream1 = new MemoryStream("test-data1"u8.ToArray());
-        var stream2 = new MemoryStream("test-data2"u8.ToArray());
-
-        await _strategy.StoreAsync(key, stream1);
-
-        // Act
-        var result = await _strategy.StoreAsync(key, stream2);
-
-        // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Errors[0].Message.Should().Be("File already exists.");
-
-        var filePath = Path.Combine(_options.RootPath, key);
-        Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data1"));
-    }
-
-    [Test]
-    public async Task StoreAsync_ShouldHandleExceptions()
+    public async Task DeleteAsync_ShouldHandleExceptions()
     {
         // Arrange
         var randomizer = new Randomizer();
         var key = randomizer.GetString(1024);
-        var stream = new MemoryStream("test-data1"u8.ToArray());
 
         // Act
         Result? result = null;
-        var action = async () => result = await _strategy.StoreAsync(key, stream);
+        var action = async () => result = await _strategy.DeleteAsync(key);
 
         // Assert
         await action.Should().NotThrowAsync();
@@ -105,23 +45,6 @@ public class FilesystemStorageStrategyTests
         // Assert
         var filePath = Path.Combine(_options.RootPath, key);
         File.Exists(filePath).Should().BeFalse();
-    }
-
-    [Test]
-    public async Task DeleteAsync_ShouldHandleExceptions()
-    {
-        // Arrange
-        var randomizer = new Randomizer();
-        var key = randomizer.GetString(1024);
-
-        // Act
-        Result? result = null;
-        var action = async () => result = await _strategy.DeleteAsync(key);
-
-        // Assert
-        await action.Should().NotThrowAsync();
-        result!.Should().NotBeNull();
-        result!.IsSuccess.Should().BeFalse();
     }
 
     [Test]
@@ -152,16 +75,87 @@ public class FilesystemStorageStrategyTests
         result.IsSuccess.Should().BeFalse();
         result.Errors[0].Message.Should().Be("Not found.");
     }
-    
+
     [Test]
     public async Task PreserveAsync_ShouldAlwaysReturnOk()
     {
         // Act
         var result = await _strategy.PreserveAsync(Guid.NewGuid().ToString());
-        
+
         // Assert
         result.IsSuccess.Should().BeTrue();
     }
+
+    [SetUp]
+    public void Setup()
+    {
+        var testRootPath = Path.Combine(
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+            "testRootPath");
+
+        _options = new FilesystemStorageOptions { RootPath = testRootPath };
+
+        _strategy = new FilesystemStorageStrategy(Options.Create(_options),
+                                                  new NullLogger<FilesystemStorageStrategy>());
+    }
+
+    [Test]
+    public async Task StoreAsync_ShouldHandleExceptions()
+    {
+        // Arrange
+        var randomizer = new Randomizer();
+        var key = randomizer.GetString(1024);
+        var stream = new MemoryStream("test-data1"u8.ToArray());
+
+        // Act
+        Result? result = null;
+        var action = async () => result = await _strategy.StoreAsync(key, stream);
+
+        // Assert
+        await action.Should().NotThrowAsync();
+        result!.Should().NotBeNull();
+        result!.IsSuccess.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task StoreAsync_WhenInvokedMultipleTimesWithTheSameKey_ShouldReturnError()
+    {
+        // Arrange
+        var key = "test-key";
+        var stream1 = new MemoryStream("test-data1"u8.ToArray());
+        var stream2 = new MemoryStream("test-data2"u8.ToArray());
+
+        await _strategy.StoreAsync(key, stream1);
+
+        // Act
+        var result = await _strategy.StoreAsync(key, stream2);
+
+        // Assert
+        result.IsSuccess.Should().BeFalse();
+        result.Errors[0].Message.Should().Be("File already exists.");
+
+        var filePath = Path.Combine(_options.RootPath, key);
+        Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data1"));
+    }
+
+    [Test]
+    public async Task StoreAsync_WhenInvokedWithStreamAndKey_ShouldStoreStream()
+    {
+        // Arrange
+        var key = "test-key";
+        var stream = new MemoryStream("test-data"u8.ToArray());
+
+        // Act
+        await _strategy.StoreAsync(key, stream);
+
+        // Assert
+        var filePath = Path.Combine(_options.RootPath, key);
+        File.Exists(filePath).Should().BeTrue();
+        Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data"));
+    }
+
+    [TearDown]
+    public void TearDown() => Directory.Delete(_options.RootPath, true);
 
     private static async Task<string> GetTextFromStreamAsync(Stream stream)
     {
