@@ -7,16 +7,16 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public class JobOffer : Entity
 {
-    public JobOfferId Id { get; private set; }
+    public JobOfferId Id { get; private set; } = null!;
 
-    private string _offerSummary;
-    private string _jobDescription;
-    private CompanyDetails _companyDetails;
-    private OfficeLocation? _location;
+    private string _offerSummary = null!;
+    private string _jobDescription = null!;
+    private CompanyDetails _companyDetails = null!;
+    private OfficeLocation? _location ;
     private Requirements? _requirements;
 
     private Dictionary<EmploymentType, ContractDetails>? _contractsDetails;
-    private RemoteWork _remoteWork;
+    private RemoteWork _remoteWork ;
 
     private DateTimeOffset? _publishedAt;
     private DateTimeOffset? _publishedUntil;

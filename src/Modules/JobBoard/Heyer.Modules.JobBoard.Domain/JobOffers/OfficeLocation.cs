@@ -2,8 +2,8 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public record OfficeLocation
 {
-    public string City { get; }
-    public string Country { get; }
+    public string City { get; private set; } = null!;
+    public string Country { get; private set; } = null!;
     
     private OfficeLocation()
     {

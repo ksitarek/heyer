@@ -4,8 +4,8 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public record CompanyDetails
 {
-    public CompanyId CompanyId { get; private set; }
-    public string Name { get; private set; }
+    public CompanyId CompanyId { get; private set; } = null!;
+    public string Name { get; private set; } = null!;
 
     private CompanyDetails()
     {

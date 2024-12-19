@@ -4,14 +4,14 @@ namespace Heyer.Modules.JobBoard.Domain.Candidates;
 
 public class Candidate : Entity
 {
-    public CandidateId Id { get; }
-    
-    private string _firstName;
-    private string _lastName;
-    private Email _email;
-    private ResumeKey _resumeKey;
+    public CandidateId Id { get; } = null!;
+
+    private string _firstName = null!;
+    private string _lastName = null!;
+    private Email _email = null!;
+    private ResumeKey _resumeKey = null!;
     private bool _includeInCandidatePool;
-    private Dictionary<string, object> _attributes;
+    private Dictionary<string, object> _attributes = null!;
 
     // For EF Core
     private Candidate()
