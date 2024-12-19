@@ -19,23 +19,31 @@ public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
     
     public async Task<Result<Guid>> Handle(CreateJobOffer request, CancellationToken cancellationToken)
     {
-        var companyDetails = new CompanyDetails(
-            new CompanyId(_userDataProvider.CompanyId),
-            _userDataProvider.CompanyName);
-        
-        var jobOffer = JobOffer.CreateNew(
-            companyDetails,
-            request.OfferSummary,
-            request.JobDescription,
-            request.RemoteWork);
-
-        var addResult = await _jobOffersRepository.AddAsync(jobOffer, cancellationToken);
-
-        if (addResult.IsSuccess)
+        try
         {
-            return jobOffer.Id.Guid;
-        }
+            var companyDetails = new CompanyDetails(
+                new CompanyId(_userDataProvider.CompanyId),
+                _userDataProvider.CompanyName);
 
-        return addResult;
+            var jobOffer = JobOffer.CreateNew(
+                companyDetails,
+                request.OfferSummary,
+                request.JobDescription,
+                request.RemoteWork);
+
+            var addResult = await _jobOffersRepository.AddAsync(jobOffer, cancellationToken);
+
+            if (addResult.IsSuccess)
+            {
+                return jobOffer.Id.Guid;
+            }
+
+            return addResult;
+        }
+        catch (Exception e)
+        {
+            return Result.Fail<Guid>(
+                new ExceptionalError("Failed to create job offer", e));
+        }
     }
 }
