@@ -52,34 +52,6 @@ public class CreateJobOfferHandlerTests
     }
 
     [Test]
-    public async Task Handle_ShouldNotThrowWhenUserDataProviderCompanyIdThrows()
-    {
-        // Arrange
-        _userDataProvider.Configure().CompanyId.Throws(new Exception("Exception"));
-        
-        // Act
-        var result = await _handler.Handle(_testRequest, _cancellationToken);
-        
-        // Assert
-        result.Should().BeFailure().Which.Should().HaveError("Failed to create job offer")
-            .And.Subject.HasException<Exception>(e => e.Message == "Exception").Should().BeTrue();
-    }
-
-    [Test]
-    public async Task Handle_ShouldNotThrowWhenUserDataProviderCompanyNameThrows()
-    {
-        // Arrange
-        _userDataProvider.Configure().CompanyName.Throws(new Exception("Exception"));
-        
-        // Act
-        var result = await _handler.Handle(_testRequest, _cancellationToken);
-        
-        // Assert
-        result.Should().BeFailure().Which.Should().HaveError("Failed to create job offer")
-            .And.Subject.HasException<Exception>(e => e.Message == "Exception").Should().BeTrue();
-    }
-
-    [Test]
     public async Task Handle_ShouldNotThrowWhenJobOffersRepositoryFails()
     {
         // Arrange
@@ -91,19 +63,5 @@ public class CreateJobOfferHandlerTests
         // Assert
         result.Should().BeFailure();
         result.Errors.Should().ContainSingle().Which.Message.Should().Be("Error");
-    }
-
-    [Test]
-    public async Task Handle_ShouldNotThrowWhenJobOffersRepositoryThrows()
-    {
-        // Arrange
-        _jobOffersRepository.Configure().AddAsync(Arg.Any<JobOffer>(), _cancellationToken).ThrowsAsync(new Exception("Exception"));
-        
-        // Act
-        var result = await _handler.Handle(_testRequest, _cancellationToken);
-        
-        // Assert
-        result.Should().BeFailure().Which.Should().HaveError("Failed to create job offer")
-            .And.Subject.HasException<Exception>(e => e.Message == "Exception").Should().BeTrue();
     }
 }
