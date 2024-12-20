@@ -16,7 +16,7 @@ var modules = new IModule[] { new JobBoardModule(builder.Configuration) };
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHealthChecks()
-    .AddCheck<DatabaseHealthcheck>("Registry", timeout: TimeSpan.FromSeconds(3));
+    .AddCheck<DatabaseHealthcheck>("Database", timeout: TimeSpan.FromSeconds(3));
 
 builder.Services.AddSingleton<IDateTimeProvider, SystemDateTime>();
 builder.Services.AddMediator(modules,

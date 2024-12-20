@@ -12,9 +12,9 @@ public class JobOfferValidator
 
     public async Task ValidateJobOfferIsSavedAsync(Guid id)
     {
-        var record = await _set.Where(x => x.Id == new JobOfferId(id)).FirstOrDefaultAsync();
+        var record = await _set.Where(x => x.Id == new JobOfferId(id)).Select(x => x.Id).FirstOrDefaultAsync();
 
         record.Should().NotBeNull();
-        record!.Id.Guid.Should().Be(id);
+        record!.Guid.Should().Be(id);
     }
 }

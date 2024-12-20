@@ -5,17 +5,18 @@ using Serilog;
 
 public partial class Build
 {
-    readonly string _apiContainerName = "Heyer-API";
-    readonly string _mongoDbContainerName = "Heyer-MongoDB";
-    readonly int _mongoDbPort = 27117;
-    readonly string _storageApiContainerName = "Heyer-Storage-API";
-
     [Parameter] readonly string ApiImageName = "heyer/api";
-    [Parameter] readonly string ApiTag = "local";
 
     [Parameter] readonly string StorageApiImageName = "heyer/storage-api";
+    string _apiContainerName = "Heyer-API";
+    int _apiPort = 3001;
+    string _mongoDbContainerName = "Heyer-MongoDB";
+    int _mongoDbPort = 27117;
+    string _storageApiContainerName = "Heyer-Storage-API";
+    int _storageApiPort = 3002;
+    [Parameter] string ApiTag = "local";
 
-    [Parameter] readonly string StorageApiTag = "local";
+    [Parameter] string StorageApiTag = "local";
 
     Target BuildApiDockerImage => _ => _
         .Executes(() =>
@@ -53,7 +54,7 @@ public partial class Build
                                       .SetImage($"{ApiImageName}:{ApiTag}")
                                       .SetName(_apiContainerName)
                                       .SetRm(true)
-                                      .SetPublish("3001:8080")
+                                      .SetPublish($"{_apiPort}:8080")
                                       .SetDetach(true)
                                       .SetEnv(
                                           $"MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}"));
@@ -82,7 +83,7 @@ public partial class Build
                                       .SetImage($"{StorageApiImageName}:{StorageApiTag}")
                                       .SetName(_storageApiContainerName)
                                       .SetRm(true)
-                                      .SetPublish("3002:8080")
+                                      .SetPublish($"{_storageApiPort}:8080")
                                       .SetDetach(true)
                                       .SetEnv(
                                           $"RegistryStrategy__MongoDbRegistry__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}"));

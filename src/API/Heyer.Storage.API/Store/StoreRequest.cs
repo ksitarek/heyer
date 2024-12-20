@@ -1,7 +1,7 @@
 using FluentResults;
+using Heyer.Storage.API.Client.PublishedLanguage;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 
-namespace Heyer.Storage.API.Client.PublishedLanguage;
+namespace Heyer.Storage.API.Store;
 
 public record StoreRequest(IFormFile File) : IRequest<Result<StoreResult>>;

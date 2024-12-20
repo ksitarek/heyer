@@ -14,6 +14,10 @@ public interface IStorageApiClient
     [Get("/csrf")]
     Task<string> GetCsrfToken();
 
+    [Get("/health")]
+    [AllowAnyStatusCode]
+    Task<Response<dynamic>> HealthCheck();
+
     [Post("/preserve/{key}")]
     Task Preserve([Path] string key);
 
