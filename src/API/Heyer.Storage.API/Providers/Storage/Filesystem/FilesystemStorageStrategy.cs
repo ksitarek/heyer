@@ -47,6 +47,21 @@ internal class FilesystemStorageStrategy : IStorageStrategy
         }
     }
 
+    public Task<Result<long>> GetAvailableFreeSpaceAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var driveInfo = new DriveInfo(_rootPath);
+            var availSpace = driveInfo.AvailableFreeSpace;
+
+            return Task.FromResult(Result.Ok(availSpace));
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<Result<long>>(new ExceptionalError("Failed to check storage health.", e));
+        }
+    }
+
     public Task<Result> PreserveAsync(string key, CancellationToken cancellationToken = default) =>
         Task.FromResult(Result.Ok());
 
