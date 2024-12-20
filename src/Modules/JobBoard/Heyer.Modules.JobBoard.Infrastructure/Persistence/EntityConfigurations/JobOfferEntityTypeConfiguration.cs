@@ -27,30 +27,33 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
             .HasElementName("JobDescription")
             .IsRequired();
 
-        builder.OwnsOne<CompanyDetails>("_companyDetails", cd =>
-        {
-            cd.HasElementName("CompanyDetails");
-            cd.Property(x => x.CompanyId)
-                .HasConversion(x => x.Id, x => new CompanyId(x));
-        });
+        builder.OwnsOne<CompanyDetails>("_companyDetails",
+                                        cd =>
+                                        {
+                                            cd.HasElementName("CompanyDetails");
+                                            cd.Property(x => x.CompanyId)
+                                                .HasConversion(x => x.Id, x => new CompanyId(x));
+                                        });
 
         builder.OwnsOne<OfficeLocation>("_location", l => { l.HasElementName("Location"); });
 
-        builder.OwnsOne<Requirements>("_requirements", r =>
-        {
-            r.HasElementName("Requirements");
-            r.Property("ExperienceLevel")
-                .IsRequired();
+        builder.OwnsOne<Requirements>("_requirements",
+                                      r =>
+                                      {
+                                          r.HasElementName("Requirements");
+                                          r.Property("ExperienceLevel")
+                                              .IsRequired();
 
-            r.OwnsMany<Skill>("Skills", s =>
-            {
-                s.Property(x => x.Label)
-                    .IsRequired();
+                                          r.OwnsMany<Skill>("Skills",
+                                                            s =>
+                                                            {
+                                                                s.Property(x => x.Label)
+                                                                    .IsRequired();
 
-                s.Property(x => x.Level)
-                    .IsRequired();
-            });
-        });
+                                                                s.Property(x => x.Level)
+                                                                    .IsRequired();
+                                                            });
+                                      });
 
         builder.OwnsMany<CandidateId>("_candidates", c => { c.HasElementName("Candidates"); });
     }

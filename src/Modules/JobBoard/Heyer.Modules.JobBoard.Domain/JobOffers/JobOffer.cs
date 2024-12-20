@@ -41,7 +41,9 @@ public class JobOffer : Entity
     public JobOfferId Id { get; } = null!;
 
 
-    public static JobOffer CreateNew(CompanyDetails companyDetails, string offerSummary, string jobDescription,
+    public static JobOffer CreateNew(CompanyDetails companyDetails,
+                                     string offerSummary,
+                                     string jobDescription,
                                      RemoteWork remoteWork) =>
         new(companyDetails, offerSummary, jobDescription, remoteWork);
 

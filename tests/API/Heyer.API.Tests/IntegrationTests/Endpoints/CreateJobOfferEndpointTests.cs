@@ -94,7 +94,10 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
     [Theory]
     [TestCaseSource(nameof(BadRequestTestCases))]
     public async Task CreateJobOfferEndpoint_WithInvalidData_WillReturn400(
-        string offerSummary, string jobDescription, RemoteWork remoteWork, string erroredField,
+        string offerSummary,
+        string jobDescription,
+        RemoteWork remoteWork,
+        string erroredField,
         string[] validationErrors)
     {
         // Arrange

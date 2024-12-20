@@ -5,7 +5,8 @@ namespace Heyer.BuildingBlocks.Application.Authorization;
 public static class RouteHandlerBuilderExtensions
 {
     public static RouteHandlerBuilder RequirePermission(
-        this RouteHandlerBuilder builder, string permissionName)
+        this RouteHandlerBuilder builder,
+        string permissionName)
     {
         builder.RequireAuthorization(x =>
         {

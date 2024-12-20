@@ -17,7 +17,11 @@ public class Candidate : Entity
     {
     }
 
-    private Candidate(string firstName, string lastName, Email email, ResumeKey resumeKey, bool includeInCandidatePool,
+    private Candidate(string firstName,
+                      string lastName,
+                      Email email,
+                      ResumeKey resumeKey,
+                      bool includeInCandidatePool,
                       Dictionary<string, object> attributes)
     {
         Id = CandidateId.CreateNew();
@@ -34,7 +38,11 @@ public class Candidate : Entity
 
     public CandidateId Id { get; } = null!;
 
-    public static Candidate Create(string firstName, string lastName, Email email, ResumeKey resumeKey,
-                                   bool includeInCandidatePool, Dictionary<string, object> attributes) =>
+    public static Candidate Create(string firstName,
+                                   string lastName,
+                                   Email email,
+                                   ResumeKey resumeKey,
+                                   bool includeInCandidatePool,
+                                   Dictionary<string, object> attributes) =>
         new(firstName, lastName, email, resumeKey, includeInCandidatePool, attributes);
 }

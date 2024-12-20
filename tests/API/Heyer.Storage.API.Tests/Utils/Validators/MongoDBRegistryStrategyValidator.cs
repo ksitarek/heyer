@@ -27,7 +27,9 @@ internal class MongoDBRegistryStrategyValidator : IRegistryStrategyValidator
         entry.Preserve.Should().BeTrue();
     }
 
-    public async Task ValidateFilePropertiesAsync(string key, string expectedFileName, string expectedContentType,
+    public async Task ValidateFilePropertiesAsync(string key,
+                                                  string expectedFileName,
+                                                  string expectedContentType,
                                                   int expectedSize)
     {
         var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);

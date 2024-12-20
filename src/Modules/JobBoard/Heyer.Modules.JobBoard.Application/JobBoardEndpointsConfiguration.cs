@@ -20,16 +20,17 @@ public class JobBoardEndpointsConfiguration
     }
 
     private static void MapCreateJobOfferEndpoint(WebApplication app) =>
-        app.MapPost("/job-offers/create", async (IMediator mediator, [FromBody] CreateJobOfferRequest request) =>
-        {
-            var command = request.MapToCommand();
+        app.MapPost("/job-offers/create",
+                    async (IMediator mediator, [FromBody] CreateJobOfferRequest request) =>
+                    {
+                        var command = request.MapToCommand();
 
-            var result = await mediator.Send(command);
+                        var result = await mediator.Send(command);
 
-            return result.IsSuccess
-                ? Results.Ok(result.Value)
-                : ResponseErrorHandling.Handle(result);
-        }).RequirePermission(JobBoardPermissions.CreateJobOffer);
+                        return result.IsSuccess
+                            ? Results.Ok(result.Value)
+                            : ResponseErrorHandling.Handle(result);
+                    }).RequirePermission(JobBoardPermissions.CreateJobOffer);
 
     private static void MapNewCandidateApplyEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/new-candidate-apply",

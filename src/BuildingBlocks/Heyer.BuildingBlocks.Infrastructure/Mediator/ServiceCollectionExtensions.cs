@@ -7,7 +7,8 @@ namespace Heyer.BuildingBlocks.Infrastructure.Mediator;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddMediator(this IServiceCollection services, IModule[] modules,
+    public static IServiceCollection AddMediator(this IServiceCollection services,
+                                                 IModule[] modules,
                                                  params Type[] pipelineBehaviors)
     {
         var assemblies = modules
@@ -21,7 +22,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddMediator(this IServiceCollection services, params Type[] pipelineBehaviors) =>
         services.AddMediator([Assembly.GetCallingAssembly()], pipelineBehaviors);
 
-    private static IServiceCollection AddMediator(this IServiceCollection services, Assembly[] assemblies,
+    private static IServiceCollection AddMediator(this IServiceCollection services,
+                                                  Assembly[] assemblies,
                                                   Type[] pipelineBehaviors)
     {
         services.AddMediatR(c => c.RegisterServicesFromAssemblies(assemblies));

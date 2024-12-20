@@ -12,7 +12,8 @@ public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, 
 
     public LoggingMiddleware(ILogger<LoggingMiddleware<TRequest, TResult>> logger) => _logger = logger;
 
-    public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next,
+    public async Task<TResult> Handle(TRequest request,
+                                      RequestHandlerDelegate<TResult> next,
                                       CancellationToken cancellationToken)
     {
         using (_logger.BeginScope("Handling {RequestName}", typeof(TRequest).Name))

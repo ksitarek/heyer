@@ -14,7 +14,8 @@ public class JobOfferMappingsTests
     [TestCase(API.Client.PublishedLanguage.RemoteWork.Hybrid, RemoteWork.Hybrid)]
     [TestCase(API.Client.PublishedLanguage.RemoteWork.Yes, RemoteWork.Yes)]
     public void MapToCommand_WithValidRequest_ShouldReturnCreateJobOfferCommand(
-        API.Client.PublishedLanguage.RemoteWork inputRemoteWork, RemoteWork expectedRemoteWork)
+        API.Client.PublishedLanguage.RemoteWork inputRemoteWork,
+        RemoteWork expectedRemoteWork)
     {
         // Arrange
         var request = new CreateJobOfferRequest(

@@ -24,12 +24,13 @@ public static class AuthorizationExtensions
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("HasPermission", policy =>
-            {
-                // policy.Requirements.Add(new HasPermissionAuthorizationRequirement());
-                policy.RequireAuthenticatedUser();
-                policy.AddAuthenticationSchemes("Bearer");
-            });
+            options.AddPolicy("HasPermission",
+                              policy =>
+                              {
+                                  // policy.Requirements.Add(new HasPermissionAuthorizationRequirement());
+                                  policy.RequireAuthenticatedUser();
+                                  policy.AddAuthenticationSchemes("Bearer");
+                              });
         });
 
         services.AddScoped<IAuthorizationHandler, HasPermissionAuthorizationHandler>();

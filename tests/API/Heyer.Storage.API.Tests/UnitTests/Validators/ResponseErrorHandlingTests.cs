@@ -30,11 +30,14 @@ public class ResponseErrorHandlingTests
         var error = Result.Fail(new ValidationError(new[]
         {
             new ValidationFailure(
-                "Test Property", "Test Error Message #1"),
+                "Test Property",
+                "Test Error Message #1"),
             new ValidationFailure(
-                "Test Property", "Test Error Message #2"),
+                "Test Property",
+                "Test Error Message #2"),
             new ValidationFailure(
-                "Another Test Property", "Test Error Message #3")
+                "Another Test Property",
+                "Test Error Message #3")
         }));
 
         // Act
@@ -43,7 +46,8 @@ public class ResponseErrorHandlingTests
         // Assert
         var errors = new List<KeyValuePair<string, string[]>>
         {
-            new("Test Property", [
+            new("Test Property",
+            [
                 "Test Error Message #1",
                 "Test Error Message #2"
             ]),

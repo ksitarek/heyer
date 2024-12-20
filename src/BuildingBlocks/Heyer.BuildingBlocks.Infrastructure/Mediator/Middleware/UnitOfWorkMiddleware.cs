@@ -11,7 +11,8 @@ public class UnitOfWorkMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
 
     public UnitOfWorkMiddleware(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next,
+    public async Task<TResult> Handle(TRequest request,
+                                      RequestHandlerDelegate<TResult> next,
                                       CancellationToken cancellationToken)
     {
         try

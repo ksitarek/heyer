@@ -13,7 +13,8 @@ public class ValidationMiddleware<TRequest, TResult> : IPipelineBehavior<TReques
 
     public ValidationMiddleware(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
 
-    public async Task<TResult> Handle(TRequest request, RequestHandlerDelegate<TResult> next,
+    public async Task<TResult> Handle(TRequest request,
+                                      RequestHandlerDelegate<TResult> next,
                                       CancellationToken cancellationToken)
     {
         var validationResult = await ValidateAsync(request, cancellationToken);
