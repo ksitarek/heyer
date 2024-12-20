@@ -1,6 +1,7 @@
 using System.Reflection;
 using FluentValidation;
 using Heyer.BuildingBlocks.Infrastructure;
+using Heyer.BuildingBlocks.Infrastructure.HealthChecks;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.Storage.API.BackgroundTasks;

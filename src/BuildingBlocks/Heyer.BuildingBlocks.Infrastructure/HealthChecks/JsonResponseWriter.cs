@@ -1,10 +1,11 @@
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Heyer.Storage.API.HealthChecks;
+namespace Heyer.BuildingBlocks.Infrastructure.HealthChecks;
 
-internal static class JsonResponseWriter
+public static class JsonResponseWriter
 {
     public static Task WriteResponse(HttpContext context, HealthReport healthReport)
     {

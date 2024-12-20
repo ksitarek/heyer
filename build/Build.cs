@@ -9,11 +9,12 @@ using Serilog;
 
 partial class Build : NukeBuild
 {
+    readonly AbsolutePath ApiPath = RootDirectory / "src/API/Heyer.API";
+
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Solution] readonly Solution Solution;
-
     readonly AbsolutePath StorageApiPath = RootDirectory / "src/API/Heyer.Storage.API";
 
     public Build() =>
