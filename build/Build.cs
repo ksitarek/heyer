@@ -1,15 +1,24 @@
 using Nuke.Common;
+using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
+using Serilog;
 
 // ReSharper disable AllUnderscoreLocalParameterName
 
-class Build : NukeBuild
+partial class Build : NukeBuild
 {
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Solution] readonly Solution Solution;
+
+    readonly AbsolutePath StorageApiPath = RootDirectory / "src/API/Heyer.Storage.API";
+
+    public Build() =>
+        DockerTasks.DockerLogger = (_, m) =>
+            Log.Information(m);
 
     Target Clean => _ => _
         .Executes(() =>
