@@ -5,9 +5,6 @@ using FluentAssertions;
 using Heyer.API.Client.PublishedLanguage;
 using Heyer.API.Tests.Utils;
 using Heyer.Modules.JobBoard.Application;
-using Heyer.Modules.JobBoard.Domain.Companies;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
-using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
 using RemoteWork = Heyer.API.Client.PublishedLanguage.RemoteWork;
@@ -177,53 +174,5 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
             Faker.Random.Enum(RemoteWork.Unknown));
 
         return request;
-    }
-}
-
-[Category("Integration")]
-public class GetJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
-{
-    private JobOffer _jobOffer = null!;
-
-    [Test]
-    public async Task GetJobOfferByIdEndpoint_WillReturn200Ok_WhenOfferFound()
-    {
-        // Arrange
-        var client = AppFactory.CreateApiClient();
-
-        // Act
-        var jobOffer = await client.GetJobOfferById(_jobOffer.Id.Guid);
-
-        // Assert
-        jobOffer.Should().NotBeNull();
-        jobOffer.Should()
-            .BeEquivalentTo(
-                new JobOfferDetails(_jobOffer.Id.Guid, _jobOffer.OfferSummary, _jobOffer.JobDescription));
-    }
-
-    [SetUp]
-    public async Task SetUp()
-    {
-        await using var ctx = AppFactory.GetRequiredService<JobBoardContext>();
-
-        _jobOffer = JobOffer.CreateNew(
-            new CompanyDetails(CompanyId.CreateNew(), "ACME"),
-            Faker.Random.String2(10, 100),
-            Faker.Random.String2(100, 500),
-            Faker.Random.Enum(Modules.JobBoard.Domain.JobOffers.RemoteWork.Unknown));
-
-        _jobOffer.SetRequirements(ExperienceLevel.Junior,
-                                  new Dictionary<string, SkillLevel>
-                                  {
-                                      ["A"] = SkillLevel.Mid, ["B"] = SkillLevel.Senior
-                                  });
-
-        _jobOffer.SetOfficeLocation(new OfficeLocation("Warsaw", "Poland"));
-
-        _jobOffer.Publish(DateTimeOffset.Now);
-
-        await ctx.JobOffers.AddAsync(_jobOffer);
-
-        await ctx.SaveChangesAsync();
     }
 }

@@ -102,6 +102,22 @@ public class JobOfferTests
     }
 
     [Test]
+    public void Publish_ShouldNotPublish_WhenNoContractsDetails()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
+        jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
+
+        // Act
+        var result = jobOffer.Publish();
+
+        // Assert
+        result.Should().BeFailure()
+            .Which.Should().HaveReason("Job offer must have at least one contract details when publishing.");
+    }
+
+    [Test]
     public void Publish_ShouldNotPublish_WhenNoOfficeLocation()
     {
         // Arrange
@@ -109,7 +125,7 @@ public class JobOfferTests
         jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
 
         // Act
-        var result = jobOffer.Publish(null);
+        var result = jobOffer.Publish();
 
         // Assert
         result.Should().BeFailure()
@@ -122,13 +138,38 @@ public class JobOfferTests
         // Arrange
         var jobOffer = CreateTestJobOffer();
         jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
 
         // Act
-        var result = jobOffer.Publish(null);
+        var result = jobOffer.Publish();
 
         // Assert
         result.Should().BeFailure()
             .Which.Should().HaveReason("Job offer must have requirements when publishing.");
+    }
+
+    [Test]
+    public void Publish_ShouldNotPublish_WhenOfferIsAlreadyPublic()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
+        jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
+        jobOffer.Publish();
+
+        // Act
+        var result = jobOffer.Publish();
+
+        // Assert
+        result.Should().BeFailure()
+            .Which.Should().HaveReason("Job offer must not be public.");
     }
 
     [Test]
@@ -138,6 +179,10 @@ public class JobOfferTests
         var jobOffer = CreateTestJobOffer();
         jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
         jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
 
         // Act
         var result = jobOffer.Publish(DateTimeOffset.Now.AddDays(-1));
@@ -154,6 +199,10 @@ public class JobOfferTests
         var jobOffer = CreateTestJobOffer();
         jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
         jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
 
         // Act
         var result = jobOffer.Publish(DateTimeOffset.UtcNow.AddDays(1));
@@ -217,6 +266,10 @@ public class JobOfferTests
         var jobOffer = CreateTestJobOffer();
         jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
         jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
         jobOffer.Publish(DateTimeOffset.UtcNow.AddDays(1));
         jobOffer.TakeDown();
 
@@ -234,6 +287,10 @@ public class JobOfferTests
         var jobOffer = CreateTestJobOffer();
         jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
         jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
         jobOffer.Publish(DateTimeOffset.UtcNow.AddDays(1));
 
         // Act

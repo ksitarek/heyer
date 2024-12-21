@@ -85,11 +85,13 @@ public class JobOffer : Entity
         return Result.Ok();
     }
 
-    public Result Publish(DateTimeOffset? publishedUntil)
+    public Result Publish(DateTimeOffset? publishedUntil = null)
     {
         var validationResult = ChallengeBusinessRules(
+            new JobOfferMustNotBePublic(PublishedAt, PublishedUntil),
             new PublishedUntilMustNotBeInPast(publishedUntil),
             new JobOfferMustHaveRequirementsWhenPublishing(Requirements),
+            new JobOfferMustHaveContractDetailsWhenPublishing(ContractsDetails),
             new JobOfferMustHaveLocationWhenPublishing(Location));
 
         if (validationResult.IsFailed)
