@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Heyer.API.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>

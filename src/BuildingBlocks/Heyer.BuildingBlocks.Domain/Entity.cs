@@ -14,13 +14,7 @@ public abstract class Entity
 
     public void ClearDomainEvents() => _domainEvents?.Clear();
 
-    protected void AddDomainEvent(DomainEvent @event)
-    {
-        _domainEvents ??= new List<DomainEvent>();
-        _domainEvents.Add(@event);
-    }
-
-    protected Result ChallengeBusinessRules(params IBusinessRule[] businessRules)
+    protected static Result ChallengeBusinessRules(params IBusinessRule[] businessRules)
     {
         var validationResult = new Result();
         foreach (var businessRule in businessRules)
@@ -33,5 +27,11 @@ public abstract class Entity
         }
 
         return validationResult;
+    }
+
+    protected void AddDomainEvent(DomainEvent @event)
+    {
+        _domainEvents ??= new List<DomainEvent>();
+        _domainEvents.Add(@event);
     }
 }

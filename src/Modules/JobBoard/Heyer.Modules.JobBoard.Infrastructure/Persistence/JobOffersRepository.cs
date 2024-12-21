@@ -28,4 +28,10 @@ internal class JobOffersRepository : IJobOffersRepository
         _context.JobOffers
             .Where(x => x.Id == jobOfferId)
             .FirstOrDefaultAsync(cancellationToken);
+
+    public Task<JobOffer?> GetPublishedJobOfferById(JobOfferId jobOfferId,
+                                                    CancellationToken cancellationToken = default) =>
+        _context.JobOffers
+            .Where(x => x.Id == jobOfferId)
+            .FirstOrDefaultAsync(cancellationToken);
 }

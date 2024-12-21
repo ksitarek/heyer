@@ -4,7 +4,7 @@ public enum SkillLevel
 {
     NiceToHave,
     Junior,
-    Regular,
+    Mid,
     Senior,
     Expert
 }

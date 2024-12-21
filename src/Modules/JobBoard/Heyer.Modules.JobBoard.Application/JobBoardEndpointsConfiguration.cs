@@ -2,6 +2,7 @@ using Heyer.API.Client.PublishedLanguage;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.JobBoard.Application.JobOffers.NewCandidateApply;
+using Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 using Heyer.Modules.JobBoard.Application.Mapping;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +17,7 @@ public class JobBoardEndpointsConfiguration
     public void MapJobBoardEndpoints(WebApplication app)
     {
         MapCreateJobOfferEndpoint(app);
+        MapGetJobOfferDetailsEndpoint(app);
         MapNewCandidateApplyEndpoint(app);
     }
 
@@ -31,6 +33,17 @@ public class JobBoardEndpointsConfiguration
                             ? Results.Ok(result.Value)
                             : ResponseErrorHandling.Handle(result);
                     }).RequirePermission(JobBoardPermissions.CreateJobOffer);
+
+    private static void MapGetJobOfferDetailsEndpoint(WebApplication app) =>
+        app.MapGet("/job-offers/{jobOfferId}",
+                   async (IMediator mediator, Guid jobOfferId) =>
+                   {
+                       var result = await mediator.Send(new GetPublicJobOfferDetails(jobOfferId));
+
+                       return result.IsSuccess
+                           ? Results.Ok(result.Value)
+                           : ResponseErrorHandling.Handle(result);
+                   });
 
     private static void MapNewCandidateApplyEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/new-candidate-apply",

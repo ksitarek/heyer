@@ -1,6 +1,14 @@
 namespace Heyer.Modules.JobBoard.Domain.Companies;
 
-public record CompanyId(Guid Id)
+public record CompanyId
 {
+    public Guid Id { get; private set; }
+
+    private CompanyId()
+    {
+    }
+
+    public CompanyId(Guid id) => Id = id;
+
     public static CompanyId CreateNew() => new(Guid.NewGuid());
 }

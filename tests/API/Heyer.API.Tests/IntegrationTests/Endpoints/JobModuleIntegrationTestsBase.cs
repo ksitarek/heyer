@@ -10,12 +10,12 @@ public abstract class JobModuleIntegrationTestsBase
     internal Faker Faker = new();
 
     [SetUp]
-    public Task SetUp()
+    public virtual Task SetUpIntegrationTestsBase()
     {
         AppFactory = ApplicationFactory.Create();
         return Task.CompletedTask;
     }
 
     [TearDown]
-    public async Task TearDown() => await AppFactory.DisposeAsync();
+    public async Task TearDownIntegrationTestsBase() => await AppFactory.DisposeAsync();
 }

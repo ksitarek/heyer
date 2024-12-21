@@ -38,7 +38,7 @@ public class JobOffer : Entity
         AddDomainEvent(new JobOfferCreated(Id));
     }
 
-    public JobOfferId Id { get; } = null!;
+    public JobOfferId Id { get; private set; } = null!;
 
 
     public static JobOffer CreateNew(CompanyDetails companyDetails,
@@ -85,6 +85,10 @@ public class JobOffer : Entity
 
         return Result.Ok();
     }
+
+    public string GetJobDescription() => _jobDescription;
+
+    public string GetOfferSummary() => _offerSummary;
 
     public Result Publish(DateTimeOffset? publishedUntil)
     {

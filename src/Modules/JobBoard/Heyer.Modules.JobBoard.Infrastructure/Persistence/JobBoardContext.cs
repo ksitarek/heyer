@@ -10,13 +10,12 @@ internal class JobBoardContext : DbContext
     {
     }
 
-    public DbSet<Candidate> Candidates { get; set; }
-    public DbSet<JobOffer> JobOffers { get; set; }
+    public DbSet<Candidate> Candidates { get; init; }
+    public DbSet<JobOffer> JobOffers { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(JobBoardContext).Assembly);
+        base.OnModelCreating(modelBuilder);
     }
 }

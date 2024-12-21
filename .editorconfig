@@ -33,6 +33,7 @@ csharp_wrap_arguments_style = chop_if_long
 csharp_wrap_parameters_style = chop_if_long
 wrap_arguments_style = chop_if_long
 wrap_parameters_style = chop_if_long
+csharp_style_prefer_primary_constructors = false:none
 
 # Indentation preferences
 csharp_indent_block_contents = true
