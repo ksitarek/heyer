@@ -2,6 +2,7 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public record ContractDetails
 {
+    public EmploymentType EmploymentType { get; private set; }
     public SalaryRange SalaryRange { get; private set; } = null!;
     public int TimeNumerator { get; private set; }
     public int TimeDenominator { get; private set; }
@@ -10,8 +11,12 @@ public record ContractDetails
     {
     }
 
-    public ContractDetails(SalaryRange salaryRange, int timeNumerator, int timeDenominator)
+    public ContractDetails(EmploymentType employmentType,
+                           SalaryRange salaryRange,
+                           int timeNumerator,
+                           int timeDenominator)
     {
+        EmploymentType = employmentType;
         SalaryRange = salaryRange;
         TimeNumerator = timeNumerator;
         TimeDenominator = timeDenominator;

@@ -38,27 +38,33 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
 
         builder.OwnsOne<OfficeLocation>("_location", l => { l.HasElementName("Location"); });
 
-        // builder.OwnsOne<Requirements>("_requirements",
-        //                               r =>
-        //                               {
-        //                                   r.HasElementName("Requirements");
-        //
-        //                                   r.Property(x => x.ExperienceLevel)
-        //                                       .IsRequired();
-        //
-        //                                   r.OwnsMany(x => x.Skills,
-        //                                              s =>
-        //                                              {
-        //                                                  s.HasElementName("Skills");
-        //
-        //                                                  s.Property(x => x.Label)
-        //                                                      .IsRequired();
-        //
-        //                                                  s.Property(x => x.Level)
-        //                                                      .IsRequired();
-        //                                              });
-        //                               });
+        builder.OwnsOne<Requirements>("_requirements",
+                                      r =>
+                                      {
+                                          r.HasElementName("Requirements");
+
+                                          r.Property(x => x.ExperienceLevel)
+                                              .IsRequired();
+
+                                          r.OwnsMany(x => x.Skills,
+                                                     s =>
+                                                     {
+                                                         s.HasElementName("Skills");
+
+                                                         s.Property(x => x.Label)
+                                                             .IsRequired();
+
+                                                         s.Property(x => x.Level)
+                                                             .IsRequired();
+                                                     });
+                                      });
 
         builder.OwnsMany<CandidateId>("_candidates", c => { c.HasElementName("Candidates"); });
+        builder.OwnsMany<ContractDetails>("_contractsDetails",
+                                          nb =>
+                                          {
+                                              nb.HasElementName("ContractsDetails");
+                                              nb.OwnsOne<SalaryRange>(x => x.SalaryRange);
+                                          });
     }
 }

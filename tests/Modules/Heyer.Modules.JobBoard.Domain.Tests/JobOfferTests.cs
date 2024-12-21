@@ -51,8 +51,8 @@ public class JobOfferTests
 
         // Act
         var result = jobOffer.AddContractDetails(
-            EmploymentType.ContractOfEmployment,
             new ContractDetails(
+                EmploymentType.ContractOfEmployment,
                 new SalaryRange(true, 10000, 20000),
                 8,
                 8));
@@ -67,16 +67,16 @@ public class JobOfferTests
         // Arrange
         var jobOffer = CreateTestJobOffer();
         jobOffer.AddContractDetails(
-            EmploymentType.ContractOfEmployment,
             new ContractDetails(
+                EmploymentType.ContractOfEmployment,
                 new SalaryRange(true, 10000, 20000),
                 8,
                 8));
 
         // Act
         var result = jobOffer.AddContractDetails(
-            EmploymentType.ContractOfEmployment,
             new ContractDetails(
+                EmploymentType.ContractOfEmployment,
                 new SalaryRange(true, 10000, 20000),
                 8,
                 8));

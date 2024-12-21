@@ -7,20 +7,6 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
 public class JobOffer : Entity
 {
-    private HashSet<CandidateId>? _candidates;
-    private CompanyDetails _companyDetails = null!;
-
-    private Dictionary<EmploymentType, ContractDetails>? _contractsDetails;
-    private string _jobDescription = null!;
-    private OfficeLocation? _location;
-
-    private string _offerSummary = null!;
-
-    private DateTimeOffset? _publishedAt;
-    private DateTimeOffset? _publishedUntil;
-    private RemoteWork _remoteWork;
-    private Requirements? _requirements;
-
     // For EF Core
     private JobOffer()
     {
@@ -37,6 +23,20 @@ public class JobOffer : Entity
 
         AddDomainEvent(new JobOfferCreated(Id));
     }
+
+    public HashSet<CandidateId>? _candidates { get; private set; }
+    public CompanyDetails _companyDetails { get; private set; } = null!;
+
+    public List<ContractDetails>? _contractsDetails { get; private set; }
+    public string _jobDescription { get; private set; } = null!;
+    public OfficeLocation? _location { get; private set; }
+
+    public string _offerSummary { get; private set; } = null!;
+
+    public DateTimeOffset? _publishedAt { get; private set; }
+    public DateTimeOffset? _publishedUntil { get; private set; }
+    public RemoteWork _remoteWork { get; private set; }
+    public Requirements? _requirements { get; private set; }
 
     public JobOfferId Id { get; private set; } = null!;
 
@@ -68,20 +68,19 @@ public class JobOffer : Entity
     }
 
     public Result AddContractDetails(
-        EmploymentType employmentType,
-        ContractDetails contractDetails)
+        ContractDetails newContractDetails)
     {
         var validationResult = ChallengeBusinessRules(
-            new JobOfferMustHaveUniqueEmploymentTypes(_contractsDetails, employmentType));
+            new JobOfferMustHaveUniqueEmploymentTypes(_contractsDetails, newContractDetails.EmploymentType));
 
         if (validationResult.IsFailed)
         {
             return validationResult;
         }
 
-        _contractsDetails ??= new Dictionary<EmploymentType, ContractDetails>();
+        _contractsDetails ??= new List<ContractDetails>();
 
-        _contractsDetails.Add(employmentType, contractDetails);
+        _contractsDetails.Add(newContractDetails);
 
         return Result.Ok();
     }
@@ -122,7 +121,8 @@ public class JobOffer : Entity
     {
         _requirements = new Requirements(
             experienceLevel,
-            skills.Select(x => new Skill(x.Key, x.Value)));
+            skills.Select(x => new Skill(x.Key, x.Value))
+                .ToList());
 
         return Result.Ok();
     }
