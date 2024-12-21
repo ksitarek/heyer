@@ -1,4 +1,3 @@
-using Heyer.Modules.JobBoard.Domain.Candidates;
 using Heyer.Modules.JobBoard.Domain.Companies;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
@@ -18,53 +17,43 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
         builder.Property(x => x.Id)
             .HasConversion(x => x.Guid, x => new JobOfferId(x));
 
-        builder.Property("_offerSummary")
-            .HasElementName("OfferSummary")
+        builder.Property(x => x.OfferSummary)
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property("_jobDescription")
-            .HasElementName("JobDescription")
+        builder.Property(x => x.JobDescription)
             .IsRequired();
 
-        builder.OwnsOne<CompanyDetails>("_companyDetails",
-                                        cd =>
-                                        {
-                                            cd.HasElementName("CompanyDetails");
+        builder.OwnsOne(x => x.CompanyDetails,
+                        cd =>
+                        {
+                            cd.Property(x => x.CompanyId)
+                                .HasConversion(x => x.Id, x => new CompanyId(x));
+                        });
 
-                                            cd.Property(x => x.CompanyId)
-                                                .HasConversion(x => x.Id, x => new CompanyId(x));
-                                        });
+        builder.OwnsOne(x => x.Location);
 
-        builder.OwnsOne<OfficeLocation>("_location", l => { l.HasElementName("Location"); });
+        builder.OwnsOne(x => x.Requirements,
+                        r =>
+                        {
+                            r.Property(x => x.ExperienceLevel)
+                                .IsRequired();
 
-        builder.OwnsOne<Requirements>("_requirements",
-                                      r =>
-                                      {
-                                          r.HasElementName("Requirements");
+                            r.OwnsMany(x => x.Skills,
+                                       s =>
+                                       {
+                                           s.HasElementName("Skills");
 
-                                          r.Property(x => x.ExperienceLevel)
-                                              .IsRequired();
+                                           s.Property(x => x.Label)
+                                               .IsRequired();
 
-                                          r.OwnsMany(x => x.Skills,
-                                                     s =>
-                                                     {
-                                                         s.HasElementName("Skills");
+                                           s.Property(x => x.Level)
+                                               .IsRequired();
+                                       });
+                        });
 
-                                                         s.Property(x => x.Label)
-                                                             .IsRequired();
-
-                                                         s.Property(x => x.Level)
-                                                             .IsRequired();
-                                                     });
-                                      });
-
-        builder.OwnsMany<CandidateId>("_candidates", c => { c.HasElementName("Candidates"); });
-        builder.OwnsMany<ContractDetails>("_contractsDetails",
-                                          nb =>
-                                          {
-                                              nb.HasElementName("ContractsDetails");
-                                              nb.OwnsOne<SalaryRange>(x => x.SalaryRange);
-                                          });
+        builder.OwnsMany(x => x.Candidates);
+        builder.OwnsMany(x => x.ContractsDetails,
+                         nb => { nb.OwnsOne<SalaryRange>(x => x.SalaryRange); });
     }
 }

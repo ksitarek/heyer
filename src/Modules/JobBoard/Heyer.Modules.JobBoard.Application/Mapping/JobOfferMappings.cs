@@ -14,7 +14,7 @@ public static class JobOfferMappings
             request.RemoteWork.MapRemoteWork());
 
     public static JobOfferDetails MapToJobOfferDetails(this JobOffer jobOffer) =>
-        new(jobOffer.Id.Guid, jobOffer.GetOfferSummary(), jobOffer.GetJobDescription());
+        new(jobOffer.Id.Guid, jobOffer.OfferSummary, jobOffer.JobDescription);
 
     private static RemoteWork MapRemoteWork(this API.Client.PublishedLanguage.RemoteWork remoteWork) =>
         remoteWork switch

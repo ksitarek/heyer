@@ -198,7 +198,7 @@ public class GetJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
         jobOffer.Should().NotBeNull();
         jobOffer.Should()
             .BeEquivalentTo(
-                new JobOfferDetails(_jobOffer.Id.Guid, _jobOffer.GetOfferSummary(), _jobOffer.GetJobDescription()));
+                new JobOfferDetails(_jobOffer.Id.Guid, _jobOffer.OfferSummary, _jobOffer.JobDescription));
     }
 
     [SetUp]

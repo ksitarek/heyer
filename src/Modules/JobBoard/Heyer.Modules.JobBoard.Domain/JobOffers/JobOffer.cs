@@ -16,29 +16,29 @@ public class JobOffer : Entity
     {
         Id = JobOfferId.CreateNew();
 
-        _companyDetails = companyDetails;
-        _offerSummary = offerSummary;
-        _jobDescription = jobDescription;
-        _remoteWork = remoteWork;
+        CompanyDetails = companyDetails;
+        OfferSummary = offerSummary;
+        JobDescription = jobDescription;
+        RemoteWork = remoteWork;
 
         AddDomainEvent(new JobOfferCreated(Id));
     }
 
-    public HashSet<CandidateId>? _candidates { get; private set; }
-    public CompanyDetails _companyDetails { get; private set; } = null!;
+    public HashSet<CandidateId>? Candidates { get; private set; }
+    public CompanyDetails CompanyDetails { get; private set; } = null!;
 
-    public List<ContractDetails>? _contractsDetails { get; private set; }
-    public string _jobDescription { get; private set; } = null!;
-    public OfficeLocation? _location { get; private set; }
-
-    public string _offerSummary { get; private set; } = null!;
-
-    public DateTimeOffset? _publishedAt { get; private set; }
-    public DateTimeOffset? _publishedUntil { get; private set; }
-    public RemoteWork _remoteWork { get; private set; }
-    public Requirements? _requirements { get; private set; }
+    public List<ContractDetails>? ContractsDetails { get; private set; }
 
     public JobOfferId Id { get; private set; } = null!;
+    public string JobDescription { get; private set; } = null!;
+    public OfficeLocation? Location { get; private set; }
+
+    public string OfferSummary { get; private set; } = null!;
+
+    public DateTimeOffset? PublishedAt { get; private set; }
+    public DateTimeOffset? PublishedUntil { get; private set; }
+    public RemoteWork RemoteWork { get; private set; }
+    public Requirements? Requirements { get; private set; }
 
 
     public static JobOffer CreateNew(CompanyDetails companyDetails,
@@ -51,16 +51,16 @@ public class JobOffer : Entity
         CandidateId candidateId)
     {
         var validationResult = ChallengeBusinessRules(
-            new CandidateCanApplyOnlyOnce(_candidates, candidateId));
+            new CandidateCanApplyOnlyOnce(Candidates, candidateId));
 
         if (validationResult.IsFailed)
         {
             return validationResult;
         }
 
-        _candidates ??= new HashSet<CandidateId>();
+        Candidates ??= new HashSet<CandidateId>();
 
-        _candidates.Add(candidateId);
+        Candidates.Add(candidateId);
 
         AddDomainEvent(new CandidateApplied(Id, candidateId));
 
@@ -71,38 +71,34 @@ public class JobOffer : Entity
         ContractDetails newContractDetails)
     {
         var validationResult = ChallengeBusinessRules(
-            new JobOfferMustHaveUniqueEmploymentTypes(_contractsDetails, newContractDetails.EmploymentType));
+            new JobOfferMustHaveUniqueEmploymentTypes(ContractsDetails, newContractDetails.EmploymentType));
 
         if (validationResult.IsFailed)
         {
             return validationResult;
         }
 
-        _contractsDetails ??= new List<ContractDetails>();
+        ContractsDetails ??= new List<ContractDetails>();
 
-        _contractsDetails.Add(newContractDetails);
+        ContractsDetails.Add(newContractDetails);
 
         return Result.Ok();
     }
-
-    public string GetJobDescription() => _jobDescription;
-
-    public string GetOfferSummary() => _offerSummary;
 
     public Result Publish(DateTimeOffset? publishedUntil)
     {
         var validationResult = ChallengeBusinessRules(
             new PublishedUntilMustNotBeInPast(publishedUntil),
-            new JobOfferMustHaveRequirementsWhenPublishing(_requirements),
-            new JobOfferMustHaveLocationWhenPublishing(_location));
+            new JobOfferMustHaveRequirementsWhenPublishing(Requirements),
+            new JobOfferMustHaveLocationWhenPublishing(Location));
 
         if (validationResult.IsFailed)
         {
             return validationResult;
         }
 
-        _publishedAt = DateTimeOffset.UtcNow;
-        _publishedUntil = publishedUntil;
+        PublishedAt = DateTimeOffset.UtcNow;
+        PublishedUntil = publishedUntil;
 
         AddDomainEvent(new JobOfferPublished(Id));
 
@@ -112,14 +108,14 @@ public class JobOffer : Entity
 
     public Result SetOfficeLocation(OfficeLocation location)
     {
-        _location = location;
+        Location = location;
 
         return Result.Ok();
     }
 
     public Result SetRequirements(ExperienceLevel experienceLevel, IDictionary<string, SkillLevel> skills)
     {
-        _requirements = new Requirements(
+        Requirements = new Requirements(
             experienceLevel,
             skills.Select(x => new Skill(x.Key, x.Value))
                 .ToList());
@@ -130,15 +126,15 @@ public class JobOffer : Entity
     public Result TakeDown()
     {
         var validationResult = ChallengeBusinessRules(
-            new JobOfferMustBePublishedToTakeDown(_publishedAt));
+            new JobOfferMustBePublishedToTakeDown(PublishedAt));
 
         if (validationResult.IsFailed)
         {
             return validationResult;
         }
 
-        _publishedAt = null;
-        _publishedUntil = null;
+        PublishedAt = null;
+        PublishedUntil = null;
 
         AddDomainEvent(new JobOfferTakenDown(Id));
 
@@ -147,8 +143,8 @@ public class JobOffer : Entity
 
     public Result UpdateDescription(string offerSummary, string jobDescription)
     {
-        _offerSummary = offerSummary;
-        _jobDescription = jobDescription;
+        OfferSummary = offerSummary;
+        JobDescription = jobDescription;
 
         AddDomainEvent(new JobOfferDescriptionUpdated(Id));
 
