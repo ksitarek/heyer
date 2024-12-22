@@ -1,5 +1,6 @@
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
+using Heyer.Modules.JobBoard.Domain.Candidates;
 using Heyer.Modules.JobBoard.Domain.Companies;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 
@@ -8,6 +9,40 @@ namespace Heyer.Modules.JobBoard.Domain.Tests;
 [Category("Unit")]
 public class JobOfferTests
 {
+    [Test]
+    public void AddCandidate_ShouldAddCandidate()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        var candidateId = CandidateId.CreateNew();
+
+        // Act
+        var result = jobOffer.AddCandidate(candidateId);
+
+        // Assert
+        result.Should().BeSuccess();
+        jobOffer.DomainEvents.Should().ContainSingle(
+            domainEvent => domainEvent.GetType() == typeof(CandidateApplied)
+                           && ((CandidateApplied)domainEvent).JobOfferId == jobOffer.Id
+                           && ((CandidateApplied)domainEvent).CandidateId == candidateId);
+    }
+
+    [Test]
+    public void AddCandidate_ShouldNotAddSameCandidateTwice()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        var candidateId = CandidateId.CreateNew();
+        jobOffer.AddCandidate(candidateId);
+
+        // Act
+        var result = jobOffer.AddCandidate(candidateId);
+
+        // Assert
+        result.Should().BeFailure()
+            .Which.Should().HaveError($"Candidate with id: {candidateId} has already applied for this job offer.");
+    }
+
     [Test]
     public void AddContractDetails_ShouldAddContractDetails()
     {

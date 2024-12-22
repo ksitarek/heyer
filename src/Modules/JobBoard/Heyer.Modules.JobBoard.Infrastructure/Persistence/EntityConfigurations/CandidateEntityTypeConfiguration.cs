@@ -1,9 +1,9 @@
-using Heyer.Modules.Hiring.Domain.Candidates;
+using Heyer.Modules.JobBoard.Domain.Candidates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-namespace Heyer.Modules.Hiring.Infrastructure.Persistence.EntityConfigurations;
+namespace Heyer.Modules.JobBoard.Infrastructure.Persistence.EntityConfigurations;
 
 public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candidate>
 {

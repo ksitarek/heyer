@@ -1,4 +1,4 @@
-namespace Heyer.Modules.Hiring.Domain.Candidates;
+namespace Heyer.Modules.JobBoard.Domain.Candidates;
 
 public record CandidateId
 {

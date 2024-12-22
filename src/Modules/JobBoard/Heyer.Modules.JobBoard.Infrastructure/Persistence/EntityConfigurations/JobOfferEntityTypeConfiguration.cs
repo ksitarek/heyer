@@ -52,6 +52,7 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
                                        });
                         });
 
+        builder.OwnsMany(x => x.Candidates);
         builder.OwnsMany(x => x.ContractsDetails,
                          nb => { nb.OwnsOne<SalaryRange>(x => x.SalaryRange); });
     }

@@ -1,6 +1,6 @@
 using FluentResults;
 
-namespace Heyer.Modules.Hiring.Domain.Candidates;
+namespace Heyer.Modules.JobBoard.Domain.Candidates;
 
 public interface ICandidatesRepository
 {
