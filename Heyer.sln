@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
+# 
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{9EA5F468-489C-492A-AE8C-F5827C1393CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{20CBEDAE-8873-4600-B3F4-6100A5F2A750}"
@@ -21,9 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Storage.API.Client", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{17B28760-FB62-43DD-AF01-287DB6534B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Application", "src/BuildingBlocks/Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj", "{FFC13D8D-2783-4B96-AE18-69F3421E0628}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Application", "src\BuildingBlocks\Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj", "{FFC13D8D-2783-4B96-AE18-69F3421E0628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Infrastructure", "src/BuildingBlocks/Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj", "{ACA2C947-36C0-4961-9752-AF6E2EF17B74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Infrastructure", "src\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj", "{ACA2C947-36C0-4961-9752-AF6E2EF17B74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.API", "src\API\Heyer.API\Heyer.API.csproj", "{368CA0EE-9DB7-4CCF-9909-5484C50A30EA}"
 EndProject
@@ -62,6 +62,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "E2E", "E2E", "{CF5BB948-B9A0-420F-AEA0-0F68931A2B4A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.E2E.Tests", "tests\E2E\Heyer.E2E.Tests\Heyer.E2E.Tests.csproj", "{1E78B6BF-1034-4CD1-BFFD-234D4508E2D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hiring", "Hiring", "{42E987EF-0D5B-49EC-A54C-50D164A924BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Application", "src\Modules\Hiring\Heyer.Modules.Hiring.Application\Heyer.Modules.Hiring.Application.csproj", "{8BD0AEBD-ABD8-41F6-BF1C-F7116661891B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Domain", "src\Modules\Hiring\Heyer.Modules.Hiring.Domain\Heyer.Modules.Hiring.Domain.csproj", "{A1C5084A-2F60-459D-AA8E-FB919C394DD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Infrastructure", "src\Modules\Hiring\Heyer.Modules.Hiring.Infrastructure\Heyer.Modules.Hiring.Infrastructure.csproj", "{4410198F-E565-465B-9350-F8B2364CFD67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.IntegrationEvents", "src\Modules\Hiring\Heyer.Modules.Hiring.IntegrationEvents\Heyer.Modules.Hiring.IntegrationEvents.csproj", "{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +157,22 @@ Global
 		{1E78B6BF-1034-4CD1-BFFD-234D4508E2D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E78B6BF-1034-4CD1-BFFD-234D4508E2D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E78B6BF-1034-4CD1-BFFD-234D4508E2D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BD0AEBD-ABD8-41F6-BF1C-F7116661891B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BD0AEBD-ABD8-41F6-BF1C-F7116661891B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BD0AEBD-ABD8-41F6-BF1C-F7116661891B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BD0AEBD-ABD8-41F6-BF1C-F7116661891B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C5084A-2F60-459D-AA8E-FB919C394DD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C5084A-2F60-459D-AA8E-FB919C394DD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C5084A-2F60-459D-AA8E-FB919C394DD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1C5084A-2F60-459D-AA8E-FB919C394DD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4410198F-E565-465B-9350-F8B2364CFD67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4410198F-E565-465B-9350-F8B2364CFD67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4410198F-E565-465B-9350-F8B2364CFD67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4410198F-E565-465B-9350-F8B2364CFD67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9EA5F468-489C-492A-AE8C-F5827C1393CA} = {20CBEDAE-8873-4600-B3F4-6100A5F2A750}
@@ -177,5 +203,10 @@ Global
 		{B9B14941-59C2-4500-A1C7-689912AC607A} = {215C5E2C-9B83-4BD7-A8AF-21FA1CEAD5A7}
 		{CF5BB948-B9A0-420F-AEA0-0F68931A2B4A} = {8D8A76C3-5F89-42A3-88CC-16E7AD55F74C}
 		{1E78B6BF-1034-4CD1-BFFD-234D4508E2D2} = {CF5BB948-B9A0-420F-AEA0-0F68931A2B4A}
+		{42E987EF-0D5B-49EC-A54C-50D164A924BF} = {259AC0C7-1E11-4C38-878A-B8677C7125A6}
+		{8BD0AEBD-ABD8-41F6-BF1C-F7116661891B} = {42E987EF-0D5B-49EC-A54C-50D164A924BF}
+		{A1C5084A-2F60-459D-AA8E-FB919C394DD5} = {42E987EF-0D5B-49EC-A54C-50D164A924BF}
+		{4410198F-E565-465B-9350-F8B2364CFD67} = {42E987EF-0D5B-49EC-A54C-50D164A924BF}
+		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2} = {42E987EF-0D5B-49EC-A54C-50D164A924BF}
 	EndGlobalSection
 EndGlobal
