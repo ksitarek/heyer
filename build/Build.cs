@@ -16,6 +16,7 @@ partial class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     readonly AbsolutePath StorageApiPath = RootDirectory / "src/API/Heyer.Storage.API";
+    readonly AbsolutePath WebPath = RootDirectory / "web";
 
     public Build() =>
         DockerTasks.DockerLogger = (_, m) =>

@@ -22,6 +22,10 @@ public partial class Build
 
             _storageApiPort = 43002;
             _storageApiContainerName = "Heyer-E2E-Storage-API";
+
+            _webPort = 44001;
+            _webContainerName = "Heyer-E2E-Web";
+            _webConfiguration = "e2e";
         });
 
     Target RunE2E => _ => _
@@ -38,6 +42,7 @@ public partial class Build
             }
             finally
             {
+                StopDockerContainer(_webContainerName);
                 StopDockerContainer(_mongoDbContainerName);
                 StopDockerContainer(_apiContainerName);
                 StopDockerContainer(_storageApiContainerName);

@@ -8,15 +8,23 @@ public partial class Build
     [Parameter] readonly string ApiImageName = "heyer/api";
 
     [Parameter] readonly string StorageApiImageName = "heyer/storage-api";
+    [Parameter] readonly string WebImageName = "heyer/web";
+
     string _apiContainerName = "Heyer-API";
     int _apiPort = 3001;
     string _mongoDbContainerName = "Heyer-MongoDB";
     int _mongoDbPort = 27117;
     string _storageApiContainerName = "Heyer-Storage-API";
     int _storageApiPort = 3002;
+    string _webConfiguration = "local";
+    string _webContainerName = "Heyer-Web";
+    int _webPort = 4201;
+
     [Parameter] string ApiTag = "local";
 
     [Parameter] string StorageApiTag = "local";
+
+    [Parameter] string WebTag = "local";
 
     Target BuildApiDockerImage => _ => _
         .Executes(() =>
@@ -25,7 +33,8 @@ public partial class Build
                                         .SetProcessWorkingDirectory(RootDirectory)
                                         .SetFile(ApiPath / "Dockerfile")
                                         .SetPath(".")
-                                        .SetTag($"{ApiImageName}:{ApiTag}"));
+                                        .SetTag($"{ApiImageName}:{ApiTag}")
+                                        .SetNoCache(true));
         });
 
     Target BuildStorageApiDockerImage => _ => _
@@ -35,11 +44,24 @@ public partial class Build
                                         .SetProcessWorkingDirectory(RootDirectory)
                                         .SetFile(StorageApiPath / "Dockerfile")
                                         .SetPath(".")
-                                        .SetTag($"{StorageApiImageName}:{StorageApiTag}"));
+                                        .SetTag($"{StorageApiImageName}:{StorageApiTag}")
+                                        .SetNoCache(true));
+        });
+
+    Target BuildWebDockerImage => _ => _
+        .Executes(() =>
+        {
+            DockerTasks.DockerBuild(x => x
+                                        .SetProcessWorkingDirectory(RootDirectory)
+                                        .SetFile(WebPath / "Dockerfile")
+                                        .SetPath(".")
+                                        .SetTag($"{WebImageName}:{WebTag}")
+                                        .SetBuildArg($"CONFIGURATION={_webConfiguration}")
+                                        .SetNoCache(true));
         });
 
     Target RunAll => _ => _
-        .DependsOn(RunApi, RunStorageApi)
+        .DependsOn(RunBackend, RunWeb)
         .Executes(() =>
         {
         });
@@ -58,6 +80,12 @@ public partial class Build
                                       .SetDetach(true)
                                       .SetEnv(
                                           $"MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}"));
+        });
+
+    Target RunBackend => _ => _
+        .DependsOn(RunApi, RunStorageApi)
+        .Executes(() =>
+        {
         });
 
     Target RunMongoDb => _ => _
@@ -87,6 +115,20 @@ public partial class Build
                                       .SetDetach(true)
                                       .SetEnv(
                                           $"RegistryStrategy__MongoDbRegistry__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}"));
+        });
+
+    Target RunWeb => _ => _
+        .DependsOn(BuildWebDockerImage)
+        .Executes(() =>
+        {
+            StopDockerContainer(_webContainerName);
+
+            DockerTasks.DockerRun(x => x
+                                      .SetImage($"{WebImageName}:{WebTag}")
+                                      .SetName(_webContainerName)
+                                      .SetRm(true)
+                                      .SetPublish($"{_webPort}:4000")
+                                      .SetDetach(true));
         });
 
     private void StopDockerContainer(string containerName)
