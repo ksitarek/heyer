@@ -1,14 +1,14 @@
 using FluentResults;
-using Heyer.Modules.JobBoard.Domain.Candidates;
+using Heyer.Modules.Hiring.Domain.Candidates;
 using Microsoft.EntityFrameworkCore;
 
-namespace Heyer.Modules.JobBoard.Infrastructure.Persistence;
+namespace Heyer.Modules.Hiring.Infrastructure.Persistence;
 
 internal class CandidatesRepository : ICandidatesRepository
 {
-    private readonly JobBoardContext _context;
+    private readonly HiringDbContext _context;
 
-    public CandidatesRepository(JobBoardContext context) => _context = context;
+    public CandidatesRepository(HiringDbContext context) => _context = context;
 
     public async Task<Result> AddCandidate(Candidate candidate, CancellationToken cancellationToken = default)
     {

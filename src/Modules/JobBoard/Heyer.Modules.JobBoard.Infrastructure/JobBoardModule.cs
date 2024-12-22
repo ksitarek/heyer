@@ -2,7 +2,6 @@ using System.Reflection;
 using FluentValidation;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.JobBoard.Application;
-using Heyer.Modules.JobBoard.Domain.Candidates;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Heyer.Storage.API.Client;
@@ -37,7 +36,6 @@ public class JobBoardModule : IModule
 
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<JobBoardContext>());
 
-        services.AddScoped<ICandidatesRepository, CandidatesRepository>();
         services.AddScoped<IJobOffersRepository, JobOffersRepository>();
     }
 

@@ -1,4 +1,3 @@
-using Heyer.Modules.JobBoard.Domain.Candidates;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -11,9 +10,7 @@ internal class JobBoardContext : DbContext
     {
     }
 
-    public DbSet<Candidate> Candidates { get; init; }
     public DbSet<JobOffer> JobOffers { get; init; }
-
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
         configurationBuilder.Conventions.Remove<RelationshipDiscoveryConvention>();

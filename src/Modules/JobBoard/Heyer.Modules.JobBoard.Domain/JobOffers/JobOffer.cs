@@ -1,6 +1,5 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Domain;
-using Heyer.Modules.JobBoard.Domain.Candidates;
 using Heyer.Modules.JobBoard.Domain.JobOffers.Rules;
 
 namespace Heyer.Modules.JobBoard.Domain.JobOffers;
@@ -24,7 +23,6 @@ public class JobOffer : Entity
         AddDomainEvent(new JobOfferCreated(Id));
     }
 
-    public HashSet<CandidateId>? Candidates { get; private set; }
     public CompanyDetails CompanyDetails { get; private set; } = null!;
 
     public List<ContractDetails>? ContractsDetails { get; private set; }
@@ -46,26 +44,6 @@ public class JobOffer : Entity
                                      string jobDescription,
                                      RemoteWork remoteWork) =>
         new(companyDetails, offerSummary, jobDescription, remoteWork);
-
-    public Result AddCandidate(
-        CandidateId candidateId)
-    {
-        var validationResult = ChallengeBusinessRules(
-            new CandidateCanApplyOnlyOnce(Candidates, candidateId));
-
-        if (validationResult.IsFailed)
-        {
-            return validationResult;
-        }
-
-        Candidates ??= new HashSet<CandidateId>();
-
-        Candidates.Add(candidateId);
-
-        AddDomainEvent(new CandidateApplied(Id, candidateId));
-
-        return Result.Ok();
-    }
 
     public Result AddContractDetails(
         ContractDetails newContractDetails)

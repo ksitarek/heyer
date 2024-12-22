@@ -1,6 +1,6 @@
 using Heyer.BuildingBlocks.Domain;
 
-namespace Heyer.Modules.JobBoard.Domain.Candidates;
+namespace Heyer.Modules.Hiring.Domain.Candidates;
 
 public class Candidate : Entity
 {
