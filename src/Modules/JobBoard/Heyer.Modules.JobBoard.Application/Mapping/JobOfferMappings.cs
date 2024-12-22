@@ -17,15 +17,16 @@ public static class JobOfferMappings
             request.JobDescription,
             request.RemoteWork.MapRemoteWork());
 
-    public static JobOfferDetails MapToJobOfferDetails(this JobOffer jobOffer) =>
-        new(jobOffer.Id.Guid,
-            jobOffer.CompanyDetails.MapCompanyDetails(),
-            jobOffer.OfferSummary,
-            jobOffer.JobDescription,
-            jobOffer.Location!.MapLocation(),
-            jobOffer.RemoteWork.MapRemoteWork(),
-            jobOffer.Requirements!.MapRequirements(),
-            jobOffer.ContractsDetails!.Select(contractDetails => contractDetails.MapContractDetails()).ToList());
+    public static JobOfferDetails MapToJobOfferDetails(this PublishedJobOffer publishedJobOffer) =>
+        new(publishedJobOffer.Id.Guid,
+            publishedJobOffer.CompanyDetails.MapCompanyDetails(),
+            publishedJobOffer.OfferSummary,
+            publishedJobOffer.JobDescription,
+            publishedJobOffer.Location!.MapLocation(),
+            publishedJobOffer.RemoteWork.MapRemoteWork(),
+            publishedJobOffer.Requirements!.MapRequirements(),
+            publishedJobOffer.ContractsDetails!.Select(contractDetails => contractDetails.MapContractDetails())
+                .ToList());
 
     private static JobOfferDetails.CompanyDetailsDto MapCompanyDetails(this CompanyDetails companyDetails)
         => new(companyDetails.CompanyId.Id, companyDetails.Name);

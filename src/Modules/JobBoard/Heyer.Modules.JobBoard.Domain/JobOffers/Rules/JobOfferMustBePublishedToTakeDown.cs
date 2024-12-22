@@ -5,9 +5,10 @@ namespace Heyer.Modules.JobBoard.Domain.JobOffers.Rules;
 
 public class JobOfferMustBePublishedToTakeDown : IBusinessRule
 {
-    private readonly DateTimeOffset? _publishedAt;
+    private readonly DateTimeOffset? _publishedUntil;
 
-    public JobOfferMustBePublishedToTakeDown(DateTimeOffset? publishedAt) => _publishedAt = publishedAt;
+    public JobOfferMustBePublishedToTakeDown(DateTimeOffset? publishedUntil) => _publishedUntil = publishedUntil;
 
-    public Result Challenge() => Result.OkIf(_publishedAt is not null, "Job offer must be published to take it down.");
+    public Result Challenge() => Result.OkIf(_publishedUntil is null || _publishedUntil >= DateTimeOffset.UtcNow,
+                                             "Job offer must be published to take it down.");
 }

@@ -1,7 +1,6 @@
 using Heyer.API.Client.PublishedLanguage;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.Results;
-using Heyer.Modules.JobBoard.Application.JobOffers.NewCandidateApply;
 using Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 using Heyer.Modules.JobBoard.Application.Mapping;
 using MediatR;
@@ -18,7 +17,6 @@ public class JobBoardEndpointsConfiguration
     {
         MapCreateJobOfferEndpoint(app);
         MapGetJobOfferDetailsEndpoint(app);
-        MapNewCandidateApplyEndpoint(app);
     }
 
     private static void MapCreateJobOfferEndpoint(WebApplication app) =>
@@ -44,17 +42,6 @@ public class JobBoardEndpointsConfiguration
                            ? Results.Ok(result.Value)
                            : ResponseErrorHandling.Handle(result);
                    });
-
-    private static void MapNewCandidateApplyEndpoint(WebApplication app) =>
-        app.MapPost("/job-offers/new-candidate-apply",
-                    async (IMediator mediator, [FromBody] NewCandidateApplyToJobOffer command) =>
-                    {
-                        var result = await mediator.Send(command);
-
-                        return result.IsSuccess
-                            ? Results.Ok()
-                            : ResponseErrorHandling.Handle(result);
-                    });
 
     private static RemoteWork MapRemoteWork(API.Client.PublishedLanguage.RemoteWork remoteWork) =>
         remoteWork switch

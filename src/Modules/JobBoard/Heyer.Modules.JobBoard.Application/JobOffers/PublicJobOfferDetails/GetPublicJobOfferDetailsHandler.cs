@@ -9,16 +9,16 @@ namespace Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 
 public class GetPublicJobOfferDetailsHandler : IRequestHandler<GetPublicJobOfferDetails, Result<JobOfferDetails>>
 {
-    private readonly IJobOffersRepository _jobOffersRepository;
+    private readonly IPublishedJobOffersRepository _publishedJobOffersRepository;
 
-    public GetPublicJobOfferDetailsHandler(IJobOffersRepository jobOffersRepository) =>
-        _jobOffersRepository = jobOffersRepository;
+    public GetPublicJobOfferDetailsHandler(IPublishedJobOffersRepository publishedJobOffersRepository) =>
+        _publishedJobOffersRepository = publishedJobOffersRepository;
 
     public async Task<Result<JobOfferDetails>> Handle(GetPublicJobOfferDetails request,
                                                       CancellationToken cancellationToken)
     {
-        var jobOffer = await _jobOffersRepository.GetPublishedJobOfferById(
-            new JobOfferId(request.Guid),
+        var jobOffer = await _publishedJobOffersRepository.GetPublishedJobOfferById(
+            new PublishedJobOfferId(request.Guid),
             cancellationToken);
 
         if (jobOffer is null)

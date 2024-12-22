@@ -14,7 +14,7 @@ public class GetJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
 {
     private JobBoardContext _ctx;
     private JobOfferDetails _expectedDetails;
-    private JobOffer _jobOffer = null!;
+    private PublishedJobOffer _publishedJobOffer = null!;
 
     [Test]
     public async Task GetJobOfferByIdEndpoint_WillReturn200Ok_WhenOfferFound()
@@ -23,48 +23,13 @@ public class GetJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
         var client = AppFactory.CreateApiClient();
 
         // Act
-        var jobOffer = await client.GetJobOfferById(_jobOffer.Id.Guid);
+        var jobOffer = await client.GetJobOfferById(_publishedJobOffer.Id.Guid);
 
         // Assert
         jobOffer.Should().NotBeNull();
         jobOffer.Should()
             .BeEquivalentTo(
                 _expectedDetails);
-    }
-
-    [Test]
-    public async Task GetJobOfferByIdEndpoint_WillReturn404NotFound_WhenOfferIsExpired()
-    {
-        // Arrange
-        _jobOffer.TakeDown();
-        _jobOffer.Publish(DateTimeOffset.Now.AddDays(-1));
-        await _ctx.SaveChangesAsync();
-
-        var client = AppFactory.CreateApiClient();
-
-        // Act
-        var action = async () => await client.GetJobOfferById(_jobOffer.Id.Guid);
-
-        // Assert
-        (await action.Should().ThrowAsync<ApiException>())
-            .And.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    [Test]
-    public async Task GetJobOfferByIdEndpoint_WillReturn404NotFound_WhenOfferIsNotPublished()
-    {
-        // Arrange
-        _jobOffer.TakeDown();
-        await _ctx.SaveChangesAsync();
-
-        var client = AppFactory.CreateApiClient();
-
-        // Act
-        var action = async () => await client.GetJobOfferById(_jobOffer.Id.Guid);
-
-        // Assert
-        (await action.Should().ThrowAsync<ApiException>())
-            .And.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Test]
@@ -81,47 +46,63 @@ public class GetJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
             .And.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
+    [Test]
+    public async Task GetJobOfferByIdEndpoint_WillReturn404NotFound_WhenOfferWasTakenDown()
+    {
+        // Arrange
+        _publishedJobOffer.TakeDown();
+        await _ctx.SaveChangesAsync();
+
+        var client = AppFactory.CreateApiClient();
+
+        // Act
+        var action = async () => await client.GetJobOfferById(_publishedJobOffer.Id.Guid);
+
+        // Assert
+        (await action.Should().ThrowAsync<ApiException>())
+            .And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
     [SetUp]
     public async Task SetUp()
     {
         _ctx = AppFactory.GetRequiredService<JobBoardContext>();
 
-        _jobOffer = JobOffer.CreateNew(
+        _publishedJobOffer = PublishedJobOffer.CreateNew(
             new CompanyDetails(CompanyId.CreateNew(), "ACME"),
             Faker.Random.String2(10, 100),
             Faker.Random.String2(100, 500),
             Faker.Random.Enum(RemoteWork.Unknown));
 
-        _jobOffer.SetRequirements(ExperienceLevel.Junior,
-                                  new Dictionary<string, SkillLevel>
-                                  {
-                                      ["A"] = SkillLevel.Mid, ["B"] = SkillLevel.Senior
-                                  });
+        _publishedJobOffer.SetRequirements(ExperienceLevel.Junior,
+                                           new Dictionary<string, SkillLevel>
+                                           {
+                                               ["A"] = SkillLevel.Mid, ["B"] = SkillLevel.Senior
+                                           });
 
-        _jobOffer.SetOfficeLocation(new OfficeLocation("Warsaw", "Poland"));
+        _publishedJobOffer.SetOfficeLocation(new OfficeLocation("Warsaw", "Poland"));
 
-        _jobOffer.AddContractDetails(new ContractDetails(EmploymentType.ContractOfEmployment,
-                                                         new SalaryRange(false, 10000, 20000),
-                                                         8,
-                                                         8));
-
-        _jobOffer.Publish();
+        _publishedJobOffer.AddContractDetails(new ContractDetails(EmploymentType.ContractOfEmployment,
+                                                                  new SalaryRange(false, 10000, 20000),
+                                                                  8,
+                                                                  8));
 
         _expectedDetails = new JobOfferDetails(
-            _jobOffer.Id.Guid,
-            new JobOfferDetails.CompanyDetailsDto(_jobOffer.CompanyDetails.CompanyId.Id, _jobOffer.CompanyDetails.Name),
-            _jobOffer.OfferSummary,
-            _jobOffer.JobDescription,
-            new JobOfferDetails.LocationDto(_jobOffer.Location!.City, _jobOffer.Location!.Country),
-            Map(_jobOffer.RemoteWork),
+            _publishedJobOffer.Id.Guid,
+            new JobOfferDetails.CompanyDetailsDto(_publishedJobOffer.CompanyDetails.CompanyId.Id,
+                                                  _publishedJobOffer.CompanyDetails.Name),
+            _publishedJobOffer.OfferSummary,
+            _publishedJobOffer.JobDescription,
+            new JobOfferDetails.LocationDto(_publishedJobOffer.Location!.City, _publishedJobOffer.Location!.Country),
+            Map(_publishedJobOffer.RemoteWork),
             new JobOfferDetails.RequirementsDto(
-                Map(_jobOffer.Requirements!.ExperienceLevel),
-                _jobOffer.Requirements.Skills!.Select(x => new JobOfferDetails.SkillDto(x.Label, Map(x.Level)))
+                Map(_publishedJobOffer.Requirements!.ExperienceLevel),
+                _publishedJobOffer.Requirements.Skills!.Select(x => new JobOfferDetails.SkillDto(x.Label, Map(x.Level)))
                     .ToList()),
-            _jobOffer.ContractsDetails!.Select(x => Map(x)).ToList()
+            _publishedJobOffer.ContractsDetails!.Select(x => Map(x)).ToList()
         );
 
-        await _ctx.JobOffers.AddAsync(_jobOffer);
+        await _ctx.PublishedJobOffers.AddAsync(_publishedJobOffer);
 
         await _ctx.SaveChangesAsync();
     }

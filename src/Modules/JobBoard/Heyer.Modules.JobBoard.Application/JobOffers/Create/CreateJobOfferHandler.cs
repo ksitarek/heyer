@@ -8,13 +8,14 @@ namespace Heyer.Modules.JobBoard.Application.JobOffers.Create;
 
 public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
 {
-    private readonly IJobOffersRepository _jobOffersRepository;
+    private readonly IPublishedJobOffersRepository _publishedJobOffersRepository;
     private readonly IUserDataProvider _userDataProvider;
 
-    public CreateJobOfferHandler(IUserDataProvider userDataProvider, IJobOffersRepository jobOffersRepository)
+    public CreateJobOfferHandler(IUserDataProvider userDataProvider,
+                                 IPublishedJobOffersRepository publishedJobOffersRepository)
     {
         _userDataProvider = userDataProvider;
-        _jobOffersRepository = jobOffersRepository;
+        _publishedJobOffersRepository = publishedJobOffersRepository;
     }
 
     public async Task<Result<Guid>> Handle(CreateJobOffer request, CancellationToken cancellationToken)
@@ -23,13 +24,13 @@ public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
             new CompanyId(_userDataProvider.CompanyId),
             _userDataProvider.CompanyName);
 
-        var jobOffer = JobOffer.CreateNew(
+        var jobOffer = PublishedJobOffer.CreateNew(
             companyDetails,
             request.OfferSummary,
             request.JobDescription,
             request.RemoteWork);
 
-        var addResult = await _jobOffersRepository.AddAsync(jobOffer, cancellationToken);
+        var addResult = await _publishedJobOffersRepository.AddAsync(jobOffer, cancellationToken);
 
         if (addResult.IsSuccess)
         {

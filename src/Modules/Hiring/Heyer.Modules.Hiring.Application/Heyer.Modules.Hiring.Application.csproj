@@ -6,4 +6,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentResults" Version="3.16.0"/>
+    <PackageReference Include="MediatR" Version="12.4.1"/>
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\API\Heyer.API.Client\Heyer.API.Client.csproj"/>
+    <ProjectReference Include="..\..\..\API\Heyer.Storage.API.Client\Heyer.Storage.API.Client.csproj"/>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj"/>
+    <ProjectReference Include="..\Heyer.Modules.Hiring.Domain\Heyer.Modules.Hiring.Domain.csproj"/>
+  </ItemGroup>
+
 </Project>

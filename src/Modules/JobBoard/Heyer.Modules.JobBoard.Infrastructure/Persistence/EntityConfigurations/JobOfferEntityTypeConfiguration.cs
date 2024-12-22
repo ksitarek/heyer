@@ -6,16 +6,16 @@ using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace Heyer.Modules.JobBoard.Infrastructure.Persistence.EntityConfigurations;
 
-public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer>
+public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<PublishedJobOffer>
 {
-    public void Configure(EntityTypeBuilder<JobOffer> builder)
+    public void Configure(EntityTypeBuilder<PublishedJobOffer> builder)
     {
         builder.ToCollection("JobOffers");
 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasConversion(x => x.Guid, x => new JobOfferId(x));
+            .HasConversion(x => x.Guid, x => new PublishedJobOfferId(x));
 
         builder.Property(x => x.OfferSummary)
             .IsRequired()
@@ -52,7 +52,6 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
                                        });
                         });
 
-        builder.OwnsMany(x => x.Candidates);
         builder.OwnsMany(x => x.ContractsDetails,
                          nb => { nb.OwnsOne<SalaryRange>(x => x.SalaryRange); });
     }

@@ -14,7 +14,7 @@ public class CreateJobOfferHandlerTests
 {
     private static readonly CancellationToken _cancellationToken = CancellationToken.None;
     private CreateJobOfferHandler _handler;
-    private IJobOffersRepository _jobOffersRepository;
+    private IPublishedJobOffersRepository _iPublishedJobOffersRepository;
     private CreateJobOffer _testRequest;
     private IUserDataProvider _userDataProvider;
 
@@ -22,7 +22,7 @@ public class CreateJobOfferHandlerTests
     public async Task Handle_ShouldNotThrowWhenJobOffersRepositoryFails()
     {
         // Arrange
-        _jobOffersRepository.Configure().AddAsync(Arg.Any<JobOffer>(), _cancellationToken)
+        _iPublishedJobOffersRepository.Configure().AddAsync(Arg.Any<PublishedJobOffer>(), _cancellationToken)
             .Returns(Result.Fail("Error"));
 
         // Act
@@ -45,8 +45,8 @@ public class CreateJobOfferHandlerTests
         result.Should().BeSuccess();
         result.Value.Should().NotBeEmpty();
 
-        await _jobOffersRepository.Received(1)
-            .AddAsync(Arg.Is<JobOffer>(jo => jo.Id.Guid == result.Value), _cancellationToken);
+        await _iPublishedJobOffersRepository.Received(1)
+            .AddAsync(Arg.Is<PublishedJobOffer>(jo => jo.Id.Guid == result.Value), _cancellationToken);
     }
 
     [SetUp]
@@ -56,10 +56,11 @@ public class CreateJobOfferHandlerTests
         _userDataProvider.Configure().CompanyId.Returns(Guid.NewGuid());
         _userDataProvider.Configure().CompanyName.Returns("ACME Inc.");
 
-        _jobOffersRepository = Substitute.For<IJobOffersRepository>();
-        _jobOffersRepository.Configure().AddAsync(Arg.Any<JobOffer>(), _cancellationToken).Returns(Result.Ok());
+        _iPublishedJobOffersRepository = Substitute.For<IPublishedJobOffersRepository>();
+        _iPublishedJobOffersRepository.Configure().AddAsync(Arg.Any<PublishedJobOffer>(), _cancellationToken)
+            .Returns(Result.Ok());
 
-        _handler = new CreateJobOfferHandler(_userDataProvider, _jobOffersRepository);
+        _handler = new CreateJobOfferHandler(_userDataProvider, _iPublishedJobOffersRepository);
 
         _testRequest = new CreateJobOffer("Offer Summary", "Job Description", RemoteWork.Hybrid);
     }

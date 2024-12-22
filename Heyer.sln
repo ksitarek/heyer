@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{9EA5F468-489C-492A-AE8C-F5827C1393CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{20CBEDAE-8873-4600-B3F4-6100A5F2A750}"
@@ -72,6 +72,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Infrastructure", "src\Modules\Hiring\Heyer.Modules.Hiring.Infrastructure\Heyer.Modules.Hiring.Infrastructure.csproj", "{4410198F-E565-465B-9350-F8B2364CFD67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.IntegrationEvents", "src\Modules\Hiring\Heyer.Modules.Hiring.IntegrationEvents\Heyer.Modules.Hiring.IntegrationEvents.csproj", "{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Application.Tests", "tests\Modules\Heyer.Modules.Hiring.Application.Tests\Heyer.Modules.Hiring.Application.Tests.csproj", "{3FCB26FF-1263-487F-A245-6C66BF7A9F2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Domain.Tests", "tests\Modules\Heyer.Modules.Hiring.Domain.Tests\Heyer.Modules.Hiring.Domain.Tests.csproj", "{293AC12B-792C-4A5A-9174-CE69973EE8D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -173,6 +177,14 @@ Global
 		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FCB26FF-1263-487F-A245-6C66BF7A9F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FCB26FF-1263-487F-A245-6C66BF7A9F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FCB26FF-1263-487F-A245-6C66BF7A9F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FCB26FF-1263-487F-A245-6C66BF7A9F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293AC12B-792C-4A5A-9174-CE69973EE8D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293AC12B-792C-4A5A-9174-CE69973EE8D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293AC12B-792C-4A5A-9174-CE69973EE8D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293AC12B-792C-4A5A-9174-CE69973EE8D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9EA5F468-489C-492A-AE8C-F5827C1393CA} = {20CBEDAE-8873-4600-B3F4-6100A5F2A750}
@@ -208,5 +220,7 @@ Global
 		{A1C5084A-2F60-459D-AA8E-FB919C394DD5} = {42E987EF-0D5B-49EC-A54C-50D164A924BF}
 		{4410198F-E565-465B-9350-F8B2364CFD67} = {42E987EF-0D5B-49EC-A54C-50D164A924BF}
 		{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2} = {42E987EF-0D5B-49EC-A54C-50D164A924BF}
+		{3FCB26FF-1263-487F-A245-6C66BF7A9F2C} = {A5A7F993-11ED-4FC2-A82A-A3FD48FD5C09}
+		{293AC12B-792C-4A5A-9174-CE69973EE8D7} = {A5A7F993-11ED-4FC2-A82A-A3FD48FD5C09}
 	EndGlobalSection
 EndGlobal
