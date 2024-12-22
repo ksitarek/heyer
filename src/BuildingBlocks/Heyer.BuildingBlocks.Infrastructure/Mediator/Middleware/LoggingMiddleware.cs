@@ -1,6 +1,7 @@
 using FluentResults;
 using MediatR;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Context;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 
@@ -8,38 +9,48 @@ public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, 
     where TRequest : IRequest<TResult>
     where TResult : ResultBase, new()
 {
-    private readonly ILogger<LoggingMiddleware<TRequest, TResult>> _logger;
-
-    public LoggingMiddleware(ILogger<LoggingMiddleware<TRequest, TResult>> logger) => _logger = logger;
-
     public async Task<TResult> Handle(TRequest request,
                                       RequestHandlerDelegate<TResult> next,
                                       CancellationToken cancellationToken)
     {
-        using (_logger.BeginScope("Handling {RequestName}", typeof(TRequest).Name))
+        using (LogContext.PushProperty("RequestName", typeof(TRequest).Name))
         {
-            var result = await next();
+            Log.Information("Handling {RequestName}", typeof(TRequest).Name);
 
-            if (result.IsSuccess)
+            try
             {
-                _logger.LogInformation("Handled {RequestName}", typeof(TRequest).Name);
-            }
-            else
-            {
-                foreach (var error in result.Errors)
+                var result = await next();
+
+                if (result.IsSuccess)
                 {
-                    _logger.LogError("Error when handling {RequestName}: {Message}",
-                                     typeof(TRequest).Name,
-                                     error.Message);
-
-                    foreach (var reason in error.Reasons)
+                    Log.Information("Handled {RequestName}", typeof(TRequest).Name);
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
                     {
-                        _logger.LogError(reason.ToString());
+                        Log.Error("Error when handling {RequestName}: {Message}",
+                                  typeof(TRequest).Name,
+                                  error.Message);
+
+                        foreach (var reason in error.Reasons)
+                        {
+                            Log.Error(reason.ToString()!);
+                        }
                     }
                 }
-            }
 
-            return result;
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Error when handling {RequestName}", typeof(TRequest).Name);
+
+                var result = new TResult();
+                result.Errors.Add(new Error(e.Message).CausedBy(e));
+
+                return result;
+            }
         }
     }
 }

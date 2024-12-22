@@ -1,5 +1,10 @@
 using System.Reflection;
 using FluentValidation;
+using Heyer.BuildingBlocks.Application.Authorization;
+using Heyer.BuildingBlocks.Infrastructure;
+using Heyer.BuildingBlocks.Infrastructure.Mediator;
+using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
+using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.JobBoard.Application;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
@@ -13,21 +18,33 @@ using MongoDB.Driver;
 
 namespace Heyer.Modules.JobBoard.Infrastructure;
 
-public class JobBoardModule : IModule
+public class JobBoardModule : ModuleRunner, IJobBoardModule, IModuleInstaller
 {
-    private readonly IConfiguration _configuration;
 
-    public JobBoardModule(IConfiguration configuration) => _configuration = configuration;
-
-    public Assembly ModuleApplicationAssembly => typeof(JobBoardEndpointsConfiguration).Assembly;
-
-    public void ConfigureDependencyInjection(IServiceCollection services)
+    public JobBoardModule(IConfiguration configuration)
     {
-        services.AddStorageApiClient(_configuration["StorageApi:Url"]);
-        services.AddValidatorsFromAssemblyContaining<JobBoardEndpointsConfiguration>();
+        var services = new ServiceCollection();
 
-        var client = new MongoClient(_configuration["MongoDb:ConnectionString"]!);
-        var db = client.GetDatabase(_configuration["MongoDb:DatabaseName"]!);
+        ConfigureServices(configuration, services);
+
+        JobBoardModuleCompositionRoot.SetServiceProvider(services.BuildServiceProvider());
+    }
+
+    private void ConfigureServices(IConfiguration configuration, ServiceCollection services)
+    {
+        services.AddSingleton<IDateTimeProvider, SystemDateTime>();
+
+        services.AddMediator(ModuleApplicationAssembly,
+                             typeof(LoggingMiddleware<,>),
+                             typeof(ValidationMiddleware<,>),
+                             typeof(UnitOfWorkMiddleware<,>));
+
+        services.AddStorageApiClient(configuration["StorageApi:Url"]);
+
+        services.AddValidatorsFromAssembly(ModuleApplicationAssembly);
+
+        var client = new MongoClient(configuration["MongoDb:ConnectionString"]!);
+        var db = client.GetDatabase(configuration["MongoDb:DatabaseName"]!);
 
         services.AddSingleton(db);
 
@@ -37,11 +54,18 @@ public class JobBoardModule : IModule
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<JobBoardContext>());
 
         services.AddScoped<IPublishedJobOffersRepository, PublishedJobOffersRepository>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddDomainEventDispatcher();
+        services.AddUserDataProvider();
     }
+
+    public Assembly ModuleApplicationAssembly => typeof(JobBoardEndpointsConfiguration).Assembly;
 
     public void ConfigureModule(WebApplication app)
     {
-        var endpointsConfiguration = new JobBoardEndpointsConfiguration();
-        endpointsConfiguration.MapJobBoardEndpoints(app);
+        JobBoardEndpointsConfiguration.MapEndpoints(app);
     }
+
+    protected override Func<IServiceScope> ScopeProvider => JobBoardModuleCompositionRoot.CreateScope;
 }

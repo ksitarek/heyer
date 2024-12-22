@@ -4,6 +4,7 @@ using Heyer.API.Client.PublishedLanguage;
 using Heyer.Modules.JobBoard.Domain.Companies;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
+using Microsoft.Extensions.DependencyInjection;
 using RestEase;
 using RemoteWork = Heyer.Modules.JobBoard.Domain.JobOffers.RemoteWork;
 
@@ -66,7 +67,7 @@ public class GetJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
     [SetUp]
     public async Task SetUp()
     {
-        _ctx = AppFactory.GetRequiredService<JobBoardContext>();
+        _ctx = _jobBoardModuleCompositionRootScope.ServiceProvider.GetRequiredService<JobBoardContext>();
 
         _publishedJobOffer = PublishedJobOffer.CreateNew(
             new CompanyDetails(CompanyId.CreateNew(), "ACME"),

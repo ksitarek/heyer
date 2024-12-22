@@ -1,19 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Heyer.Modules.Hiring.Domain\Heyer.Modules.Hiring.Domain.csproj"/>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Heyer.Modules.Hiring.Application\Heyer.Modules.Hiring.Application.csproj"/>
+    <ProjectReference Include="..\Heyer.Modules.Hiring.Domain\Heyer.Modules.Hiring.Domain.csproj"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="FluentResults" Version="3.16.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10"/>
-        <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.2.1"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentResults" Version="3.16.0"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10"/>
+    <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.2.1"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Heyer.API.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 
 </Project>

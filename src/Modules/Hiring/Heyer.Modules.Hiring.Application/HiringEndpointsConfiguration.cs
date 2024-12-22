@@ -1,21 +1,20 @@
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Heyer.Modules.Hiring.Application;
 
-public class HiringEndpointsConfiguration
+public static class HiringEndpointsConfiguration
 {
-    public HiringEndpointsConfiguration(WebApplication app) => MapNewCandidateApplyEndpoint(app);
+    public static void MapEndpoints(WebApplication app) => MapNewCandidateApplyEndpoint(app);
 
     private static void MapNewCandidateApplyEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/new-candidate-apply",
-                    async (IMediator mediator, [FromBody] NewCandidateApplyToJobOffer command) =>
+                    async (IHiringModule module, [FromBody] NewCandidateApplyToJobOffer command, CancellationToken cancellationToken) =>
                     {
-                        var result = await mediator.Send(command);
+                        var result = await module.DispatchCommand(command, cancellationToken);
 
                         return result.IsSuccess
                             ? Results.Ok()

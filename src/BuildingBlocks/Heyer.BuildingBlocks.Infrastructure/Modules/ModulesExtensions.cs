@@ -1,23 +1,24 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Modules;
 
 public static class ModulesExtensions
 {
-    public static IHostApplicationBuilder AddModules(this IHostApplicationBuilder applicationBuilder,
-                                                     IEnumerable<IModule> modules)
+    public static IServiceCollection AddModule<TModuleInterface, TModule>(this IServiceCollection services)
+        where TModuleInterface : class, IModuleInstaller
+        where TModule : class, TModuleInterface
     {
-        foreach (var module in modules)
-        {
-            module.ConfigureDependencyInjection(applicationBuilder.Services);
-        }
+        services.AddSingleton<TModuleInterface, TModule>();
+        services.AddSingleton<IModuleInstaller, TModule>();
 
-        return applicationBuilder;
+        return services;
     }
 
-    public static IApplicationBuilder UseModules(this WebApplication app, IEnumerable<IModule> modules)
+    public static IApplicationBuilder UseModules(this WebApplication app)
     {
+        var modules = app.Services.GetServices<IModuleInstaller>();
+
         foreach (var module in modules)
         {
             module.ConfigureModule(app);

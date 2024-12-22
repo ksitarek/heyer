@@ -9,13 +9,17 @@ namespace Heyer.BuildingBlocks.Application.Authorization;
 
 public static class AuthorizationExtensions
 {
+    public static void AddUserDataProvider(this IServiceCollection services)
+    {
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserDataProvider, ClaimsUserDataProvider>();
+    }
+
     public static void AddAuthenticationAndAuthorization(this IServiceCollection services,
                                                          IConfiguration jwtConfiguration)
     {
-        services.AddHttpContextAccessor();
+        services.AddUserDataProvider();
         services.AddSingleton<IUserPermissionChecker, ClaimsPermissionChecker>();
-        services.AddScoped<IUserDataProvider, ClaimsUserDataProvider>();
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

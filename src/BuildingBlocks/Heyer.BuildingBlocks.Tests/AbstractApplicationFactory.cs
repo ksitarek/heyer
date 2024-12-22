@@ -2,10 +2,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 namespace Heyer.BuildingBlocks.Tests;
 
@@ -48,7 +51,18 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
             config.AddInMemoryCollection(_instanceConfigOverrides);
         });
 
-        return base.CreateHost(builder);
+        builder.ConfigureLogging(loggingBuilder =>
+        {
+            loggingBuilder.ClearProviders();
+            loggingBuilder.AddSerilog();
+        });
+
+        var host = base.CreateHost(builder);
+
+        // Hack needed to get logs from inside the test server
+        host.GetTestServer().PreserveExecutionContext = true;
+
+        return host;
     }
 
     protected string GenerateJwtToken(string jwtIssuer, string jwtAudience, string jwtSecret, string[] permissions)

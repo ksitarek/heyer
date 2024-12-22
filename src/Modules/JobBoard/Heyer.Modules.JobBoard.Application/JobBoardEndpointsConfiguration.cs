@@ -1,19 +1,18 @@
 using Heyer.API.Client.PublishedLanguage;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.Results;
+using Heyer.Modules.JobBoard.Application.JobOffers.Create;
 using Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 using Heyer.Modules.JobBoard.Application.Mapping;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RemoteWork = Heyer.Modules.JobBoard.Domain.JobOffers.RemoteWork;
 
 namespace Heyer.Modules.JobBoard.Application;
 
-public class JobBoardEndpointsConfiguration
+public static class JobBoardEndpointsConfiguration
 {
-    public void MapJobBoardEndpoints(WebApplication app)
+    public static void MapEndpoints(WebApplication app)
     {
         MapCreateJobOfferEndpoint(app);
         MapGetJobOfferDetailsEndpoint(app);
@@ -21,11 +20,11 @@ public class JobBoardEndpointsConfiguration
 
     private static void MapCreateJobOfferEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/create",
-                    async (IMediator mediator, [FromBody] CreateJobOfferRequest request) =>
+                    async (IJobBoardModule module, [FromBody] CreateJobOfferRequest request, CancellationToken cancellationToken) =>
                     {
                         var command = request.MapToCommand();
 
-                        var result = await mediator.Send(command);
+                        var result = await module.DispatchCommand<CreateJobOffer, Guid>(command, cancellationToken);
 
                         return result.IsSuccess
                             ? Results.Ok(result.Value)
@@ -34,21 +33,12 @@ public class JobBoardEndpointsConfiguration
 
     private static void MapGetJobOfferDetailsEndpoint(WebApplication app) =>
         app.MapGet("/job-offers/{jobOfferId}",
-                   async (IMediator mediator, Guid jobOfferId) =>
+                   async (IJobBoardModule module, Guid jobOfferId, CancellationToken cancellationToken) =>
                    {
-                       var result = await mediator.Send(new GetPublicJobOfferDetails(jobOfferId));
+                       var result = await module.DispatchQuery<GetPublicJobOfferDetails, JobOfferDetails>(new GetPublicJobOfferDetails(jobOfferId), cancellationToken);
 
                        return result.IsSuccess
                            ? Results.Ok(result.Value)
                            : ResponseErrorHandling.Handle(result);
                    });
-
-    private static RemoteWork MapRemoteWork(API.Client.PublishedLanguage.RemoteWork remoteWork) =>
-        remoteWork switch
-        {
-            API.Client.PublishedLanguage.RemoteWork.No => RemoteWork.No,
-            API.Client.PublishedLanguage.RemoteWork.Hybrid => RemoteWork.Hybrid,
-            API.Client.PublishedLanguage.RemoteWork.Yes => RemoteWork.Yes,
-            _ => throw new ArgumentOutOfRangeException(nameof(remoteWork))
-        };
 }
