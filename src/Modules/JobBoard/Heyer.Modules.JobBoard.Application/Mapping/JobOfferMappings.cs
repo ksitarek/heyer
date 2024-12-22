@@ -9,7 +9,7 @@ public static class JobOfferMappings
 {
     public static JobOfferDetails.ContractDetailsDto MapContractDetails(this ContractDetails contractDetails)
         => new(contractDetails.EmploymentType.MapEmploymentType(),
-               contractDetails.SalaryRange?.MapSalaryRange());
+               contractDetails.SalaryRange.IsPublished ? contractDetails.SalaryRange?.MapSalaryRange() : null);
 
     public static CreateJobOffer MapToCommand(this CreateJobOfferRequest request) =>
         new(

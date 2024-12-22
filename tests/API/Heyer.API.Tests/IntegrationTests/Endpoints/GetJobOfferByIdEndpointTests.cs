@@ -132,7 +132,7 @@ public class GetJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
     private JobOfferDetails.ContractDetailsDto Map(ContractDetails contractDetails)
         => new(
             Map(contractDetails.EmploymentType),
-            Map(contractDetails.SalaryRange));
+            contractDetails.SalaryRange.IsPublished ? Map(contractDetails.SalaryRange) : null);
 
     private JobOfferDetails.SalaryRangeDto Map(SalaryRange salaryRange) => new(salaryRange.From, salaryRange.To);
 
