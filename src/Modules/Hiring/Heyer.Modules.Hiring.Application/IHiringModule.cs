@@ -4,5 +4,4 @@ namespace Heyer.Modules.Hiring.Application;
 
 public interface IHiringModule : IModuleRunner, IModuleInstaller
 {
-
 }

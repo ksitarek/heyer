@@ -20,7 +20,9 @@ public static class JobBoardEndpointsConfiguration
 
     private static void MapCreateJobOfferEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/create",
-                    async (IJobBoardModule module, [FromBody] CreateJobOfferRequest request, CancellationToken cancellationToken) =>
+                    async (IJobBoardModule module,
+                           [FromBody] CreateJobOfferRequest request,
+                           CancellationToken cancellationToken) =>
                     {
                         var command = request.MapToCommand();
 
@@ -35,7 +37,10 @@ public static class JobBoardEndpointsConfiguration
         app.MapGet("/job-offers/{jobOfferId}",
                    async (IJobBoardModule module, Guid jobOfferId, CancellationToken cancellationToken) =>
                    {
-                       var result = await module.DispatchQuery<GetPublicJobOfferDetails, JobOfferDetails>(new GetPublicJobOfferDetails(jobOfferId), cancellationToken);
+                       var result =
+                           await module.DispatchQuery<GetPublicJobOfferDetails, JobOfferDetails>(
+                               new GetPublicJobOfferDetails(jobOfferId),
+                               cancellationToken);
 
                        return result.IsSuccess
                            ? Results.Ok(result.Value)

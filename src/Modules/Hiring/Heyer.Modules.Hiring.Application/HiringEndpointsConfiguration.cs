@@ -12,7 +12,9 @@ public static class HiringEndpointsConfiguration
 
     private static void MapNewCandidateApplyEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/new-candidate-apply",
-                    async (IHiringModule module, [FromBody] NewCandidateApplyToJobOffer command, CancellationToken cancellationToken) =>
+                    async (IHiringModule module,
+                           [FromBody] NewCandidateApplyToJobOffer command,
+                           CancellationToken cancellationToken) =>
                     {
                         var result = await module.DispatchCommand(command, cancellationToken);
 

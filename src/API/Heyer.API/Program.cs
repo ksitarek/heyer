@@ -18,7 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSerilog((sp, lc) => lc
                                 .ReadFrom.Configuration(builder.Configuration)
-                                .ReadFrom.Services(sp), true);
+                                .ReadFrom.Services(sp),
+                            true);
 
 builder.Services.AddModule<IHiringModule, HiringModule>();
 builder.Services.AddModule<IJobBoardModule, JobBoardModule>();

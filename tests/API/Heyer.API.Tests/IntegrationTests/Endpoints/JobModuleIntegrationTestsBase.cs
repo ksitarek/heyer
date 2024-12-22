@@ -12,9 +12,9 @@ public abstract class JobModuleIntegrationTestsBase
 {
     internal IApplicationFactory<IApiClient> AppFactory;
     internal Faker Faker = new();
+    protected IServiceScope _hiringModuleCompositionRootScope;
 
     protected IServiceScope _jobBoardModuleCompositionRootScope;
-    protected IServiceScope _hiringModuleCompositionRootScope;
 
     [SetUp]
     public virtual Task SetUpIntegrationTestsBase()

@@ -9,13 +9,6 @@ namespace Heyer.Modules.Hiring.Infrastructure;
 
 public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
 {
-    public Assembly ModuleApplicationAssembly => typeof(HiringEndpointsConfiguration).Assembly;
-
-    public void ConfigureModule(WebApplication app)
-    {
-        HiringEndpointsConfiguration.MapEndpoints(app);
-    }
-
     public HiringModule(IConfiguration configuration)
     {
         var services = new ServiceCollection();
@@ -25,9 +18,13 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
         HiringModuleCompositionRoot.SetServiceProvider(services.BuildServiceProvider());
     }
 
+    public Assembly ModuleApplicationAssembly => typeof(HiringEndpointsConfiguration).Assembly;
+
+    protected override Func<IServiceScope> ScopeProvider => HiringModuleCompositionRoot.CreateScope;
+
+    public void ConfigureModule(WebApplication app) => HiringEndpointsConfiguration.MapEndpoints(app);
+
     private void ConfigureServices(IConfiguration configuration, ServiceCollection services)
     {
     }
-
-    protected override Func<IServiceScope> ScopeProvider => HiringModuleCompositionRoot.CreateScope;
 }

@@ -9,8 +9,8 @@ namespace Heyer.API.Tests.Utils;
 
 public class JobOfferValidator : IDisposable
 {
-    private readonly DbSet<PublishedJobOffer> _set;
     private readonly IServiceScope _scope;
+    private readonly DbSet<PublishedJobOffer> _set;
 
     public JobOfferValidator()
     {
@@ -21,6 +21,8 @@ public class JobOfferValidator : IDisposable
         _set = dbContext.Set<PublishedJobOffer>();
     }
 
+    public void Dispose() => _scope.Dispose();
+
     public async Task ValidateJobOfferIsSavedAsync(Guid id)
     {
         var record = await _set.Where(x => x.Id == new PublishedJobOfferId(id)).Select(x => x.Id).FirstOrDefaultAsync();
@@ -28,6 +30,4 @@ public class JobOfferValidator : IDisposable
         record.Should().NotBeNull();
         record!.Guid.Should().Be(id);
     }
-
-    public void Dispose() => _scope.Dispose();
 }

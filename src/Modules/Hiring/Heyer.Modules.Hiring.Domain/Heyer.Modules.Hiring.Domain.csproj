@@ -10,4 +10,8 @@
         <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Class1.cs" />
+    </ItemGroup>
+
 </Project>
