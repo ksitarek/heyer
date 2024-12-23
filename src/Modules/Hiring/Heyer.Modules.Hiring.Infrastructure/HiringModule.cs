@@ -20,7 +20,7 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
 
     public Assembly ModuleApplicationAssembly => typeof(HiringEndpointsConfiguration).Assembly;
 
-    protected override Func<IServiceScope> ScopeProvider => HiringModuleCompositionRoot.CreateScope;
+    public override Func<IServiceScope> ScopeProvider => HiringModuleCompositionRoot.CreateScope;
 
     public void ConfigureModule(WebApplication app) => HiringEndpointsConfiguration.MapEndpoints(app);
 

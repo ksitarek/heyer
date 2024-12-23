@@ -5,12 +5,12 @@ namespace Heyer.BuildingBlocks.Infrastructure.Modules;
 
 public static class ModulesExtensions
 {
-    public static IServiceCollection AddModule<TModuleInterface, TModule>(this IServiceCollection services)
+    public static IServiceCollection AddModule<TModuleInterface, TModule>(this IServiceCollection services, TModule module)
         where TModuleInterface : class, IModuleInstaller
         where TModule : class, TModuleInterface
     {
-        services.AddSingleton<TModuleInterface, TModule>();
-        services.AddSingleton<IModuleInstaller, TModule>();
+        services.AddSingleton<TModuleInterface, TModule>(_ => module);
+        services.AddSingleton<IModuleInstaller, TModule>(_ => module);
 
         return services;
     }

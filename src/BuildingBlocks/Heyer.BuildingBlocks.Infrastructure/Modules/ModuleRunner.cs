@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Modules;
 
-public abstract class ModuleRunner
+public abstract class ModuleRunner : IModuleRunner
 {
-    protected abstract Func<IServiceScope> ScopeProvider { get; }
+    public abstract Func<IServiceScope> ScopeProvider { get; }
 
     public async Task<Result> DispatchCommand<TCommand>(TCommand command, CancellationToken cancellationToken)
         where TCommand : ICommand

@@ -27,7 +27,7 @@ public class HealthCheckTests
 
         report.Status.Should().Be(HealthCheckStatus.Healthy);
         report.Results.Should().NotBeEmpty().And.HaveCount(1);
-        report.Results.First().Key.Should().Be("Database");
+        report.Results.First().Key.Should().Be("JobBoardDatabase");
         report.Results.First().Value.Status.Should().Be(HealthCheckStatus.Healthy);
     }
 
