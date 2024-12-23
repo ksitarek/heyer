@@ -6,7 +6,6 @@ using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Application;
 using Heyer.Modules.Hiring.PublishedLanguage;
-using Heyer.Modules.JobBoard.Application;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
 using RemoteWork = Heyer.Modules.Hiring.PublishedLanguage.RemoteWork;
@@ -14,7 +13,7 @@ using RemoteWork = Heyer.Modules.Hiring.PublishedLanguage.RemoteWork;
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 [Category("Integration")]
-public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
+public class CreateJobOfferEndpointTests : IntegrationTestsBase
 {
     public static IEnumerable<object[]> BadRequestTestCases()
     {

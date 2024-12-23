@@ -1,5 +1,4 @@
 using Heyer.Modules.Hiring.PublishedLanguage;
-using Heyer.Modules.JobBoard.Domain.Companies;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

@@ -1,19 +1,14 @@
-using System.Text.Json;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.PublishedLanguage;
 using Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Serilog;
 
 namespace Heyer.Modules.JobBoard.Application;
 
 public static class JobBoardEndpointsConfiguration
 {
-    public static void MapEndpoints(WebApplication app)
-    {
-        MapGetJobOfferDetailsEndpoint(app);
-    }
+    public static void MapEndpoints(WebApplication app) => MapGetJobOfferDetailsEndpoint(app);
 
     private static void MapGetJobOfferDetailsEndpoint(WebApplication app) =>
         app.MapGet("/job-board/{jobOfferId}",
@@ -23,9 +18,6 @@ public static class JobBoardEndpointsConfiguration
                            await module.DispatchQuery<GetPublicJobOfferDetails, PublishedJobOfferDetails>(
                                new GetPublicJobOfferDetails(jobOfferId),
                                cancellationToken);
-
-                       var j = JsonSerializer.Serialize(result.Value);
-                       var d = JsonSerializer.Deserialize<PublishedJobOfferDetails>(j);
 
                        return result.IsSuccess
                            ? Results.Ok(result.Value)

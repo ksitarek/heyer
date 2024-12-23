@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj"/>
-        <ProjectReference Include="..\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj"/>
+    <ProjectReference Include="..\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj"/>
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="Class1.cs" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Class1.cs"/>
+  </ItemGroup>
 
 </Project>

@@ -36,15 +36,4 @@ internal class JobOffersRepository : IJobOffersRepository
         _context.JobOffers
             .Where(x => x.Id == publishedJobOfferId)
             .FirstOrDefaultAsync(cancellationToken);
-
-    public Task<JobOffer?> GetPublishedJobOfferById(JobOfferId publishedJobOfferId,
-                                                    CancellationToken cancellationToken = default)
-    {
-        var now = _dateTimeProvider.UtcNow();
-
-        return _context.JobOffers
-            .Where(x => x.Id == publishedJobOfferId)
-            .Where(x => x.PublishedUntil == null || x.PublishedUntil >= now)
-            .FirstOrDefaultAsync(cancellationToken);
-    }
 }

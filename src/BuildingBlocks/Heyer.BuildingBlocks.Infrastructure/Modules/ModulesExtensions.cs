@@ -5,7 +5,9 @@ namespace Heyer.BuildingBlocks.Infrastructure.Modules;
 
 public static class ModulesExtensions
 {
-    public static IServiceCollection AddModule<TModuleInterface, TModule>(this IServiceCollection services, TModule module)
+    public static IServiceCollection AddModule<TModuleInterface, TModule>(
+        this IServiceCollection services,
+        TModule module)
         where TModuleInterface : class, IModuleInstaller
         where TModule : class, TModuleInterface
     {

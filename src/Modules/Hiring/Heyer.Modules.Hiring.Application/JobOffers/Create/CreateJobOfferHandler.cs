@@ -1,7 +1,6 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
-using Heyer.Modules.Hiring.Domain.Companies;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage;
 

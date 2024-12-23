@@ -1,7 +1,6 @@
 using System.Net;
 using FluentAssertions;
 using Heyer.Modules.Hiring.PublishedLanguage;
-using Heyer.Modules.JobBoard.Domain.Companies;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +9,7 @@ using RestEase;
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 [Category("Integration")]
-public class GetPublicJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
+public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
 {
     private JobBoardContext _ctx;
     private PublishedJobOfferDetails _expectedDetails;
@@ -23,7 +22,7 @@ public class GetPublicJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
         var client = AppFactory.CreateApiClient();
 
         // Act
-        var jobOffer = await client.GetJobOfferById(_publishedJobOffer.Id.Guid);
+        var jobOffer = await client.GetPublishedJobOfferById(_publishedJobOffer.Id.Guid);
 
         // Assert
         jobOffer.Should().NotBeNull();
@@ -39,7 +38,7 @@ public class GetPublicJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
         var client = AppFactory.CreateApiClient();
 
         // Act
-        var action = async () => await client.GetJobOfferById(Guid.NewGuid());
+        var action = async () => await client.GetPublishedJobOfferById(Guid.NewGuid());
 
         // Assert
         (await action.Should().ThrowAsync<ApiException>())
@@ -56,7 +55,7 @@ public class GetPublicJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
         var client = AppFactory.CreateApiClient();
 
         // Act
-        var action = async () => await client.GetJobOfferById(_publishedJobOffer.Id.Guid);
+        var action = async () => await client.GetPublishedJobOfferById(_publishedJobOffer.Id.Guid);
 
         // Assert
         (await action.Should().ThrowAsync<ApiException>())
@@ -96,7 +95,7 @@ public class GetPublicJobOfferByIdEndpointTests : JobModuleIntegrationTestsBase
             _publishedJobOffer.Location!,
             _publishedJobOffer.RemoteWork,
             _publishedJobOffer.Requirements!,
-            new()
+            new List<ContractDetails>
             {
                 new(
                     _publishedJobOffer.ContractsDetails!.First().EmploymentType,

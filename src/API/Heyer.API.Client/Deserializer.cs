@@ -7,10 +7,8 @@ internal class Deserializer : ResponseDeserializer
 {
     private readonly JsonSerializerOptions options;
 
-    public Deserializer(JsonSerializerOptions? options = null)
-    {
+    public Deserializer(JsonSerializerOptions? options = null) =>
         this.options = options ?? JsonSerializerOptions.Default;
-    }
 
     public override T Deserialize<T>(string? content, HttpResponseMessage response, ResponseDeserializerInfo info)
     {

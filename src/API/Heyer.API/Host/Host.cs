@@ -20,8 +20,5 @@ internal class Host
         _app.UseHealthChecks("/health", new HealthCheckOptions { ResponseWriter = JsonResponseWriter.WriteResponse });
     }
 
-    public async Task RunAsync()
-    {
-        await _app.RunAsync();
-    }
+    public async Task RunAsync() => await _app.RunAsync();
 }

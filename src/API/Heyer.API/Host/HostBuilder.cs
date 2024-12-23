@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Heyer.API.Client;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
@@ -20,7 +19,14 @@ internal class HostBuilder
 
         _builder.Services.AddEndpointsApiExplorer();
         _builder.Services.AddAuthenticationAndAuthorization(_builder.Configuration.GetSection("Jwt"));
-        _builder.Services.Configure<JsonOptions>(options => options.SerializerOptions.PropertyNamingPolicy = ApiClientFactory.SerializerOptions.PropertyNamingPolicy);
+        _builder.Services.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.PropertyNamingPolicy =
+                ApiClientFactory.SerializerOptions.PropertyNamingPolicy;
+
+            options.SerializerOptions.DefaultIgnoreCondition =
+                ApiClientFactory.SerializerOptions.DefaultIgnoreCondition;
+        });
     }
 
     public HostBuilder AddModule<TInterface, TImplementation>()

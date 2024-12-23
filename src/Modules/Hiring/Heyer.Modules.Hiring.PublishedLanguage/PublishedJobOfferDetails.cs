@@ -9,7 +9,7 @@ public record PublishedJobOfferDetails
                                     CompanyDetails CompanyDetails,
                                     string OfferSummary,
                                     string JobDescription,
-                                    OfficeLocation OfficeLocationD,
+                                    OfficeLocation OfficeLocation,
                                     RemoteWork RemoteWork,
                                     Requirements Requirements,
                                     List<ContractDetails> ContractDetails)
@@ -18,7 +18,7 @@ public record PublishedJobOfferDetails
         this.CompanyDetails = CompanyDetails;
         this.OfferSummary = OfferSummary;
         this.JobDescription = JobDescription;
-        this.OfficeLocationD = OfficeLocationD;
+        this.OfficeLocation = OfficeLocation;
         this.RemoteWork = RemoteWork;
         this.Requirements = Requirements;
         this.ContractDetails = ContractDetails;
@@ -28,7 +28,7 @@ public record PublishedJobOfferDetails
     public CompanyDetails CompanyDetails { get; init; }
     public string OfferSummary { get; init; }
     public string JobDescription { get; init; }
-    public OfficeLocation OfficeLocationD { get; init; }
+    public OfficeLocation OfficeLocation { get; init; }
     public RemoteWork RemoteWork { get; init; }
     public Requirements Requirements { get; init; }
     public List<ContractDetails> ContractDetails { get; init; }
@@ -46,7 +46,7 @@ public record PublishedJobOfferDetails
         CompanyDetails = this.CompanyDetails;
         OfferSummary = this.OfferSummary;
         JobDescription = this.JobDescription;
-        OfficeLocationD = this.OfficeLocationD;
+        OfficeLocationD = OfficeLocation;
         RemoteWork = this.RemoteWork;
         Requirements = this.Requirements;
         ContractDetails = this.ContractDetails;

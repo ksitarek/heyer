@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
-public abstract class JobModuleIntegrationTestsBase
+public abstract class IntegrationTestsBase
 {
     internal IApplicationFactory<IApiClient> AppFactory;
 

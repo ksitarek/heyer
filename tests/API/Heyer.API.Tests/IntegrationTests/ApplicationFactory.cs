@@ -1,9 +1,7 @@
 using Heyer.API.Client;
-using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Tests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.API.Tests.IntegrationTests;
 
@@ -27,7 +25,7 @@ public class ApplicationFactory : AbstractApplicationFactory<Program, IApiClient
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureTestServices(services => {  });
+        builder.ConfigureTestServices(services => { });
 
         base.ConfigureWebHost(builder);
     }

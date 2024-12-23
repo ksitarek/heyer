@@ -11,11 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="PublishedLanguage\" />
+    <Folder Include="PublishedLanguage\"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Modules\Hiring\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj" />
+    <ProjectReference Include="..\..\Modules\Hiring\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj"/>
   </ItemGroup>
 
 </Project>

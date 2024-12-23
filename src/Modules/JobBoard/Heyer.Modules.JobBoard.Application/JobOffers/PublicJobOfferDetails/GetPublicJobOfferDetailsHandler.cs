@@ -7,7 +7,8 @@ using MediatR;
 
 namespace Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 
-public class GetPublicJobOfferDetailsHandler : IRequestHandler<GetPublicJobOfferDetails, Result<PublishedJobOfferDetails>>
+public class
+    GetPublicJobOfferDetailsHandler : IRequestHandler<GetPublicJobOfferDetails, Result<PublishedJobOfferDetails>>
 {
     private readonly IPublishedJobOffersRepository _publishedJobOffersRepository;
 
@@ -15,7 +16,7 @@ public class GetPublicJobOfferDetailsHandler : IRequestHandler<GetPublicJobOffer
         _publishedJobOffersRepository = publishedJobOffersRepository;
 
     public async Task<Result<PublishedJobOfferDetails>> Handle(GetPublicJobOfferDetails request,
-                                                      CancellationToken cancellationToken)
+                                                               CancellationToken cancellationToken)
     {
         var publishedJobOffer = await _publishedJobOffersRepository.GetPublishedJobOfferById(
             new PublishedJobOfferId(request.Guid),

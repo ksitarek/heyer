@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj"/>
-    <ProjectReference Include="..\..\Hiring\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj" />
+    <ProjectReference Include="..\..\Hiring\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

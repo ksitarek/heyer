@@ -1,13 +1,8 @@
 using FluentAssertions;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Domain.JobOffers;
-using Heyer.Modules.Hiring.Infrastructure;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
-using Heyer.Modules.JobBoard.Infrastructure;
-using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
 namespace Heyer.API.Tests.Utils;
@@ -15,7 +10,6 @@ namespace Heyer.API.Tests.Utils;
 public class JobOfferValidator : IDisposable
 {
     private readonly Guid _companyId;
-    private DbSet<JobOffer> _set => _ctx.Set<JobOffer>();
     private readonly HiringDbContext _ctx;
 
     public JobOfferValidator(Guid companyId)
@@ -24,20 +18,7 @@ public class JobOfferValidator : IDisposable
         _ctx = GetContext();
     }
 
-    private HiringDbContext GetContext()
-    {
-        var connectionString = ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:MongoDb:ConnectionString"];
-        var databaseName = ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:MongoDb:DatabaseName"];
-
-        var client = new MongoClient(connectionString);
-        var db = client.GetDatabase(databaseName);
-
-        var options = new DbContextOptionsBuilder<HiringDbContext>()
-            .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
-            .Options;
-
-        return new HiringDbContext(options);
-    }
+    private DbSet<JobOffer> _set => _ctx.Set<JobOffer>();
 
     public void Dispose() => _ctx.Dispose();
 
@@ -47,5 +28,22 @@ public class JobOfferValidator : IDisposable
 
         record.Should().NotBeNull();
         record!.Guid.Should().Be(id);
+    }
+
+    private HiringDbContext GetContext()
+    {
+        var connectionString =
+            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:MongoDb:ConnectionString"];
+        var databaseName =
+            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:MongoDb:DatabaseName"];
+
+        var client = new MongoClient(connectionString);
+        var db = client.GetDatabase(databaseName);
+
+        var options = new DbContextOptionsBuilder<HiringDbContext>()
+            .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+            .Options;
+
+        return new HiringDbContext(options);
     }
 }

@@ -4,7 +4,7 @@ using Heyer.BuildingBlocks.Tests.Fixtures;
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 [SetUpFixture]
-public class JobBoardIntegrationTestsFixture
+public class IntegrationTestsFixture
 {
     private readonly MongoDbFixture _mongoDbFixture = new();
 
@@ -23,13 +23,18 @@ public class JobBoardIntegrationTestsFixture
             _mongoDbFixture.ConnectionString);
 
         ApplicationFactoryConfiguration.AddTenantConfig(
+            ApplicationFactoryConfiguration.Tenant2Id,
+            Config.MongoDb_ConnectionString,
+            _mongoDbFixture.ConnectionString);
+
+        ApplicationFactoryConfiguration.AddTenantConfig(
             ApplicationFactoryConfiguration.Tenant1Id,
             Config.MongoDb_DatabaseName,
             ApplicationFactoryConfiguration.Tenant1Id.ToString());
 
         ApplicationFactoryConfiguration.AddTenantConfig(
             ApplicationFactoryConfiguration.Tenant2Id,
-            Config.MongoDb_ConnectionString,
+            Config.MongoDb_DatabaseName,
             ApplicationFactoryConfiguration.Tenant2Id.ToString());
     }
 

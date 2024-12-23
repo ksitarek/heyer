@@ -4,7 +4,6 @@ using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
 using Heyer.Modules.Hiring.Domain.Candidates;
-using Heyer.Modules.Hiring.Domain.Companies;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
 using Heyer.Modules.Hiring.PublishedLanguage;
