@@ -1,18 +1,18 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
-using Heyer.Modules.JobBoard.Domain.Companies;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
+using Heyer.Modules.Hiring.Domain.Companies;
+using Heyer.Modules.Hiring.Domain.JobOffers;
 
-namespace Heyer.Modules.JobBoard.Application.JobOffers.Create;
+namespace Heyer.Modules.Hiring.Application.JobOffers.Create;
 
 public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
 {
-    private readonly IPublishedJobOffersRepository _publishedJobOffersRepository;
+    private readonly IJobOffersRepository _publishedJobOffersRepository;
     private readonly IUserDataProvider _userDataProvider;
 
     public CreateJobOfferHandler(IUserDataProvider userDataProvider,
-                                 IPublishedJobOffersRepository publishedJobOffersRepository)
+                                 IJobOffersRepository publishedJobOffersRepository)
     {
         _userDataProvider = userDataProvider;
         _publishedJobOffersRepository = publishedJobOffersRepository;
@@ -24,7 +24,7 @@ public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
             new CompanyId(_userDataProvider.CompanyId),
             _userDataProvider.CompanyName);
 
-        var jobOffer = PublishedJobOffer.CreateNew(
+        var jobOffer = JobOffer.CreateNew(
             companyDetails,
             request.OfferSummary,
             request.JobDescription,

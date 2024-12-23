@@ -11,7 +11,9 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 public abstract class JobModuleIntegrationTestsBase
 {
     internal IApplicationFactory<IApiClient> AppFactory;
+
     internal Faker Faker = new();
+
     protected IServiceScope _hiringModuleCompositionRootScope;
 
     protected IServiceScope _jobBoardModuleCompositionRootScope;

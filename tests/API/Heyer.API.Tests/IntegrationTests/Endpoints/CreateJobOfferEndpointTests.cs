@@ -4,6 +4,7 @@ using Bogus;
 using FluentAssertions;
 using Heyer.API.Client.PublishedLanguage;
 using Heyer.API.Tests.Utils;
+using Heyer.Modules.Hiring.Application;
 using Heyer.Modules.JobBoard.Application;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
@@ -102,7 +103,7 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
         string[] validationErrors)
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(JobBoardPermissions.CreateJobOffer);
+        var client = AppFactory.CreateAuthorizedApiClient(HiringPermissions.CreateJobOffer);
         var request = new CreateJobOfferRequest(offerSummary, jobDescription, remoteWork);
 
         // Act
@@ -155,7 +156,7 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
     public async Task CreateJobOfferEndpoint_WithPermission_WillReturn200()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(JobBoardPermissions.CreateJobOffer);
+        var client = AppFactory.CreateAuthorizedApiClient(HiringPermissions.CreateJobOffer);
         var request = CreateJobOfferRequest();
 
         // Act

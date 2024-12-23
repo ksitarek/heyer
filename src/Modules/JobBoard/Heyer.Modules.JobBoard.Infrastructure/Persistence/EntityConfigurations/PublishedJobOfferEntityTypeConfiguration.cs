@@ -6,7 +6,7 @@ using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace Heyer.Modules.JobBoard.Infrastructure.Persistence.EntityConfigurations;
 
-public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<PublishedJobOffer>
+public class PublishedJobOfferEntityTypeConfiguration : IEntityTypeConfiguration<PublishedJobOffer>
 {
     public void Configure(EntityTypeBuilder<PublishedJobOffer> builder)
     {

@@ -12,13 +12,12 @@ internal class JobBoardContext : DbContext
 
     public DbSet<PublishedJobOffer> PublishedJobOffers { get; init; }
 
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
         configurationBuilder.Conventions.Remove<RelationshipDiscoveryConvention>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(JobBoardContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         base.OnModelCreating(modelBuilder);
     }
 }

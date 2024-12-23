@@ -1,8 +1,9 @@
 using Heyer.API.Client.PublishedLanguage;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
-using RemoteWork = Heyer.Modules.JobBoard.Domain.JobOffers.RemoteWork;
+using Heyer.Modules.Hiring.Application.JobOffers.Create;
+using Heyer.Modules.Hiring.Domain.JobOffers;
+using RemoteWork = Heyer.Modules.Hiring.Domain.JobOffers.RemoteWork;
 
-namespace Heyer.Modules.JobBoard.Application.Mapping;
+namespace Heyer.Modules.Hiring.Application.Mapping;
 
 public static class JobOfferMappings
 {
@@ -10,7 +11,13 @@ public static class JobOfferMappings
         => new(contractDetails.EmploymentType.MapEmploymentType(),
                contractDetails.SalaryRange.IsPublished ? contractDetails.SalaryRange?.MapSalaryRange() : null);
 
-    public static JobOfferDetails MapToJobOfferDetails(this PublishedJobOffer publishedJobOffer) =>
+    public static CreateJobOffer MapToCommand(this CreateJobOfferRequest request) =>
+        new(
+            request.OfferSummary,
+            request.JobDescription,
+            request.RemoteWork.MapRemoteWork());
+
+    public static JobOfferDetails MapToJobOfferDetails(this JobOffer publishedJobOffer) =>
         new(publishedJobOffer.Id.Guid,
             publishedJobOffer.CompanyDetails.MapCompanyDetails(),
             publishedJobOffer.OfferSummary,

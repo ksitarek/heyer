@@ -1,10 +1,10 @@
 using FluentAssertions;
 using Heyer.API.Client.PublishedLanguage;
-using Heyer.Modules.JobBoard.Application.JobOffers.Create;
-using Heyer.Modules.JobBoard.Application.Mapping;
-using RemoteWork = Heyer.Modules.JobBoard.Domain.JobOffers.RemoteWork;
+using Heyer.Modules.Hiring.Application.JobOffers.Create;
+using Heyer.Modules.Hiring.Application.Mapping;
+using RemoteWork = Heyer.Modules.Hiring.Domain.JobOffers.RemoteWork;
 
-namespace Heyer.Modules.JobBoard.Application.Tests;
+namespace Heyer.Modules.Hiring.Application.Tests;
 
 [Category("Unit")]
 public class JobOfferMappingsTests

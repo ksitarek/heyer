@@ -2,19 +2,19 @@ using FluentAssertions;
 using FluentResults;
 using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Authorization;
-using Heyer.Modules.JobBoard.Application.JobOffers.Create;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
+using Heyer.Modules.Hiring.Application.JobOffers.Create;
+using Heyer.Modules.Hiring.Domain.JobOffers;
 using NSubstitute;
 using NSubstitute.Extensions;
 
-namespace Heyer.Modules.JobBoard.Application.Tests.JobOffers;
+namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 
 [Category("Unit")]
 public class CreateJobOfferHandlerTests
 {
     private static readonly CancellationToken _cancellationToken = CancellationToken.None;
     private CreateJobOfferHandler _handler;
-    private IPublishedJobOffersRepository _iPublishedJobOffersRepository;
+    private IJobOffersRepository _jobOffersRepository;
     private CreateJobOffer _testRequest;
     private IUserDataProvider _userDataProvider;
 
@@ -22,7 +22,7 @@ public class CreateJobOfferHandlerTests
     public async Task Handle_ShouldNotThrowWhenJobOffersRepositoryFails()
     {
         // Arrange
-        _iPublishedJobOffersRepository.Configure().AddAsync(Arg.Any<PublishedJobOffer>(), _cancellationToken)
+        _jobOffersRepository.Configure().AddAsync(Arg.Any<JobOffer>(), _cancellationToken)
             .Returns(Result.Fail("Error"));
 
         // Act
@@ -45,8 +45,8 @@ public class CreateJobOfferHandlerTests
         result.Should().BeSuccess();
         result.Value.Should().NotBeEmpty();
 
-        await _iPublishedJobOffersRepository.Received(1)
-            .AddAsync(Arg.Is<PublishedJobOffer>(jo => jo.Id.Guid == result.Value), _cancellationToken);
+        await _jobOffersRepository.Received(1)
+            .AddAsync(Arg.Is<JobOffer>(jo => jo.Id.Guid == result.Value), _cancellationToken);
     }
 
     [SetUp]
@@ -56,11 +56,11 @@ public class CreateJobOfferHandlerTests
         _userDataProvider.Configure().CompanyId.Returns(Guid.NewGuid());
         _userDataProvider.Configure().CompanyName.Returns("ACME Inc.");
 
-        _iPublishedJobOffersRepository = Substitute.For<IPublishedJobOffersRepository>();
-        _iPublishedJobOffersRepository.Configure().AddAsync(Arg.Any<PublishedJobOffer>(), _cancellationToken)
+        _jobOffersRepository = Substitute.For<IJobOffersRepository>();
+        _jobOffersRepository.Configure().AddAsync(Arg.Any<JobOffer>(), _cancellationToken)
             .Returns(Result.Ok());
 
-        _handler = new CreateJobOfferHandler(_userDataProvider, _iPublishedJobOffersRepository);
+        _handler = new CreateJobOfferHandler(_userDataProvider, _jobOffersRepository);
 
         _testRequest = new CreateJobOffer("Offer Summary", "Job Description", RemoteWork.Hybrid);
     }

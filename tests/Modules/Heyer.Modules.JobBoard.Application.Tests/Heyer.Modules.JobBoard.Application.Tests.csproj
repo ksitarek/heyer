@@ -31,4 +31,8 @@
     <ProjectReference Include="..\..\..\src\Modules\JobBoard\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="JobOffers\" />
+  </ItemGroup>
+
 </Project>

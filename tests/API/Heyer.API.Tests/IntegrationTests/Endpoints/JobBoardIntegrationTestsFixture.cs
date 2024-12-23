@@ -15,6 +15,10 @@ public class JobBoardIntegrationTestsFixture
 
         ApplicationFactoryConfiguration.InMemoryConfiguration[Config.MongoDb_ConnectionString] =
             _mongoDbFixture.ConnectionString;
+
+        ApplicationFactoryConfiguration.InMemoryConfiguration[
+                "Companies:A62C048C-8E0F-41E2-84D4-BD061F9DDE97:MongoDb:ConnectionString"] =
+            _mongoDbFixture.ConnectionString;
     }
 
     [OneTimeTearDown]

@@ -1,9 +1,9 @@
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using Heyer.Modules.JobBoard.Application.JobOffers.Create;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
+using Heyer.Modules.Hiring.Application.JobOffers.Create;
+using Heyer.Modules.Hiring.Domain.JobOffers;
 
-namespace Heyer.Modules.JobBoard.Application.Tests.JobOffers;
+namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 
 [Category("Unit")]
 public class CreateJobOfferValidatorTests
