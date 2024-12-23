@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.Appl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.Domain", "src\Modules\JobBoard\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj", "{240E9583-C90B-40A2-BBE9-74D68260056A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.IntegrationEvents", "src\Modules\JobBoard\Heyer.Modules.JobBoard.IntegrationEvents\Heyer.Modules.JobBoard.IntegrationEvents.csproj", "{EFA52A9B-3797-4997-BCD7-6236930E22F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.JobBoard.PublishedLanguage", "src\Modules\JobBoard\Heyer.Modules.JobBoard.PublishedLanguage\Heyer.Modules.JobBoard.PublishedLanguage.csproj", "{EFA52A9B-3797-4997-BCD7-6236930E22F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JobBoard", "JobBoard", "{792152C2-1372-4AED-9772-156B90BB3357}"
 EndProject
@@ -71,7 +71,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Domain
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Infrastructure", "src\Modules\Hiring\Heyer.Modules.Hiring.Infrastructure\Heyer.Modules.Hiring.Infrastructure.csproj", "{4410198F-E565-465B-9350-F8B2364CFD67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.IntegrationEvents", "src\Modules\Hiring\Heyer.Modules.Hiring.IntegrationEvents\Heyer.Modules.Hiring.IntegrationEvents.csproj", "{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.PublishedLanguage", "src\Modules\Hiring\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj", "{F10A548F-D0D1-44A7-BBE2-2E986C2B07C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Application.Tests", "tests\Modules\Heyer.Modules.Hiring.Application.Tests\Heyer.Modules.Hiring.Application.Tests.csproj", "{3FCB26FF-1263-487F-A245-6C66BF7A9F2C}"
 EndProject

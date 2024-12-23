@@ -1,3 +1,4 @@
+using Heyer.Modules.Hiring.PublishedLanguage;
 using Heyer.Modules.JobBoard.Domain.Companies;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
@@ -24,12 +25,7 @@ public class PublishedJobOfferEntityTypeConfiguration : IEntityTypeConfiguration
         builder.Property(x => x.JobDescription)
             .IsRequired();
 
-        builder.OwnsOne(x => x.CompanyDetails,
-                        cd =>
-                        {
-                            cd.Property(x => x.CompanyId)
-                                .HasConversion(x => x.Id, x => new CompanyId(x));
-                        });
+        builder.OwnsOne(x => x.CompanyDetails);
 
         builder.OwnsOne(x => x.Location);
 

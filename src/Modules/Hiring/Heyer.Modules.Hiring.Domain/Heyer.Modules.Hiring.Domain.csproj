@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj"/>
+        <ProjectReference Include="..\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj" />
     </ItemGroup>
 
     <ItemGroup>

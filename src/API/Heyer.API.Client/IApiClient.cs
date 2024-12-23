@@ -1,15 +1,15 @@
-using Heyer.API.Client.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage;
 using RestEase;
 
 namespace Heyer.API.Client;
 
 public interface IApiClient
 {
+    [Get("/job-board/{jobOfferId}")]
+    Task<PublishedJobOfferDetails> GetJobOfferById([Path("jobOfferId")] Guid jobOfferId);
+
     [Post("/job-offers/create")]
     Task<Guid> CreateJobOffer([Body] CreateJobOfferRequest createJobOfferRequestRequest);
-
-    [Get("/job-offers/{jobOfferId}")]
-    Task<JobOfferDetails> GetJobOfferById([Path("jobOfferId")] Guid jobOfferId);
 
     [Get("/health")]
     [AllowAnyStatusCode]

@@ -2,6 +2,7 @@ using FluentAssertions;
 using FluentValidation.TestHelper;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Domain.JobOffers;
+using Heyer.Modules.Hiring.PublishedLanguage;
 
 namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 

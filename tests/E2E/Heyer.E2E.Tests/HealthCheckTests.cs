@@ -1,7 +1,7 @@
 using System.Net;
 using FluentAssertions;
 using Heyer.API.Client;
-using Heyer.API.Client.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage;
 using Heyer.Storage.API.Client;
 
 namespace Heyer.E2E.Tests;

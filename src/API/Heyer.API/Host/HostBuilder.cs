@@ -1,5 +1,8 @@
+using System.Text.Json;
+using Heyer.API.Client;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using IHealthCheck = Heyer.BuildingBlocks.Infrastructure.HealthChecks.IHealthCheck;
@@ -17,6 +20,7 @@ internal class HostBuilder
 
         _builder.Services.AddEndpointsApiExplorer();
         _builder.Services.AddAuthenticationAndAuthorization(_builder.Configuration.GetSection("Jwt"));
+        _builder.Services.Configure<JsonOptions>(options => options.SerializerOptions.PropertyNamingPolicy = ApiClientFactory.SerializerOptions.PropertyNamingPolicy);
     }
 
     public HostBuilder AddModule<TInterface, TImplementation>()

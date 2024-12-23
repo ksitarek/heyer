@@ -1,7 +1,9 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Domain;
 using Heyer.Modules.Hiring.Domain.Candidates;
+using Heyer.Modules.Hiring.Domain.JobOffers.Events;
 using Heyer.Modules.Hiring.Domain.JobOffers.Rules;
+using Heyer.Modules.Hiring.PublishedLanguage;
 
 namespace Heyer.Modules.Hiring.Domain.JobOffers;
 

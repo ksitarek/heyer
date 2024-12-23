@@ -1,7 +1,9 @@
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
-using Heyer.Modules.JobBoard.Domain.Companies;
+using Heyer.Modules.Hiring.PublishedLanguage;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
+using Heyer.Modules.JobBoard.Domain.JobOffers.Events;
+using SkillLevel = Heyer.Modules.Hiring.PublishedLanguage.SkillLevel;
 
 namespace Heyer.Modules.JobBoard.Domain.Tests;
 
@@ -62,8 +64,8 @@ public class PublishedJobOfferTests
         jobOffer.Should().NotBeNull();
         jobOffer.Id.Should().NotBeNull();
         jobOffer.DomainEvents.Should().ContainSingle(
-            domainEvent => domainEvent.GetType() == typeof(JobOfferCreated)
-                           && ((JobOfferCreated)domainEvent).PublishedJobOfferId == jobOffer.Id);
+            domainEvent => domainEvent.GetType() == typeof(JobOfferPublished)
+                           && ((JobOfferPublished)domainEvent).PublishedJobOfferId == jobOffer.Id);
     }
 
     [Test]
@@ -160,7 +162,7 @@ public class PublishedJobOfferTests
 
     private PublishedJobOffer CreateTestJobOffer()
     {
-        var companyDetails = new CompanyDetails(CompanyId.CreateNew(), "CompanyLogoUrl");
+        var companyDetails = new CompanyDetails(Guid.NewGuid(), "CompanyLogoUrl");
         var offerSummary = "OfferSummary";
         var jobDescription = "JobDescription";
         var remoteWork = RemoteWork.Yes;

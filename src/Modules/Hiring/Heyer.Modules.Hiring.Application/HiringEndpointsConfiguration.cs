@@ -1,9 +1,9 @@
-using Heyer.API.Client.PublishedLanguage;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.Mapping;
+using Heyer.Modules.Hiring.PublishedLanguage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

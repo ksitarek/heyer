@@ -1,6 +1,9 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Domain;
+using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.JobBoard.Domain.JobOffers.Events;
 using Heyer.Modules.JobBoard.Domain.JobOffers.Rules;
+using SkillLevel = Heyer.Modules.Hiring.PublishedLanguage.SkillLevel;
 
 namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
@@ -23,7 +26,7 @@ public class PublishedJobOffer : Entity
         JobDescription = jobDescription;
         RemoteWork = remoteWork;
 
-        AddDomainEvent(new JobOfferCreated(Id));
+        AddDomainEvent(new JobOfferPublished(Id));
     }
 
     public CompanyDetails CompanyDetails { get; private set; } = null!;

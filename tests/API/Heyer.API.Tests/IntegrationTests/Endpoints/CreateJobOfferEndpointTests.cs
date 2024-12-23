@@ -2,14 +2,14 @@ using System.Net;
 using System.Text.Json;
 using Bogus;
 using FluentAssertions;
-using Heyer.API.Client.PublishedLanguage;
 using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Application;
+using Heyer.Modules.Hiring.PublishedLanguage;
 using Heyer.Modules.JobBoard.Application;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
-using RemoteWork = Heyer.API.Client.PublishedLanguage.RemoteWork;
+using RemoteWork = Heyer.Modules.Hiring.PublishedLanguage.RemoteWork;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
