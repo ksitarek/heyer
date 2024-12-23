@@ -23,7 +23,8 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
         _instanceConfigOverrides = configOverrides;
 
     public abstract TApiClient CreateApiClient();
-    public abstract TApiClient CreateAuthorizedApiClient(params string[] permissions);
+
+    public abstract TApiClient CreateAuthorizedApiClient(Guid companyId, params string[] permissions);
 
     public override ValueTask DisposeAsync()
     {
@@ -65,13 +66,17 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
         return host;
     }
 
-    protected string GenerateJwtToken(string jwtIssuer, string jwtAudience, string jwtSecret, string[] permissions)
+    protected string GenerateJwtToken(string jwtIssuer,
+                                      string jwtAudience,
+                                      string jwtSecret,
+                                      Guid companyId,
+                                      string[] permissions)
     {
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim("CompanyId", Guid.Parse("A62C048C-8E0F-41E2-84D4-BD061F9DDE97").ToString()),
-            new Claim("CompanyName", "ACME Corporation")
+            new Claim("CompanyId", companyId.ToString()),
+            new Claim("CompanyName", $"ACME Corporation {companyId}")
         };
 
         claims = claims.Concat(permissions.Select(permission => new Claim("permissions", permission))).ToArray();

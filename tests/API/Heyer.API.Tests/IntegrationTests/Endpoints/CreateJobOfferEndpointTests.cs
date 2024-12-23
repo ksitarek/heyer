@@ -4,6 +4,7 @@ using Bogus;
 using FluentAssertions;
 using Heyer.API.Client.PublishedLanguage;
 using Heyer.API.Tests.Utils;
+using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Application;
 using Heyer.Modules.JobBoard.Application;
 using Microsoft.AspNetCore.Mvc;
@@ -103,7 +104,9 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
         string[] validationErrors)
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(HiringPermissions.CreateJobOffer);
+        var client = AppFactory.CreateAuthorizedApiClient(
+            ApplicationFactoryConfiguration.Tenant1Id,
+            HiringPermissions.CreateJobOffer);
         var request = new CreateJobOfferRequest(offerSummary, jobDescription, remoteWork);
 
         // Act
@@ -142,7 +145,8 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
     public async Task CreateJobOfferEndpoint_WithoutPermission_WillReturn403()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient();
+        var client = AppFactory.CreateAuthorizedApiClient(
+            ApplicationFactoryConfiguration.Tenant1Id);
         var request = CreateJobOfferRequest();
 
         // Act
@@ -156,14 +160,16 @@ public class CreateJobOfferEndpointTests : JobModuleIntegrationTestsBase
     public async Task CreateJobOfferEndpoint_WithPermission_WillReturn200()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(HiringPermissions.CreateJobOffer);
+        var client = AppFactory.CreateAuthorizedApiClient(
+            ApplicationFactoryConfiguration.Tenant1Id,
+            HiringPermissions.CreateJobOffer);
         var request = CreateJobOfferRequest();
 
         // Act
         var jobOfferId = await client.CreateJobOffer(request);
 
         // Assert
-        await AppFactory.GetRequiredService<JobOfferValidator>()
+        await new JobOfferValidator(ApplicationFactoryConfiguration.Tenant1Id)
             .ValidateJobOfferIsSavedAsync(jobOfferId);
     }
 

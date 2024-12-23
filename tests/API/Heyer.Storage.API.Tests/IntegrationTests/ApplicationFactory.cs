@@ -30,10 +30,10 @@ internal class ApplicationFactory : AbstractApplicationFactory<Program, IStorage
         return apiClient;
     }
 
-    public override IStorageApiClient CreateAuthorizedApiClient(params string[] permissions)
+    public override IStorageApiClient CreateAuthorizedApiClient(Guid companyId, params string[] permissions)
     {
         var client = CreateClient();
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GenerateJwtToken(permissions));
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + GenerateJwtToken(companyId, permissions));
 
         return StorageApiClientFactory.Create(client);
     }
@@ -57,12 +57,12 @@ internal class ApplicationFactory : AbstractApplicationFactory<Program, IStorage
         base.ConfigureWebHost(builder);
     }
 
-    private string GenerateJwtToken(string[] permissions)
+    private string GenerateJwtToken(Guid companyId, string[] permissions)
     {
         var issuer = GetConfigValue(Config.Jwt_ValidIssuer)!.ToString()!;
         var audience = GetConfigValue(Config.Jwt_ValidAudience)!.ToString()!;
         var secret = GetConfigValue(Config.Jwt_Secret)!.ToString()!;
 
-        return base.GenerateJwtToken(issuer, audience, secret, permissions);
+        return base.GenerateJwtToken(issuer, audience, secret, companyId, permissions);
     }
 }

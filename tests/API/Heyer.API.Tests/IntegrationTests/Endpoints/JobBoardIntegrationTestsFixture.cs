@@ -13,12 +13,24 @@ public class JobBoardIntegrationTestsFixture
     {
         await _mongoDbFixture.InitializeAsync();
 
-        ApplicationFactoryConfiguration.InMemoryConfiguration[Config.MongoDb_ConnectionString] =
-            _mongoDbFixture.ConnectionString;
+        ApplicationFactoryConfiguration.AddConfig(
+            Config.MongoDb_ConnectionString,
+            _mongoDbFixture.ConnectionString);
 
-        ApplicationFactoryConfiguration.InMemoryConfiguration[
-                "Companies:A62C048C-8E0F-41E2-84D4-BD061F9DDE97:MongoDb:ConnectionString"] =
-            _mongoDbFixture.ConnectionString;
+        ApplicationFactoryConfiguration.AddTenantConfig(
+            ApplicationFactoryConfiguration.Tenant1Id,
+            Config.MongoDb_ConnectionString,
+            _mongoDbFixture.ConnectionString);
+
+        ApplicationFactoryConfiguration.AddTenantConfig(
+            ApplicationFactoryConfiguration.Tenant1Id,
+            Config.MongoDb_DatabaseName,
+            ApplicationFactoryConfiguration.Tenant1Id.ToString());
+
+        ApplicationFactoryConfiguration.AddTenantConfig(
+            ApplicationFactoryConfiguration.Tenant2Id,
+            Config.MongoDb_ConnectionString,
+            ApplicationFactoryConfiguration.Tenant2Id.ToString());
     }
 
     [OneTimeTearDown]

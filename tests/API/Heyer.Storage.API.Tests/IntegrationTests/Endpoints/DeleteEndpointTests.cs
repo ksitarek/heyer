@@ -13,7 +13,7 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithInvalidKey_WillReturnOk()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient();
+        var client = AppFactory.CreateAuthorizedApiClient(Guid.NewGuid());
 
         // Act
         var action = async () => await client.Delete(Guid.NewGuid().ToString());
@@ -39,7 +39,7 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithValidKey_WillReturnOk()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient();
+        var client = AppFactory.CreateAuthorizedApiClient(Guid.NewGuid());
         var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Act

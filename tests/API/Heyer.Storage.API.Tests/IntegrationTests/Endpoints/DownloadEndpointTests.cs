@@ -12,7 +12,7 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithInvalidKey_WillReturn404()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient();
+        var client = AppFactory.CreateAuthorizedApiClient(Guid.NewGuid());
 
         // Act
         var action = async () => await client.Download(Guid.NewGuid().ToString());
@@ -38,7 +38,7 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithValidKey_WillReturnCorrectFile()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient();
+        var client = AppFactory.CreateAuthorizedApiClient(Guid.NewGuid());
         var filePath = "Utils/TestFiles/test-file.png";
         var storeResult = await client.Store(filePath);
 
