@@ -18,7 +18,7 @@ public abstract class IntegrationTestsBase
 
     protected IServiceScope _jobBoardModuleCompositionRootScope;
 
-    [SetUp]
+    [OneTimeSetUp]
     public virtual Task SetUpIntegrationTestsBase()
     {
         AppFactory = ApplicationFactory.Create();
@@ -32,7 +32,7 @@ public abstract class IntegrationTestsBase
         return Task.CompletedTask;
     }
 
-    [TearDown]
+    [OneTimeTearDown]
     public async Task TearDownIntegrationTestsBase()
     {
         _hiringModuleCompositionRootScope.Dispose();

@@ -42,6 +42,7 @@ public class JobOfferValidator : IDisposable
 
         var options = new DbContextOptionsBuilder<HiringDbContext>()
             .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+            .EnableServiceProviderCaching(false)
             .Options;
 
         return new HiringDbContext(options);

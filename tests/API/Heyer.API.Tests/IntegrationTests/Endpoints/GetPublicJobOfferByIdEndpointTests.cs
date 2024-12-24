@@ -3,7 +3,10 @@ using FluentAssertions;
 using Heyer.Modules.Hiring.PublishedLanguage;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using RestEase;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
@@ -65,7 +68,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
     [SetUp]
     public async Task SetUp()
     {
-        _ctx = _jobBoardModuleCompositionRootScope.ServiceProvider.GetRequiredService<JobBoardContext>();
+        _ctx = GetContext();
 
         _publishedJobOffer = PublishedJobOffer.CreateNew(
             new CompanyDetails(Guid.NewGuid(), "ACME"),
@@ -111,4 +114,17 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
 
     [TearDown]
     public async Task TearDown() => await _ctx.DisposeAsync();
+
+    private JobBoardContext GetContext()
+    {
+        var db = _jobBoardModuleCompositionRootScope.ServiceProvider.GetRequiredService<IMongoDatabase>();
+
+        var options = new DbContextOptionsBuilder<JobBoardContext>()
+            .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+            .ConfigureWarnings(x => x.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning))
+            .EnableServiceProviderCaching(false)
+            .Options;
+
+        return new JobBoardContext(options);
+    }
 }

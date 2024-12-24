@@ -19,6 +19,36 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     private JobOffer _jobOffer;
 
     [Test]
+    public async Task GetJobOfferByIdEndpoint_ForOtherTenant_WillReturn404()
+    {
+        // Arrange
+        var client = AppFactory.CreateAuthorizedApiClient(
+            ApplicationFactoryConfiguration.Tenant2Id,
+            HiringPermissions.ListJobOffers);
+
+        // Act
+        var action = async () => await client.GetJobOfferById(_jobOffer.Id.Guid);
+
+        // Assert
+        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Test]
+    public async Task GetJobOfferByIdEndpoint_WillReturn404()
+    {
+        // Arrange
+        var client = AppFactory.CreateAuthorizedApiClient(
+            ApplicationFactoryConfiguration.Tenant1Id,
+            HiringPermissions.ListJobOffers);
+
+        // Act
+        var action = async () => await client.GetJobOfferById(Guid.NewGuid());
+
+        // Assert
+        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Test]
     public async Task GetJobOfferByIdEndpoint_WithoutAuthorization_WillReturn401()
     {
         // Arrange
@@ -59,36 +89,6 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
 
         // Assert
         jobOffer.Should().NotBeNull().And.BeEquivalentTo(_expectedDetails);
-    }
-
-    [Test]
-    public async Task GetJobOfferByIdEndpoint_ForOtherTenant_WillReturn404()
-    {
-        // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant2Id,
-            HiringPermissions.ListJobOffers);
-
-        // Act
-        var action = async () => await client.GetJobOfferById(_jobOffer.Id.Guid);
-
-        // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    [Test]
-    public async Task GetJobOfferByIdEndpoint_WillReturn404()
-    {
-        // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id,
-            HiringPermissions.ListJobOffers);
-
-        // Act
-        var action = async () => await client.GetJobOfferById(Guid.NewGuid());
-
-        // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     // todo test other tenant
@@ -151,6 +151,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
 
         var options = new DbContextOptionsBuilder<HiringDbContext>()
             .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+            .EnableServiceProviderCaching(false)
             .Options;
 
         return new HiringDbContext(options);
