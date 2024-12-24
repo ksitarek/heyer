@@ -1,4 +1,6 @@
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FluentAssertions;
 using Heyer.API.Client;
 using Heyer.Modules.Hiring.PublishedLanguage;

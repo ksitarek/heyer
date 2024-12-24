@@ -26,6 +26,11 @@ internal class HostBuilder
 
             options.SerializerOptions.DefaultIgnoreCondition =
                 ApiClientFactory.SerializerOptions.DefaultIgnoreCondition;
+
+            foreach (var converter in ApiClientFactory.SerializerOptions.Converters)
+            {
+                options.SerializerOptions.Converters.Add(converter);
+            }
         });
     }
 

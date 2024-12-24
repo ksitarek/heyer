@@ -9,7 +9,8 @@ public static class ApiClientFactory
     public static readonly JsonSerializerOptions SerializerOptions = new()
     {
         PropertyNamingPolicy = null,
-        DefaultIgnoreCondition = JsonIgnoreCondition.Never
+        DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+        Converters = { new JsonStringEnumConverter() }
     };
 
     private static readonly Deserializer Deserializer = new(SerializerOptions);
