@@ -5,8 +5,8 @@ namespace Heyer.Storage.API.Validators;
 
 public class FileValidator : AbstractValidator<IFormFile>
 {
-    private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".pdf" };
-    private static readonly Type[] AllowedFormats = { typeof(Image), typeof(Pdf) };
+    private static readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png", ".pdf" };
+    private static readonly Type[] _allowedFormats = { typeof(Image), typeof(Pdf) };
 
 
     public FileValidator()
@@ -19,7 +19,7 @@ public class FileValidator : AbstractValidator<IFormFile>
 
         RuleFor(x => x.FileName)
             .NotNull()
-            .Must(x => AllowedExtensions.Contains(Path.GetExtension(x).ToLower()))
+            .Must(x => _allowedExtensions.Contains(Path.GetExtension(x).ToLower()))
             .WithMessage("Invalid file extension.");
 
         RuleFor(x => x)
@@ -30,6 +30,6 @@ public class FileValidator : AbstractValidator<IFormFile>
     private static bool BeOfAllowedType(IFormFile file)
     {
         var fileFormat = file.GetFileFormat();
-        return fileFormat != null && AllowedFormats.Any(t => fileFormat.GetType().IsAssignableTo(t));
+        return fileFormat != null && _allowedFormats.Any(t => fileFormat.GetType().IsAssignableTo(t));
     }
 }

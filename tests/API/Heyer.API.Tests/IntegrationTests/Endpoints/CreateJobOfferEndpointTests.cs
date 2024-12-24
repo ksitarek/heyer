@@ -103,7 +103,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         string[] validationErrors)
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
+        var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Tenant1Id,
             HiringPermissions.CreateJobOffer);
         var request = new CreateJobOfferRequest(offerSummary, jobDescription, remoteWork);
@@ -130,7 +130,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
     public async Task CreateJobOfferEndpoint_WithoutAuthorization_WillReturn401()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
         var request = CreateJobOfferRequest();
 
         // Act
@@ -144,7 +144,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
     public async Task CreateJobOfferEndpoint_WithoutPermission_WillReturn403()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
+        var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Tenant1Id);
         var request = CreateJobOfferRequest();
 
@@ -159,7 +159,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
     public async Task CreateJobOfferEndpoint_WithPermission_WillReturn200()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
+        var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Tenant1Id,
             HiringPermissions.CreateJobOffer);
         var request = CreateJobOfferRequest();
@@ -175,9 +175,9 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
     private CreateJobOfferRequest CreateJobOfferRequest()
     {
         var request = new CreateJobOfferRequest(
-            Faker.Random.String(10, 100),
-            Faker.Random.String(100, 500),
-            Faker.Random.Enum(RemoteWork.Unknown));
+            _faker.Random.String(10, 100),
+            _faker.Random.String(100, 500),
+            _faker.Random.Enum(RemoteWork.Unknown));
 
         return request;
     }

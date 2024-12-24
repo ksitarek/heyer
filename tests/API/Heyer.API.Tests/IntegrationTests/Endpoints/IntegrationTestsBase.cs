@@ -10,24 +10,24 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 public abstract class IntegrationTestsBase
 {
-    internal IApplicationFactory<IApiClient> AppFactory;
+    internal IApplicationFactory<IApiClient> _appFactory;
 
-    internal Faker Faker = new();
+    internal Faker _faker = new();
 
-    protected IServiceScope _hiringModuleCompositionRootScope;
+    protected IServiceScope HiringModuleCompositionRootScope;
 
-    protected IServiceScope _jobBoardModuleCompositionRootScope;
+    protected IServiceScope JobBoardModuleCompositionRootScope;
 
     [OneTimeSetUp]
     public virtual Task SetUpIntegrationTestsBase()
     {
-        AppFactory = ApplicationFactory.Create();
+        _appFactory = ApplicationFactory.Create();
 
         // hack making app factory to start immediately
-        AppFactory.GetRequiredService<IConfiguration>();
+        _appFactory.GetRequiredService<IConfiguration>();
 
-        _hiringModuleCompositionRootScope = HiringModuleCompositionRoot.CreateScope();
-        _jobBoardModuleCompositionRootScope = JobBoardModuleCompositionRoot.CreateScope();
+        HiringModuleCompositionRootScope = HiringModuleCompositionRoot.CreateScope();
+        JobBoardModuleCompositionRootScope = JobBoardModuleCompositionRoot.CreateScope();
 
         return Task.CompletedTask;
     }
@@ -35,9 +35,9 @@ public abstract class IntegrationTestsBase
     [OneTimeTearDown]
     public async Task TearDownIntegrationTestsBase()
     {
-        _hiringModuleCompositionRootScope.Dispose();
-        _jobBoardModuleCompositionRootScope.Dispose();
+        HiringModuleCompositionRootScope.Dispose();
+        JobBoardModuleCompositionRootScope.Dispose();
 
-        await AppFactory.DisposeAsync();
+        await _appFactory.DisposeAsync();
     }
 }

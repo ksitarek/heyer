@@ -22,7 +22,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_ForOtherTenant_WillReturn404()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
+        var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Tenant2Id,
             HiringPermissions.ListJobOffers);
 
@@ -37,7 +37,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_WillReturn404()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
+        var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Tenant1Id,
             HiringPermissions.ListJobOffers);
 
@@ -52,7 +52,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_WithoutAuthorization_WillReturn401()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
         var jobOfferId = Guid.NewGuid();
 
         // Act
@@ -66,7 +66,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_WithoutPermission_WillReturn403()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Tenant1Id);
+        var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Tenant1Id);
         var jobOfferId = Guid.NewGuid();
 
         // Act
@@ -80,7 +80,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_WithPermission_WillReturn200()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(
+        var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Tenant1Id,
             HiringPermissions.ListJobOffers);
 
@@ -100,9 +100,9 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
 
         _jobOffer = JobOffer.CreateNew(
             new CompanyDetails(Guid.NewGuid(), "ACME"),
-            Faker.Random.String2(10, 100),
-            Faker.Random.String2(100, 500),
-            Faker.Random.Enum(RemoteWork.Unknown));
+            _faker.Random.String2(10, 100),
+            _faker.Random.String2(100, 500),
+            _faker.Random.Enum(RemoteWork.Unknown));
 
         _jobOffer.SetRequirements(ExperienceLevel.Junior,
                                   new Dictionary<string, SkillLevel>

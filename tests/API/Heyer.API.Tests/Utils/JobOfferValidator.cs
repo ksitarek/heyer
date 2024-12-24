@@ -18,13 +18,13 @@ public class JobOfferValidator : IDisposable
         _ctx = GetContext();
     }
 
-    private DbSet<JobOffer> _set => _ctx.Set<JobOffer>();
+    private DbSet<JobOffer> Set => _ctx.Set<JobOffer>();
 
     public void Dispose() => _ctx.Dispose();
 
     public async Task ValidateJobOfferIsSavedAsync(Guid id)
     {
-        var record = await _set.Where(x => x.Id == new JobOfferId(id)).Select(x => x.Id).FirstOrDefaultAsync();
+        var record = await Set.Where(x => x.Id == new JobOfferId(id)).Select(x => x.Id).FirstOrDefaultAsync();
 
         record.Should().NotBeNull();
         record!.Guid.Should().Be(id);

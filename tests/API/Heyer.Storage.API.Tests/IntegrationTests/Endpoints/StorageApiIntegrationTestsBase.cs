@@ -5,15 +5,15 @@ namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
 public abstract class StorageApiIntegrationTestsBase
 {
-    internal IApplicationFactory<IStorageApiClient> AppFactory;
+    internal IApplicationFactory<IStorageApiClient> _appFactory;
 
     [SetUp]
     public Task SetUp()
     {
-        AppFactory = ApplicationFactory.Create();
+        _appFactory = ApplicationFactory.Create();
         return Task.CompletedTask;
     }
 
     [TearDown]
-    public async Task TearDown() => await AppFactory.DisposeAsync();
+    public async Task TearDown() => await _appFactory.DisposeAsync();
 }

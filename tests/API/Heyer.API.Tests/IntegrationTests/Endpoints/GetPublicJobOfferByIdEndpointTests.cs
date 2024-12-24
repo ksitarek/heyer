@@ -22,7 +22,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_WillReturn200Ok_WhenOfferFound()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
 
         // Act
         var jobOffer = await client.GetPublishedJobOfferById(_publishedJobOffer.Id.Guid);
@@ -38,7 +38,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_WillReturn404NotFound_WhenOfferNotFound()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
 
         // Act
         var action = async () => await client.GetPublishedJobOfferById(Guid.NewGuid());
@@ -55,7 +55,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
         _publishedJobOffer.TakeDown();
         await _ctx.SaveChangesAsync();
 
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
 
         // Act
         var action = async () => await client.GetPublishedJobOfferById(_publishedJobOffer.Id.Guid);
@@ -72,9 +72,9 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
 
         _publishedJobOffer = PublishedJobOffer.CreateNew(
             new CompanyDetails(Guid.NewGuid(), "ACME"),
-            Faker.Random.String2(10, 100),
-            Faker.Random.String2(100, 500),
-            Faker.Random.Enum(RemoteWork.Unknown));
+            _faker.Random.String2(10, 100),
+            _faker.Random.String2(100, 500),
+            _faker.Random.Enum(RemoteWork.Unknown));
 
         _publishedJobOffer.SetRequirements(ExperienceLevel.Junior,
                                            new Dictionary<string, SkillLevel>
@@ -117,7 +117,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
 
     private JobBoardContext GetContext()
     {
-        var db = _jobBoardModuleCompositionRootScope.ServiceProvider.GetRequiredService<IMongoDatabase>();
+        var db = JobBoardModuleCompositionRootScope.ServiceProvider.GetRequiredService<IMongoDatabase>();
 
         var options = new DbContextOptionsBuilder<JobBoardContext>()
             .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)

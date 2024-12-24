@@ -33,22 +33,22 @@ public record PublishedJobOfferDetails
     public Requirements Requirements { get; init; }
     public List<ContractDetails> ContractDetails { get; init; }
 
-    public void Deconstruct(out Guid Id,
-                            out CompanyDetails CompanyDetails,
-                            out string OfferSummary,
-                            out string JobDescription,
-                            out OfficeLocation OfficeLocationD,
-                            out RemoteWork RemoteWork,
-                            out Requirements Requirements,
-                            out List<ContractDetails> ContractDetails)
+    public void Deconstruct(out Guid id,
+                            out CompanyDetails companyDetails,
+                            out string offerSummary,
+                            out string jobDescription,
+                            out OfficeLocation officeLocationD,
+                            out RemoteWork remoteWork,
+                            out Requirements requirements,
+                            out List<ContractDetails> contractDetails)
     {
-        Id = this.Id;
-        CompanyDetails = this.CompanyDetails;
-        OfferSummary = this.OfferSummary;
-        JobDescription = this.JobDescription;
-        OfficeLocationD = OfficeLocation;
-        RemoteWork = this.RemoteWork;
-        Requirements = this.Requirements;
-        ContractDetails = this.ContractDetails;
+        id = this.Id;
+        companyDetails = this.CompanyDetails;
+        offerSummary = this.OfferSummary;
+        jobDescription = this.JobDescription;
+        officeLocationD = OfficeLocation;
+        remoteWork = this.RemoteWork;
+        requirements = this.Requirements;
+        contractDetails = this.ContractDetails;
     }
 }

@@ -15,7 +15,7 @@ public class StoreEndpointTests : StorageApiIntegrationTestsBase
     public async Task StoreEndpoint_WithInvalidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
 
         // Act
         var action = async () => await client.Store("Utils/TestFiles/test-file.docx");
@@ -36,7 +36,7 @@ public class StoreEndpointTests : StorageApiIntegrationTestsBase
     public async Task StoreEndpoint_WithValidFile_ReturnsOkWithFileHandle()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
 
         // Act
         var storeResult = await client.Store("Utils/TestFiles/test-file.png");
@@ -45,10 +45,10 @@ public class StoreEndpointTests : StorageApiIntegrationTestsBase
         storeResult.Should().NotBeNull();
         storeResult.FileHandle.Should().NotBeNull();
 
-        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+        await _appFactory.GetRequiredService<IStorageStrategyValidator>()
             .ValidateFileIsPresent(storeResult.FileHandle);
 
-        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+        await _appFactory.GetRequiredService<IRegistryStrategyValidator>()
             .ValidateFilePropertiesAsync(
                 storeResult.FileHandle,
                 "test-file.png",

@@ -5,10 +5,10 @@ using Serilog;
 
 public partial class Build
 {
-    [Parameter] readonly string ApiImageName = "heyer/api";
+    [Parameter] readonly string _apiImageName = "heyer/api";
 
-    [Parameter] readonly string StorageApiImageName = "heyer/storage-api";
-    [Parameter] readonly string WebImageName = "heyer/web";
+    [Parameter] readonly string _storageApiImageName = "heyer/storage-api";
+    [Parameter] readonly string _webImageName = "heyer/web";
 
     string _apiContainerName = "Heyer-API";
     int _apiPort = 3001;
@@ -20,20 +20,20 @@ public partial class Build
     string _webContainerName = "Heyer-Web";
     int _webPort = 4201;
 
-    [Parameter] string ApiTag = "local";
+    [Parameter] string _apiTag = "local";
 
-    [Parameter] string StorageApiTag = "local";
+    [Parameter] string _storageApiTag = "local";
 
-    [Parameter] string WebTag = "local";
+    [Parameter] string _webTag = "local";
 
     Target BuildApiDockerImage => _ => _
         .Executes(() =>
         {
             DockerTasks.DockerBuild(x => x
                                         .SetProcessWorkingDirectory(RootDirectory)
-                                        .SetFile(ApiPath / "Dockerfile")
+                                        .SetFile(_apiPath / "Dockerfile")
                                         .SetPath(".")
-                                        .SetTag($"{ApiImageName}:{ApiTag}")
+                                        .SetTag($"{_apiImageName}:{_apiTag}")
                                         .SetNoCache(true));
         });
 
@@ -42,9 +42,9 @@ public partial class Build
         {
             DockerTasks.DockerBuild(x => x
                                         .SetProcessWorkingDirectory(RootDirectory)
-                                        .SetFile(StorageApiPath / "Dockerfile")
+                                        .SetFile(_storageApiPath / "Dockerfile")
                                         .SetPath(".")
-                                        .SetTag($"{StorageApiImageName}:{StorageApiTag}")
+                                        .SetTag($"{_storageApiImageName}:{_storageApiTag}")
                                         .SetNoCache(true));
         });
 
@@ -53,9 +53,9 @@ public partial class Build
         {
             DockerTasks.DockerBuild(x => x
                                         .SetProcessWorkingDirectory(RootDirectory)
-                                        .SetFile(WebPath / "Dockerfile")
+                                        .SetFile(_webPath / "Dockerfile")
                                         .SetPath(".")
-                                        .SetTag($"{WebImageName}:{WebTag}")
+                                        .SetTag($"{_webImageName}:{_webTag}")
                                         .SetBuildArg($"CONFIGURATION={_webConfiguration}")
                                         .SetNoCache(true));
         });
@@ -73,7 +73,7 @@ public partial class Build
             StopDockerContainer(_apiContainerName);
 
             DockerTasks.DockerRun(x => x
-                                      .SetImage($"{ApiImageName}:{ApiTag}")
+                                      .SetImage($"{_apiImageName}:{_apiTag}")
                                       .SetName(_apiContainerName)
                                       .SetRm(true)
                                       .SetPublish($"{_apiPort}:8080")
@@ -108,7 +108,7 @@ public partial class Build
             StopDockerContainer(_storageApiContainerName);
 
             DockerTasks.DockerRun(x => x
-                                      .SetImage($"{StorageApiImageName}:{StorageApiTag}")
+                                      .SetImage($"{_storageApiImageName}:{_storageApiTag}")
                                       .SetName(_storageApiContainerName)
                                       .SetRm(true)
                                       .SetPublish($"{_storageApiPort}:8080")
@@ -124,7 +124,7 @@ public partial class Build
             StopDockerContainer(_webContainerName);
 
             DockerTasks.DockerRun(x => x
-                                      .SetImage($"{WebImageName}:{WebTag}")
+                                      .SetImage($"{_webImageName}:{_webTag}")
                                       .SetName(_webContainerName)
                                       .SetRm(true)
                                       .SetPublish($"{_webPort}:4000")

@@ -13,7 +13,7 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithInvalidKey_WillReturnOk()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(Guid.NewGuid());
+        var client = _appFactory.CreateAuthorizedApiClient(Guid.NewGuid());
 
         // Act
         var action = async () => await client.Delete(Guid.NewGuid().ToString());
@@ -26,7 +26,7 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithoutAuthorization_WillReturn401()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
 
         // Act
         var action = async () => await client.Delete(Guid.NewGuid().ToString());
@@ -39,17 +39,17 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithValidKey_WillReturnOk()
     {
         // Arrange
-        var client = AppFactory.CreateAuthorizedApiClient(Guid.NewGuid());
+        var client = _appFactory.CreateAuthorizedApiClient(Guid.NewGuid());
         var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Act
         await client.Delete(storeResult.FileHandle);
 
         // Assert
-        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+        await _appFactory.GetRequiredService<IStorageStrategyValidator>()
             .ValidateFileIsNotPresent(storeResult.FileHandle);
 
-        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+        await _appFactory.GetRequiredService<IRegistryStrategyValidator>()
             .ValidateFileIsNotPresent(storeResult.FileHandle);
     }
 }

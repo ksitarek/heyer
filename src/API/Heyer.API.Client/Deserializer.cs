@@ -5,13 +5,13 @@ namespace Heyer.API.Client;
 
 internal class Deserializer : ResponseDeserializer
 {
-    private readonly JsonSerializerOptions options;
+    private readonly JsonSerializerOptions _options;
 
     public Deserializer(JsonSerializerOptions? options = null) =>
-        this.options = options ?? JsonSerializerOptions.Default;
+        this._options = options ?? JsonSerializerOptions.Default;
 
     public override T Deserialize<T>(string? content, HttpResponseMessage response, ResponseDeserializerInfo info)
     {
-        return JsonSerializer.Deserialize<T>(content!, options)!;
+        return JsonSerializer.Deserialize<T>(content!, _options)!;
     }
 }

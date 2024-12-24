@@ -13,17 +13,17 @@ public class PreserveEndpointTests : StorageApiIntegrationTestsBase
     public async Task PreserveEndpoint_WithAlreadyPreservedKey_ReturnsOk()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
         var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Act
         await client.Preserve(storeResult.FileHandle);
 
         // Assert
-        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+        await _appFactory.GetRequiredService<IStorageStrategyValidator>()
             .ValidateFileIsPreserved(storeResult.FileHandle);
 
-        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+        await _appFactory.GetRequiredService<IRegistryStrategyValidator>()
             .ValidateFileIsPreserved(storeResult.FileHandle);
     }
 
@@ -31,7 +31,7 @@ public class PreserveEndpointTests : StorageApiIntegrationTestsBase
     public async Task PreserveEndpoint_WithInvalidKey_ReturnsNotFound()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
 
         // Act
         var action = async () => await client.Preserve("invalid-key");
@@ -44,17 +44,17 @@ public class PreserveEndpointTests : StorageApiIntegrationTestsBase
     public async Task PreserveEndpoint_WithValidKey_ReturnsOk()
     {
         // Arrange
-        var client = AppFactory.CreateApiClient();
+        var client = _appFactory.CreateApiClient();
         var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Act
         await client.Preserve(storeResult.FileHandle);
 
         // Assert
-        await AppFactory.GetRequiredService<IStorageStrategyValidator>()
+        await _appFactory.GetRequiredService<IStorageStrategyValidator>()
             .ValidateFileIsPreserved(storeResult.FileHandle);
 
-        await AppFactory.GetRequiredService<IRegistryStrategyValidator>()
+        await _appFactory.GetRequiredService<IRegistryStrategyValidator>()
             .ValidateFileIsPreserved(storeResult.FileHandle);
     }
 }

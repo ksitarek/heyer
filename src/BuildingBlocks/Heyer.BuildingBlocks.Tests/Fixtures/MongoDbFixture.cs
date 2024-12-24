@@ -5,14 +5,14 @@ namespace Heyer.BuildingBlocks.Tests.Fixtures;
 
 public class MongoDbFixture
 {
-    private static readonly Randomizer Randomizer = new();
+    private static readonly Randomizer _randomizer = new();
     private readonly MongoDbContainer _mongoDbContainer;
 
     public MongoDbFixture()
     {
-        var port = Randomizer.Next(27100, 27200);
-        var username = Randomizer.GetString(8);
-        var password = Randomizer.GetString(8);
+        var port = _randomizer.Next(27100, 27200);
+        var username = _randomizer.GetString(8);
+        var password = _randomizer.GetString(8);
 
         _mongoDbContainer = new MongoDbBuilder()
             .WithImage("mongo:8")

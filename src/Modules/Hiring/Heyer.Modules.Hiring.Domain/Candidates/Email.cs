@@ -1,3 +1,3 @@
 namespace Heyer.Modules.Hiring.Domain.Candidates;
 
-public record Email(string email);
+public record Email(string EmailAddress);

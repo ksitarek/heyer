@@ -4,12 +4,12 @@ namespace Heyer.Storage.API.Validators;
 
 public static class FormFileExtensions
 {
-    private static readonly FileFormatInspector FileInspector = new();
+    private static readonly FileFormatInspector _fileInspector = new();
 
     public static FileFormat? GetFileFormat(this IFormFile file)
     {
         using var fileStream = file.OpenReadStream();
-        var fileFormat = FileInspector.DetermineFileFormat(fileStream);
+        var fileFormat = _fileInspector.DetermineFileFormat(fileStream);
         return fileFormat;
     }
 }

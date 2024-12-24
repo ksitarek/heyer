@@ -9,14 +9,14 @@ using Serilog;
 
 partial class Build : NukeBuild
 {
-    readonly AbsolutePath ApiPath = RootDirectory / "src/API/Heyer.API";
+    readonly AbsolutePath _apiPath = RootDirectory / "src/API/Heyer.API";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    readonly Configuration _configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Solution] readonly Solution Solution;
-    readonly AbsolutePath StorageApiPath = RootDirectory / "src/API/Heyer.Storage.API";
-    readonly AbsolutePath WebPath = RootDirectory / "web";
+    [Solution] readonly Solution _solution;
+    readonly AbsolutePath _storageApiPath = RootDirectory / "src/API/Heyer.Storage.API";
+    readonly AbsolutePath _webPath = RootDirectory / "web";
 
     public Build() =>
         DockerTasks.DockerLogger = (_, m) =>
@@ -26,8 +26,8 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             DotNetTasks.DotNetClean(t => t
-                                        .SetConfiguration(Configuration)
-                                        .SetProject(Solution));
+                                        .SetConfiguration(_configuration)
+                                        .SetProject(_solution));
         });
 
     Target Compile => _ => _
@@ -35,8 +35,8 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             DotNetTasks.DotNetBuild(t => t
-                                        .SetConfiguration(Configuration)
-                                        .SetProjectFile(Solution)
+                                        .SetConfiguration(_configuration)
+                                        .SetProjectFile(_solution)
                                         .SetNoRestore(true));
         });
 
@@ -45,8 +45,8 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             DotNetTasks.DotNetTest(t => t
-                                       .SetConfiguration(Configuration)
-                                       .SetProjectFile(Solution)
+                                       .SetConfiguration(_configuration)
+                                       .SetProjectFile(_solution)
                                        .SetNoRestore(true)
                                        .SetNoBuild(true)
                                        .SetFilter("TestCategory=Integration"));
@@ -56,7 +56,7 @@ partial class Build : NukeBuild
         .DependsOn(Clean)
         .Executes(() =>
         {
-            DotNetTasks.DotNetRestore(t => t.SetProjectFile(Solution));
+            DotNetTasks.DotNetRestore(t => t.SetProjectFile(_solution));
         });
 
     Target RunAllTests => _ => _
@@ -64,8 +64,8 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             DotNetTasks.DotNetTest(t => t
-                                       .SetConfiguration(Configuration)
-                                       .SetProjectFile(Solution)
+                                       .SetConfiguration(_configuration)
+                                       .SetProjectFile(_solution)
                                        .SetNoRestore(true)
                                        .SetNoBuild(true));
         });
@@ -75,8 +75,8 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             DotNetTasks.DotNetTest(t => t
-                                       .SetConfiguration(Configuration)
-                                       .SetProjectFile(Solution)
+                                       .SetConfiguration(_configuration)
+                                       .SetProjectFile(_solution)
                                        .SetNoRestore(true)
                                        .SetNoBuild(true)
                                        .SetFilter("TestCategory=Unit"));
