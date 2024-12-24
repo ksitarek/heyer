@@ -11,7 +11,8 @@ public class GetJobOfferByIdHandler : IRequestHandler<GetJobOfferById, Result<Jo
 {
     private readonly IJobOffersRepository _jobOffersRepository;
 
-    public GetJobOfferByIdHandler(IJobOffersRepository jobOffersRepository) => _jobOffersRepository = jobOffersRepository;
+    public GetJobOfferByIdHandler(IJobOffersRepository jobOffersRepository) =>
+        _jobOffersRepository = jobOffersRepository;
 
     public async Task<Result<JobOfferDetails>> Handle(GetJobOfferById request, CancellationToken cancellationToken)
     {

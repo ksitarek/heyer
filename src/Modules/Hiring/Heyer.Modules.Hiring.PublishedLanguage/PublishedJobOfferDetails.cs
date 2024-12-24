@@ -42,13 +42,13 @@ public record PublishedJobOfferDetails
                             out Requirements requirements,
                             out List<ContractDetails> contractDetails)
     {
-        id = this.Id;
-        companyDetails = this.CompanyDetails;
-        offerSummary = this.OfferSummary;
-        jobDescription = this.JobDescription;
+        id = Id;
+        companyDetails = CompanyDetails;
+        offerSummary = OfferSummary;
+        jobDescription = JobDescription;
         officeLocationD = OfficeLocation;
-        remoteWork = this.RemoteWork;
-        requirements = this.Requirements;
-        contractDetails = this.ContractDetails;
+        remoteWork = RemoteWork;
+        requirements = Requirements;
+        contractDetails = ContractDetails;
     }
 }

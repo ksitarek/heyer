@@ -8,7 +8,7 @@ internal class Serializer : RequestBodySerializer
 {
     private readonly JsonSerializerOptions _options;
 
-    public Serializer(JsonSerializerOptions? options = null) => this._options = options ?? JsonSerializerOptions.Default;
+    public Serializer(JsonSerializerOptions? options = null) => _options = options ?? JsonSerializerOptions.Default;
 
     public override HttpContent? SerializeBody<T>(T body, RequestBodySerializerInfo info)
     {

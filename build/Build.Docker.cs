@@ -12,17 +12,17 @@ public partial class Build
 
     string _apiContainerName = "Heyer-API";
     int _apiPort = 3001;
+
+    [Parameter] string _apiTag = "local";
     string _mongoDbContainerName = "Heyer-MongoDB";
     int _mongoDbPort = 27117;
     string _storageApiContainerName = "Heyer-Storage-API";
     int _storageApiPort = 3002;
+
+    [Parameter] string _storageApiTag = "local";
     string _webConfiguration = "local";
     string _webContainerName = "Heyer-Web";
     int _webPort = 4201;
-
-    [Parameter] string _apiTag = "local";
-
-    [Parameter] string _storageApiTag = "local";
 
     [Parameter] string _webTag = "local";
 
