@@ -3,7 +3,7 @@ using FluentResults.Extensions.FluentAssertions;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
 namespace Heyer.Modules.Hiring.Domain.Tests;
 
@@ -325,11 +325,10 @@ public class JobOfferTests
 
     private JobOffer CreateTestJobOffer()
     {
-        var companyDetails = new CompanyDetails(Guid.NewGuid(), "CompanyLogoUrl");
         var offerSummary = "OfferSummary";
         var jobDescription = "JobDescription";
         var remoteWork = RemoteWork.Yes;
 
-        return JobOffer.CreateNew(companyDetails, offerSummary, jobDescription, remoteWork);
+        return JobOffer.CreateNew(offerSummary, jobDescription, remoteWork);
     }
 }

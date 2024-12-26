@@ -2,7 +2,7 @@ using FluentResults;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.Application.Mapping;
 using Heyer.Modules.Hiring.Domain.JobOffers;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using MediatR;
 
 namespace Heyer.Modules.Hiring.Application.JobOffers.GetById;

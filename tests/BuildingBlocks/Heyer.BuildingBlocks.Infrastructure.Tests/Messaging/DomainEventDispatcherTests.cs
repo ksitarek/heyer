@@ -1,8 +1,12 @@
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
+using Heyer.BuildingBlocks.Application.Authorization;
+using Heyer.BuildingBlocks.Application.Notifications;
 using Heyer.BuildingBlocks.Domain;
+using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NSubstitute.Extensions;
@@ -20,8 +24,11 @@ public class DomainEventDispatcherTests
     };
 
     private DomainEventDispatcher _domainEventDispatcher;
+    private DomainEventNotificationsRegistry _domainEventNotificationsRegistry;
     private IDomainEventsAccessor _domainEventsAccessor;
     private IMediator _mediator;
+    private IOutboxStore _outboxStore;
+    private ValueUserDataProvider _userDataProvider;
 
     [Test]
     public async Task DispatchEventsAsync_WhenCalled_ShouldPublishAllDomainEvents()
@@ -66,7 +73,23 @@ public class DomainEventDispatcherTests
         _domainEventsAccessor = Substitute.For<IDomainEventsAccessor>();
         _domainEventsAccessor.Configure().GetAllDomainEvents().Returns(_domainEvents);
 
-        _domainEventDispatcher = new DomainEventDispatcher(_mediator, _domainEventsAccessor);
+        _domainEventNotificationsRegistry = new DomainEventNotificationsRegistry();
+
+        _outboxStore = Substitute.For<IOutboxStore>();
+
+        _userDataProvider = new ValueUserDataProvider();
+
+        _domainEventDispatcher =
+            new DomainEventDispatcher(_mediator,
+                                      _domainEventsAccessor,
+                                      _domainEventNotificationsRegistry,
+                                      _outboxStore,
+                                      _userDataProvider);
+    }
+
+    internal class OutboxContext : DbContext
+    {
+        public DbSet<OutboxMessage> OutboxMessages { get; init; }
     }
 
     internal record FakeDomainEvent(Guid Id) : DomainEvent;

@@ -1,6 +1,8 @@
 using System.Net;
 using FluentAssertions;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
+using Heyer.BuildingBlocks.Tests;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -70,24 +72,8 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
     {
         _ctx = GetContext();
 
-        _publishedJobOffer = PublishedJobOffer.CreateNew(
-            new CompanyDetails(Guid.NewGuid(), "ACME"),
-            _faker.Random.String2(10, 100),
-            _faker.Random.String2(100, 500),
-            _faker.Random.Enum(RemoteWork.Unknown));
-
-        _publishedJobOffer.SetRequirements(ExperienceLevel.Junior,
-                                           new Dictionary<string, SkillLevel>
-                                           {
-                                               ["A"] = SkillLevel.Mid, ["B"] = SkillLevel.Senior
-                                           });
-
-        _publishedJobOffer.SetOfficeLocation(new OfficeLocation("Warsaw", "Poland"));
-
-        _publishedJobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
-                                                                  new SalaryRange(false, 10000, 20000),
-                                                                  8,
-                                                                  8));
+        _publishedJobOffer = TestPublishedJobOfferBuilder.Create(ApplicationFactoryConfiguration.Tenant1Id)
+            .BuildTestData();
 
         _expectedDetails = new PublishedJobOfferDetails(
             _publishedJobOffer.Id.Guid,
@@ -95,16 +81,18 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
                                _publishedJobOffer.CompanyDetails.Name),
             _publishedJobOffer.OfferSummary,
             _publishedJobOffer.JobDescription,
-            _publishedJobOffer.Location!,
+            _publishedJobOffer.Location,
             _publishedJobOffer.RemoteWork,
-            _publishedJobOffer.Requirements!,
+            _publishedJobOffer.Requirements,
             new List<ContractDetails>
             {
                 new(
-                    _publishedJobOffer.ContractsDetails!.First().EmploymentType,
-                    new SalaryRange(false, 0, 0),
-                    _publishedJobOffer.ContractsDetails!.First().TimeNumerator,
-                    _publishedJobOffer.ContractsDetails!.First().TimeDenominator)
+                    _publishedJobOffer.ContractsDetails.First().EmploymentType,
+                    _publishedJobOffer.ContractsDetails.First().SalaryRange.IsPublished
+                        ? _publishedJobOffer.ContractsDetails.First().SalaryRange
+                        : new SalaryRange(false, 0, 0),
+                    _publishedJobOffer.ContractsDetails.First().TimeNumerator,
+                    _publishedJobOffer.ContractsDetails.First().TimeDenominator)
             });
 
         await _ctx.PublishedJobOffers.AddAsync(_publishedJobOffer);

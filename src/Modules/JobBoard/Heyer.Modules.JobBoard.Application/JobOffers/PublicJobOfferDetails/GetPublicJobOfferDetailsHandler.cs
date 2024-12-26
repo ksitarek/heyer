@@ -1,6 +1,6 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Application.Results;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.JobBoard.Application.Mapping;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using MediatR;

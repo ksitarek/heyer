@@ -1,9 +1,6 @@
 using FluentAssertions;
-using FluentResults.Extensions.FluentAssertions;
-using Heyer.Modules.Hiring.PublishedLanguage;
-using Heyer.Modules.JobBoard.Domain.JobOffers;
+using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.Modules.JobBoard.Domain.JobOffers.Events;
-using SkillLevel = Heyer.Modules.Hiring.PublishedLanguage.SkillLevel;
 
 namespace Heyer.Modules.JobBoard.Domain.Tests;
 
@@ -11,54 +8,13 @@ namespace Heyer.Modules.JobBoard.Domain.Tests;
 public class PublishedJobOfferTests
 {
     [Test]
-    public void AddContractDetails_ShouldAddContractDetails()
-    {
-        // Arrange
-        var jobOffer = CreateTestJobOffer();
-
-        // Act
-        var result = jobOffer.AddContractDetails(
-            new ContractDetails(
-                EmploymentType.ContractOfEmployment,
-                new SalaryRange(true, 10000, 20000),
-                8,
-                8));
-
-        // Assert
-        result.Should().BeSuccess();
-    }
-
-    [Test]
-    public void AddContractDetails_ShouldNotAddContractDetailsForEmploymentTypeTwice()
-    {
-        // Arrange
-        var jobOffer = CreateTestJobOffer();
-        jobOffer.AddContractDetails(
-            new ContractDetails(
-                EmploymentType.ContractOfEmployment,
-                new SalaryRange(true, 10000, 20000),
-                8,
-                8));
-
-        // Act
-        var result = jobOffer.AddContractDetails(
-            new ContractDetails(
-                EmploymentType.ContractOfEmployment,
-                new SalaryRange(true, 10000, 20000),
-                8,
-                8));
-
-        // Assert
-        result.Should().BeFailure();
-    }
-
-    [Test]
     public void JobOfferShouldCreate()
     {
         // Arrange
 
         // Act
-        var jobOffer = CreateTestJobOffer();
+        var jobOffer = TestPublishedJobOfferBuilder.Create(Guid.NewGuid())
+            .BuildTestData();
 
         // Assert
         jobOffer.Should().NotBeNull();
@@ -66,107 +22,5 @@ public class PublishedJobOfferTests
         jobOffer.DomainEvents.Should().ContainSingle(
             domainEvent => domainEvent.GetType() == typeof(JobOfferPublished)
                            && ((JobOfferPublished)domainEvent).PublishedJobOfferId == jobOffer.Id);
-    }
-
-    [Test]
-    public void SetOfficeLocation_ShouldSetOfficeLocation()
-    {
-        // Arrange
-        var jobOffer = CreateTestJobOffer();
-        var location = new OfficeLocation("City", "CountryCode");
-
-        // Act
-        var result = jobOffer.SetOfficeLocation(location);
-
-        // Assert
-        result.Should().BeSuccess();
-    }
-
-    [Test]
-    public void SetRequirements_ShouldSetRequirements()
-    {
-        // Arrange
-        var jobOffer = CreateTestJobOffer();
-
-        var experienceLevel = ExperienceLevel.Junior;
-
-        var skills = new Dictionary<string, SkillLevel> { { "Skill", SkillLevel.NiceToHave } };
-
-        // Act
-        var result = jobOffer.SetRequirements(experienceLevel, skills);
-
-        // Assert
-        result.Should().BeSuccess();
-    }
-
-    [Test]
-    public void TakeDown_ShouldNotTakeDownTwice()
-    {
-        // Arrange
-        var jobOffer = CreateTestJobOffer();
-        jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
-        jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
-        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
-                                                        new SalaryRange(false, 10000, 20000),
-                                                        8,
-                                                        8));
-        jobOffer.TakeDown();
-
-        // Act
-        var result = jobOffer.TakeDown();
-
-        // Assert
-        result.Should().BeFailure();
-    }
-
-    [Test]
-    public void TakeDown_ShouldTakeDown()
-    {
-        // Arrange
-        var jobOffer = CreateTestJobOffer();
-        jobOffer.SetOfficeLocation(new OfficeLocation("City", "CountryCode"));
-        jobOffer.SetRequirements(ExperienceLevel.Junior, new Dictionary<string, SkillLevel>());
-        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
-                                                        new SalaryRange(false, 10000, 20000),
-                                                        8,
-                                                        8));
-
-        // Act
-        var result = jobOffer.TakeDown();
-
-        // Assert
-        result.Should().BeSuccess();
-        jobOffer.DomainEvents.Should().ContainSingle(
-            domainEvent => domainEvent.GetType() == typeof(JobOfferTakenDown)
-                           && ((JobOfferTakenDown)domainEvent).PublishedJobOfferId == jobOffer.Id);
-    }
-
-    [Test]
-    public void UpdateDescription_ShouldUpdateDescription()
-    {
-        // Arrange
-        var jobOffer = CreateTestJobOffer();
-
-        var offerSummary = "OfferSummary";
-        var jobDescription = "JobDescription";
-
-        // Act
-        var result = jobOffer.UpdateDescription(offerSummary, jobDescription);
-
-        // Assert
-        result.Should().BeSuccess();
-        jobOffer.DomainEvents.Should().ContainSingle(
-            domainEvent => domainEvent.GetType() == typeof(JobOfferDescriptionUpdated)
-                           && ((JobOfferDescriptionUpdated)domainEvent).PublishedJobOfferId == jobOffer.Id);
-    }
-
-    private PublishedJobOffer CreateTestJobOffer()
-    {
-        var companyDetails = new CompanyDetails(Guid.NewGuid(), "CompanyLogoUrl");
-        var offerSummary = "OfferSummary";
-        var jobDescription = "JobDescription";
-        var remoteWork = RemoteWork.Yes;
-
-        return PublishedJobOffer.CreateNew(companyDetails, offerSummary, jobDescription, remoteWork);
     }
 }

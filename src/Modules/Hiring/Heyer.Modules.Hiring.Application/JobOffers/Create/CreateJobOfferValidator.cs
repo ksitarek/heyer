@@ -1,5 +1,5 @@
 using FluentValidation;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
 namespace Heyer.Modules.Hiring.Application.JobOffers.Create;
 

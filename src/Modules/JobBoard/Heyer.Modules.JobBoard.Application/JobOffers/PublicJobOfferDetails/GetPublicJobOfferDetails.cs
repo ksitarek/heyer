@@ -1,5 +1,5 @@
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
 namespace Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 

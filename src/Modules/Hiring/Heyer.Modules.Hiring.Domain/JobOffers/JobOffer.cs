@@ -3,7 +3,7 @@ using Heyer.BuildingBlocks.Domain;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
 using Heyer.Modules.Hiring.Domain.JobOffers.Rules;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
 namespace Heyer.Modules.Hiring.Domain.JobOffers;
 
@@ -14,11 +14,10 @@ public class JobOffer : Entity
     {
     }
 
-    private JobOffer(CompanyDetails companyDetails, string offerSummary, string jobDescription, RemoteWork remoteWork)
+    private JobOffer(string offerSummary, string jobDescription, RemoteWork remoteWork)
     {
         Id = JobOfferId.CreateNew();
 
-        CompanyDetails = companyDetails;
         OfferSummary = offerSummary;
         JobDescription = jobDescription;
         RemoteWork = remoteWork;
@@ -27,7 +26,6 @@ public class JobOffer : Entity
     }
 
     public HashSet<CandidateId>? Candidates { get; private set; }
-    public CompanyDetails CompanyDetails { get; private set; } = null!;
 
     public List<ContractDetails>? ContractsDetails { get; private set; }
 
@@ -43,11 +41,10 @@ public class JobOffer : Entity
     public Requirements? Requirements { get; private set; }
 
 
-    public static JobOffer CreateNew(CompanyDetails companyDetails,
-                                     string offerSummary,
+    public static JobOffer CreateNew(string offerSummary,
                                      string jobDescription,
                                      RemoteWork remoteWork) =>
-        new(companyDetails, offerSummary, jobDescription, remoteWork);
+        new(offerSummary, jobDescription, remoteWork);
 
     public Result AddCandidate(
         CandidateId candidateId)

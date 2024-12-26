@@ -1,4 +1,4 @@
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using RestEase;
 
 namespace Heyer.API.Client;
@@ -17,4 +17,7 @@ public interface IApiClient
     [Get("/health")]
     [AllowAnyStatusCode]
     Task<Response<HealthReport>> HealthCheck();
+
+    [Post("/job-offers/publish/{jobOfferId}")]
+    Task PublishJobOffer([Path("jobOfferId")] Guid jobOfferId);
 }

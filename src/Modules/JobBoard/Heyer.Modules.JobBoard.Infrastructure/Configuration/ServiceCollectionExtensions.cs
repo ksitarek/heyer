@@ -1,4 +1,5 @@
 using Heyer.BuildingBlocks.Infrastructure;
+using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +19,13 @@ internal static class ServiceCollectionExtensions
 
         services.AddSingleton(db);
 
-        services.AddDbContext<JobBoardContext>(o => o.UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName));
+        services.AddDbContext<JobBoardContext>(o => o.UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+                                                   .EnableServiceProviderCaching(false));
 
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<JobBoardContext>());
+
+        services.AddMongoDbInboxStore();
+        services.AddMongoDbOutboxStore();
 
         return services;
     }

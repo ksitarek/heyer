@@ -12,7 +12,7 @@ public abstract class IntegrationTestsBase
 {
     internal IApplicationFactory<IApiClient> _appFactory;
 
-    internal Faker _faker = new();
+    internal readonly Faker _faker = new();
 
     protected IServiceScope HiringModuleCompositionRootScope;
 

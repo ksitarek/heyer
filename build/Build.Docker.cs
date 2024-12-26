@@ -1,3 +1,4 @@
+using System.Threading;
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
@@ -72,14 +73,23 @@ public partial class Build
         {
             StopDockerContainer(_apiContainerName);
 
+            string[] environmentVariables =
+            [
+                $"MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
+                $"Scheduler__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
+                $"HiringModule__InboxOutbox__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
+                $"Companies__A62C048C-8E0F-41E2-84D4-BD061F9DDE97__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
+                $"Companies__0692183B-CE56-432D-88B5-B59280A678C5__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true"
+            ];
+
             DockerTasks.DockerRun(x => x
                                       .SetImage($"{_apiImageName}:{_apiTag}")
                                       .SetName(_apiContainerName)
                                       .SetRm(true)
                                       .SetPublish($"{_apiPort}:8080")
                                       .SetDetach(true)
-                                      .SetEnv(
-                                          $"MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}"));
+                                      .SetEnv(environmentVariables)
+            );
         });
 
     Target RunBackend => _ => _
@@ -98,7 +108,15 @@ public partial class Build
                                       .SetName(_mongoDbContainerName)
                                       .SetRm(true)
                                       .SetPublish($"{_mongoDbPort}:27017")
+                                      .SetArgs("--replSet=rs0")
                                       .SetDetach(true));
+
+            Thread.Sleep(5000);
+
+            DockerTasks.DockerExec(x => x
+                                       .SetContainer(_mongoDbContainerName)
+                                       .SetCommand("mongosh")
+                                       .SetArgs("--quiet", "--eval", "\"rs.initiate();\""));
         });
 
     Target RunStorageApi => _ => _
@@ -114,7 +132,7 @@ public partial class Build
                                       .SetPublish($"{_storageApiPort}:8080")
                                       .SetDetach(true)
                                       .SetEnv(
-                                          $"RegistryStrategy__MongoDbRegistry__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}"));
+                                          $"RegistryStrategy__MongoDbRegistry__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true"));
         });
 
     Target RunWeb => _ => _

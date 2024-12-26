@@ -20,12 +20,7 @@ public class CreateJobOfferHandler : ICommandHandler<CreateJobOffer, Guid>
 
     public async Task<Result<Guid>> Handle(CreateJobOffer request, CancellationToken cancellationToken)
     {
-        var companyDetails = new CompanyDetails(
-            _userDataProvider.CompanyId,
-            _userDataProvider.CompanyName);
-
         var jobOffer = JobOffer.CreateNew(
-            companyDetails,
             request.OfferSummary,
             request.JobDescription,
             request.RemoteWork);

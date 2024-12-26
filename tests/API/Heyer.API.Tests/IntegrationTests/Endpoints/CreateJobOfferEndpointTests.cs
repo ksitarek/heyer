@@ -5,10 +5,10 @@ using FluentAssertions;
 using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Application;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
-using RemoteWork = Heyer.Modules.Hiring.PublishedLanguage.RemoteWork;
+using RemoteWork = Heyer.Modules.Hiring.PublishedLanguage.DTOs.RemoteWork;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 

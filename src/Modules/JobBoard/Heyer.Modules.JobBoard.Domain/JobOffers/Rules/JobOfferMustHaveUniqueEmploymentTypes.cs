@@ -1,6 +1,6 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Domain;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
 namespace Heyer.Modules.JobBoard.Domain.JobOffers.Rules;
 

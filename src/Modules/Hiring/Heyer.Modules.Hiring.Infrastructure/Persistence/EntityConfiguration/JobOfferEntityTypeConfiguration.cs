@@ -1,5 +1,5 @@
 using Heyer.Modules.Hiring.Domain.JobOffers;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MongoDB.EntityFrameworkCore.Extensions;
@@ -23,8 +23,6 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
 
         builder.Property(x => x.JobDescription)
             .IsRequired();
-
-        builder.OwnsOne(x => x.CompanyDetails);
 
         builder.OwnsOne(x => x.Location);
 

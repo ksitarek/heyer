@@ -1,6 +1,8 @@
 using Heyer.API.Client;
 using Heyer.BuildingBlocks.Application.Authorization;
+using Heyer.BuildingBlocks.Infrastructure.Integration;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
+using Heyer.BuildingBlocks.Infrastructure.Scheduler;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
@@ -11,6 +13,8 @@ namespace Heyer.API.Host;
 internal class HostBuilder
 {
     private readonly WebApplicationBuilder _builder;
+
+    private readonly IEventBus _eventBus = new InProcessEventBus();
     private readonly List<ModuleRunner> _modules = new();
 
     public HostBuilder(WebApplicationBuilder builder)
@@ -19,6 +23,7 @@ internal class HostBuilder
 
         _builder.Services.AddEndpointsApiExplorer();
         _builder.Services.AddAuthenticationAndAuthorization(_builder.Configuration.GetSection("Jwt"));
+        _builder.Services.AddScheduler(builder.Configuration.GetSection("Scheduler"));
         _builder.Services.Configure<JsonOptions>(options =>
         {
             options.SerializerOptions.PropertyNamingPolicy =
@@ -38,7 +43,7 @@ internal class HostBuilder
         where TImplementation : ModuleRunner, TInterface, IModuleInstaller
         where TInterface : class, IModuleInstaller
     {
-        var module = Activator.CreateInstance(typeof(TImplementation), _builder.Configuration)
+        var module = Activator.CreateInstance(typeof(TImplementation), _builder.Configuration, _eventBus)
             as TImplementation;
 
         if (module is null)

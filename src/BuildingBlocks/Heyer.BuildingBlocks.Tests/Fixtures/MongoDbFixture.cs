@@ -11,19 +11,14 @@ public class MongoDbFixture
     public MongoDbFixture()
     {
         var port = _randomizer.Next(27100, 27200);
-        var username = _randomizer.GetString(8);
-        var password = _randomizer.GetString(8);
 
-        _mongoDbContainer = new MongoDbBuilder()
-            .WithImage("mongo:8")
-            .WithUsername(username)
-            .WithPortBinding(port, 27017)
-            .Build();
+        _mongoDbContainer = new MongoDbBuilder().WithReplicaSet().Build();
     }
 
-    public string ConnectionString => _mongoDbContainer.GetConnectionString();
+    public string ConnectionString => $"{_mongoDbContainer.GetConnectionString()}?directConnection=true";
 
     public async Task DisposeAsync() => await _mongoDbContainer.StopAsync();
 
     public async Task InitializeAsync() => await _mongoDbContainer.StartAsync();
+    // await _mongoDbContainer.ExecScriptAsync("rs.initiate();");
 }

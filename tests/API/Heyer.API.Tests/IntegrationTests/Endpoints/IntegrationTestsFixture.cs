@@ -17,27 +17,31 @@ public class IntegrationTestsFixture
             Config.MongoDb_ConnectionString,
             _mongoDbFixture.ConnectionString);
 
-        ApplicationFactoryConfiguration.AddTenantConfig(
-            ApplicationFactoryConfiguration.Tenant1Id,
-            Config.MongoDb_ConnectionString,
+        ApplicationFactoryConfiguration.AddConfig(
+            Config.Scheduler_MongoDb_ConnectionString,
             _mongoDbFixture.ConnectionString);
 
-        ApplicationFactoryConfiguration.AddTenantConfig(
-            ApplicationFactoryConfiguration.Tenant2Id,
-            Config.MongoDb_ConnectionString,
+        ApplicationFactoryConfiguration.AddConfig(
+            Config.HiringModule_InboxOutbox_MongoDb_ConnectionString,
             _mongoDbFixture.ConnectionString);
 
-        ApplicationFactoryConfiguration.AddTenantConfig(
-            ApplicationFactoryConfiguration.Tenant1Id,
-            Config.MongoDb_DatabaseName,
-            ApplicationFactoryConfiguration.Tenant1Id.ToString());
-
-        ApplicationFactoryConfiguration.AddTenantConfig(
-            ApplicationFactoryConfiguration.Tenant2Id,
-            Config.MongoDb_DatabaseName,
-            ApplicationFactoryConfiguration.Tenant2Id.ToString());
+        ConfigureTenantDb(ApplicationFactoryConfiguration.Tenant1Id);
+        ConfigureTenantDb(ApplicationFactoryConfiguration.Tenant2Id);
     }
 
     [OneTimeTearDown]
     public async Task OneTimeTearDown() => await _mongoDbFixture.DisposeAsync();
+
+    private void ConfigureTenantDb(Guid tenantId)
+    {
+        ApplicationFactoryConfiguration.AddTenantConfig(
+            tenantId,
+            Config.MongoDb_ConnectionString,
+            _mongoDbFixture.ConnectionString);
+
+        ApplicationFactoryConfiguration.AddTenantConfig(
+            tenantId,
+            Config.MongoDb_DatabaseName,
+            tenantId.ToString());
+    }
 }

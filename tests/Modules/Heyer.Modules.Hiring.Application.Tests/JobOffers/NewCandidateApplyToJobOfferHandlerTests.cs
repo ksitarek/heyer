@@ -6,7 +6,7 @@ using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Storage.API.Client;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -20,7 +20,6 @@ public class NewCandidateApplyToJobOfferHandlerTests
     private readonly CancellationToken _cancellationToken = CancellationToken.None;
 
     private readonly JobOffer _publishedJobOffer = JobOffer.CreateNew(
-        new CompanyDetails(Guid.NewGuid(), "ACME"),
         "Summary",
         "Description",
         RemoteWork.Hybrid);

@@ -13,11 +13,10 @@ Log.Logger = new LoggerConfiguration()
 var builder = new HostBuilder(WebApplication.CreateBuilder(args));
 
 builder
+    .ConfigureLogging()
     .AddModule<IHiringModule, HiringModule>()
     .AddModule<IJobBoardModule, JobBoardModule>()
-    .ConfigureLogging()
     .ConfigureHealthChecks();
-
 var host = builder.Build();
 
 await host.RunAsync();

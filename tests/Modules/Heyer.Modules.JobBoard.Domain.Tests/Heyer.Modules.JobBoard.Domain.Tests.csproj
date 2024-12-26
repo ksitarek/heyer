@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\BuildingBlocks\Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj"/>
     <ProjectReference Include="..\..\..\src\Modules\JobBoard\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj"/>
+    <ProjectReference Include="..\..\BuildingBlocks\Heyer.BuildingBlocks.Domain.Tests\Heyer.BuildingBlocks.Domain.Tests.csproj"/>
   </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Domain.JobOffers;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using NSubstitute;
 using NSubstitute.Extensions;
 

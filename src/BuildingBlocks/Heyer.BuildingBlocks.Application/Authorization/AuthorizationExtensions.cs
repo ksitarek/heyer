@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -34,10 +35,28 @@ public static class AuthorizationExtensions
         services.AddScoped<IAuthorizationHandler, HasPermissionAuthorizationHandler>();
     }
 
-    public static void AddUserDataProvider(this IServiceCollection services)
+    public static IServiceCollection AddUserDataProvider(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
-        services.AddScoped<IUserDataProvider, ClaimsUserDataProvider>();
+        services.AddScoped<ValueUserDataProvider>();
+        services.AddTransient<IUserDataProvider>(sp =>
+        {
+            var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+            if (httpContextAccessor?.HttpContext != null &&
+                httpContextAccessor.HttpContext.User.Identity?.IsAuthenticated == true)
+            {
+                var userDataProvider = new ClaimsUserDataProvider(httpContextAccessor);
+                if (userDataProvider.CompanyId != Guid.Empty)
+                {
+                    return userDataProvider;
+                }
+            }
+
+            var vudp = sp.GetRequiredService<ValueUserDataProvider>();
+            return vudp;
+        });
+
+        return services;
     }
 
     private static TokenValidationParameters GetTokenValidationParameters(IConfiguration configuration)

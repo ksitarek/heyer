@@ -1,5 +1,5 @@
 using Heyer.BuildingBlocks.Application.Results;
-using Heyer.Modules.Hiring.PublishedLanguage;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

@@ -114,13 +114,13 @@
   "allOf": [
     {
       "properties": {
-        "ApiImageName": {
+        "_apiImageName": {
           "type": "string"
         },
-        "ApiTag": {
+        "_apiTag": {
           "type": "string"
         },
-        "Configuration": {
+        "_configuration": {
           "type": "string",
           "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
           "enum": [
@@ -128,20 +128,20 @@
             "Release"
           ]
         },
-        "Solution": {
+        "_solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
         },
-        "StorageApiImageName": {
+        "_storageApiImageName": {
           "type": "string"
         },
-        "StorageApiTag": {
+        "_storageApiTag": {
           "type": "string"
         },
-        "WebImageName": {
+        "_webImageName": {
           "type": "string"
         },
-        "WebTag": {
+        "_webTag": {
           "type": "string"
         }
       }
