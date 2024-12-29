@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.Mapping;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
@@ -30,5 +31,31 @@ public class JobOfferMappingsTests
         result.OfferSummary.Should().Be(request.OfferSummary);
         result.JobDescription.Should().Be(request.JobDescription);
         result.RemoteWork.Should().Be(expectedRemoteWork);
+    }
+
+    [Test]
+    public void MapToJobOfferDetails_WithValidJobOffer_ShouldReturnJobOfferDetails()
+    {
+        // Arrange
+        var jobOffer = TestJobOfferBuilder.Create()
+            .WithRandomContractDetails()
+            .WithRandomOfficeLocation()
+            .WithRandomRequirements()
+            .Build();
+
+        // Act
+        var result = jobOffer.MapToJobOfferDetails();
+
+        // Assert
+        result.Should().BeOfType<JobOfferDetails>();
+        result.Id.Should().Be(jobOffer.Id.Guid);
+        result.OfferSummary.Should().Be(jobOffer.OfferSummary);
+        result.JobDescription.Should().Be(jobOffer.JobDescription);
+        result.PublishedAt.Should().Be(jobOffer.PublishedAt);
+        result.PublishedUntil.Should().Be(jobOffer.PublishedUntil);
+        result.OfficeLocation.Should().Be(jobOffer.Location);
+        result.RemoteWork.Should().Be(jobOffer.RemoteWork);
+        result.Requirements.Should().BeEquivalentTo(jobOffer.Requirements);
+        result.ContractsDetails.Should().BeEquivalentTo(jobOffer.ContractsDetails);
     }
 }

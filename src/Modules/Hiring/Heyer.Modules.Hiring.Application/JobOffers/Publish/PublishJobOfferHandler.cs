@@ -2,7 +2,6 @@ using FluentResults;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.Modules.Hiring.Domain.JobOffers;
-using Serilog;
 
 namespace Heyer.Modules.Hiring.Application.JobOffers.Publish;
 
@@ -24,7 +23,7 @@ public class PublishJobOfferHandler : ICommandHandler<PublishJobOffer>
             return new NotFoundError();
         }
 
-        var publishResult = jobOffer.Publish();
+        var publishResult = jobOffer.Publish(request.PublishUntil);
 
         return publishResult;
     }

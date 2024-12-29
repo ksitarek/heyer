@@ -26,20 +26,19 @@ internal class HiringOutboxProcessingJob
         {
             var companyId = Guid.Parse(configurationSection.Key);
 
-            using (var scope = HiringModuleCompositionRoot.CreateScope())
-            {
-                var userDataProvider =
-                    scope.ServiceProvider.GetRequiredService<IUserDataProvider>() as ValueUserDataProvider;
+            using var scope = HiringModuleCompositionRoot.CreateScope();
 
-                userDataProvider!.SetExecutionContext(Guid.Empty, companyId, string.Empty);
+            var userDataProvider =
+                scope.ServiceProvider.GetRequiredService<IUserDataProvider>() as ValueUserDataProvider;
 
-                var companyJob = new CompanyHiringOutboxProcessingJob(
-                    scope.ServiceProvider.GetRequiredService<IMediator>(),
-                    userDataProvider,
-                    scope.ServiceProvider.GetRequiredService<IOutboxStore>());
+            userDataProvider!.SetExecutionContext(Guid.Empty, companyId, string.Empty);
 
-                await companyJob.Handle();
-            }
+            var companyJob = new CompanyHiringOutboxProcessingJob(
+                scope.ServiceProvider.GetRequiredService<IMediator>(),
+                userDataProvider,
+                scope.ServiceProvider.GetRequiredService<IOutboxStore>());
+
+            await companyJob.Handle();
         }
 
         _semaphore.Release();

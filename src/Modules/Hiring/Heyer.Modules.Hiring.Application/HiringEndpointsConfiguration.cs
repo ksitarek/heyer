@@ -55,10 +55,11 @@ public static class HiringEndpointsConfiguration
         app.MapPost("/job-offers/publish/{jobOfferId}",
                     async (IHiringModule module,
                            [FromRoute] Guid jobOfferId,
+                           [FromBody] DateTimeOffset? publishedUntil,
                            CancellationToken cancellationToken) =>
                     {
                         var result = await module.DispatchCommand(
-                            new PublishJobOffer(jobOfferId),
+                            new PublishJobOffer(jobOfferId, publishedUntil),
                             cancellationToken);
 
                         return result.IsSuccess

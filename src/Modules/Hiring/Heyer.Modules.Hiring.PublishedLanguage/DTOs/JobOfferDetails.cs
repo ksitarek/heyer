@@ -13,7 +13,7 @@ public record JobOfferDetails
                            OfficeLocation OfficeLocation,
                            RemoteWork RemoteWork,
                            Requirements Requirements,
-                           List<ContractDetails> ContractDetails)
+                           List<ContractDetails> ContractsDetails)
     {
         this.Id = Id;
         this.OfferSummary = OfferSummary;
@@ -23,7 +23,7 @@ public record JobOfferDetails
         this.OfficeLocation = OfficeLocation;
         this.RemoteWork = RemoteWork;
         this.Requirements = Requirements;
-        this.ContractDetails = ContractDetails;
+        this.ContractsDetails = ContractsDetails;
     }
 
     public Guid Id { get; init; }
@@ -34,7 +34,7 @@ public record JobOfferDetails
     public OfficeLocation OfficeLocation { get; init; }
     public RemoteWork RemoteWork { get; init; }
     public Requirements Requirements { get; init; }
-    public List<ContractDetails> ContractDetails { get; init; }
+    public List<ContractDetails> ContractsDetails { get; init; }
 
     public void Deconstruct(out Guid Id,
                             out string OfferSummary,
@@ -54,6 +54,6 @@ public record JobOfferDetails
         OfficeLocation = this.OfficeLocation;
         RemoteWork = this.RemoteWork;
         Requirements = this.Requirements;
-        ContractDetails = this.ContractDetails;
+        ContractDetails = ContractsDetails;
     }
 }
