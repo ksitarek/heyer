@@ -4,7 +4,9 @@ using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Application;
+using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
+using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using RestEase;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
@@ -28,12 +30,12 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
             .WithRandomRequirements()
             .Build();
 
-        await _ctx.JobOffers.AddAsync(jobOffer);
+        await _ctx.Set<JobOffer>().AddAsync(jobOffer);
 
         await _ctx.SaveChangesAsync();
 
         // Act
-        await client.PublishJobOffer(jobOffer.Id.Guid);
+        await client.PublishJobOffer(new PublishJobOfferRequest(jobOffer.Id.Guid));
         await AsyncHelper.AssertAllMessagesProcessed();
 
         // Assert
@@ -49,7 +51,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
         var client = _appFactory.CreateApiClient();
 
         // Act
-        var action = async () => await client.PublishJobOffer(Guid.NewGuid());
+        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
 
         // Assert
         (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -62,7 +64,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
         var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Tenant1Id);
 
         // Act
-        var action = async () => await client.PublishJobOffer(Guid.NewGuid());
+        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
 
         // Assert
         (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -77,7 +79,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
             HiringPermissions.PublishJobOffer);
 
         // Act
-        var action = async () => await client.PublishJobOffer(Guid.NewGuid());
+        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
 
         // Assert
         (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);

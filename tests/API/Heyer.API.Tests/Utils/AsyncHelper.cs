@@ -15,7 +15,7 @@ internal static class AsyncHelper
         ApplicationFactoryConfiguration.Tenant1Id,
         ApplicationFactoryConfiguration.Tenant2Id
     ];
-
+    
     public static IServiceScope[] Scopes =
     [
         HiringModuleCompositionRoot.CreateScope(),

@@ -15,22 +15,22 @@ public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candida
         builder.Property(x => x.Id)
             .HasConversion(x => x.Guid, x => new CandidateId(x));
 
-        builder.Property("_firstName")
-            .HasElementName("FirstName")
+        builder.Property(x => x.FirstName)
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Property("_lastName")
-            .HasElementName("LastName")
+        builder.Property(x => x.LastName)
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Property("_includeInCandidatePool")
-            .HasElementName("IncludeInCandidatePool")
+        builder.Property(x => x.IncludeInCandidatePool)
             .IsRequired();
 
-        builder.OwnsOne<Email>("_email", e => { e.HasElementName("Email"); });
+        // builder.Property(x => x.Attributes)
+        //     .HasElementName("Attributes");
 
-        builder.OwnsOne<ResumeKey>("_resumeKey", rk => { rk.HasElementName("ResumeKey"); });
+        // builder.OwnsOne<Email>(x => x.Email, e => { e.HasElementName("Email"); });
+        //
+        // builder.OwnsOne<ResumeKey>(x => x.ResumeKey, rk => { rk.HasElementName("ResumeKey"); });
     }
 }

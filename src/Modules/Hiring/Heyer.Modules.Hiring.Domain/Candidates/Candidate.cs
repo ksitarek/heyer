@@ -4,14 +4,6 @@ namespace Heyer.Modules.Hiring.Domain.Candidates;
 
 public class Candidate : Entity
 {
-    private Dictionary<string, object> _attributes = null!;
-    private Email _email = null!;
-
-    private string _firstName = null!;
-    private bool _includeInCandidatePool;
-    private string _lastName = null!;
-    private ResumeKey _resumeKey = null!;
-
     // For EF Core
     private Candidate()
     {
@@ -26,23 +18,39 @@ public class Candidate : Entity
     {
         Id = CandidateId.CreateNew();
 
-        _firstName = firstName;
-        _lastName = lastName;
-        _email = email;
-        _resumeKey = resumeKey;
-        _includeInCandidatePool = includeInCandidatePool;
-        _attributes = attributes;
+        FirstName = firstName;
+        LastName = lastName;
+        // Email = email;
+        // ResumeKey = resumeKey;
+        IncludeInCandidatePool = includeInCandidatePool;
+        // Attributes = attributes;
 
         AddDomainEvent(new CandidateCreated(Id));
     }
 
     public CandidateId Id { get; } = null!;
 
+    // public Dictionary<string, object> Attributes { get; private set; } = null!;
+    // public Email Email { get; private set; } = null!;
+
+    public string FirstName { get; private set; } = null!;
+    public bool IncludeInCandidatePool { get; private set; }
+
+    public string LastName { get; private set; } = null!;
+    // public ResumeKey ResumeKey { get; private set; } = null!;
+
     public static Candidate Create(string firstName,
                                    string lastName,
                                    Email email,
                                    ResumeKey resumeKey,
                                    bool includeInCandidatePool,
-                                   Dictionary<string, object> attributes) =>
-        new(firstName, lastName, email, resumeKey, includeInCandidatePool, attributes);
+                                   Dictionary<string, object> attributes)
+    {
+        if (attributes == null)
+        {
+            throw new ArgumentNullException(nameof(attributes));
+        }
+
+        return new Candidate(firstName, lastName, email, resumeKey, includeInCandidatePool, attributes);
+    }
 }

@@ -113,7 +113,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
             _jobOffer.Requirements!,
             _jobOffer.ContractsDetails!.ToList());
 
-        await _ctx.JobOffers.AddAsync(_jobOffer);
+        await _ctx.Set<JobOffer>().AddAsync(_jobOffer);
 
         await _ctx.SaveChangesAsync();
     }

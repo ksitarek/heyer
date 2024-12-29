@@ -15,7 +15,7 @@ internal class JobOffersRepository : IJobOffersRepository
     {
         try
         {
-            await _context.JobOffers.AddAsync(jobOffer, cancellationToken);
+            await _context.Set<JobOffer>().AddAsync(jobOffer, cancellationToken);
 
             return Result.Ok();
         }
@@ -27,7 +27,7 @@ internal class JobOffersRepository : IJobOffersRepository
 
     public Task<JobOffer?> GetJobOfferById(JobOfferId jobOfferId,
                                            CancellationToken cancellationToken = default) =>
-        _context.JobOffers
+        _context.Set<JobOffer>()
             .Where(x => x.Id == jobOfferId)
             .FirstOrDefaultAsync(cancellationToken);
 }

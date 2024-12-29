@@ -1,4 +1,3 @@
-using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.Modules.Hiring.Domain.JobOffers;
@@ -13,14 +12,11 @@ public class
 {
     private readonly IEventBus _eventBus;
     private readonly IJobOffersRepository _jobOfferRepository;
-    private readonly IUserDataProvider _userDataProvider;
 
     public JobOfferPublishedNotificationHandler(IEventBus eventBus,
-                                                IUserDataProvider userDataProvider,
                                                 IJobOffersRepository jobOfferRepository)
     {
         _eventBus = eventBus;
-        _userDataProvider = userDataProvider;
         _jobOfferRepository = jobOfferRepository;
     }
 
@@ -30,8 +26,8 @@ public class
         var jobOfferPublished = notification.DomainEvent;
 
         var companyDetails = new CompanyDetails(
-            _userDataProvider.CompanyId,
-            _userDataProvider.CompanyName);
+            notification.ExecutionContext.CompanyId,
+            notification.ExecutionContext.CompanyName);
 
         var jobOffer = await _jobOfferRepository.GetJobOfferById(jobOfferPublished.JobOfferId, cancellationToken);
 

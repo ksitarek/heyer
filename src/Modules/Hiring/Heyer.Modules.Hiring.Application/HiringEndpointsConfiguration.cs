@@ -3,7 +3,6 @@ using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.GetById;
-using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Application.Mapping;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Microsoft.AspNetCore.Builder;
@@ -52,13 +51,15 @@ public static class HiringEndpointsConfiguration
                     });
 
     private static void MapPublishJobOfferEndpoint(WebApplication app) =>
-        app.MapPost("/job-offers/publish/{jobOfferId}",
+        app.MapPost("/job-offers/publish",
                     async (IHiringModule module,
-                           [FromRoute] Guid jobOfferId,
-                           CancellationToken cancellationToken) =>
+                           PublishJobOfferRequest request,
+                           CancellationToken cancellationToken = default) =>
                     {
+                        var command = request.MapToCommand();
+
                         var result = await module.DispatchCommand(
-                            new PublishJobOffer(jobOfferId),
+                            command,
                             cancellationToken);
 
                         return result.IsSuccess

@@ -18,6 +18,6 @@ public interface IApiClient
     [AllowAnyStatusCode]
     Task<Response<HealthReport>> HealthCheck();
 
-    [Post("/job-offers/publish/{jobOfferId}")]
-    Task PublishJobOffer([Path("jobOfferId")] Guid jobOfferId);
+    [Post("/job-offers/publish")]
+    Task PublishJobOffer([Body] PublishJobOfferRequest publishJobOfferRequest);
 }

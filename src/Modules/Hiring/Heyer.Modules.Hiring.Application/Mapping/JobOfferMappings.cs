@@ -1,4 +1,5 @@
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
+using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
@@ -6,6 +7,9 @@ namespace Heyer.Modules.Hiring.Application.Mapping;
 
 public static class JobOfferMappings
 {
+    public static PublishJobOffer MapToCommand(this PublishJobOfferRequest request) =>
+        new(request.JobOfferId, request.PublishedUntil);
+
     public static CreateJobOffer MapToCommand(this CreateJobOfferRequest request) =>
         new(
             request.OfferSummary,
