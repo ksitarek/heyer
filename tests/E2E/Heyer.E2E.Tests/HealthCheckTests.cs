@@ -46,8 +46,8 @@ public class HealthCheckTests
     [SetUp]
     public void SetUp()
     {
-        _apiClient = ApiClientFactory.Create(RuntimeSettings.ApiAddress, TimeSpan.FromSeconds(1));
+        _apiClient = ApiClientFactory.Create(RuntimeSettings.ApiAddress, TimeSpan.FromSeconds(10));
         _storageApiClient =
-            StorageApiClientFactory.Create(RuntimeSettings.StorageApiAddress, TimeSpan.FromSeconds(1));
+            StorageApiClientFactory.Create(RuntimeSettings.StorageApiAddress, TimeSpan.FromSeconds(10));
     }
 }

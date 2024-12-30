@@ -20,8 +20,8 @@ public class Candidate : Entity
 
         FirstName = firstName;
         LastName = lastName;
-        // Email = email;
-        // ResumeKey = resumeKey;
+        Email = email;
+        ResumeKey = resumeKey;
         IncludeInCandidatePool = includeInCandidatePool;
         // Attributes = attributes;
 
@@ -31,13 +31,13 @@ public class Candidate : Entity
     public CandidateId Id { get; } = null!;
 
     // public Dictionary<string, object> Attributes { get; private set; } = null!;
-    // public Email Email { get; private set; } = null!;
+    public Email Email { get; private set; } = null!;
 
     public string FirstName { get; private set; } = null!;
     public bool IncludeInCandidatePool { get; private set; }
 
     public string LastName { get; private set; } = null!;
-    // public ResumeKey ResumeKey { get; private set; } = null!;
+    public ResumeKey ResumeKey { get; private set; } = null!;
 
     public static Candidate Create(string firstName,
                                    string lastName,

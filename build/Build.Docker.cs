@@ -1,7 +1,11 @@
+using System;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
+using Polly;
 using Serilog;
 
 public partial class Build
@@ -17,6 +21,8 @@ public partial class Build
     [Parameter] string _apiTag = "local";
     string _mongoDbContainerName = "Heyer-MongoDB";
     int _mongoDbPort = 27117;
+    string _sqlEdgeContainerName = "Heyer-SqlEdge";
+    int _sqlEdgePort = 41433;
     string _storageApiContainerName = "Heyer-Storage-API";
     int _storageApiPort = 3002;
 
@@ -68,18 +74,18 @@ public partial class Build
         });
 
     Target RunApi => _ => _
-        .DependsOn(BuildApiDockerImage, RunMongoDb)
+        .DependsOn(BuildApiDockerImage, RunSqlEdge)
         .Executes(() =>
         {
             StopDockerContainer(_apiContainerName);
 
             string[] environmentVariables =
             [
-                $"MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
-                $"Scheduler__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
-                $"HiringModule__InboxOutbox__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
-                $"Companies__A62C048C-8E0F-41E2-84D4-BD061F9DDE97__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true",
-                $"Companies__0692183B-CE56-432D-88B5-B59280A678C5__MongoDb__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true"
+                $"SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Heyer;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
+                $"Scheduler__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Scheduler;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
+                // $"HiringModule__InboxOutbox__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Hiring;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
+                $"Companies__A62C048C-8E0F-41E2-84D4-BD061F9DDE97__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=A62C048C-8E0F-41E2-84D4-BD061F9DDE97;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
+                $"Companies__0692183B-CE56-432D-88B5-B59280A678C5__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=0692183B-CE56-432D-88B5-B59280A678C5;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"
             ];
 
             DockerTasks.DockerRun(x => x
@@ -119,8 +125,39 @@ public partial class Build
                                        .SetArgs("--quiet", "--eval", "\"rs.initiate();\""));
         });
 
+    Target RunSqlEdge => _ => _
+        .Executes(async () =>
+        {
+            StopDockerContainer(_sqlEdgeContainerName);
+
+            string[] environmentVariables =
+            {
+                "ACCEPT_EULA=Y", "MSSQL_SA_PASSWORD=yourStrong(!)Password", "MSSQL_PID=Developer"
+            };
+
+            DockerTasks.DockerRun(x => x
+                                      .SetImage("mcr.microsoft.com/azure-sql-edge:1.0.7")
+                                      .SetName(_sqlEdgeContainerName)
+                                      .SetRm(true)
+                                      .SetPublish($"{_sqlEdgePort}:1433")
+                                      .SetDetach(true)
+                                      .SetEnv(environmentVariables));
+
+
+            var databases = new[]
+            {
+                "Heyer", "Scheduler" /*"A62C048C-8E0F-41E2-84D4-BD061F9DDE97",
+                "0692183B-CE56-432D-88B5-B59280A678C5"*/
+            };
+
+            await Policy.Handle<Exception>()
+                .WaitAndRetryAsync(9, _ => TimeSpan.FromSeconds(1))
+                .ExecuteAsync(async () => await CreateDatabases(databases,
+                                                                $"Server=localhost,{_sqlEdgePort};Database=master;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"));
+        });
+
     Target RunStorageApi => _ => _
-        .DependsOn(BuildStorageApiDockerImage, RunMongoDb)
+        .DependsOn(BuildStorageApiDockerImage, RunSqlEdge)
         .Executes(() =>
         {
             StopDockerContainer(_storageApiContainerName);
@@ -132,7 +169,7 @@ public partial class Build
                                       .SetPublish($"{_storageApiPort}:8080")
                                       .SetDetach(true)
                                       .SetEnv(
-                                          $"RegistryStrategy__MongoDbRegistry__ConnectionString=mongodb://host.docker.internal:{_mongoDbPort}/?directConnection=true"));
+                                          $"RegistryStrategy__SqlServerRegistry__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Storage;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"));
         });
 
     Target RunWeb => _ => _
@@ -149,20 +186,29 @@ public partial class Build
                                       .SetDetach(true));
         });
 
-    private void StopDockerContainer(string containerName)
+    private async Task CreateDatabases(string[] databases, string masterConnectionString)
     {
-        var ps = DockerTasks.DockerPs(x => x
-                                          .SetFilter($"name={containerName}")
-                                          .SetFormat("{{.ID}}"));
+        await using var connection = new SqlConnection(masterConnectionString);
+        await connection.OpenAsync();
 
-        if (ps.Count == 0)
+        foreach (var dbName in databases)
         {
-            return;
+            var command =
+                $"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'{dbName}') CREATE DATABASE [{dbName}];";
+
+            await using var sqlCommand = new SqlCommand(command, connection);
+            await sqlCommand.ExecuteNonQueryAsync();
         }
 
+        await connection.CloseAsync();
+    }
+
+    private void StopDockerContainer(string containerName)
+    {
         Log.Information("Stopping and removing existing container");
 
-        DockerTasks.DockerStop(x => x
-                                   .SetContainers(containerName));
+        DockerTasks.DockerRm(x => x
+                                 .SetContainers(containerName)
+                                 .SetForce(true));
     }
 }

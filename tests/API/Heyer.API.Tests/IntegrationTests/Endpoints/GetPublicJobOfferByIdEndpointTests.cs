@@ -1,14 +1,11 @@
 using System.Net;
 using FluentAssertions;
+using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 using RestEase;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
@@ -70,7 +67,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
     [SetUp]
     public async Task SetUp()
     {
-        _ctx = GetContext();
+        _ctx = JobBoardDbContextProvider.Get();
 
         _publishedJobOffer = TestPublishedJobOfferBuilder.Create(ApplicationFactoryConfiguration.Tenant1Id)
             .BuildTestData();
@@ -102,17 +99,4 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
 
     [TearDown]
     public async Task TearDown() => await _ctx.DisposeAsync();
-
-    private JobBoardContext GetContext()
-    {
-        var db = JobBoardModuleCompositionRootScope.ServiceProvider.GetRequiredService<IMongoDatabase>();
-
-        var options = new DbContextOptionsBuilder<JobBoardContext>()
-            .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
-            .ConfigureWarnings(x => x.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning))
-            .EnableServiceProviderCaching(false)
-            .Options;
-
-        return new JobBoardContext(options);
-    }
 }

@@ -1,4 +1,5 @@
 using Heyer.Storage.API.Providers.Registry.MongoDB;
+using Heyer.Storage.API.Providers.Registry.SqlServer;
 
 namespace Heyer.Storage.API.Providers.Registry;
 
@@ -15,6 +16,11 @@ public static class RegistryStrategyExtensions
             case RegistryStrategyOptions.RegistryStrategyType.MongoDB:
                 services.AddMongoDBRegistryProvider(registryStrategyOptions.MongoDBRegistry);
                 break;
+
+            case RegistryStrategyOptions.RegistryStrategyType.SqlServer:
+                services.AddSqlServerRegistryProvider(registryStrategyOptions.SqlServerRegistry);
+                break;
+
             case RegistryStrategyOptions.RegistryStrategyType.Unknown:
             default:
                 throw new ArgumentOutOfRangeException(

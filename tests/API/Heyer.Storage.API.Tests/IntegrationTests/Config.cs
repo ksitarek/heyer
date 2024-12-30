@@ -21,6 +21,9 @@ internal static class Config
 
     public const string RegistryStrategy_MongoDbRegistry_DatabaseName = "RegistryStrategy:MongoDbRegistry:DatabaseName";
 
+    public const string RegistryStrategy_SqlServerRegistry_ConnectionString =
+        "RegistryStrategy:SqlServerRegistry:ConnectionString";
+
     public const string RegistryStrategy_Type = "RegistryStrategy:Type";
     public const string StorageStrategy_FilesystemStorage_RootPath = "StorageStrategy:FilesystemStorage:RootPath";
     public const string StorageStrategy_Type = "StorageStrategy:Type";

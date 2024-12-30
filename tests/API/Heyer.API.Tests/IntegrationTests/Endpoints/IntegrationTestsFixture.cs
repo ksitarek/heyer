@@ -1,47 +1,66 @@
 using Heyer.BuildingBlocks.Tests;
 using Heyer.BuildingBlocks.Tests.Fixtures;
+using Microsoft.Data.SqlClient;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 [SetUpFixture]
 public class IntegrationTestsFixture
 {
-    private readonly MongoDbFixture _mongoDbFixture = new();
+    private readonly SqlEdgeFixture _sqlEdgeFixture = new();
 
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
-        await _mongoDbFixture.InitializeAsync();
+        await _sqlEdgeFixture.InitializeAsync();
+
+        var databases = new[]
+        {
+            "Heyer", "Scheduler", "HiringInboxOutbox", ApplicationFactoryConfiguration.Tenant1Id.ToString(),
+            ApplicationFactoryConfiguration.Tenant2Id.ToString()
+        };
+
+        await CreateDatabases(databases);
 
         ApplicationFactoryConfiguration.AddConfig(
-            Config.MongoDb_ConnectionString,
-            _mongoDbFixture.ConnectionString);
+            Config.SqlServer_ConnectionString,
+            _sqlEdgeFixture.ConnectionString.Replace("master", "Heyer"));
 
         ApplicationFactoryConfiguration.AddConfig(
-            Config.Scheduler_MongoDb_ConnectionString,
-            _mongoDbFixture.ConnectionString);
+            Config.Scheduler_SqlServer_ConnectionString,
+            _sqlEdgeFixture.ConnectionString.Replace("master", "Scheduler"));
 
-        ApplicationFactoryConfiguration.AddConfig(
-            Config.HiringModule_InboxOutbox_MongoDb_ConnectionString,
-            _mongoDbFixture.ConnectionString);
+        // ApplicationFactoryConfiguration.AddConfig(
+        //     Config.HiringModule_InboxOutbox_SqlServer_ConnectionString,
+        //     _sqlEdgeFixture.ConnectionString.Replace("master", "HiringInboxOutbox"));
 
         ConfigureTenantDb(ApplicationFactoryConfiguration.Tenant1Id);
         ConfigureTenantDb(ApplicationFactoryConfiguration.Tenant2Id);
     }
 
     [OneTimeTearDown]
-    public async Task OneTimeTearDown() => await _mongoDbFixture.DisposeAsync();
+    public async Task OneTimeTearDown() => await _sqlEdgeFixture.DisposeAsync();
 
-    private void ConfigureTenantDb(Guid tenantId)
+    private void ConfigureTenantDb(Guid tenantId) =>
+        ApplicationFactoryConfiguration.AddTenantConfig(
+            tenantId,
+            Config.SqlServer_ConnectionString,
+            _sqlEdgeFixture.ConnectionString.Replace("master", tenantId.ToString()));
+
+    private async Task CreateDatabases(string[] databases)
     {
-        ApplicationFactoryConfiguration.AddTenantConfig(
-            tenantId,
-            Config.MongoDb_ConnectionString,
-            _mongoDbFixture.ConnectionString);
+        await using var connection = new SqlConnection(_sqlEdgeFixture.ConnectionString);
+        await connection.OpenAsync();
 
-        ApplicationFactoryConfiguration.AddTenantConfig(
-            tenantId,
-            Config.MongoDb_DatabaseName,
-            tenantId.ToString());
+        foreach (var dbName in databases)
+        {
+            var command =
+                $"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'{dbName}') CREATE DATABASE [{dbName}];";
+
+            await using var sqlCommand = new SqlCommand(command, connection);
+            await sqlCommand.ExecuteNonQueryAsync();
+        }
+
+        await connection.CloseAsync();
     }
 }

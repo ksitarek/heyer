@@ -2,6 +2,7 @@ using Testcontainers.MongoDb;
 
 namespace Heyer.BuildingBlocks.Tests.Fixtures;
 
+// [Obsolete("Use SQL Server instead.")]
 public class MongoDbFixture
 {
     private readonly MongoDbContainer _mongoDbContainer = new MongoDbBuilder().WithReplicaSet().Build();

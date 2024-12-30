@@ -1,19 +1,19 @@
+using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Heyer.Modules.JobBoard.Infrastructure.Persistence;
 
-internal class JobBoardContext : DbContext
+internal class JobBoardContext : DbContext, IInboxContext, IOutboxContext
 {
     public JobBoardContext(DbContextOptions<JobBoardContext> options) : base(options)
     {
     }
 
-    public DbSet<PublishedJobOffer> PublishedJobOffers { get; init; }
+    public DbSet<InboxMessage> InboxMessages { get; init; }
+    public DbSet<OutboxMessage> OutboxMessages { get; init; }
 
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
-        configurationBuilder.Conventions.Remove<RelationshipDiscoveryConvention>();
+    public DbSet<PublishedJobOffer> PublishedJobOffers { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

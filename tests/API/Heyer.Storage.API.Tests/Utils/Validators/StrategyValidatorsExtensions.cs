@@ -1,9 +1,10 @@
 using Heyer.Storage.API.Providers.Registry;
-using Heyer.Storage.API.Providers.Registry.MongoDB;
+using Heyer.Storage.API.Providers.Registry.SqlServer;
 using Heyer.Storage.API.Providers.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using StorageRegistryEntry = Heyer.Storage.API.Providers.Registry.MongoDB.StorageRegistryEntry;
 
 namespace Heyer.Storage.API.Tests.Utils.Validators;
 
@@ -16,7 +17,7 @@ internal static class StrategyValidatorsExtensions
 
     private static IServiceCollection AddRegistryStrategyValidator(this IServiceCollection services)
     {
-        services.AddSingleton<IRegistryStrategyValidator>(sp =>
+        services.AddScoped<IRegistryStrategyValidator>(sp =>
         {
             var registryStrategyOptions = sp.GetRequiredService<IOptions<RegistryStrategyOptions>>().Value;
 
@@ -25,6 +26,10 @@ internal static class StrategyValidatorsExtensions
                 case RegistryStrategyOptions.RegistryStrategyType.MongoDB:
                     return new MongoDBRegistryStrategyValidator(
                         sp.GetRequiredService<IMongoCollection<StorageRegistryEntry>>()
+                    );
+                case RegistryStrategyOptions.RegistryStrategyType.SqlServer:
+                    return new SqlServerRegistryStrategyValidator(
+                        sp.GetRequiredService<StorageDbContext>()
                     );
                 case RegistryStrategyOptions.RegistryStrategyType.Unknown:
                 default:

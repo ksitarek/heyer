@@ -16,6 +16,7 @@ using Heyer.Modules.JobBoard.Application;
 using Heyer.Modules.JobBoard.Infrastructure.Configuration;
 using Heyer.Modules.JobBoard.Infrastructure.HealthChecks;
 using Heyer.Modules.JobBoard.Infrastructure.Integration;
+using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Heyer.Storage.API.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -49,9 +50,11 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
     {
         JobBoardEndpointsConfiguration.MapEndpoints(app);
 
-        var jobBoardContext = _serviceProvider.GetRequiredService<IInboxStore>();
+        var inboxStore = _serviceProvider.GetRequiredService<IInboxStore>();
 
-        _eventBus.Subscribe(new JobBoardIntegrationHandler<JobOfferPublishedIntegrationEvent>(jobBoardContext));
+        _eventBus.Subscribe(new JobBoardIntegrationHandler<JobOfferPublishedIntegrationEvent>(inboxStore));
+
+        SetupDatabase(_serviceProvider);
 
         var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
         recurringJobManager.AddOrUpdate<JobBoardInboxProcessingJob>(
@@ -83,7 +86,17 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
             .AddDomainEventDispatcher(domainEventNotificationsRegistry)
             .AddUserDataProvider()
             .AddValidatorsFromAssembly(ModuleApplicationAssembly)
-            .AddJobBoardContext(configuration["MongoDb:ConnectionString"]!, configuration["MongoDb:DatabaseName"]!)
+            .AddJobBoardContext(configuration["SqlServer:ConnectionString"]!)
             .AddPersistence();
+    }
+
+    private void SetupDatabase(ServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+
+        var jobBoardContext = scope.ServiceProvider.GetRequiredService<JobBoardContext>();
+
+        jobBoardContext.Database.EnsureDeleted();
+        jobBoardContext.Database.EnsureCreated();
     }
 }

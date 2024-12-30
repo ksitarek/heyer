@@ -6,7 +6,6 @@ using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 
 namespace Heyer.Modules.Hiring.Infrastructure.Configuration;
 
@@ -14,13 +13,12 @@ internal static class ServiceCollectionExtensions
 {
     internal static IServiceCollection AddHiringDbContext(
         this IServiceCollection services,
-        IConfiguration companiesConfiguration,
-        IConfiguration inboxOutboxConfiguration)
+        IConfiguration companiesConfiguration)
     {
         AddPerTenantContext(services, companiesConfiguration);
 
-        services.AddMongoDbInboxStore();
-        services.AddMongoDbOutboxStore();
+        services.AddMongoDbInboxStore<HiringDbContext>();
+        services.AddMongoDbOutboxStore<HiringDbContext>();
 
         return services;
     }
@@ -35,33 +33,15 @@ internal static class ServiceCollectionExtensions
 
     private static void AddPerTenantContext(IServiceCollection services, IConfiguration companiesConfiguration)
     {
-        services.AddScoped<IMongoClient>(sp =>
-        {
-            var userDataProvider = sp.GetRequiredService<IUserDataProvider>();
-            var companyId = userDataProvider.CompanyId;
-
-            var connectionString = companiesConfiguration[$"{companyId}:MongoDb:ConnectionString"];
-
-            return new MongoClient(connectionString);
-        });
-
-        services.AddScoped<IMongoDatabase>(sp =>
-        {
-            var userDataProvider = sp.GetRequiredService<IUserDataProvider>();
-
-            var companyId = userDataProvider.CompanyId;
-
-            var databaseName = companiesConfiguration[$"{companyId}:MongoDb:DatabaseName"];
-
-            return sp.GetRequiredService<IMongoClient>().GetDatabase(databaseName);
-        });
-
         services.AddScoped<HiringDbContext>(sp =>
         {
-            var db = sp.GetRequiredService<IMongoDatabase>();
+            var userDataProvider = sp.GetRequiredService<IUserDataProvider>();
+            var companyId = userDataProvider.CompanyId;
+
+            var connectionString = companiesConfiguration[$"{companyId}:SqlServer:ConnectionString"];
 
             var options = new DbContextOptionsBuilder<HiringDbContext>()
-                .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+                .UseSqlServer(connectionString)
                 .EnableServiceProviderCaching(false)
                 .Options;
 

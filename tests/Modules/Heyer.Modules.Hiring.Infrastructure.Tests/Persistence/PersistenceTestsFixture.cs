@@ -5,13 +5,13 @@ namespace Heyer.Modules.Hiring.Infrastructure.Tests.Persistence;
 [SetUpFixture]
 public class PersistenceTestsFixture
 {
-    private static readonly MongoDbFixture _mongoDbFixture = new();
-    public static string ConnectionString => _mongoDbFixture.ConnectionString;
+    private static readonly SqlEdgeFixture _sqlEdgeFixture = new();
+    public static string ConnectionString => _sqlEdgeFixture.ConnectionString;
 
     [OneTimeSetUp]
-    public static async Task OneTimeSetUp() => await _mongoDbFixture.InitializeAsync();
+    public static async Task OneTimeSetUp() => await _sqlEdgeFixture.InitializeAsync();
 
 
     [OneTimeTearDown]
-    public static async Task OneTimeTearDown() => await _mongoDbFixture.DisposeAsync();
+    public static async Task OneTimeTearDown() => await _sqlEdgeFixture.DisposeAsync();
 }

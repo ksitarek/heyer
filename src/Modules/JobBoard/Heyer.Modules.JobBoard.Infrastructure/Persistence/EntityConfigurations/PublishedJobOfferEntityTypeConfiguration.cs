@@ -2,10 +2,6 @@ using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MongoDB.EntityFrameworkCore.Extensions;
-
-//   at MongoDB.EntityFrameworkCore.Storage.MongoUpdate.WriteKeyProperties(IBsonWriter writer, IUpdateEntry entry)
-
 
 namespace Heyer.Modules.JobBoard.Infrastructure.Persistence.EntityConfigurations;
 
@@ -13,7 +9,7 @@ public class PublishedJobOfferEntityTypeConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<PublishedJobOffer> builder)
     {
-        builder.ToCollection("JobOffers");
+        builder.ToTable("JobOffers");
 
         builder.HasKey(x => x.Id);
 
@@ -40,7 +36,7 @@ public class PublishedJobOfferEntityTypeConfiguration : IEntityTypeConfiguration
                             r.OwnsMany(x => x.Skills,
                                        s =>
                                        {
-                                           s.HasElementName("Skills");
+                                           s.ToTable("Skills");
 
                                            s.Property(x => x.Label)
                                                .IsRequired();
@@ -51,6 +47,10 @@ public class PublishedJobOfferEntityTypeConfiguration : IEntityTypeConfiguration
                         });
 
         builder.OwnsMany(x => x.ContractsDetails,
-                         nb => { nb.OwnsOne<SalaryRange>(x => x.SalaryRange); });
+                         nb =>
+                         {
+                             nb.ToTable("JobOfferContractsDetails");
+                             nb.OwnsOne<SalaryRange>(x => x.SalaryRange);
+                         });
     }
 }

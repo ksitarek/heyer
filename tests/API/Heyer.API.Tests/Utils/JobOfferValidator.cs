@@ -3,7 +3,6 @@ using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
 
 namespace Heyer.API.Tests.Utils;
 
@@ -33,15 +32,10 @@ public class JobOfferValidator : IDisposable
     private HiringDbContext GetContext()
     {
         var connectionString =
-            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:MongoDb:ConnectionString"];
-        var databaseName =
-            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:MongoDb:DatabaseName"];
-
-        var client = new MongoClient(connectionString);
-        var db = client.GetDatabase(databaseName);
+            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:SqlServer:ConnectionString"];
 
         var options = new DbContextOptionsBuilder<HiringDbContext>()
-            .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+            .UseSqlServer(connectionString)
             .EnableServiceProviderCaching(false)
             .Options;
 

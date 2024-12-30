@@ -1,7 +1,6 @@
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace Heyer.Modules.Hiring.Infrastructure.Persistence.EntityConfiguration;
 
@@ -9,7 +8,7 @@ public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candida
 {
     public void Configure(EntityTypeBuilder<Candidate> builder)
     {
-        builder.ToCollection("Candidates");
+        builder.ToTable("Candidates");
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
@@ -29,8 +28,10 @@ public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candida
         // builder.Property(x => x.Attributes)
         //     .HasElementName("Attributes");
 
-        // builder.OwnsOne<Email>(x => x.Email, e => { e.HasElementName("Email"); });
-        //
-        // builder.OwnsOne<ResumeKey>(x => x.ResumeKey, rk => { rk.HasElementName("ResumeKey"); });
+        builder.Property(x => x.Email)
+            .HasConversion(x => x.EmailAddress, x => new Email(x));
+
+        builder.Property(x => x.ResumeKey)
+            .HasConversion(x => x.Key, x => new ResumeKey(x));
     }
 }

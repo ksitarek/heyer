@@ -11,9 +11,13 @@ internal static class MongoDBRegistryStrategyExtensions
         services.AddSingleton(Options.Create(options));
         services.AddSingleton<IRegistryStrategy, MongoDBRegistryStrategy>();
 
+        throw new Exception();
+
+#pragma warning disable CS0162 // Unreachable code detected
         services.ConfigureMongoDB(options);
 
         return services;
+#pragma warning restore CS0162 // Unreachable code detected
     }
 
     private static IServiceCollection ConfigureMongoDB(this IServiceCollection services, MongoDBRegistryOptions options)

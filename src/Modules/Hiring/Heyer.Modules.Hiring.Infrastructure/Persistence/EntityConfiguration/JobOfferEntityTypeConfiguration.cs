@@ -2,7 +2,6 @@ using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace Heyer.Modules.Hiring.Infrastructure.Persistence.EntityConfiguration;
 
@@ -10,7 +9,7 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
 {
     public void Configure(EntityTypeBuilder<JobOffer> builder)
     {
-        builder.ToCollection("JobOffers");
+        builder.ToTable("JobOffers");
 
         builder.HasKey(x => x.Id);
 
@@ -35,7 +34,7 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
                             r.OwnsMany(x => x.Skills,
                                        s =>
                                        {
-                                           s.HasElementName("Skills");
+                                           s.ToTable("Skills");
 
                                            s.Property(x => x.Label)
                                                .IsRequired();
@@ -46,8 +45,12 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
                         });
 
         builder.OwnsMany(x => x.ContractsDetails,
-                         nb => { nb.OwnsOne<SalaryRange>(x => x.SalaryRange); });
+                         nb =>
+                         {
+                             nb.ToTable("JobOfferContractsDetails");
+                             nb.OwnsOne<SalaryRange>(x => x.SalaryRange);
+                         });
 
-        builder.OwnsMany(x => x.Candidates);
+        builder.OwnsMany(x => x.Candidates, x => x.ToTable("JobOfferCandidates"));
     }
 }

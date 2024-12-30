@@ -1,25 +1,22 @@
-using Heyer.Storage.API.Providers.Registry.MongoDB;
+using Heyer.Storage.API.Providers.Registry;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using MongoDB.Driver;
 
 namespace Heyer.Storage.API.HealthChecks;
 
 public class RegistryHealthcheck : IHealthCheck
 {
-    private readonly IMongoCollection<StorageRegistryEntry> _mongoRegistryCollection;
+    private readonly IRegistryStrategy _registryStrategy;
 
-    public RegistryHealthcheck(IMongoCollection<StorageRegistryEntry> mongoRegistryCollection) =>
-        _mongoRegistryCollection = mongoRegistryCollection;
+    public RegistryHealthcheck(IRegistryStrategy registryStrategy) =>
+        _registryStrategy = registryStrategy;
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
                                                           CancellationToken cancellationToken = new())
     {
         try
         {
-            var cnt = await _mongoRegistryCollection.CountDocumentsAsync(FilterDefinition<StorageRegistryEntry>.Empty,
-                                                                         cancellationToken: cancellationToken);
-
-            return HealthCheckResult.Healthy(cnt.ToString());
+            await _registryStrategy.GetAsync("doesn't matter", cancellationToken);
+            return HealthCheckResult.Healthy();
         }
         catch (Exception e)
         {

@@ -1,27 +1,39 @@
+using Heyer.API.Tests.IntegrationTests;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
+using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
 
 namespace Heyer.API.Tests.Utils;
 
-public static class HiringDbContextProvider
+internal static class HiringDbContextProvider
 {
     public static HiringDbContext Get(Guid companyId)
     {
         var connectionString =
-            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{companyId}:MongoDb:ConnectionString"];
-        var databaseName =
-            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{companyId}:MongoDb:DatabaseName"];
-
-        var client = new MongoClient(connectionString);
-        var db = client.GetDatabase(databaseName);
+            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{companyId}:SqlServer:ConnectionString"];
 
         var options = new DbContextOptionsBuilder<HiringDbContext>()
-            .UseMongoDB(db.Client, db.DatabaseNamespace.DatabaseName)
+            .UseSqlServer(connectionString)
             .EnableServiceProviderCaching(false)
             .Options;
 
         return new HiringDbContext(options);
+    }
+}
+
+internal static class JobBoardDbContextProvider
+{
+    public static JobBoardContext Get()
+    {
+        var connectionString =
+            ApplicationFactoryConfiguration.InMemoryConfiguration[Config.SqlServer_ConnectionString];
+
+        var options = new DbContextOptionsBuilder<JobBoardContext>()
+            .UseSqlServer(connectionString)
+            .EnableServiceProviderCaching(false)
+            .Options;
+
+        return new JobBoardContext(options);
     }
 }

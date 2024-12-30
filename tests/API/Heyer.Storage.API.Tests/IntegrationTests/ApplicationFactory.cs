@@ -16,7 +16,7 @@ internal class ApplicationFactory : AbstractApplicationFactory<Program, IStorage
     public static IApplicationFactory<IStorageApiClient> Create() =>
         new ApplicationFactory(new Dictionary<string, string?>
         {
-            [Config.RegistryStrategy_Type] = "MongoDB",
+            [Config.RegistryStrategy_Type] = "SqlServer",
             [Config.StorageStrategy_Type] = "Filesystem",
             [Config.StorageStrategy_FilesystemStorage_RootPath] =
                 "IntegrationTests/Endpoints/StoreEndpointTests"

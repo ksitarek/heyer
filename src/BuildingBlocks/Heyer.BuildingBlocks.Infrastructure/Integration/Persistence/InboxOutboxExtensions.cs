@@ -1,21 +1,22 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
 
 public static class InboxOutboxExtensions
 {
-    public static IServiceCollection AddMongoDbInboxStore(this IServiceCollection services)
+    public static IServiceCollection AddMongoDbInboxStore<T>(this IServiceCollection services)
+        where T : DbContext, IInboxContext
     {
-        // in multitenant environment this MUST be scoped, not singleton, even though MongoDbInboxStore would allow it
-        services.AddScoped<IInboxStore, MongoDbInboxStore>();
+        services.AddScoped<IInboxStore, DbContextInboxStore<T>>();
 
         return services;
     }
 
-    public static IServiceCollection AddMongoDbOutboxStore(this IServiceCollection services)
+    public static IServiceCollection AddMongoDbOutboxStore<T>(this IServiceCollection services)
+        where T : DbContext, IOutboxContext
     {
-        // in multitenant environment this MUST be scoped, not singleton, even though MongoDbOutboxStore would allow it
-        services.AddScoped<IOutboxStore, MongoDbOutboxStore>();
+        services.AddScoped<IOutboxStore, DbContextOutboxStore<T>>();
 
         return services;
     }

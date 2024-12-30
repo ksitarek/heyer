@@ -38,6 +38,8 @@ app.UseAntiforgery();
 app.MapEndpoints();
 app.UseHealthChecks("/health", new HealthCheckOptions { ResponseWriter = JsonResponseWriter.WriteResponse });
 
+app.EnsureDatabaseIsCreated();
+
 await app.RunAsync();
 
 // For Integration Testing

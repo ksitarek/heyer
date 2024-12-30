@@ -3,7 +3,7 @@ using RestEase;
 
 namespace Heyer.API.Client;
 
-public interface IApiClient
+public interface IApiClient : IDisposable
 {
     [Post("/job-offers/create")]
     Task<Guid> CreateJobOffer([Body] CreateJobOfferRequest createJobOfferRequestRequest);

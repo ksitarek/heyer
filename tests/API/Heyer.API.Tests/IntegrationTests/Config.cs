@@ -5,10 +5,12 @@ namespace Heyer.API.Tests.IntegrationTests;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal static class Config
 {
-    public const string HiringModule_InboxOutbox_MongoDb_ConnectionString =
-        "HiringModule:InboxOutbox:MongoDb:ConnectionString";
+    public const string HiringModule_InboxOutbox_SqlServer_ConnectionString =
+        "HiringModule:InboxOutbox:SqlServer:ConnectionString";
 
-    public const string HiringModule_InboxOutbox_MongoDb_DatabaseName = "HiringModule:InboxOutbox:MongoDb:DatabaseName";
+    public const string HiringModule_InboxOutbox_SqlServer_DatabaseName =
+        "HiringModule:InboxOutbox:SqlServer:DatabaseName";
+
     public const string Jwt_Secret = "Jwt:Secret";
     public const string Jwt_ValidateAudience = "Jwt:ValidateAudience";
     public const string Jwt_ValidateIssuer = "Jwt:ValidateIssuer";
@@ -16,9 +18,9 @@ internal static class Config
     public const string Jwt_ValidAudience = "Jwt:ValidAudience";
     public const string Jwt_ValidIssuer = "Jwt:ValidIssuer";
 
-    public const string MongoDb_ConnectionString = "MongoDb:ConnectionString";
-    public const string MongoDb_DatabaseName = "MongoDb:DatabaseName";
+    public const string Scheduler_SqlServer_ConnectionString = "Scheduler:SqlServer:ConnectionString";
+    public const string Scheduler_SqlServer_DatabaseName = "Scheduler:SqlServer:DatabaseName";
 
-    public const string Scheduler_MongoDb_ConnectionString = "Scheduler:MongoDb:ConnectionString";
-    public const string Scheduler_MongoDb_DatabaseName = "Scheduler:MongoDb:DatabaseName";
+    public const string SqlServer_ConnectionString = "SqlServer:ConnectionString";
+    public const string SqlServer_DatabaseName = "SqlServer:DatabaseName";
 }

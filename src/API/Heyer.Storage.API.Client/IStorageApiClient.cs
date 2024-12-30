@@ -3,7 +3,7 @@ using RestEase;
 
 namespace Heyer.Storage.API.Client;
 
-public interface IStorageApiClient
+public interface IStorageApiClient : IDisposable
 {
     [Delete("/delete/{key}")]
     Task Delete([Path] string key);

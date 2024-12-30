@@ -4,7 +4,6 @@ using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
 
 namespace Heyer.Modules.Hiring.Infrastructure.Tests.Persistence;
 
@@ -12,7 +11,6 @@ namespace Heyer.Modules.Hiring.Infrastructure.Tests.Persistence;
 public class CandidatesRepositoryTests
 {
     private HiringDbContext _dbContext;
-    private MongoClient _mongoClient;
     private CandidatesRepository _repository;
 
     [Test]
@@ -41,7 +39,6 @@ public class CandidatesRepositoryTests
     }
 
     [Test]
-    [Ignore("MongoDB")]
     public async Task GetCandidateById_WhenCandidateExists_ShouldReturnCandidate()
     {
         // Arrange
@@ -59,7 +56,6 @@ public class CandidatesRepositoryTests
     }
 
     [Test]
-    [Ignore("MongoDB")]
     public async Task GetCandidateById_WhenCandidateNotExists_ShouldReturnNull()
     {
         // Arrange
@@ -71,24 +67,17 @@ public class CandidatesRepositoryTests
         result.Should().BeNull();
     }
 
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
-    {
-        var connectionString = PersistenceTestsFixture.ConnectionString;
-        _mongoClient = new MongoClient(connectionString);
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTearDown() => _mongoClient.Dispose();
-
     [SetUp]
     public void SetUp()
     {
         var options = new DbContextOptionsBuilder<HiringDbContext>()
-            .UseMongoDB(_mongoClient, Guid.NewGuid().ToString())
+            .UseSqlServer(PersistenceTestsFixture.ConnectionString.Replace("master", Guid.NewGuid().ToString()))
             .Options;
 
         _dbContext = new HiringDbContext(options);
+
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Database.EnsureCreated();
 
         _repository = new CandidatesRepository(_dbContext);
     }
