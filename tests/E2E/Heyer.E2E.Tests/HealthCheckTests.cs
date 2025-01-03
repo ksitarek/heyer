@@ -50,4 +50,11 @@ public class HealthCheckTests
         _storageApiClient =
             StorageApiClientFactory.Create(RuntimeSettings.StorageApiAddress, TimeSpan.FromSeconds(10));
     }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _apiClient.Dispose();
+        _storageApiClient.Dispose();
+    }
 }

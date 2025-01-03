@@ -14,10 +14,9 @@ public class JobOffer : Entity
     {
     }
 
-    private JobOffer(string offerSummary, string jobDescription, RemoteWork remoteWork)
+    private JobOffer(JobOfferId id, string offerSummary, string jobDescription, RemoteWork remoteWork)
     {
-        Id = JobOfferId.CreateNew();
-
+        Id = id;
         OfferSummary = offerSummary;
         JobDescription = jobDescription;
         RemoteWork = remoteWork;
@@ -41,10 +40,12 @@ public class JobOffer : Entity
     public Requirements? Requirements { get; private set; }
 
 
-    public static JobOffer CreateNew(string offerSummary,
-                                     string jobDescription,
-                                     RemoteWork remoteWork) =>
-        new(offerSummary, jobDescription, remoteWork);
+    public static JobOffer CreateNew(
+        JobOfferId id,
+        string offerSummary,
+        string jobDescription,
+        RemoteWork remoteWork) =>
+        new(id, offerSummary, jobDescription, remoteWork);
 
     public Result AddCandidate(
         CandidateId candidateId)

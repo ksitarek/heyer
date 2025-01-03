@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\..\API\Heyer.Storage.API.Client\Heyer.Storage.API.Client.csproj"/>
     <ProjectReference Include="..\..\..\BuildingBlocks\Heyer.BuildingBlocks.Infrastructure\Heyer.BuildingBlocks.Infrastructure.csproj"/>
     <ProjectReference Include="..\Heyer.Modules.JobBoard.Domain\Heyer.Modules.JobBoard.Domain.csproj"/>
+    <ProjectReference Include="..\Heyer.Modules.JobBoard.PublishedLanguage\Heyer.Modules.JobBoard.PublishedLanguage.csproj"/>
   </ItemGroup>
 
 </Project>

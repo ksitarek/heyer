@@ -101,6 +101,8 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
+
+            HiringTestData.Seed(context, company.Key);
         }
     }
 }

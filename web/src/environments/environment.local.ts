@@ -1,4 +1,4 @@
 export const environment = {
-  heyerApi: "https://localhost:3001",
-  storageApi: "https://localhost:3002"
+  heyerApi: "http://localhost:3001",
+  storageApi: "http://localhost:3002"
 };

@@ -98,5 +98,7 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
 
         jobBoardContext.Database.EnsureDeleted();
         jobBoardContext.Database.EnsureCreated();
+
+        JobBoardTestData.Seed(jobBoardContext);
     }
 }

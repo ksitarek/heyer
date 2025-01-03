@@ -329,6 +329,10 @@ public class JobOfferTests
         var jobDescription = "JobDescription";
         var remoteWork = RemoteWork.Yes;
 
-        return JobOffer.CreateNew(offerSummary, jobDescription, remoteWork);
+        return JobOffer.CreateNew(
+            JobOfferId.CreateNew(),
+            offerSummary,
+            jobDescription,
+            remoteWork);
     }
 }

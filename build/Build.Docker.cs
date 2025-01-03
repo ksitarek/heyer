@@ -151,7 +151,7 @@ public partial class Build
             };
 
             await Policy.Handle<Exception>()
-                .WaitAndRetryAsync(9, _ => TimeSpan.FromSeconds(1))
+                .WaitAndRetryAsync(9, x => TimeSpan.FromSeconds(x))
                 .ExecuteAsync(async () => await CreateDatabases(databases,
                                                                 $"Server=localhost,{_sqlEdgePort};Database=master;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"));
         });

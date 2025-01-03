@@ -4,8 +4,16 @@ namespace Heyer.BuildingBlocks.Tests.Fixtures;
 
 public class SqlEdgeFixture
 {
-    private readonly SqlEdgeContainer _sqlServerContainer =
-        new SqlEdgeBuilder().Build();
+    private readonly SqlEdgeContainer _sqlServerContainer;
+
+    public SqlEdgeFixture()
+    {
+        var port = Random.Shared.Next(21433, 31433);
+
+        _sqlServerContainer = new SqlEdgeBuilder()
+            .WithPortBinding(port, 1433)
+            .Build();
+    }
 
     public string ConnectionString => _sqlServerContainer.GetConnectionString();
 

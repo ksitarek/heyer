@@ -24,6 +24,7 @@ internal class HostBuilder
         _builder.Services.AddEndpointsApiExplorer();
         _builder.Services.AddAuthenticationAndAuthorization(_builder.Configuration.GetSection("Jwt"));
         _builder.Services.AddScheduler(builder.Configuration.GetSection("Scheduler"));
+        _builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyOrigin())); // todo this should be configurable
         _builder.Services.Configure<JsonOptions>(options =>
         {
             options.SerializerOptions.PropertyNamingPolicy =

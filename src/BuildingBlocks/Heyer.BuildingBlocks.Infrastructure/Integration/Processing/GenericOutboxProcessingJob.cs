@@ -41,7 +41,7 @@ public abstract class GenericOutboxProcessingJob
             await ProcessMessage(message);
         }
 
-        Log.Information("{TypeName}: Processed outbox messages", GetType().Namespace);
+        Log.Debug("{TypeName}: Processed outbox messages", GetType().Namespace);
 
         return Result.Ok();
     }

@@ -27,6 +27,7 @@ public class JobOfferPublishedIntegrationEventHandler : IEventHandler<JobOfferPu
             notification.RemoteWork,
             notification.ContractsDetails,
             notification.Location,
+            notification.OccurredOn,
             notification.PublishedUntil,
             notification.Requirements);
 

@@ -29,6 +29,7 @@ internal class TestJobOfferBuilder
     public JobOffer Build()
     {
         var jobOffer = JobOffer.CreateNew(
+            JobOfferId.CreateNew(),
             _offerSummary,
             _jobDescription,
             _remoteWork);

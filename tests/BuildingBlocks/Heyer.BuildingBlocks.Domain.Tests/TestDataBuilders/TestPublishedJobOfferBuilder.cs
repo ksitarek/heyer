@@ -36,6 +36,7 @@ internal class TestPublishedJobOfferBuilder
 
         var location = new OfficeLocation(_f.Address.City(), _f.Address.Country());
 
+        var publishedAt = _f.Date.PastOffset();
         var publishedUntil = _f.Date.FutureOffset();
 
         var requirements = new Requirements(
@@ -55,6 +56,7 @@ internal class TestPublishedJobOfferBuilder
             remoteWork,
             [contractsDetails],
             location,
+            publishedAt,
             publishedUntil,
             requirements);
     }

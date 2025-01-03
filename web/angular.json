@@ -88,11 +88,11 @@
             "production": {
               "buildTarget": "Heyer:build:production"
             },
-            "development": {
-              "buildTarget": "Heyer:build:development"
+            "local": {
+              "buildTarget": "Heyer:build:local"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

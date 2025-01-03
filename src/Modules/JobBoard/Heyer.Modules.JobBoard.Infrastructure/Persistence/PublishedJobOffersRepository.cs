@@ -37,6 +37,14 @@ internal class PublishedJobOffersRepository : IPublishedJobOffersRepository
             .Where(x => x.Id == publishedJobOfferId)
             .FirstOrDefaultAsync(cancellationToken);
 
+    public Task<List<PublishedJobOffer>> GetPageAsync(long startIx,
+                                                      long cnt,
+                                                      CancellationToken cancellationToken) =>
+        _context.PublishedJobOffers
+            .Skip((int)startIx)
+            .Take((int)cnt)
+            .ToListAsync(cancellationToken);
+
     public async Task<PublishedJobOffer?> GetPublishedJobOfferById(PublishedJobOfferId publishedJobOfferId,
                                                                    CancellationToken cancellationToken = default)
     {

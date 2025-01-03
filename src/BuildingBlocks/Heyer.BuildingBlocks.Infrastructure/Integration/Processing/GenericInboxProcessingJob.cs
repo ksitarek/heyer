@@ -42,7 +42,7 @@ public abstract class GenericInboxProcessingJob
             await ProcessMessage(message);
         }
 
-        Log.Information("{TypeName}: Processed inbox messages", GetType().Namespace);
+        Log.Debug("{TypeName}: Processed inbox messages", GetType().Namespace);
 
         return Result.Ok();
     }

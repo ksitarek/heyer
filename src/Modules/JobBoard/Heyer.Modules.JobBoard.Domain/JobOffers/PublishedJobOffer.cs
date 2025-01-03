@@ -20,6 +20,7 @@ public class PublishedJobOffer : Entity
                               RemoteWork remoteWork,
                               List<ContractDetails> contractsDetails,
                               OfficeLocation location,
+                              DateTimeOffset publishedAt,
                               DateTimeOffset? publishedUntil,
                               Requirements requirements)
     {
@@ -30,6 +31,7 @@ public class PublishedJobOffer : Entity
         RemoteWork = remoteWork;
         ContractsDetails = contractsDetails;
         Location = location;
+        PublishedAt = publishedAt;
         PublishedUntil = publishedUntil;
         Requirements = requirements;
 
@@ -47,6 +49,7 @@ public class PublishedJobOffer : Entity
 
     public string OfferSummary { get; private set; } = null!;
 
+    public DateTimeOffset PublishedAt { get; private set; }
     public DateTimeOffset? PublishedUntil { get; private set; }
     public RemoteWork RemoteWork { get; private set; }
     public Requirements Requirements { get; private set; } = null!;
@@ -60,6 +63,7 @@ public class PublishedJobOffer : Entity
         RemoteWork remoteWork,
         List<ContractDetails> contractsDetails,
         OfficeLocation location,
+        DateTimeOffset publishedAt,
         DateTimeOffset? publishedUntil,
         Requirements requirements) => new(id,
                                           companyDetails,
@@ -68,6 +72,7 @@ public class PublishedJobOffer : Entity
                                           remoteWork,
                                           contractsDetails,
                                           location,
+                                          publishedAt,
                                           publishedUntil,
                                           requirements);
 

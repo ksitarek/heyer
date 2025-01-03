@@ -20,6 +20,7 @@ public class NewCandidateApplyToJobOfferHandlerTests
     private readonly CancellationToken _cancellationToken = CancellationToken.None;
 
     private readonly JobOffer _publishedJobOffer = JobOffer.CreateNew(
+        JobOfferId.CreateNew(),
         "Summary",
         "Description",
         RemoteWork.Hybrid);
@@ -143,6 +144,9 @@ public class NewCandidateApplyToJobOfferHandlerTests
 
         _publishedJobOffer.ClearDomainEvents();
     }
+
+    [TearDown]
+    public void TearDown() => _storageApiClient.Dispose();
 
     private void MockCandidatesRepository()
     {

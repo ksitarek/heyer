@@ -9,6 +9,8 @@ public interface IPublishedJobOffersRepository
     Task<PublishedJobOffer?> GetJobOfferById(PublishedJobOfferId publishedJobOfferId,
                                              CancellationToken cancellationToken = default);
 
+    Task<List<PublishedJobOffer>> GetPageAsync(long startIx, long cnt, CancellationToken cancellationToken);
+
     Task<PublishedJobOffer?> GetPublishedJobOfferById(PublishedJobOfferId publishedJobOfferId,
                                                       CancellationToken cancellationToken = default);
 }

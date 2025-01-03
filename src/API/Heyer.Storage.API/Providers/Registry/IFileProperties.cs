@@ -1,4 +1,4 @@
-namespace Heyer.Storage.API.Providers.Registry.MongoDB;
+namespace Heyer.Storage.API.Providers.Registry;
 
 public interface IFileProperties
 {
