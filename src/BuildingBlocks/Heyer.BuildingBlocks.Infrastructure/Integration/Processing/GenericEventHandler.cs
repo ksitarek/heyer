@@ -1,5 +1,5 @@
-using System.Text.Json;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
+using Heyer.BuildingBlocks.Json;
 
 namespace Heyer.BuildingBlocks.Infrastructure.Integration.Processing;
 
@@ -13,7 +13,7 @@ public abstract class GenericEventHandler<T> : IIntegrationEventHandler<T> where
         {
             Id = Guid.NewGuid(),
             Type = @event.GetType().FullName!,
-            Data = JsonSerializer.Serialize(@event),
+            Data = @event.Serialize(),
             CreatedAt = @event.OccurredOn
         });
 }

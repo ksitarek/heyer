@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Heyer.BuildingBlocks.Json\Heyer.BuildingBlocks.Json.csproj"/>
     <ProjectReference Include="..\..\Modules\Hiring\Heyer.Modules.Hiring.PublishedLanguage\Heyer.Modules.Hiring.PublishedLanguage.csproj"/>
   </ItemGroup>
 

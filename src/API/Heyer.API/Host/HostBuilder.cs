@@ -1,9 +1,8 @@
-using Heyer.API.Client;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.BuildingBlocks.Infrastructure.Scheduler;
-using Microsoft.AspNetCore.Http.Json;
+using Heyer.BuildingBlocks.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using IHealthCheck = Heyer.BuildingBlocks.Infrastructure.HealthChecks.IHealthCheck;
@@ -25,19 +24,7 @@ internal class HostBuilder
         _builder.Services.AddAuthenticationAndAuthorization(_builder.Configuration.GetSection("Jwt"));
         _builder.Services.AddScheduler(builder.Configuration.GetSection("Scheduler"));
         _builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyOrigin())); // todo this should be configurable
-        _builder.Services.Configure<JsonOptions>(options =>
-        {
-            options.SerializerOptions.PropertyNamingPolicy =
-                ApiClientFactory.SerializerOptions.PropertyNamingPolicy;
-
-            options.SerializerOptions.DefaultIgnoreCondition =
-                ApiClientFactory.SerializerOptions.DefaultIgnoreCondition;
-
-            foreach (var converter in ApiClientFactory.SerializerOptions.Converters)
-            {
-                options.SerializerOptions.Converters.Add(converter);
-            }
-        });
+        _builder.Services.ConfigureJson();
     }
 
     public HostBuilder AddModule<TInterface, TImplementation>()

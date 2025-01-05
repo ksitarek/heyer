@@ -1,9 +1,9 @@
-using System.Text.Json;
 using FluentResults;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.Notifications;
 using Heyer.BuildingBlocks.Domain;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
+using Heyer.BuildingBlocks.Json;
 using MediatR;
 using Serilog;
 using ExecutionContext = Heyer.BuildingBlocks.Application.Authorization.ExecutionContext;
@@ -85,7 +85,7 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
                 Id = Guid.NewGuid(),
                 CreatedAt = DateTime.UtcNow,
                 Type = notificationType.FullName!,
-                Data = JsonSerializer.Serialize(domainEventNotification)
+                Data = domainEventNotification.Serialize()
             });
         }
 

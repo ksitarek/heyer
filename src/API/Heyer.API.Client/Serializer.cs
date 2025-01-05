@@ -1,15 +1,11 @@
 using System.Net.Http.Headers;
-using System.Text.Json;
+using Heyer.BuildingBlocks.Json;
 using RestEase;
 
 namespace Heyer.API.Client;
 
 internal class Serializer : RequestBodySerializer
 {
-    private readonly JsonSerializerOptions _options;
-
-    public Serializer(JsonSerializerOptions? options = null) => _options = options ?? JsonSerializerOptions.Default;
-
     public override HttpContent? SerializeBody<T>(T body, RequestBodySerializerInfo info)
     {
         if (body == null)
@@ -17,7 +13,7 @@ internal class Serializer : RequestBodySerializer
             return null;
         }
 
-        var content = new StringContent(JsonSerializer.Serialize(body, _options));
+        var content = new StringContent(body.Serialize());
 
         const string contentType = "application/json";
         if (content.Headers.ContentType == null)

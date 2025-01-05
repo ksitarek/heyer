@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\API\Heyer.Storage.API\Heyer.Storage.API.csproj"/>
+    <ProjectReference Include="..\..\..\src\BuildingBlocks\Heyer.BuildingBlocks.Json\Heyer.BuildingBlocks.Json.csproj"/>
     <ProjectReference Include="..\..\..\src\BuildingBlocks\Heyer.BuildingBlocks.Tests\Heyer.BuildingBlocks.Tests.csproj"/>
   </ItemGroup>
 

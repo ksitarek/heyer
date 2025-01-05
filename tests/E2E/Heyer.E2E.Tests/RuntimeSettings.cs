@@ -3,6 +3,5 @@
 public static class RuntimeSettings
 {
     public static string ApiAddress = "http://localhost:43001";
-    public static string MongoDbConnectionString = "mongodb://localhost:27217";
     public static string StorageApiAddress = "http://localhost:43002";
 }

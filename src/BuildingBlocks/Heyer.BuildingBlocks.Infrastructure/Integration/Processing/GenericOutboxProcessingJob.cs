@@ -1,9 +1,9 @@
-using System.Text.Json;
 using FluentResults;
 using Hangfire;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.Notifications;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
+using Heyer.BuildingBlocks.Json;
 using MediatR;
 using Serilog;
 
@@ -56,7 +56,7 @@ public abstract class GenericOutboxProcessingJob
 
         if (type != null)
         {
-            var command = JsonSerializer.Deserialize(message.Data, type);
+            var command = message.Data.Deserialize(type);
 
             if (command is IDomainEventNotification domainNotification)
             {

@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Heyer.BuildingBlocks.Application\Heyer.BuildingBlocks.Application.csproj"/>
     <ProjectReference Include="..\Heyer.BuildingBlocks.Domain\Heyer.BuildingBlocks.Domain.csproj"/>
+    <ProjectReference Include="..\Heyer.BuildingBlocks.Json\Heyer.BuildingBlocks.Json.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

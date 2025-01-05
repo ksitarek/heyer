@@ -1,8 +1,8 @@
 using System.Net;
-using System.Text.Json;
 using Bogus;
 using FluentAssertions;
 using Heyer.API.Tests.Utils;
+using Heyer.BuildingBlocks.Json;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Application;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
@@ -115,7 +115,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         var exception = (await action.Should().ThrowAsync<ApiException>()).Subject.First();
         exception.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var validationDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(exception.Content!)!;
+        var validationDetails = exception.Content!.Deserialize<ValidationProblemDetails>()!;
 
         validationDetails.Should().NotBeNull();
         validationDetails.Errors.Should().HaveCount(1).And.ContainKeys(erroredField);

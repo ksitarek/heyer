@@ -1,22 +1,12 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using RestEase;
+﻿using RestEase;
 
 namespace Heyer.API.Client;
 
 public static class ApiClientFactory
 {
-    public static readonly JsonSerializerOptions SerializerOptions = new()
-    {
-        PropertyNamingPolicy = null,
-        PropertyNameCaseInsensitive = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.Never,
-        Converters = { new JsonStringEnumConverter() }
-    };
+    private static readonly Deserializer _deserializer = new();
 
-    private static readonly Deserializer _deserializer = new(SerializerOptions);
-
-    private static readonly Serializer _serializer = new(SerializerOptions);
+    private static readonly Serializer _serializer = new();
 
     public static IApiClient Create(HttpClient client) =>
         new RestClient(client) { RequestBodySerializer = _serializer, ResponseDeserializer = _deserializer }

@@ -1,6 +1,6 @@
 using System.Net;
-using System.Text.Json;
 using FluentAssertions;
+using Heyer.BuildingBlocks.Json;
 using Heyer.Storage.API.Tests.Utils;
 using Heyer.Storage.API.Tests.Utils.Validators;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +24,7 @@ public class StoreEndpointTests : StorageApiIntegrationTestsBase
         var exception = await action.Should().ThrowAsync<ApiException>()
             .Where(e => e.StatusCode == HttpStatusCode.BadRequest);
 
-        var validationDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(exception.Which.Content!)!;
+        var validationDetails = exception.Which.Content!.Deserialize<ValidationProblemDetails>()!;
 
         validationDetails.Should().NotBeNull();
         validationDetails.Errors.Should().HaveCount(2).And.ContainKeys("File.FileName", "File");
