@@ -1,3 +1,23 @@
-<div>
-  <span>{{ item | json }}</span>
+<div class="py-3 mx-0 mb-5 bg-transparent hover:bg-stone-50 px-7">
+  <header class="flex items-center">
+    <p class="flex-1 offer-summary">{{ item.OfferSummary }}</p>
+    <p class="flex-none salary-range w-36">
+      <span>{{ minSalary }}</span> &ndash; <span>{{ maxSalary }}</span>
+    </p>
+  </header>
+
+  <footer>
+    <address class="flex items-center">
+      <div class="flex-1 text-xs">
+        <p class="company-name">{{ item.CompanyName }}</p>
+        <p class="location">{{ item.LocationCity }}, {{ item.LocationCountry }}</p>
+      </div>
+      <div class="flex-1">
+        <app-list-item-tag tag="Remote" *ngIf="isRemote" />
+        <app-list-item-tag tag="Hybrid" *ngIf="isHybrid" />
+        <app-list-item-tag tag="B2B" *ngIf="isB2B" />
+        <app-list-item-tag tag="Contract" *ngIf="isContractOfEmployment" />
+      </div>
+    </address>
+  </footer>
 </div>
