@@ -34,7 +34,7 @@ public abstract class GenericInboxProcessingJob
 
         if (messages.Count > 0)
         {
-            Log.Information("{TypeName}: Processing inbox messages. Count: {Cnt}", GetType().Namespace, messages.Count);
+            Log.Debug("{TypeName}: Processing inbox messages. Count: {Cnt}", GetType().Namespace, messages.Count);
         }
 
         foreach (var message in messages)

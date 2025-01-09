@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
@@ -150,10 +151,24 @@ public partial class Build
                 "0692183B-CE56-432D-88B5-B59280A678C5"*/
             };
 
+            var sw = new Stopwatch();
+            sw.Start();
+
             await Policy.Handle<Exception>()
-                .WaitAndRetryAsync(9, x => TimeSpan.FromSeconds(x))
+                .WaitAndRetryAsync(90,
+                                   x => TimeSpan.FromMilliseconds(x * 100),
+                                   (exception, calculatedWait, i, ctx) =>
+                                   {
+                                       Log.Information(
+                                           "#{no} Waiting for DB to start up. Waiting for {ts}ms. Total elapsed {total}ms",
+                                           i,
+                                           calculatedWait.Milliseconds,
+                                           sw.ElapsedMilliseconds);
+                                   })
                 .ExecuteAsync(async () => await CreateDatabases(databases,
                                                                 $"Server=localhost,{_sqlEdgePort};Database=master;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"));
+
+            sw.Stop();
         });
 
     Target RunStorageApi => _ => _

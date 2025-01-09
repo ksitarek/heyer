@@ -78,8 +78,7 @@ internal class HostBuilder
     {
         _builder.Services.AddSerilog((sp, lc) => lc
                                          .ReadFrom.Configuration(_builder.Configuration)
-                                         .ReadFrom.Services(sp),
-                                     true);
+                                         .ReadFrom.Services(sp));
 
         return this;
     }

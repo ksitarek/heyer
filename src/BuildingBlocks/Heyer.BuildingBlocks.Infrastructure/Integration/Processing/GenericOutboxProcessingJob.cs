@@ -31,9 +31,9 @@ public abstract class GenericOutboxProcessingJob
 
         if (messages.Count > 0)
         {
-            Log.Information("{TypeName}: Processing outbox messages. Count: {Cnt}",
-                            GetType().Namespace,
-                            messages.Count);
+            Log.Debug("{TypeName}: Processing outbox messages. Count: {Cnt}",
+                      GetType().Namespace,
+                      messages.Count);
         }
 
         foreach (var message in messages)
