@@ -21,7 +21,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id,
+            ApplicationFactoryConfiguration.Client1Id,
             HiringPermissions.PublishJobOffer);
 
         var jobOffer = TestJobOfferBuilder.Create()
@@ -61,7 +61,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
     public async Task PublishJobOffer_WillReturn403()
     {
         // Arrange
-        var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Tenant1Id);
+        var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Client1Id);
 
         // Act
         var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
@@ -75,7 +75,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id,
+            ApplicationFactoryConfiguration.Client1Id,
             HiringPermissions.PublishJobOffer);
 
         // Act
@@ -87,7 +87,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
 
     [SetUp]
     public void SetUp() =>
-        _ctx = HiringDbContextProvider.Get(ApplicationFactoryConfiguration.Tenant1Id);
+        _ctx = HiringDbContextProvider.Get(ApplicationFactoryConfiguration.Client1Id);
 
     [TearDown]
     public async Task TearDown() => await _ctx.DisposeAsync();

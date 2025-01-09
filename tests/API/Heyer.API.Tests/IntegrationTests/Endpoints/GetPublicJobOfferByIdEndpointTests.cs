@@ -69,7 +69,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
     {
         _ctx = JobBoardDbContextProvider.Get();
 
-        _publishedJobOffer = TestPublishedJobOfferBuilder.Create(ApplicationFactoryConfiguration.Tenant1Id)
+        _publishedJobOffer = TestPublishedJobOfferBuilder.Create(ApplicationFactoryConfiguration.Client1Id)
             .BuildTestData();
 
         _expectedDetails = new PublishedJobOfferDetails(

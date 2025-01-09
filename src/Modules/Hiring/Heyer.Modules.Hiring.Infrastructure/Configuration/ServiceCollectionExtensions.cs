@@ -15,7 +15,7 @@ internal static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration companiesConfiguration)
     {
-        AddPerTenantContext(services, companiesConfiguration);
+        AddPerClientContext(services, companiesConfiguration);
 
         services.AddMongoDbInboxStore<HiringDbContext>();
         services.AddMongoDbOutboxStore<HiringDbContext>();
@@ -31,7 +31,7 @@ internal static class ServiceCollectionExtensions
         return services;
     }
 
-    private static void AddPerTenantContext(IServiceCollection services, IConfiguration companiesConfiguration)
+    private static void AddPerClientContext(IServiceCollection services, IConfiguration companiesConfiguration)
     {
         services.AddScoped<HiringDbContext>(sp =>
         {

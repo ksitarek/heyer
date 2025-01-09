@@ -104,7 +104,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id,
+            ApplicationFactoryConfiguration.Client1Id,
             HiringPermissions.CreateJobOffer);
         var request = new CreateJobOfferRequest(offerSummary, jobDescription, remoteWork);
 
@@ -145,7 +145,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id);
+            ApplicationFactoryConfiguration.Client1Id);
         var request = CreateJobOfferRequest();
 
         // Act
@@ -160,7 +160,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id,
+            ApplicationFactoryConfiguration.Client1Id,
             HiringPermissions.CreateJobOffer);
         var request = CreateJobOfferRequest();
 
@@ -168,7 +168,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         var jobOfferId = await client.CreateJobOffer(request);
 
         // Assert
-        await new JobOfferValidator(ApplicationFactoryConfiguration.Tenant1Id)
+        await new JobOfferValidator(ApplicationFactoryConfiguration.Client1Id)
             .ValidateJobOfferIsSavedAsync(jobOfferId);
     }
 

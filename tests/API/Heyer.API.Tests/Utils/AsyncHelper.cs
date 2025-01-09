@@ -12,8 +12,8 @@ internal static class AsyncHelper
 {
     public static Guid[] Companies =
     [
-        ApplicationFactoryConfiguration.Tenant1Id,
-        ApplicationFactoryConfiguration.Tenant2Id
+        ApplicationFactoryConfiguration.Client1Id,
+        ApplicationFactoryConfiguration.Client2Id
     ];
 
     public static IServiceScope[] Scopes =

@@ -16,8 +16,8 @@ public class IntegrationTestsFixture
 
         var databases = new[]
         {
-            "Heyer", "Scheduler", "HiringInboxOutbox", ApplicationFactoryConfiguration.Tenant1Id.ToString(),
-            ApplicationFactoryConfiguration.Tenant2Id.ToString()
+            "Heyer", "Scheduler", "HiringInboxOutbox", ApplicationFactoryConfiguration.Client1Id.ToString(),
+            ApplicationFactoryConfiguration.Client2Id.ToString()
         };
 
         await CreateDatabases(databases);
@@ -34,18 +34,18 @@ public class IntegrationTestsFixture
         //     Config.HiringModule_InboxOutbox_SqlServer_ConnectionString,
         //     _sqlEdgeFixture.ConnectionString.Replace("master", "HiringInboxOutbox"));
 
-        ConfigureTenantDb(ApplicationFactoryConfiguration.Tenant1Id);
-        ConfigureTenantDb(ApplicationFactoryConfiguration.Tenant2Id);
+        ConfigureClientDb(ApplicationFactoryConfiguration.Client1Id);
+        ConfigureClientDb(ApplicationFactoryConfiguration.Client2Id);
     }
 
     [OneTimeTearDown]
     public async Task OneTimeTearDown() => await _sqlEdgeFixture.DisposeAsync();
 
-    private void ConfigureTenantDb(Guid tenantId) =>
-        ApplicationFactoryConfiguration.AddTenantConfig(
-            tenantId,
+    private void ConfigureClientDb(Guid clientId) =>
+        ApplicationFactoryConfiguration.AddClientConfig(
+            clientId,
             Config.SqlServer_ConnectionString,
-            _sqlEdgeFixture.ConnectionString.Replace("master", tenantId.ToString()));
+            _sqlEdgeFixture.ConnectionString.Replace("master", clientId.ToString()));
 
     private async Task CreateDatabases(string[] databases)
     {

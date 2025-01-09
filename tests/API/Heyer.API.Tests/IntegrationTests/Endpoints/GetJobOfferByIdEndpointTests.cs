@@ -19,11 +19,11 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     private JobOffer _jobOffer;
 
     [Test]
-    public async Task GetJobOfferByIdEndpoint_ForOtherTenant_WillReturn404()
+    public async Task GetJobOfferByIdEndpoint_ForOtherClient_WillReturn404()
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant2Id,
+            ApplicationFactoryConfiguration.Client2Id,
             HiringPermissions.ListJobOffers);
 
         // Act
@@ -38,7 +38,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id,
+            ApplicationFactoryConfiguration.Client1Id,
             HiringPermissions.ListJobOffers);
 
         // Act
@@ -66,7 +66,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     public async Task GetJobOfferByIdEndpoint_WithoutPermission_WillReturn403()
     {
         // Arrange
-        var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Tenant1Id);
+        var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Client1Id);
         var jobOfferId = Guid.NewGuid();
 
         // Act
@@ -81,7 +81,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
-            ApplicationFactoryConfiguration.Tenant1Id,
+            ApplicationFactoryConfiguration.Client1Id,
             HiringPermissions.ListJobOffers);
 
         // Act
@@ -94,7 +94,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     [SetUp]
     public async Task SetUp()
     {
-        _ctx = HiringDbContextProvider.Get(ApplicationFactoryConfiguration.Tenant1Id);
+        _ctx = HiringDbContextProvider.Get(ApplicationFactoryConfiguration.Client1Id);
 
         _jobOffer = TestJobOfferBuilder.Create()
             .WithRandomContractDetails()
