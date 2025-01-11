@@ -1,19 +1,19 @@
 using System.Reflection;
 using DbUp;
+using Heyer.Meta.DbMigrator.Providers;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Heyer.Meta.DbMigrator.Commands.MigrateStorageDb;
 
 internal class MigrateStorageDbCommandHandler : IRequestHandler<MigrateStorageDb>
 {
-    private readonly IConfiguration _configuration;
+    private readonly IStorageDbConnectionStringProvider _connectionStringProvider;
     private readonly ILogger _logger;
 
-    public MigrateStorageDbCommandHandler(ILogger logger, IConfiguration configuration)
+    public MigrateStorageDbCommandHandler(ILogger logger, IStorageDbConnectionStringProvider connectionStringProvider)
     {
-        _configuration = configuration;
+        _connectionStringProvider = connectionStringProvider;
         _logger = logger.ForContext("SourceContext", nameof(MigrateStorageDbCommandHandler));
     }
 
@@ -21,7 +21,7 @@ internal class MigrateStorageDbCommandHandler : IRequestHandler<MigrateStorageDb
     {
         _logger.Information("Migration of Storage database started.");
 
-        var connectionString = _configuration["RegistryStrategy:SqlServerRegistry:ConnectionString"];
+        var connectionString = _connectionStringProvider.GetConnectionString();
         if (connectionString is null)
         {
             _logger.Warning("Connection string for Storage database is not found in configuration.");

@@ -1,4 +1,5 @@
 using Cocona.Builder;
+using Heyer.Meta.DbMigrator.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -30,6 +31,15 @@ internal static class CoconaAppBuilderExtensions
     {
         builder.Services.AddMediatR(
             cfg => cfg.RegisterServicesFromAssembly(typeof(CoconaAppBuilderExtensions).Assembly));
+
+        return builder;
+    }
+
+    public static CoconaAppBuilder AddProviders(this CoconaAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IHiringDbConnectionStringProvider, HiringDbConnectionStringProvider>();
+        builder.Services.AddSingleton<IJobBoardDbConnectionStringProvider, JobBoardDbConnectionStringProvider>();
+        builder.Services.AddSingleton<IStorageDbConnectionStringProvider, StorageDbConnectionStringProvider>();
 
         return builder;
     }

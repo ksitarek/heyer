@@ -10,7 +10,8 @@ var builder = CoconaApp.CreateBuilder();
 builder
     .AddConfiguration()
     .AddLogging()
-    .AddMediatR();
+    .AddMediatR()
+    .AddProviders();
 
 var app = builder.Build();
 

@@ -1,7 +1,7 @@
 using System.Reflection;
 using DbUp;
+using Heyer.Meta.DbMigrator.Providers;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Heyer.Meta.DbMigrator.Commands.MigrateJobBoardDb;
@@ -9,20 +9,20 @@ namespace Heyer.Meta.DbMigrator.Commands.MigrateJobBoardDb;
 internal class MigrateJobBoardDbHandler : IRequestHandler<MigrateJobBoardDb>
 {
     private const string Schema = "job_board";
-    private readonly IConfiguration _configuration;
+    private readonly IJobBoardDbConnectionStringProvider _connectionStringProvider;
     private readonly ILogger _logger;
 
-    public MigrateJobBoardDbHandler(ILogger logger, IConfiguration configuration)
+    public MigrateJobBoardDbHandler(ILogger logger, IJobBoardDbConnectionStringProvider connectionStringProvider)
     {
+        _connectionStringProvider = connectionStringProvider;
         _logger = logger.ForContext("SourceContext", nameof(MigrateJobBoardDbHandler));
-        _configuration = configuration;
     }
 
     public Task Handle(MigrateJobBoardDb request, CancellationToken cancellationToken)
     {
         _logger.Information("Migration of Job Board database started.");
 
-        var connectionString = _configuration["SqlServer:ConnectionString"];
+        var connectionString = _connectionStringProvider.GetConnectionString();
         if (connectionString is null)
         {
             _logger.Warning("Connection string for Job Board database is not found in configuration.");
