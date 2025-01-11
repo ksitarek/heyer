@@ -14,10 +14,8 @@ using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
 using Heyer.Modules.Hiring.Infrastructure.Configuration;
 using Heyer.Modules.Hiring.Infrastructure.Integration;
-using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Heyer.Storage.API.Client;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -47,7 +45,6 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
     public void ConfigureModule(WebApplication app)
     {
         HiringEndpointsConfiguration.MapEndpoints(app);
-        SetupDatabases();
 
         var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
         recurringJobManager.AddOrUpdate<HiringInboxProcessingJob>(
@@ -81,28 +78,5 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
             .AddValidatorsFromAssembly(ModuleApplicationAssembly)
             .AddHiringDbContext(configuration.GetSection("Companies"))
             .AddPersistence();
-    }
-
-    private void SetupDatabases()
-    {
-        var companiesSection = _configuration.GetSection("Companies");
-
-        var companies = companiesSection.GetChildren();
-
-        foreach (var company in companies)
-        {
-            var connectionString = company.GetValue<string>("SqlServer:ConnectionString");
-
-            var options = new DbContextOptionsBuilder<HiringDbContext>()
-                .UseSqlServer(connectionString)
-                .Options;
-
-            using var context = new HiringDbContext(options);
-
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-
-            HiringTestData.Seed(context, company.Key);
-        }
     }
 }
