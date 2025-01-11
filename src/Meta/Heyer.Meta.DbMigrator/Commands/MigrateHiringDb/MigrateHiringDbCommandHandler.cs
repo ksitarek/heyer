@@ -1,19 +1,19 @@
+using Heyer.Meta.DbMigrator.Providers;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Heyer.Meta.DbMigrator.Commands.MigrateHiringDb;
 
 internal class MigrateHiringDbCommandHandler : IRequestHandler<MigrateHiringDb>
 {
-    private readonly IConfiguration _configuration;
+    private readonly ICompaniesProvider _companiesProvider;
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
 
-    public MigrateHiringDbCommandHandler(ILogger logger, IConfiguration configuration, IMediator mediator)
+    public MigrateHiringDbCommandHandler(ILogger logger, ICompaniesProvider companiesProvider, IMediator mediator)
     {
         _logger = logger.ForContext("SourceContext", nameof(MigrateHiringDbCommandHandler));
-        _configuration = configuration;
+        _companiesProvider = companiesProvider;
         _mediator = mediator;
     }
 
@@ -21,9 +21,7 @@ internal class MigrateHiringDbCommandHandler : IRequestHandler<MigrateHiringDb>
     {
         _logger.Information("Migration of Hiring database started.");
 
-        var companies = _configuration.GetSection("Companies")
-            .GetChildren()
-            .ToList();
+        var companies = _companiesProvider.GetCompanies().ToList();
 
         if (companies.Count == 0)
         {
@@ -31,14 +29,12 @@ internal class MigrateHiringDbCommandHandler : IRequestHandler<MigrateHiringDb>
             return Task.CompletedTask;
         }
 
-        Log.Information("Companies found in configuration: {Companies}", companies.Select(x => x.Key));
+        Log.Information("Companies found in configuration: {Companies}", companies);
 
         var tasks = new List<Task>();
 
-        foreach (var company in companies)
+        foreach (var companyId in companies)
         {
-            var companyId = company.Key;
-
             var migrateCompanyHiringDb = new MigrateCompanyHiringDb.MigrateCompanyHiringDb(companyId);
             tasks.Add(_mediator.Send(migrateCompanyHiringDb, cancellationToken));
         }

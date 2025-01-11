@@ -41,6 +41,8 @@ internal static class CoconaAppBuilderExtensions
         builder.Services.AddSingleton<IJobBoardDbConnectionStringProvider, JobBoardDbConnectionStringProvider>();
         builder.Services.AddSingleton<IStorageDbConnectionStringProvider, StorageDbConnectionStringProvider>();
 
+        builder.Services.AddSingleton<ICompaniesProvider, CompaniesProvider>();
+
         return builder;
     }
 }

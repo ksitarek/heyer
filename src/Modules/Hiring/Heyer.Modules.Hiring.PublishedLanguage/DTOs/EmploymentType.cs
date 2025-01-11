@@ -2,6 +2,6 @@ namespace Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
 public enum EmploymentType
 {
-    ContractOfEmployment,
+    ContractOfEmployment = 1,
     B2B
 }

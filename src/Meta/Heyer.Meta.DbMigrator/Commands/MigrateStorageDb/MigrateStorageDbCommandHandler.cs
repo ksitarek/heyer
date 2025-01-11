@@ -32,7 +32,8 @@ internal class MigrateStorageDbCommandHandler : IRequestHandler<MigrateStorageDb
 
         var result = DeployChanges.To
             .SqlDatabase(connectionString)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), opts => opts.Contains("StorageContext"))
+            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(),
+                                           opts => opts.Contains("MigrationFiles") && opts.Contains("StorageContext"))
             .LogToAutodetectedLog()
             .Build()
             .PerformUpgrade();

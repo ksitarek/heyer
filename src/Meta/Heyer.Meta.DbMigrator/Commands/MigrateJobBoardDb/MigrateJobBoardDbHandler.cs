@@ -33,7 +33,8 @@ internal class MigrateJobBoardDbHandler : IRequestHandler<MigrateJobBoardDb>
 
         var result = DeployChanges.To
             .SqlDatabase(connectionString, Schema)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), opts => opts.Contains("JobBoardContext"))
+            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(),
+                                           opts => opts.Contains("MigrationFiles") && opts.Contains("JobBoardContext"))
             .LogToAutodetectedLog()
             .Build()
             .PerformUpgrade();

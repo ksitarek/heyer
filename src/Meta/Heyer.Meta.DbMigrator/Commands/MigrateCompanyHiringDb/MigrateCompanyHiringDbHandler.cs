@@ -34,7 +34,9 @@ internal class MigrateCompanyHiringDbHandler : IRequestHandler<MigrateCompanyHir
 
         var result = DeployChanges.To
             .SqlDatabase(connectionString)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), opts => opts.Contains("HiringContext"))
+            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(),
+                                           opts => opts.Contains("MigrationFiles") &&
+                                                   opts.Contains("HiringContext"))
             .LogToAutodetectedLog()
             .Build()
             .PerformUpgrade();

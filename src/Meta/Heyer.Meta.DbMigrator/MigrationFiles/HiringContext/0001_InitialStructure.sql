@@ -1,3 +1,16 @@
+CREATE TABLE dbo.Candidates
+(
+    Id                     UNIQUEIDENTIFIER NOT NULL,
+    Email                  NVARCHAR(MAX)    NOT NULL,
+    FirstName              NVARCHAR(50)     NOT NULL,
+    IncludeInCandidatePool BIT              NOT NULL,
+    LastName               NVARCHAR(50)     NOT NULL,
+    ResumeKey              NVARCHAR(MAX)    NOT NULL,
+
+    CONSTRAINT PK_Candidates PRIMARY KEY (Id)
+)
+GO
+
 CREATE TABLE dbo.InboxMessages
 (
     Id          UNIQUEIDENTIFIER NOT NULL,
@@ -6,31 +19,44 @@ CREATE TABLE dbo.InboxMessages
     ProcessedAt DATETIME2,
     Type        NVARCHAR(MAX)    NOT NULL,
 
-    CONSTRAINT PK_InboxMessages PRIMARY KEY (Id)
+    CONSTRAINT PK_InboxMessages PRIMARY KEY (Id),
 )
 GO
 
 CREATE TABLE dbo.JobOffers
 (
-    Id                           UNIQUEIDENTIFIER NOT NULL,
-    CompanyDetails_CompanyId     UNIQUEIDENTIFIER NOT NULL,
-    CompanyDetails_Name          NVARCHAR(MAX)    NOT NULL,
-    JobDescription               NVARCHAR(MAX)    NOT NULL,
-    Location_City                NVARCHAR(MAX)    NOT NULL,
-    Location_Country             NVARCHAR(MAX)    NOT NULL,
-    OfferSummary                 NVARCHAR(100)    NOT NULL,
-    PublishedUntil               DATETIMEOFFSET,
-    RemoteWork                   INT              NOT NULL,
-    Requirements_ExperienceLevel INT              NOT NULL,
+    Id               UNIQUEIDENTIFIER NOT NULL,
+    JobDescription   NVARCHAR(MAX)    NOT NULL,
+    Location_City    NVARCHAR(100),
+    Location_Country NVARCHAR(100),
+    OfferSummary     NVARCHAR(100)    NOT NULL,
+    PublishedAt      DATETIMEOFFSET,
+    PublishedUntil   DATETIMEOFFSET,
+    RemoteWork       INT              NOT NULL,
 
     CONSTRAINT PK_JobOffers PRIMARY KEY (Id)
+)
+GO
+
+CREATE TABLE dbo.JobOfferCandidates
+(
+    Id         INT IDENTITY,
+    Guid       UNIQUEIDENTIFIER NOT NULL,
+    JobOfferId UNIQUEIDENTIFIER NOT NULL,
+
+    CONSTRAINT PK_JobOfferCandidates PRIMARY KEY (JobOfferId, Id),
+
+    CONSTRAINT FK_JobOfferCandidates_JobOffers_JobOfferId
+        FOREIGN KEY (JobOfferId)
+            REFERENCES dbo.JobOffers (Id)
+            ON DELETE CASCADE
 )
 GO
 
 CREATE TABLE dbo.JobOfferContractsDetails
 (
     Id                      INT IDENTITY,
-    PublishedJobOfferId     UNIQUEIDENTIFIER NOT NULL,
+    JobOfferId              UNIQUEIDENTIFIER NOT NULL,
     EmploymentType          INT              NOT NULL,
     SalaryRange_IsPublished BIT              NOT NULL,
     SalaryRange_From        DECIMAL(18, 2)   NOT NULL,
@@ -38,11 +64,25 @@ CREATE TABLE dbo.JobOfferContractsDetails
     TimeNumerator           INT              NOT NULL,
     TimeDenominator         INT              NOT NULL,
 
-    CONSTRAINT PK_JobOfferContractsDetails PRIMARY KEY (PublishedJobOfferId, Id),
+    CONSTRAINT PK_JobOfferContractsDetails PRIMARY KEY (JobOfferId, Id),
 
-    CONSTRAINT FK_JobOfferContractsDetails_JobOffers_PublishedJobOfferId
-        FOREIGN KEY (PublishedJobOfferId)
-            REFERENCES JobOffers (Id)
+    CONSTRAINT FK_JobOfferContractsDetails_JobOffers_JobOfferId
+        FOREIGN KEY (JobOfferId)
+            REFERENCES dbo.JobOffers (Id)
+            ON DELETE CASCADE,
+)
+GO
+
+CREATE TABLE dbo.JobOfferRequirements
+(
+    JobOfferId      UNIQUEIDENTIFIER NOT NULL,
+    ExperienceLevel INT              NOT NULL,
+
+    CONSTRAINT PK_JobOfferRequirements PRIMARY KEY (JobOfferId),
+
+    CONSTRAINT FK_JobOfferRequirements_JobOffers_JobOfferId
+        FOREIGN KEY (JobOfferId) REFERENCES dbo.JobOffers (Id)
+            ON DELETE CASCADE
 )
 GO
 
@@ -60,16 +100,16 @@ GO
 
 CREATE TABLE dbo.Skills
 (
-    Id                              INT IDENTITY,
-    RequirementsPublishedJobOfferId UNIQUEIDENTIFIER NOT NULL,
-    Label                           NVARCHAR(MAX)    NOT NULL,
-    Level                           INT              NOT NULL,
+    Id                     INT IDENTITY,
+    RequirementsJobOfferId UNIQUEIDENTIFIER NOT NULL,
+    Label                  NVARCHAR(MAX)    NOT NULL,
+    Level                  INT              NOT NULL,
 
-    CONSTRAINT PK_Skills PRIMARY KEY (RequirementsPublishedJobOfferId, Id),
+    CONSTRAINT PK_Skills PRIMARY KEY (RequirementsJobOfferId, Id),
 
-    CONSTRAINT FK_Skills_JobOffers_RequirementsPublishedJobOfferId
-        FOREIGN KEY (RequirementsPublishedJobOfferId)
-            REFERENCES JobOffers (Id)
+    CONSTRAINT FK_Skills_JobOfferRequirements_RequirementsJobOfferId
+        FOREIGN KEY (RequirementsJobOfferId)
+            REFERENCES dbo.JobOfferRequirements (JobOfferId)
+            ON DELETE CASCADE
 )
 GO
-

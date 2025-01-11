@@ -2,7 +2,7 @@ namespace Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
 public enum ExperienceLevel
 {
-    Junior,
+    Junior = 1,
     Mid,
     Senior,
     CLevel
