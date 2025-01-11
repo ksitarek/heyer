@@ -23,10 +23,10 @@ export class ListItemComponent {
 
   public get maxSalary(): number {
     var max = this.item.ContractsDetails.reduce((c1, c2) => {
-      return c1.SalaryRange.IsPublished && c1.SalaryRange.From > c2.SalaryRange.From ? c1 : c2;
+      return c1.SalaryRange.IsPublished && c1.SalaryRange.To > c2.SalaryRange.To ? c1 : c2;
     });
 
-    return max.SalaryRange.From;
+    return max.SalaryRange.To;
   }
 
   public get isB2B(): boolean {
