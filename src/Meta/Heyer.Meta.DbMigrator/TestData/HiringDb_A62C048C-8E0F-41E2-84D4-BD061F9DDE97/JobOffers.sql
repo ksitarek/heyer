@@ -43,46 +43,34 @@ DECLARE @Skills TABLE
                 );
 
 INSERT INTO @JobOffers
-VALUES ('3E99C748-9DC3-49DD-97E1-9233A166802F',
-        'DevOps Engineer',
-        'Doing devops stuff',
-        'Warsaw',
+VALUES ('D0C85350-E31E-4D62-BBF3-FDC554877D92',
+        '.NET Developer',
+        'Doing dotnetty stuff',
+        'Gdańsk',
         'Poland',
         '2021-01-01 00:00:00',
         NULL,
         1);
 
 INSERT INTO @ContractDetails
-VALUES (1,
-        '3E99C748-9DC3-49DD-97E1-9233A166802F',
+VALUES (3,
+        'D0C85350-E31E-4D62-BBF3-FDC554877D92',
         1,
         1,
-        1000,
-        2000,
-        8,
-        8),
-       (2,
-        '3E99C748-9DC3-49DD-97E1-9233A166802F',
-        2,
-        1,
-        2000,
-        3000,
+        500,
+        600,
         8,
         8);
 
 INSERT INTO @JobOfferRequirements
-VALUES ('3E99C748-9DC3-49DD-97E1-9233A166802F',
-        3);
+VALUES ('D0C85350-E31E-4D62-BBF3-FDC554877D92',
+        2);
 
 INSERT INTO @Skills
 VALUES (1,
-        '3E99C748-9DC3-49DD-97E1-9233A166802F',
-        'Python',
-        2),
-       (2,
-        '3E99C748-9DC3-49DD-97E1-9233A166802F',
-        'SQL',
-        3);
+        'D0C85350-E31E-4D62-BBF3-FDC554877D92',
+        'C#',
+        2);
 
 MERGE INTO dbo.JobOffers AS target
 USING @JobOffers AS source

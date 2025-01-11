@@ -31,8 +31,6 @@ internal class LoadSampleDataHandler : IRequestHandler<LoadSampleData>
     {
         _logger.Information("Loading sample data started.");
 
-        _logger.Information("Resources: \n {resources}", Assembly.GetExecutingAssembly().GetManifestResourceNames());
-
         HandleDataLoad("JobBoardDb", _jobBoardDbConnectionStringProvider.GetConnectionString());
 
         foreach (var company in _companiesProvider.GetCompanies())
