@@ -17,6 +17,8 @@ internal class JobBoardContext : DbContext, IInboxContext, IOutboxContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("job_board");
+
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         base.OnModelCreating(modelBuilder);
     }

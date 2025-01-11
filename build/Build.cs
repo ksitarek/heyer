@@ -14,6 +14,8 @@ partial class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration _configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
+    readonly AbsolutePath _dbMigratorPath = RootDirectory / "src/Meta/Heyer.Meta.DbMigrator";
+
     [Solution] readonly Solution _solution;
     readonly AbsolutePath _storageApiPath = RootDirectory / "src/API/Heyer.Storage.API";
     readonly AbsolutePath _webPath = RootDirectory / "web";

@@ -17,7 +17,10 @@ public static class SchedulerExtensions
                                  .UseSimpleAssemblyNameTypeSerializer()
                                  .UseRecommendedSerializerSettings()
                                  .UseSqlServerStorage(connectionString,
-                                                      new SqlServerStorageOptions { PrepareSchemaIfNecessary = true }));
+                                                      new SqlServerStorageOptions
+                                                      {
+                                                          PrepareSchemaIfNecessary = true, SchemaName = "dbo"
+                                                      }));
 
         services.AddHangfireServer(x => { x.SchedulePollingInterval = TimeSpan.FromSeconds(1); });
 

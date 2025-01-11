@@ -1,12 +1,11 @@
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
-using Polly;
+using Nuke.Common.Tools.DotNet;
 using Serilog;
 
 public partial class Build
@@ -144,31 +143,12 @@ public partial class Build
                                       .SetDetach(true)
                                       .SetEnv(environmentVariables));
 
+            await WaitForDb(
+                $"Server=localhost,{_sqlEdgePort};Database=master;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True");
 
-            var databases = new[]
-            {
-                "Heyer", "Scheduler" /*"A62C048C-8E0F-41E2-84D4-BD061F9DDE97",
-                "0692183B-CE56-432D-88B5-B59280A678C5"*/
-            };
-
-            var sw = new Stopwatch();
-            sw.Start();
-
-            await Policy.Handle<Exception>()
-                .WaitAndRetryAsync(90,
-                                   x => TimeSpan.FromMilliseconds(x * 100),
-                                   (exception, calculatedWait, i, ctx) =>
-                                   {
-                                       Log.Information(
-                                           "#{no} Waiting for DB to start up. Waiting for {ts}ms. Total elapsed {total}ms",
-                                           i,
-                                           calculatedWait.Milliseconds,
-                                           sw.ElapsedMilliseconds);
-                                   })
-                .ExecuteAsync(async () => await CreateDatabases(databases,
-                                                                $"Server=localhost,{_sqlEdgePort};Database=master;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"));
-
-            sw.Stop();
+            DotNetTasks.DotNetRun(_ => _
+                                      .SetProjectFile(_dbMigratorPath)
+                                      .SetApplicationArguments("migrate-all-databases"));
         });
 
     Target RunStorageApi => _ => _
@@ -201,23 +181,6 @@ public partial class Build
                                       .SetDetach(true));
         });
 
-    private async Task CreateDatabases(string[] databases, string masterConnectionString)
-    {
-        await using var connection = new SqlConnection(masterConnectionString);
-        await connection.OpenAsync();
-
-        foreach (var dbName in databases)
-        {
-            var command =
-                $"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'{dbName}') CREATE DATABASE [{dbName}];";
-
-            await using var sqlCommand = new SqlCommand(command, connection);
-            await sqlCommand.ExecuteNonQueryAsync();
-        }
-
-        await connection.CloseAsync();
-    }
-
     private void StopDockerContainer(string containerName)
     {
         Log.Information("Stopping and removing existing container");
@@ -225,5 +188,40 @@ public partial class Build
         DockerTasks.DockerRm(x => x
                                  .SetContainers(containerName)
                                  .SetForce(true));
+    }
+
+    private async Task WaitForDb(string masterConnectionString)
+    {
+        var i = 0;
+        while (true)
+        {
+            try
+            {
+                await using var connection = new SqlConnection(masterConnectionString);
+                await connection.OpenAsync();
+                await connection.CloseAsync();
+
+                Log.Information("SQL Edge is running");
+
+                return;
+            }
+            catch
+            {
+                Log.Information("Waiting for SQL Edge to start... {i}ms", i += 300);
+
+                var r = DockerTasks.DockerPs(_ => new DockerPsSettings()
+                                                 .SetFilter($"name={_sqlEdgeContainerName}")
+                                                 .SetQuiet(true)
+                                                 .DisableProcessLogOutput());
+
+                if (r.Count == 0)
+                {
+                    Log.Fatal("SQL Edge container crashed.");
+                    throw;
+                }
+
+                await Task.Delay(TimeSpan.FromMilliseconds(300));
+            }
+        }
     }
 }

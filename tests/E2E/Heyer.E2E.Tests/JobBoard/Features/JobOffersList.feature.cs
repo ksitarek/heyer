@@ -28,8 +28,8 @@ namespace Heyer.E2E.Tests.JobBoard.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "JobBoard/Features", "", ("    As potential candidate\n    I want to see the list of job offers\n    So that I" +
-                " can apply for a job"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "JobBoard/Features", "", ("As potential candidate\nI want to see the list of job offers\nSo that I can apply f" +
+                "or a job"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
 #line 1 "JobOffersList.feature"
 #line hidden
@@ -106,13 +106,23 @@ namespace Heyer.E2E.Tests.JobBoard.Features
                             "OfferSummary",
                             "JobDescription",
                             "RemoteWork"});
+                table1.AddRow(new string[] {
+                            "A62C048C-8E0F-41E2-84D4-BD061F9DDE97",
+                            "Fullstack Developer",
+                            "We are looking for a fullstack developer with experience in Angular and .NET Core",
+                            "Remote"});
+                table1.AddRow(new string[] {
+                            "0692183B-CE56-432D-88B5-B59280A678C5",
+                            "Frontend Developer",
+                            "We are looking for a frontend developer with experience in Angular",
+                            "No"});
 #line 8
         await testRunner.GivenAsync("Following offer are published:", ((string)(null)), table1, "Given ");
 #line hidden
-#line 10
+#line 12
         await testRunner.WhenAsync("I check the job offers list", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 11
+#line 13
         await testRunner.ThenAsync("the job offers should be listed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

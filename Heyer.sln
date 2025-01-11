@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
+# 
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{9EA5F468-489C-492A-AE8C-F5827C1393CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{20CBEDAE-8873-4600-B3F4-6100A5F2A750}"
@@ -80,6 +80,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Modules.Hiring.Infrastructure.Tests", "tests\Modules\Heyer.Modules.Hiring.Infrastructure.Tests\Heyer.Modules.Hiring.Infrastructure.Tests.csproj", "{7D9709F9-7C97-43F3-BDA1-1A7B06AC3412}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.BuildingBlocks.Json", "src\BuildingBlocks\Heyer.BuildingBlocks.Json\Heyer.BuildingBlocks.Json.csproj", "{BCCDB10E-8844-40EA-914A-391EF436E2CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{D15F9A24-1E17-49F1-B6E2-66C27768610A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heyer.Meta.DbMigrator", "src\Meta\Heyer.Meta.DbMigrator\Heyer.Meta.DbMigrator.csproj", "{ACD53A2F-0225-4E2C-92E1-A8D56C4751D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -197,6 +201,10 @@ Global
 		{BCCDB10E-8844-40EA-914A-391EF436E2CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCCDB10E-8844-40EA-914A-391EF436E2CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCCDB10E-8844-40EA-914A-391EF436E2CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACD53A2F-0225-4E2C-92E1-A8D56C4751D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACD53A2F-0225-4E2C-92E1-A8D56C4751D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACD53A2F-0225-4E2C-92E1-A8D56C4751D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACD53A2F-0225-4E2C-92E1-A8D56C4751D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9EA5F468-489C-492A-AE8C-F5827C1393CA} = {20CBEDAE-8873-4600-B3F4-6100A5F2A750}
@@ -236,5 +244,7 @@ Global
 		{293AC12B-792C-4A5A-9174-CE69973EE8D7} = {A5A7F993-11ED-4FC2-A82A-A3FD48FD5C09}
 		{7D9709F9-7C97-43F3-BDA1-1A7B06AC3412} = {A5A7F993-11ED-4FC2-A82A-A3FD48FD5C09}
 		{BCCDB10E-8844-40EA-914A-391EF436E2CC} = {17B28760-FB62-43DD-AF01-287DB6534B56}
+		{D15F9A24-1E17-49F1-B6E2-66C27768610A} = {E943B1BF-73FE-4E08-AE15-AC2837E0D5B7}
+		{ACD53A2F-0225-4E2C-92E1-A8D56C4751D4} = {D15F9A24-1E17-49F1-B6E2-66C27768610A}
 	EndGlobalSection
 EndGlobal
