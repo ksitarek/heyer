@@ -1,5 +1,3 @@
-using System.Reflection;
-using DbUp;
 using Heyer.Meta.DbMigrator.Providers;
 using MediatR;
 using Serilog;
@@ -10,10 +8,14 @@ internal class MigrateStorageDbCommandHandler : IRequestHandler<MigrateStorageDb
 {
     private readonly IStorageDbConnectionStringProvider _connectionStringProvider;
     private readonly ILogger _logger;
+    private readonly IMigrator _migrator;
 
-    public MigrateStorageDbCommandHandler(ILogger logger, IStorageDbConnectionStringProvider connectionStringProvider)
+    public MigrateStorageDbCommandHandler(ILogger logger,
+                                          IStorageDbConnectionStringProvider connectionStringProvider,
+                                          IMigrator migrator)
     {
         _connectionStringProvider = connectionStringProvider;
+        _migrator = migrator;
         _logger = logger.ForContext("SourceContext", nameof(MigrateStorageDbCommandHandler));
     }
 
@@ -28,15 +30,7 @@ internal class MigrateStorageDbCommandHandler : IRequestHandler<MigrateStorageDb
             return Task.CompletedTask;
         }
 
-        EnsureDatabase.For.SqlDatabase(connectionString);
-
-        var result = DeployChanges.To
-            .SqlDatabase(connectionString)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(),
-                                           opts => opts.Contains("MigrationFiles") && opts.Contains("StorageContext"))
-            .LogToAutodetectedLog()
-            .Build()
-            .PerformUpgrade();
+        var result = _migrator.Migrate("StorageContext", connectionString);
 
         if (!result.Successful)
         {

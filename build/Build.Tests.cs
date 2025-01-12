@@ -17,7 +17,7 @@ public partial class Build
             _mongoDbPort = 27217;
             _mongoDbContainerName = "Heyer-E2E-MongoDB";
 
-            _sqlEdgePort = 41434;
+            _posrgesPort = 41434;
             _sqlEdgeContainerName = "Heyer-E2E-SqlEdge";
 
             _apiPort = 43001;

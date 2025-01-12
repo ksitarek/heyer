@@ -1,5 +1,5 @@
 using Heyer.Storage.API.Providers.Registry;
-using Heyer.Storage.API.Providers.Registry.SqlServer;
+using Heyer.Storage.API.Providers.Registry.Npgsql;
 using Heyer.Storage.API.Providers.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -27,8 +27,8 @@ internal static class StrategyValidatorsExtensions
                     return new MongoDBRegistryStrategyValidator(
                         sp.GetRequiredService<IMongoCollection<StorageRegistryEntry>>()
                     );
-                case RegistryStrategyOptions.RegistryStrategyType.SqlServer:
-                    return new SqlServerRegistryStrategyValidator(
+                case RegistryStrategyOptions.RegistryStrategyType.Npgsql:
+                    return new NpgsqlRegistryStrategyValidator(
                         sp.GetRequiredService<StorageDbContext>()
                     );
                 case RegistryStrategyOptions.RegistryStrategyType.Unknown:

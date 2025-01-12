@@ -12,7 +12,7 @@ internal static class ServiceCollectionExtensions
     internal static IServiceCollection AddJobBoardContext(this IServiceCollection services,
                                                           string connectionString)
     {
-        services.AddDbContext<JobBoardContext>(o => o.UseSqlServer(connectionString)
+        services.AddDbContext<JobBoardContext>(o => o.UseNpgsql(connectionString)
                                                    .EnableServiceProviderCaching(false));
 
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<JobBoardContext>());

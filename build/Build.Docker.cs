@@ -1,7 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
+using Npgsql;
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
@@ -21,8 +22,8 @@ public partial class Build
     [Parameter] string _apiTag = "local";
     string _mongoDbContainerName = "Heyer-MongoDB";
     int _mongoDbPort = 27117;
+    int _posrgesPort = 41433;
     string _sqlEdgeContainerName = "Heyer-SqlEdge";
-    int _sqlEdgePort = 41433;
     string _storageApiContainerName = "Heyer-Storage-API";
     int _storageApiPort = 3002;
 
@@ -74,18 +75,20 @@ public partial class Build
         });
 
     Target RunApi => _ => _
-        .DependsOn(BuildApiDockerImage, RunSqlEdge)
+        .DependsOn(BuildApiDockerImage, RunPostgres)
         .Executes(() =>
         {
             StopDockerContainer(_apiContainerName);
 
+            //
+
             string[] environmentVariables =
             [
-                $"SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Heyer;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
-                $"Scheduler__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Scheduler;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
-                // $"HiringModule__InboxOutbox__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Hiring;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
-                $"Companies__A62C048C-8E0F-41E2-84D4-BD061F9DDE97__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=A62C048C-8E0F-41E2-84D4-BD061F9DDE97;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True",
-                $"Companies__0692183B-CE56-432D-88B5-B59280A678C5__SqlServer__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=0692183B-CE56-432D-88B5-B59280A678C5;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"
+                $"Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=heyer;TrustServerCertificate=True",
+                $"Scheduler__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=scheduler;TrustServerCertificate=True",
+                // $"HiringModule__InboxOutbox__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=hiring;TrustServerCertificate=True",
+                $"Companies__A62C048C-8E0F-41E2-84D4-BD061F9DDE97__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=C_A62C048C-8E0F-41E2-84D4-BD061F9DDE97;TrustServerCertificate=True",
+                $"Companies__0692183B-CE56-432D-88B5-B59280A678C5__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=C_0692183B-CE56-432D-88B5-B59280A678C5;TrustServerCertificate=True"
             ];
 
             DockerTasks.DockerRun(x => x
@@ -125,26 +128,26 @@ public partial class Build
                                        .SetArgs("--quiet", "--eval", "\"rs.initiate();\""));
         });
 
-    Target RunSqlEdge => _ => _
+    Target RunPostgres => _ => _
         .Executes(async () =>
         {
             StopDockerContainer(_sqlEdgeContainerName);
 
-            string[] environmentVariables =
-            {
-                "ACCEPT_EULA=Y", "MSSQL_SA_PASSWORD=yourStrong(!)Password", "MSSQL_PID=Developer"
-            };
+            var password = "yourStrong(!)Password";
+            string[] environmentVariables = { $"POSTGRES_PASSWORD={password}" };
 
             DockerTasks.DockerRun(x => x
-                                      .SetImage("mcr.microsoft.com/azure-sql-edge:1.0.7")
+                                      .SetImage("postgres:17")
                                       .SetName(_sqlEdgeContainerName)
                                       .SetRm(true)
-                                      .SetPublish($"{_sqlEdgePort}:1433")
+                                      .SetPublish($"{_posrgesPort}:5432")
                                       .SetDetach(true)
                                       .SetEnv(environmentVariables));
 
-            await WaitForDb(
-                $"Server=localhost,{_sqlEdgePort};Database=master;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True");
+            var connectionString =
+                $"Host=localhost:{_posrgesPort};Username=postgres;Password={password};Database=postgres;TrustServerCertificate=True";
+
+            await WaitForPostgresDb(connectionString);
 
             DotNetTasks.DotNetRun(_ => _
                                       .SetProjectFile(_dbMigratorPath)
@@ -152,7 +155,7 @@ public partial class Build
         });
 
     Target RunStorageApi => _ => _
-        .DependsOn(BuildStorageApiDockerImage, RunSqlEdge)
+        .DependsOn(BuildStorageApiDockerImage, RunPostgres)
         .Executes(() =>
         {
             StopDockerContainer(_storageApiContainerName);
@@ -164,7 +167,7 @@ public partial class Build
                                       .SetPublish($"{_storageApiPort}:8080")
                                       .SetDetach(true)
                                       .SetEnv(
-                                          $"RegistryStrategy__SqlServerRegistry__ConnectionString=Server=host.docker.internal,{_sqlEdgePort};Database=Storage;User=sa;Password=yourStrong(!)Password;TrustServerCertificate=True"));
+                                          $"RegistryStrategy__NpgsqlRegistry__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=storage;TrustServerCertificate=True"));
         });
 
     Target RunWeb => _ => _
@@ -190,24 +193,27 @@ public partial class Build
                                  .SetForce(true));
     }
 
-    private async Task WaitForDb(string masterConnectionString)
+    private async Task WaitForPostgresDb(string connectionString)
     {
+        var sw = new Stopwatch();
+        sw.Start();
+
         var i = 0;
         while (true)
         {
             try
             {
-                await using var connection = new SqlConnection(masterConnectionString);
+                await using var connection = new NpgsqlConnection(connectionString);
                 await connection.OpenAsync();
                 await connection.CloseAsync();
 
-                Log.Information("SQL Edge is running");
+                Log.Information("Postgres is running");
 
                 return;
             }
             catch
             {
-                Log.Information("Waiting for SQL Edge to start... {i}ms", i += 300);
+                Log.Information("Waiting for Postgres to start... {i}ms", i += 300);
 
                 var r = DockerTasks.DockerPs(_ => new DockerPsSettings()
                                                  .SetFilter($"name={_sqlEdgeContainerName}")
@@ -216,8 +222,13 @@ public partial class Build
 
                 if (r.Count == 0)
                 {
-                    Log.Fatal("SQL Edge container crashed.");
+                    Log.Fatal("Postgres container crashed.");
                     throw;
+                }
+
+                if (sw.Elapsed > TimeSpan.FromSeconds(10))
+                {
+                    throw new TimeoutException("Postgres did not start in time.");
                 }
 
                 await Task.Delay(TimeSpan.FromMilliseconds(300));

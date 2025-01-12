@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Heyer.Storage.API.Providers.Registry.SqlServer;
+namespace Heyer.Storage.API.Providers.Registry.Npgsql;
 
 internal class StorageDbContext : DbContext
 {

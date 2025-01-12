@@ -38,10 +38,10 @@ internal static class ServiceCollectionExtensions
             var userDataProvider = sp.GetRequiredService<IUserDataProvider>();
             var companyId = userDataProvider.CompanyId;
 
-            var connectionString = companiesConfiguration[$"{companyId}:SqlServer:ConnectionString"];
+            var connectionString = companiesConfiguration[$"{companyId}:Npgsql:ConnectionString"];
 
             var options = new DbContextOptionsBuilder<HiringDbContext>()
-                .UseSqlServer(connectionString)
+                .UseNpgsql(connectionString)
                 .EnableServiceProviderCaching(false)
                 .Options;
 

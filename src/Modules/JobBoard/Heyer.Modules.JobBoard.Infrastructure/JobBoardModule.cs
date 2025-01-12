@@ -83,7 +83,7 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
             .AddDomainEventDispatcher(domainEventNotificationsRegistry)
             .AddUserDataProvider()
             .AddValidatorsFromAssembly(ModuleApplicationAssembly)
-            .AddJobBoardContext(configuration["SqlServer:ConnectionString"]!)
+            .AddJobBoardContext(configuration["Npgsql:ConnectionString"]!)
             .AddPersistence();
     }
 }

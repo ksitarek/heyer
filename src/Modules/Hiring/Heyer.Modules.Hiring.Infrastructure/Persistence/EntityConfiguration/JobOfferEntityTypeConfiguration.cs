@@ -9,8 +9,6 @@ public class JobOfferEntityTypeConfiguration : IEntityTypeConfiguration<JobOffer
 {
     public void Configure(EntityTypeBuilder<JobOffer> builder)
     {
-        builder.ToTable("JobOffers");
-
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)

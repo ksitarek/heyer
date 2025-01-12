@@ -5,7 +5,7 @@ namespace Heyer.Modules.Hiring.Infrastructure.Tests.Persistence;
 [SetUpFixture]
 public class PersistenceTestsFixture
 {
-    private static readonly SqlEdgeFixture _sqlEdgeFixture = new();
+    private static readonly PostgresFixture _sqlEdgeFixture = new();
     public static string ConnectionString => _sqlEdgeFixture.ConnectionString;
 
     [OneTimeSetUp]

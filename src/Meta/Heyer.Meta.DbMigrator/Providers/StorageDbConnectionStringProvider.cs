@@ -8,5 +8,5 @@ internal class StorageDbConnectionStringProvider : IStorageDbConnectionStringPro
 
     public StorageDbConnectionStringProvider(IConfiguration configuration) => _configuration = configuration;
 
-    public string? GetConnectionString() => _configuration["RegistryStrategy:SqlServerRegistry:ConnectionString"];
+    public string? GetConnectionString() => _configuration["RegistryStrategy:NpgsqlRegistry:ConnectionString"];
 }

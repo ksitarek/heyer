@@ -1,4 +1,5 @@
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
+using Heyer.BuildingBlocks.Infrastructure.Npgsql;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,22 @@ internal class HiringDbContext : DbContext, IInboxContext, IOutboxContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(DateTimeOffset))
+                {
+                    property.SetValueConverter(new DateTimeOffsetConverter());
+                }
+                else if (property.ClrType == typeof(DateTimeOffset?))
+                {
+                    property.SetValueConverter(new NullableDateTimeOffsetConverter());
+                }
+            }
+        }
+
         base.OnModelCreating(modelBuilder);
     }
 }

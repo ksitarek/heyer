@@ -38,7 +38,7 @@
         "RunBackend",
         "RunE2E",
         "RunMongoDb",
-        "RunSqlEdge",
+        "RunPostgres",
         "RunStorageApi",
         "RunWeb",
         "UnitTests"

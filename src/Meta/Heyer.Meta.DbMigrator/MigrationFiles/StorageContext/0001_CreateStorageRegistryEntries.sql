@@ -1,12 +1,10 @@
-CREATE TABLE dbo.StorageRegistryEntries
+-- Table: public.StorageRegistryEntries
+CREATE TABLE public."StorageRegistryEntries"
 (
-    [Key]       NVARCHAR(450) NOT NULL,
-    ContentType NVARCHAR(MAX) NOT NULL,
-    CreatedAt   DATETIME2     NOT NULL,
-    FileName    NVARCHAR(MAX) NOT NULL,
-    Preserve    BIT           NOT NULL,
-    Size        BIGINT        NOT NULL,
-
-    CONSTRAINT PK_StorageRegistryEntries PRIMARY KEY ([Key])
-)
-GO
+    "Key"         VARCHAR(450) NOT NULL PRIMARY KEY,
+    "ContentType" TEXT         NOT NULL,
+    "CreatedAt"   TIMESTAMP    NOT NULL,
+    "FileName"    TEXT         NOT NULL,
+    "Preserve"    BOOLEAN      NOT NULL,
+    "Size"        BIGINT       NOT NULL
+);

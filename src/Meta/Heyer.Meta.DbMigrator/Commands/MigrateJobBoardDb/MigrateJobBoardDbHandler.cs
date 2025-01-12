@@ -1,5 +1,3 @@
-using System.Reflection;
-using DbUp;
 using Heyer.Meta.DbMigrator.Providers;
 using MediatR;
 using Serilog;
@@ -11,10 +9,14 @@ internal class MigrateJobBoardDbHandler : IRequestHandler<MigrateJobBoardDb>
     private const string Schema = "job_board";
     private readonly IJobBoardDbConnectionStringProvider _connectionStringProvider;
     private readonly ILogger _logger;
+    private readonly IMigrator _migrator;
 
-    public MigrateJobBoardDbHandler(ILogger logger, IJobBoardDbConnectionStringProvider connectionStringProvider)
+    public MigrateJobBoardDbHandler(ILogger logger,
+                                    IJobBoardDbConnectionStringProvider connectionStringProvider,
+                                    IMigrator migrator)
     {
         _connectionStringProvider = connectionStringProvider;
+        _migrator = migrator;
         _logger = logger.ForContext("SourceContext", nameof(MigrateJobBoardDbHandler));
     }
 
@@ -29,15 +31,7 @@ internal class MigrateJobBoardDbHandler : IRequestHandler<MigrateJobBoardDb>
             return Task.CompletedTask;
         }
 
-        EnsureDatabase.For.SqlDatabase(connectionString);
-
-        var result = DeployChanges.To
-            .SqlDatabase(connectionString, Schema)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(),
-                                           opts => opts.Contains("MigrationFiles") && opts.Contains("JobBoardContext"))
-            .LogToAutodetectedLog()
-            .Build()
-            .PerformUpgrade();
+        var result = _migrator.Migrate("JobBoardContext", Schema, connectionString);
 
         if (!result.Successful)
         {

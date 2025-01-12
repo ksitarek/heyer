@@ -18,6 +18,19 @@ internal static class CoconaAppBuilderExtensions
         return builder;
     }
 
+    public static CoconaAppBuilder AddDependencies(this CoconaAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IHiringDbConnectionStringProvider, HiringDbConnectionStringProvider>();
+        builder.Services.AddSingleton<IJobBoardDbConnectionStringProvider, JobBoardDbConnectionStringProvider>();
+        builder.Services.AddSingleton<IStorageDbConnectionStringProvider, StorageDbConnectionStringProvider>();
+
+        builder.Services.AddSingleton<ICompaniesProvider, CompaniesProvider>();
+
+        builder.Services.AddSingleton<IMigrator, Migrator>();
+
+        return builder;
+    }
+
     public static CoconaAppBuilder AddLogging(this CoconaAppBuilder builder)
     {
         builder.Services.AddSerilog((sp, lc) => lc
@@ -31,17 +44,6 @@ internal static class CoconaAppBuilderExtensions
     {
         builder.Services.AddMediatR(
             cfg => cfg.RegisterServicesFromAssembly(typeof(CoconaAppBuilderExtensions).Assembly));
-
-        return builder;
-    }
-
-    public static CoconaAppBuilder AddProviders(this CoconaAppBuilder builder)
-    {
-        builder.Services.AddSingleton<IHiringDbConnectionStringProvider, HiringDbConnectionStringProvider>();
-        builder.Services.AddSingleton<IJobBoardDbConnectionStringProvider, JobBoardDbConnectionStringProvider>();
-        builder.Services.AddSingleton<IStorageDbConnectionStringProvider, StorageDbConnectionStringProvider>();
-
-        builder.Services.AddSingleton<ICompaniesProvider, CompaniesProvider>();
 
         return builder;
     }

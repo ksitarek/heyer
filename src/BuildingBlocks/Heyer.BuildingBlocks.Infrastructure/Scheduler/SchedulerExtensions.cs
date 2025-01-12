@@ -1,5 +1,5 @@
 using Hangfire;
-using Hangfire.SqlServer;
+using Hangfire.PostgreSql;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,17 +10,13 @@ public static class SchedulerExtensions
     public static IServiceCollection AddScheduler(this IServiceCollection services,
                                                   IConfiguration schedulerConfiguration)
     {
-        var connectionString = schedulerConfiguration["SqlServer:ConnectionString"];
+        var connectionString = schedulerConfiguration["Npgsql:ConnectionString"];
 
         services.AddHangfire(configuration => configuration
                                  .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                                  .UseSimpleAssemblyNameTypeSerializer()
                                  .UseRecommendedSerializerSettings()
-                                 .UseSqlServerStorage(connectionString,
-                                                      new SqlServerStorageOptions
-                                                      {
-                                                          PrepareSchemaIfNecessary = true, SchemaName = "dbo"
-                                                      }));
+                                 .UsePostgreSqlStorage(o => { o.UseNpgsqlConnection(connectionString); }));
 
         services.AddHangfireServer(x => { x.SchedulePollingInterval = TimeSpan.FromSeconds(1); });
 

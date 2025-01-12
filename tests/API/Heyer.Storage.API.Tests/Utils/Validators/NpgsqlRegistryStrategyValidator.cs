@@ -1,14 +1,14 @@
 using FluentAssertions;
-using Heyer.Storage.API.Providers.Registry.SqlServer;
+using Heyer.Storage.API.Providers.Registry.Npgsql;
 using Microsoft.EntityFrameworkCore;
 
 namespace Heyer.Storage.API.Tests.Utils.Validators;
 
-internal class SqlServerRegistryStrategyValidator : IRegistryStrategyValidator
+internal class NpgsqlRegistryStrategyValidator : IRegistryStrategyValidator
 {
     private readonly StorageDbContext _context;
 
-    public SqlServerRegistryStrategyValidator(StorageDbContext context) => _context = context;
+    public NpgsqlRegistryStrategyValidator(StorageDbContext context) => _context = context;
 
     public async Task ValidateFileIsNotPresent(string key)
     {

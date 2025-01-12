@@ -8,8 +8,6 @@ public class CandidateEntityTypeConfiguration : IEntityTypeConfiguration<Candida
 {
     public void Configure(EntityTypeBuilder<Candidate> builder)
     {
-        builder.ToTable("Candidates");
-
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .HasConversion(x => x.Guid, x => new CandidateId(x));

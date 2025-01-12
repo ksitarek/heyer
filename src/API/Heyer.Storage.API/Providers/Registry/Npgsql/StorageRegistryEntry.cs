@@ -1,6 +1,4 @@
-using Heyer.Storage.API.Providers.Registry.MongoDB;
-
-namespace Heyer.Storage.API.Providers.Registry.SqlServer;
+namespace Heyer.Storage.API.Providers.Registry.Npgsql;
 
 public class StorageRegistryEntry : IFileProperties
 {

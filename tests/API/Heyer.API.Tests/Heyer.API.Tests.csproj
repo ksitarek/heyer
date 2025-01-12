@@ -13,7 +13,7 @@
     <PackageReference Include="coverlet.collector" Version="6.0.2"/>
     <PackageReference Include="FluentAssertions" Version="7.0.0"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1"/>
     <PackageReference Include="NUnit" Version="4.3.2"/>
     <PackageReference Include="NUnit.Analyzers" Version="4.3.0"/>
@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\..\src\API\Heyer.API.Client\Heyer.API.Client.csproj"/>
     <ProjectReference Include="..\..\..\src\API\Heyer.API\Heyer.API.csproj"/>
     <ProjectReference Include="..\..\..\src\BuildingBlocks\Heyer.BuildingBlocks.Tests\Heyer.BuildingBlocks.Tests.csproj"/>
+    <ProjectReference Include="..\..\..\src\Meta\Heyer.Meta.DbMigrator\Heyer.Meta.DbMigrator.csproj"/>
     <ProjectReference Include="..\..\BuildingBlocks\Heyer.BuildingBlocks.Domain.Tests\Heyer.BuildingBlocks.Domain.Tests.csproj"/>
   </ItemGroup>
 

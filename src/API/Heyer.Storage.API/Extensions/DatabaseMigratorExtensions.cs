@@ -1,4 +1,4 @@
-using Heyer.Storage.API.Providers.Registry.SqlServer;
+using Heyer.Storage.API.Providers.Registry.Npgsql;
 
 namespace Heyer.Storage.API.Extensions;
 

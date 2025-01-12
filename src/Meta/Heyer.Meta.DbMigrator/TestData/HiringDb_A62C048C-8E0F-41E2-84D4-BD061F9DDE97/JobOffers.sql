@@ -1,136 +1,110 @@
-DECLARE
-    @JobOffers TABLE
-               (
-                   Id               UNIQUEIDENTIFIER,
-                   OfferSummary     NVARCHAR(100),
-                   JobDescription   NVARCHAR(1000),
+-- Temporary tables for PostgreSQL
+CREATE TEMP TABLE "t_JobOffers" (
+                                  "Id" UUID PRIMARY KEY,
+                                  "OfferSummary" VARCHAR(100),
+                                  "JobDescription" VARCHAR(1000),
+                                  "Location_City" VARCHAR(100),
+                                  "Location_Country" VARCHAR(100),
+                                  "PublishedAt" TIMESTAMPTZ,
+                                  "PublishedUntil" TIMESTAMPTZ,
+                                  "RemoteWork" INT
+);
 
-                   Location_City    NVARCHAR(100),
-                   Location_Country NVARCHAR(100),
+CREATE TEMP TABLE "t_ContractDetails" (
+                                        "Id" SERIAL PRIMARY KEY,
+                                        "JobOfferId" UUID,
+                                        "EmploymentType" INT,
+                                        "SalaryRange_IsPublished" BOOLEAN,
+                                        "SalaryRange_From" NUMERIC(18, 2),
+                                        "SalaryRange_To" NUMERIC(18, 2),
+                                        "TimeNumerator" INT,
+                                        "TimeDenominator" INT
+);
 
-                   PublishedAt      DATETIMEOFFSET,
-                   PublishedUntil   DATETIMEOFFSET,
+CREATE TEMP TABLE "t_JobOfferRequirements" (
+                                             "JobOfferId" UUID PRIMARY KEY,
+                                             "ExperienceLevel" INT
+);
 
-                   RemoteWork       INT
-               );
+CREATE TEMP TABLE "t_Skills" (
+                               "Id" SERIAL PRIMARY KEY,
+                               "RequirementsJobOfferId" UUID,
+                               "Label" VARCHAR(100),
+                               "Level" INT
+);
 
-DECLARE @ContractDetails TABLE
-                         (
-                             Id                      INT,
-                             JobOfferId              UNIQUEIDENTIFIER,
-                             EmploymentType          INT,
+-- Insert data into temporary tables
+INSERT INTO "t_JobOffers" VALUES
+    ('D0C85350-E31E-4D62-BBF3-FDC554877D92', '.NET Developer', 'Doing dotnetty stuff', 'Gdańsk', 'Poland', '2021-01-01 00:00:00+00', NULL, 1);
 
-                             SalaryRange_IsPublished BIT,
-                             SalaryRange_From        DECIMAL(18, 2),
-                             SalaryRange_To          DECIMAL(18, 2),
+INSERT INTO "t_ContractDetails" VALUES
+    (3, 'D0C85350-E31E-4D62-BBF3-FDC554877D92', 1, TRUE, 500, 600, 8, 8);
 
-                             TimeNumerator           INT,
-                             TimeDenominator         INT
-                         );
+INSERT INTO "t_JobOfferRequirements" VALUES
+    ('D0C85350-E31E-4D62-BBF3-FDC554877D92', 2);
 
-DECLARE @JobOfferRequirements TABLE
-                              (
-                                  JobOfferId      UNIQUEIDENTIFIER,
-                                  ExperienceLevel INT
-                              );
+INSERT INTO "t_Skills" VALUES
+    (1, 'D0C85350-E31E-4D62-BBF3-FDC554877D92', 'C#', 2);
 
-DECLARE @Skills TABLE
-                (
-                    Id                     INT,
-                    RequirementsJobOfferId UNIQUEIDENTIFIER,
-                    Label                  NVARCHAR(100),
-                    Level                  INT
-                );
+-- Merge equivalent in PostgreSQL using INSERT ON CONFLICT
+-- JobOffers table
+INSERT INTO public."JobOffers" ("Id", "OfferSummary", "JobDescription", "Location_City", "Location_Country",
+                                "PublishedAt", "PublishedUntil", "RemoteWork")
+SELECT "Id",
+       "OfferSummary",
+       "JobDescription",
+       "Location_City",
+       "Location_Country",
+       "PublishedAt",
+       "PublishedUntil",
+       "RemoteWork"
+FROM "t_JobOffers"
+ON CONFLICT ("Id") DO UPDATE
+    SET "OfferSummary"     = EXCLUDED."OfferSummary",
+        "JobDescription"   = EXCLUDED."JobDescription",
+        "Location_City"    = EXCLUDED."Location_City",
+        "Location_Country" = EXCLUDED."Location_Country",
+        "PublishedAt"      = EXCLUDED."PublishedAt",
+        "PublishedUntil"   = EXCLUDED."PublishedUntil",
+        "RemoteWork"       = EXCLUDED."RemoteWork";
 
-INSERT INTO @JobOffers
-VALUES ('D0C85350-E31E-4D62-BBF3-FDC554877D92',
-        '.NET Developer',
-        'Doing dotnetty stuff',
-        'Gdańsk',
-        'Poland',
-        '2021-01-01 00:00:00',
-        NULL,
-        1);
+-- JobOfferContractsDetails table
+INSERT INTO public."JobOfferContractsDetails" ("Id", "JobOfferId", "EmploymentType", "SalaryRange_IsPublished",
+                                               "SalaryRange_From", "SalaryRange_To", "TimeNumerator", "TimeDenominator")
+SELECT "Id",
+       "JobOfferId",
+       "EmploymentType",
+       "SalaryRange_IsPublished",
+       "SalaryRange_From",
+       "SalaryRange_To",
+       "TimeNumerator",
+       "TimeDenominator"
+FROM "t_ContractDetails"
+ON CONFLICT ("JobOfferId", "Id") DO UPDATE
+    SET "EmploymentType"          = EXCLUDED."EmploymentType",
+        "SalaryRange_IsPublished" = EXCLUDED."SalaryRange_IsPublished",
+        "SalaryRange_From"        = EXCLUDED."SalaryRange_From",
+        "SalaryRange_To"          = EXCLUDED."SalaryRange_To",
+        "TimeNumerator"           = EXCLUDED."TimeNumerator",
+        "TimeDenominator"         = EXCLUDED."TimeDenominator";
 
-INSERT INTO @ContractDetails
-VALUES (3,
-        'D0C85350-E31E-4D62-BBF3-FDC554877D92',
-        1,
-        1,
-        500,
-        600,
-        8,
-        8);
+-- JobOfferRequirements table
+INSERT INTO public."JobOfferRequirements" ("JobOfferId", "ExperienceLevel")
+SELECT "JobOfferId", "ExperienceLevel"
+FROM "t_JobOfferRequirements"
+ON CONFLICT ("JobOfferId") DO UPDATE
+    SET "ExperienceLevel" = EXCLUDED."ExperienceLevel";
 
-INSERT INTO @JobOfferRequirements
-VALUES ('D0C85350-E31E-4D62-BBF3-FDC554877D92',
-        2);
+-- Skills table
+INSERT INTO public."Skills" ("Id", "RequirementsJobOfferId", "Label", "Level")
+SELECT "Id", "RequirementsJobOfferId", "Label", "Level"
+FROM "t_Skills"
+ON CONFLICT ("RequirementsJobOfferId", "Id") DO UPDATE
+    SET "Label" = EXCLUDED."Label",
+        "Level" = EXCLUDED."Level";
 
-INSERT INTO @Skills
-VALUES (1,
-        'D0C85350-E31E-4D62-BBF3-FDC554877D92',
-        'C#',
-        2);
-
-MERGE INTO dbo.JobOffers AS target
-USING @JobOffers AS source
-ON target.Id = source.Id
-WHEN MATCHED THEN
-    UPDATE
-    SET OfferSummary     = source.OfferSummary,
-        JobDescription   = source.JobDescription,
-        Location_City    = source.Location_City,
-        Location_Country = source.Location_Country,
-        PublishedAt      = source.PublishedAt,
-        PublishedUntil   = source.PublishedUntil,
-        RemoteWork       = source.RemoteWork
-WHEN NOT MATCHED BY TARGET THEN
-    INSERT (Id, OfferSummary, JobDescription, Location_City, Location_Country, PublishedAt, PublishedUntil, RemoteWork)
-    VALUES (source.Id, source.OfferSummary, source.JobDescription, source.Location_City, source.Location_Country,
-            source.PublishedAt, source.PublishedUntil, source.RemoteWork);
-
-SET IDENTITY_INSERT dbo.JobOfferContractsDetails ON;
-
-MERGE INTO dbo.JobOfferContractsDetails AS target
-USING @ContractDetails AS source
-ON target.Id = source.Id
-WHEN MATCHED THEN
-    UPDATE
-    SET EmploymentType          = source.EmploymentType,
-        SalaryRange_IsPublished = source.SalaryRange_IsPublished,
-        SalaryRange_From        = source.SalaryRange_From,
-        SalaryRange_To          = source.SalaryRange_To,
-        TimeNumerator           = source.TimeNumerator,
-        TimeDenominator         = source.TimeDenominator
-WHEN NOT MATCHED BY TARGET THEN
-    INSERT (Id, JobOfferId, EmploymentType, SalaryRange_IsPublished, SalaryRange_From, SalaryRange_To, TimeNumerator,
-            TimeDenominator)
-    VALUES (source.Id, source.JobOfferId, source.EmploymentType, source.SalaryRange_IsPublished,
-            source.SalaryRange_From, source.SalaryRange_To, source.TimeNumerator, source.TimeDenominator);
-
-SET IDENTITY_INSERT dbo.JobOfferContractsDetails OFF;
-
-MERGE INTO dbo.JobOfferRequirements AS target
-USING @JobOfferRequirements AS source
-ON target.JobOfferId = source.JobOfferId
-WHEN MATCHED THEN
-    UPDATE
-    SET ExperienceLevel = source.ExperienceLevel
-WHEN NOT MATCHED BY TARGET THEN
-    INSERT (JobOfferId, ExperienceLevel)
-    VALUES (source.JobOfferId, source.ExperienceLevel);
-
-SET IDENTITY_INSERT dbo.Skills ON;
-
-MERGE INTO dbo.Skills AS target
-USING @Skills AS source
-ON target.Id = source.Id
-WHEN MATCHED THEN
-    UPDATE
-    SET Label = source.Label,
-        Level = source.Level
-WHEN NOT MATCHED BY TARGET THEN
-    INSERT (Id, RequirementsJobOfferId, Label, Level)
-    VALUES (source.Id, source.RequirementsJobOfferId, source.Label, source.Level);
-
-SET IDENTITY_INSERT dbo.Skills OFF;
+-- Drop temporary tables
+DROP TABLE "t_JobOffers";
+DROP TABLE "t_ContractDetails";
+DROP TABLE "t_JobOfferRequirements";
+DROP TABLE "t_Skills";

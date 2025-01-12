@@ -1,4 +1,5 @@
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
+using Heyer.BuildingBlocks.Infrastructure.Npgsql;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,22 @@ internal class JobBoardContext : DbContext, IInboxContext, IOutboxContext
         modelBuilder.HasDefaultSchema("job_board");
 
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(DateTimeOffset))
+                {
+                    property.SetValueConverter(new DateTimeOffsetConverter());
+                }
+                else if (property.ClrType == typeof(DateTimeOffset?))
+                {
+                    property.SetValueConverter(new NullableDateTimeOffsetConverter());
+                }
+            }
+        }
+
         base.OnModelCreating(modelBuilder);
     }
 }

@@ -1,5 +1,5 @@
 using Heyer.Storage.API.Providers.Registry.MongoDB;
-using Heyer.Storage.API.Providers.Registry.SqlServer;
+using Heyer.Storage.API.Providers.Registry.Npgsql;
 
 namespace Heyer.Storage.API.Providers.Registry;
 
@@ -17,8 +17,8 @@ public static class RegistryStrategyExtensions
                 services.AddMongoDBRegistryProvider(registryStrategyOptions.MongoDBRegistry);
                 break;
 
-            case RegistryStrategyOptions.RegistryStrategyType.SqlServer:
-                services.AddSqlServerRegistryProvider(registryStrategyOptions.SqlServerRegistry);
+            case RegistryStrategyOptions.RegistryStrategyType.Npgsql:
+                services.AddNpgsqlRegistryProvider(registryStrategyOptions.NpgsqlRegistry);
                 break;
 
             case RegistryStrategyOptions.RegistryStrategyType.Unknown:

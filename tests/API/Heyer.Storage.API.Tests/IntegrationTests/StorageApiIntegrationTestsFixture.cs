@@ -6,7 +6,7 @@ namespace Heyer.Storage.API.Tests.IntegrationTests;
 [SetUpFixture]
 public class StorageApiIntegrationTestsFixture
 {
-    private readonly SqlEdgeFixture _sqlEdgeFixture = new();
+    private readonly PostgresFixture _sqlEdgeFixture = new();
 
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
@@ -14,7 +14,7 @@ public class StorageApiIntegrationTestsFixture
         await _sqlEdgeFixture.InitializeAsync();
 
         ApplicationFactoryConfiguration.InMemoryConfiguration[
-                Config.RegistryStrategy_SqlServerRegistry_ConnectionString]
+                Config.RegistryStrategy_NpgsqlRegistry_ConnectionString]
             = _sqlEdgeFixture.ConnectionString;
     }
 

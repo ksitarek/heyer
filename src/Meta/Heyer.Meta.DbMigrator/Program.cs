@@ -12,7 +12,7 @@ builder
     .AddConfiguration()
     .AddLogging()
     .AddMediatR()
-    .AddProviders();
+    .AddDependencies();
 
 var app = builder.Build();
 

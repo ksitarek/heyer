@@ -1,115 +1,95 @@
-CREATE TABLE dbo.Candidates
+-- Table: Candidates
+CREATE TABLE "Candidates"
 (
-    Id                     UNIQUEIDENTIFIER NOT NULL,
-    Email                  NVARCHAR(MAX)    NOT NULL,
-    FirstName              NVARCHAR(50)     NOT NULL,
-    IncludeInCandidatePool BIT              NOT NULL,
-    LastName               NVARCHAR(50)     NOT NULL,
-    ResumeKey              NVARCHAR(MAX)    NOT NULL,
+    "Id"                     UUID        NOT NULL PRIMARY KEY,
+    "Email"                  TEXT        NOT NULL,
+    "FirstName"              VARCHAR(50) NOT NULL,
+    "IncludeInCandidatePool" BOOLEAN     NOT NULL,
+    "LastName"               VARCHAR(50) NOT NULL,
+    "ResumeKey"              TEXT        NOT NULL
+);
 
-    CONSTRAINT PK_Candidates PRIMARY KEY (Id)
-)
-GO
-
-CREATE TABLE dbo.InboxMessages
+-- Table: InboxMessages
+CREATE TABLE "InboxMessages"
 (
-    Id          UNIQUEIDENTIFIER NOT NULL,
-    CreatedAt   DATETIME2        NOT NULL,
-    Data        NVARCHAR(MAX)    NOT NULL,
-    ProcessedAt DATETIME2,
-    Type        NVARCHAR(MAX)    NOT NULL,
+    "Id"          UUID      NOT NULL PRIMARY KEY,
+    "CreatedAt"   TIMESTAMP NOT NULL,
+    "Data"        TEXT      NOT NULL,
+    "ProcessedAt" TIMESTAMP,
+    "Type"        TEXT      NOT NULL
+);
 
-    CONSTRAINT PK_InboxMessages PRIMARY KEY (Id),
-)
-GO
-
-CREATE TABLE dbo.JobOffers
+-- Table: JobOffers
+CREATE TABLE "JobOffers"
 (
-    Id               UNIQUEIDENTIFIER NOT NULL,
-    JobDescription   NVARCHAR(MAX)    NOT NULL,
-    Location_City    NVARCHAR(100),
-    Location_Country NVARCHAR(100),
-    OfferSummary     NVARCHAR(100)    NOT NULL,
-    PublishedAt      DATETIMEOFFSET,
-    PublishedUntil   DATETIMEOFFSET,
-    RemoteWork       INT              NOT NULL,
+    "Id"               UUID         NOT NULL PRIMARY KEY,
+    "JobDescription"   TEXT         NOT NULL,
+    "Location_City"    VARCHAR(100),
+    "Location_Country" VARCHAR(100),
+    "OfferSummary"     VARCHAR(100) NOT NULL,
+    "PublishedAt"      TIMESTAMPTZ,
+    "PublishedUntil"   TIMESTAMPTZ,
+    "RemoteWork"       INT          NOT NULL
+);
 
-    CONSTRAINT PK_JobOffers PRIMARY KEY (Id)
-)
-GO
-
-CREATE TABLE dbo.JobOfferCandidates
+-- Table: JobOfferCandidates
+CREATE TABLE "JobOfferCandidates"
 (
-    Id         INT IDENTITY,
-    Guid       UNIQUEIDENTIFIER NOT NULL,
-    JobOfferId UNIQUEIDENTIFIER NOT NULL,
+    "Id"         SERIAL,
+    "Guid"       UUID NOT NULL,
+    "JobOfferId" UUID NOT NULL,
+    PRIMARY KEY ("JobOfferId", "Id"),
+    CONSTRAINT FK_JobOfferCandidates_JobOffers_JobOfferId FOREIGN KEY ("JobOfferId")
+        REFERENCES "JobOffers" ("Id")
+        ON DELETE CASCADE
+);
 
-    CONSTRAINT PK_JobOfferCandidates PRIMARY KEY (JobOfferId, Id),
-
-    CONSTRAINT FK_JobOfferCandidates_JobOffers_JobOfferId
-        FOREIGN KEY (JobOfferId)
-            REFERENCES dbo.JobOffers (Id)
-            ON DELETE CASCADE
-)
-GO
-
-CREATE TABLE dbo.JobOfferContractsDetails
+-- Table: JobOfferContractsDetails
+CREATE TABLE "JobOfferContractsDetails"
 (
-    Id                      INT IDENTITY,
-    JobOfferId              UNIQUEIDENTIFIER NOT NULL,
-    EmploymentType          INT              NOT NULL,
-    SalaryRange_IsPublished BIT              NOT NULL,
-    SalaryRange_From        DECIMAL(18, 2)   NOT NULL,
-    SalaryRange_To          DECIMAL(18, 2)   NOT NULL,
-    TimeNumerator           INT              NOT NULL,
-    TimeDenominator         INT              NOT NULL,
+    "Id"                      SERIAL,
+    "JobOfferId"              UUID           NOT NULL,
+    "EmploymentType"          INT            NOT NULL,
+    "SalaryRange_IsPublished" BOOLEAN        NOT NULL,
+    "SalaryRange_From"        NUMERIC(18, 2) NOT NULL,
+    "SalaryRange_To"          NUMERIC(18, 2) NOT NULL,
+    "TimeNumerator"           INT            NOT NULL,
+    "TimeDenominator"         INT            NOT NULL,
+    PRIMARY KEY ("JobOfferId", "Id"),
+    CONSTRAINT FK_JobOfferContractsDetails_JobOffers_JobOfferId FOREIGN KEY ("JobOfferId")
+        REFERENCES "JobOffers" ("Id")
+        ON DELETE CASCADE
+);
 
-    CONSTRAINT PK_JobOfferContractsDetails PRIMARY KEY (JobOfferId, Id),
-
-    CONSTRAINT FK_JobOfferContractsDetails_JobOffers_JobOfferId
-        FOREIGN KEY (JobOfferId)
-            REFERENCES dbo.JobOffers (Id)
-            ON DELETE CASCADE,
-)
-GO
-
-CREATE TABLE dbo.JobOfferRequirements
+-- Table: JobOfferRequirements
+CREATE TABLE "JobOfferRequirements"
 (
-    JobOfferId      UNIQUEIDENTIFIER NOT NULL,
-    ExperienceLevel INT              NOT NULL,
+    "JobOfferId"      UUID NOT NULL PRIMARY KEY,
+    "ExperienceLevel" INT  NOT NULL,
+    CONSTRAINT FK_JobOfferRequirements_JobOffers_JobOfferId FOREIGN KEY ("JobOfferId")
+        REFERENCES "JobOffers" ("Id")
+        ON DELETE CASCADE
+);
 
-    CONSTRAINT PK_JobOfferRequirements PRIMARY KEY (JobOfferId),
-
-    CONSTRAINT FK_JobOfferRequirements_JobOffers_JobOfferId
-        FOREIGN KEY (JobOfferId) REFERENCES dbo.JobOffers (Id)
-            ON DELETE CASCADE
-)
-GO
-
-CREATE TABLE dbo.OutboxMessages
+-- Table: OutboxMessages
+CREATE TABLE "OutboxMessages"
 (
-    Id          UNIQUEIDENTIFIER NOT NULL,
-    CreatedAt   DATETIME2        NOT NULL,
-    Data        NVARCHAR(MAX)    NOT NULL,
-    ProcessedAt DATETIME2,
-    Type        NVARCHAR(MAX)    NOT NULL,
+    "Id"          UUID      NOT NULL PRIMARY KEY,
+    "CreatedAt"   TIMESTAMP NOT NULL,
+    "Data"        TEXT      NOT NULL,
+    "ProcessedAt" TIMESTAMP,
+    "Type"        TEXT      NOT NULL
+);
 
-    CONSTRAINT PK_OutboxMessages PRIMARY KEY (Id)
-)
-GO
-
-CREATE TABLE dbo.Skills
+-- Table: Skills
+CREATE TABLE "Skills"
 (
-    Id                     INT IDENTITY,
-    RequirementsJobOfferId UNIQUEIDENTIFIER NOT NULL,
-    Label                  NVARCHAR(MAX)    NOT NULL,
-    Level                  INT              NOT NULL,
-
-    CONSTRAINT PK_Skills PRIMARY KEY (RequirementsJobOfferId, Id),
-
-    CONSTRAINT FK_Skills_JobOfferRequirements_RequirementsJobOfferId
-        FOREIGN KEY (RequirementsJobOfferId)
-            REFERENCES dbo.JobOfferRequirements (JobOfferId)
-            ON DELETE CASCADE
-)
-GO
+    "Id"                     SERIAL,
+    "RequirementsJobOfferId" UUID NOT NULL,
+    "Label"                  TEXT NOT NULL,
+    "Level"                  INT  NOT NULL,
+    PRIMARY KEY ("RequirementsJobOfferId", "Id"),
+    CONSTRAINT FK_Skills_JobOfferRequirements_RequirementsJobOfferId FOREIGN KEY ("RequirementsJobOfferId")
+        REFERENCES "JobOfferRequirements" ("JobOfferId")
+        ON DELETE CASCADE
+);

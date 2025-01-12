@@ -1,5 +1,3 @@
-using System.Reflection;
-using DbUp;
 using Heyer.Meta.DbMigrator.Providers;
 using MediatR;
 using Serilog;
@@ -9,11 +7,15 @@ namespace Heyer.Meta.DbMigrator.Commands.MigrateCompanyHiringDb;
 internal class MigrateCompanyHiringDbHandler : IRequestHandler<MigrateCompanyHiringDb>
 {
     private readonly IHiringDbConnectionStringProvider _connectionStringProvider;
+    private readonly IMigrator _migrator;
     private ILogger _logger;
 
-    public MigrateCompanyHiringDbHandler(ILogger logger, IHiringDbConnectionStringProvider connectionStringProvider)
+    public MigrateCompanyHiringDbHandler(ILogger logger,
+                                         IHiringDbConnectionStringProvider connectionStringProvider,
+                                         IMigrator migrator)
     {
         _connectionStringProvider = connectionStringProvider;
+        _migrator = migrator;
         _logger = logger.ForContext("SourceContext", nameof(MigrateCompanyHiringDbHandler));
     }
 
@@ -30,16 +32,7 @@ internal class MigrateCompanyHiringDbHandler : IRequestHandler<MigrateCompanyHir
             return Task.CompletedTask;
         }
 
-        EnsureDatabase.For.SqlDatabase(connectionString);
-
-        var result = DeployChanges.To
-            .SqlDatabase(connectionString)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(),
-                                           opts => opts.Contains("MigrationFiles") &&
-                                                   opts.Contains("HiringContext"))
-            .LogToAutodetectedLog()
-            .Build()
-            .PerformUpgrade();
+        var result = _migrator.Migrate("HiringContext", connectionString);
 
         if (!result.Successful)
         {

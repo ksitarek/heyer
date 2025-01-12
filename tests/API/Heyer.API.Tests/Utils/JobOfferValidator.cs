@@ -32,10 +32,10 @@ public class JobOfferValidator : IDisposable
     private HiringDbContext GetContext()
     {
         var connectionString =
-            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:SqlServer:ConnectionString"];
+            ApplicationFactoryConfiguration.InMemoryConfiguration[$"Companies:{_companyId}:Npgsql:ConnectionString"];
 
         var options = new DbContextOptionsBuilder<HiringDbContext>()
-            .UseSqlServer(connectionString)
+            .UseNpgsql(connectionString)
             .EnableServiceProviderCaching(false)
             .Options;
 

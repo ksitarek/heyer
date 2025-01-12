@@ -5,11 +5,11 @@ namespace Heyer.API.Tests.IntegrationTests;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal static class Config
 {
-    public const string HiringModule_InboxOutbox_SqlServer_ConnectionString =
-        "HiringModule:InboxOutbox:SqlServer:ConnectionString";
+    public const string HiringModule_InboxOutbox_Npgsql_ConnectionString =
+        "HiringModule:InboxOutbox:Npgsql:ConnectionString";
 
-    public const string HiringModule_InboxOutbox_SqlServer_DatabaseName =
-        "HiringModule:InboxOutbox:SqlServer:DatabaseName";
+    public const string HiringModule_InboxOutbox_Npgsql_DatabaseName =
+        "HiringModule:InboxOutbox:Npgsql:DatabaseName";
 
     public const string Jwt_Secret = "Jwt:Secret";
     public const string Jwt_ValidateAudience = "Jwt:ValidateAudience";
@@ -18,9 +18,9 @@ internal static class Config
     public const string Jwt_ValidAudience = "Jwt:ValidAudience";
     public const string Jwt_ValidIssuer = "Jwt:ValidIssuer";
 
-    public const string Scheduler_SqlServer_ConnectionString = "Scheduler:SqlServer:ConnectionString";
-    public const string Scheduler_SqlServer_DatabaseName = "Scheduler:SqlServer:DatabaseName";
+    public const string Npgsql_ConnectionString = "Npgsql:ConnectionString";
+    public const string Npgsql_DatabaseName = "Npgsql:DatabaseName";
 
-    public const string SqlServer_ConnectionString = "SqlServer:ConnectionString";
-    public const string SqlServer_DatabaseName = "SqlServer:DatabaseName";
+    public const string Scheduler_Npgsql_ConnectionString = "Scheduler:Npgsql:ConnectionString";
+    public const string Scheduler_Npgsql_DatabaseName = "Scheduler:Npgsql:DatabaseName";
 }

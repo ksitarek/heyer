@@ -1,24 +1,23 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Infrastructure;
-using Heyer.Storage.API.Providers.Registry.MongoDB;
 using Heyer.Storage.API.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Heyer.Storage.API.Providers.Registry.SqlServer;
+namespace Heyer.Storage.API.Providers.Registry.Npgsql;
 
-internal class SqlServerRegistryStrategy : IRegistryStrategy
+internal class NpgsqlRegistryStrategy : IRegistryStrategy
 {
     private readonly StorageDbContext _context;
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly ILogger<SqlServerRegistryStrategy> _logger;
+    private readonly ILogger<NpgsqlRegistryStrategy> _logger;
     private readonly IOptions<RegistryStrategyOptions> _options;
 
-    public SqlServerRegistryStrategy(ILogger<SqlServerRegistryStrategy> logger,
-                                     StorageDbContext context,
-                                     IDateTimeProvider dateTimeProvider,
-                                     IOptions<RegistryStrategyOptions> options)
+    public NpgsqlRegistryStrategy(ILogger<NpgsqlRegistryStrategy> logger,
+                                  StorageDbContext context,
+                                  IDateTimeProvider dateTimeProvider,
+                                  IOptions<RegistryStrategyOptions> options)
     {
         _logger = logger;
         _context = context;

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Heyer.Storage.API.Providers.Registry.SqlServer;
+namespace Heyer.Storage.API.Providers.Registry.Npgsql;
 
 public class StorageRegistryEntityTypeConfiguration : IEntityTypeConfiguration<StorageRegistryEntry>
 {

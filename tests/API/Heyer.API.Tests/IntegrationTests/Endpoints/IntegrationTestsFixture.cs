@@ -1,66 +1,90 @@
 using Heyer.BuildingBlocks.Tests;
 using Heyer.BuildingBlocks.Tests.Fixtures;
-using Microsoft.Data.SqlClient;
+using Heyer.Meta.DbMigrator;
+using Npgsql;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 [SetUpFixture]
 public class IntegrationTestsFixture
 {
-    private readonly SqlEdgeFixture _sqlEdgeFixture = new();
+    private readonly Migrator _migrator = new();
+    private readonly PostgresFixture _npgsqlFixture = new();
 
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
-        await _sqlEdgeFixture.InitializeAsync();
+        await _npgsqlFixture.InitializeAsync();
 
         var databases = new[]
         {
-            "Heyer", "Scheduler", "HiringInboxOutbox", ApplicationFactoryConfiguration.Client1Id.ToString(),
-            ApplicationFactoryConfiguration.Client2Id.ToString()
+            "Heyer", "Scheduler", "HiringInboxOutbox", $"C_{ApplicationFactoryConfiguration.Client1Id}",
+            $"C_{ApplicationFactoryConfiguration.Client2Id}"
         };
 
-        await CreateDatabases(databases);
+        // await CreateDatabases(databases);
 
         ApplicationFactoryConfiguration.AddConfig(
-            Config.SqlServer_ConnectionString,
-            _sqlEdgeFixture.ConnectionString.Replace("master", "Heyer"));
+            Config.Npgsql_ConnectionString,
+            GetConnectionString("heyer"));
 
         ApplicationFactoryConfiguration.AddConfig(
-            Config.Scheduler_SqlServer_ConnectionString,
-            _sqlEdgeFixture.ConnectionString.Replace("master", "Scheduler"));
-
-        // ApplicationFactoryConfiguration.AddConfig(
-        //     Config.HiringModule_InboxOutbox_SqlServer_ConnectionString,
-        //     _sqlEdgeFixture.ConnectionString.Replace("master", "HiringInboxOutbox"));
+            Config.Scheduler_Npgsql_ConnectionString,
+            GetConnectionString("scheduler"));
 
         ConfigureClientDb(ApplicationFactoryConfiguration.Client1Id);
         ConfigureClientDb(ApplicationFactoryConfiguration.Client2Id);
+
+        _migrator.Migrate("JobBoardContext",
+                          "job_board",
+                          ApplicationFactoryConfiguration.InMemoryConfiguration[Config.Npgsql_ConnectionString]!);
+
+        _migrator.Migrate("SchedulerDb",
+                          ApplicationFactoryConfiguration.InMemoryConfiguration[
+                              Config.Scheduler_Npgsql_ConnectionString]!);
     }
 
     [OneTimeTearDown]
-    public async Task OneTimeTearDown() => await _sqlEdgeFixture.DisposeAsync();
+    public async Task OneTimeTearDown() => await _npgsqlFixture.DisposeAsync();
 
-    private void ConfigureClientDb(Guid clientId) =>
+    private void ConfigureClientDb(Guid clientId)
+    {
+        var connectionString = GetConnectionString($"C_{clientId}");
+
         ApplicationFactoryConfiguration.AddClientConfig(
             clientId,
-            Config.SqlServer_ConnectionString,
-            _sqlEdgeFixture.ConnectionString.Replace("master", clientId.ToString()));
+            Config.Npgsql_ConnectionString,
+            connectionString);
+
+        _migrator.Migrate("HiringContext", connectionString);
+    }
 
     private async Task CreateDatabases(string[] databases)
     {
-        await using var connection = new SqlConnection(_sqlEdgeFixture.ConnectionString);
+        await using var connection = new NpgsqlConnection(_npgsqlFixture.ConnectionString);
         await connection.OpenAsync();
 
         foreach (var dbName in databases)
         {
-            var command =
-                $"IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'{dbName}') CREATE DATABASE [{dbName}];";
+            // Open a connection to the "postgres" database or any other system database
+            var createDbCommand = $"SELECT 1 FROM pg_database WHERE datname = '{dbName}';";
 
-            await using var sqlCommand = new SqlCommand(command, connection);
-            await sqlCommand.ExecuteNonQueryAsync();
+            await using var checkDbCommand = new NpgsqlCommand(createDbCommand, connection);
+            var dbExists = await checkDbCommand.ExecuteScalarAsync();
+
+            // If the database doesn't exist, create it
+            if (dbExists == null)
+            {
+                var createDatabaseCommand = $@"CREATE DATABASE ""{dbName}"";";
+
+                await using var createCommand = new NpgsqlCommand(createDatabaseCommand, connection);
+                await createCommand.ExecuteNonQueryAsync();
+            }
         }
 
         await connection.CloseAsync();
     }
+
+    private string GetConnectionString(string databaseName) =>
+        _npgsqlFixture.ConnectionString.Replace("Database=postgres", $"Database={databaseName}");
 }

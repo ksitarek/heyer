@@ -51,7 +51,7 @@ internal class LoadSampleDataHandler : IRequestHandler<LoadSampleData>
         }
 
         var result = DeployChanges.To
-            .SqlDatabase(connectionString)
+            .PostgresqlDatabase(connectionString)
             .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(),
                                            opts => opts.Contains("TestData") && opts.Contains(name))
             .JournalTo(_nullJournal)

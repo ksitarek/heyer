@@ -8,5 +8,5 @@ internal class JobBoardDbConnectionStringProvider : IJobBoardDbConnectionStringP
 
     public JobBoardDbConnectionStringProvider(IConfiguration configuration) => _configuration = configuration;
 
-    public string? GetConnectionString() => _configuration["SqlServer:ConnectionString"];
+    public string? GetConnectionString() => _configuration["Npgsql:ConnectionString"];
 }
