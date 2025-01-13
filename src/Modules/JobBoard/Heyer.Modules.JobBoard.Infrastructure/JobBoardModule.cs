@@ -1,4 +1,3 @@
-using System.Reflection;
 using FluentValidation;
 using Hangfire;
 using Heyer.BuildingBlocks.Application.Authorization;
@@ -41,8 +40,6 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
         JobBoardModuleCompositionRoot.SetServiceProvider(_serviceProvider);
     }
 
-    public Assembly ModuleApplicationAssembly => typeof(JobBoardEndpointsConfiguration).Assembly;
-
     public override Func<IServiceScope> ScopeProvider => JobBoardModuleCompositionRoot.CreateScope;
 
     public void ConfigureModule(WebApplication app)
@@ -68,6 +65,8 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
     {
         var domainEventNotificationsRegistry = new DomainEventNotificationsRegistry();
 
+        var assembly = typeof(JobBoardEndpointsConfiguration).Assembly;
+
         services
             .AddSingleton(_eventBus)
             .AddSingleton<IDateTimeProvider, SystemDateTime>()
@@ -75,14 +74,14 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
             .AddTransient<IHealthCheck, JobBoardDatabaseHealthcheck>();
 
         services
-            .AddMediator(ModuleApplicationAssembly,
+            .AddMediator(assembly,
                          typeof(LoggingMiddleware<,>),
                          typeof(ValidationMiddleware<,>),
                          typeof(UnitOfWorkMiddleware<,>))
             .AddStorageApiClient(configuration["StorageApi:Url"])
             .AddDomainEventDispatcher(domainEventNotificationsRegistry)
             .AddUserDataProvider()
-            .AddValidatorsFromAssembly(ModuleApplicationAssembly)
+            .AddValidatorsFromAssembly(assembly)
             .AddJobBoardContext(configuration["Npgsql:ConnectionString"]!)
             .AddPersistence();
     }
