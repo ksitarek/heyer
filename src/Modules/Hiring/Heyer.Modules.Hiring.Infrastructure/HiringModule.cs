@@ -1,4 +1,3 @@
-using System.Reflection;
 using FluentValidation;
 using Hangfire;
 using Heyer.BuildingBlocks.Application.Authorization;
@@ -21,24 +20,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Heyer.Modules.Hiring.Infrastructure;
 
-public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
+public class HiringModule : ModuleRunner, IHiringModule
 {
-    private readonly IConfiguration _configuration;
     private readonly IEventBus _eventBus;
 
     public HiringModule(IConfiguration configuration, IEventBus eventBus)
     {
-        _configuration = configuration;
         _eventBus = eventBus;
 
         var services = new ServiceCollection();
 
-        ConfigureServices(_configuration, services);
+        ConfigureServices(configuration, services);
 
         HiringModuleCompositionRoot.SetServiceProvider(services.BuildServiceProvider());
     }
-
-    public Assembly ModuleApplicationAssembly => typeof(HiringEndpointsConfiguration).Assembly;
 
     public override Func<IServiceScope> ScopeProvider => HiringModuleCompositionRoot.CreateScope;
 
@@ -46,6 +41,11 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
     {
         HiringEndpointsConfiguration.MapEndpoints(app);
 
+        ConfigureScheduler(app);
+    }
+
+    private static void ConfigureScheduler(WebApplication app)
+    {
         var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
         recurringJobManager.AddOrUpdate<HiringInboxProcessingJob>(
             $"{nameof(HiringModule)}_InboxProcessing",
@@ -64,9 +64,11 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
         var notificationsRegistry = new DomainEventNotificationsRegistry();
         notificationsRegistry.Add<JobOfferPublishedNotification, JobOfferPublished>();
 
+        var assembly = typeof(HiringEndpointsConfiguration).Assembly;
+
         services
             .AddSingleton<IDateTimeProvider, SystemDateTime>()
-            .AddMediator(ModuleApplicationAssembly,
+            .AddMediator(assembly,
                          typeof(LoggingMiddleware<,>),
                          typeof(ValidationMiddleware<,>),
                          typeof(UnitOfWorkMiddleware<,>))
@@ -75,7 +77,7 @@ public class HiringModule : ModuleRunner, IHiringModule, IModuleInstaller
             .AddUserDataProvider();
 
         services
-            .AddValidatorsFromAssembly(ModuleApplicationAssembly)
+            .AddValidatorsFromAssembly(assembly)
             .AddHiringDbContext(configuration.GetSection("Companies"))
             .AddPersistence();
     }

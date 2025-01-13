@@ -1,4 +1,3 @@
-using System.Reflection;
 using FluentValidation;
 using Hangfire;
 using Heyer.BuildingBlocks.Application.Authorization;
@@ -7,6 +6,7 @@ using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.HealthChecks;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
+using Heyer.BuildingBlocks.Infrastructure.Integration.Processing;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
@@ -41,18 +41,19 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
         JobBoardModuleCompositionRoot.SetServiceProvider(_serviceProvider);
     }
 
-    public Assembly ModuleApplicationAssembly => typeof(JobBoardEndpointsConfiguration).Assembly;
-
     public override Func<IServiceScope> ScopeProvider => JobBoardModuleCompositionRoot.CreateScope;
 
     public void ConfigureModule(WebApplication app)
     {
         JobBoardEndpointsConfiguration.MapEndpoints(app);
 
-        var inboxStore = _serviceProvider.GetRequiredService<IInboxStore>();
+        ConfigureEventBus();
 
-        _eventBus.Subscribe(new JobBoardIntegrationHandler<JobOfferPublishedIntegrationEvent>(inboxStore));
+        ConfigureScheduler(app);
+    }
 
+    private static void ConfigureScheduler(WebApplication app)
+    {
         var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
         recurringJobManager.AddOrUpdate<JobBoardInboxProcessingJob>(
             $"{nameof(JobBoardModule)}_InboxProcessing",
@@ -64,9 +65,18 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
             "* * * * * *");
     }
 
+    private void ConfigureEventBus()
+    {
+        var inboxStore = _serviceProvider.GetRequiredService<IInboxStore>();
+
+        _eventBus.Subscribe(new GenericEventHandler<JobOfferPublishedIntegrationEvent>(inboxStore));
+    }
+
     private void ConfigureServices(IConfiguration configuration, ServiceCollection services)
     {
         var domainEventNotificationsRegistry = new DomainEventNotificationsRegistry();
+
+        var assembly = typeof(JobBoardEndpointsConfiguration).Assembly;
 
         services
             .AddSingleton(_eventBus)
@@ -75,14 +85,14 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
             .AddTransient<IHealthCheck, JobBoardDatabaseHealthcheck>();
 
         services
-            .AddMediator(ModuleApplicationAssembly,
+            .AddMediator(assembly,
                          typeof(LoggingMiddleware<,>),
                          typeof(ValidationMiddleware<,>),
                          typeof(UnitOfWorkMiddleware<,>))
             .AddStorageApiClient(configuration["StorageApi:Url"])
             .AddDomainEventDispatcher(domainEventNotificationsRegistry)
             .AddUserDataProvider()
-            .AddValidatorsFromAssembly(ModuleApplicationAssembly)
+            .AddValidatorsFromAssembly(assembly)
             .AddJobBoardContext(configuration["Npgsql:ConnectionString"]!)
             .AddPersistence();
     }
