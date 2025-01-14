@@ -1,0 +1,11 @@
+<h-data-table [columns]="dataTableColumns" [data$]="data$">
+  <ng-template #row let-row>
+    <tr>
+      <td></td>
+      <td>{{ row.offerSummary }}</td>
+      <td>{{ row.publishedAt | date }}</td>
+      <td>{{ row.publishedUntil | date }}</td>
+      <td></td>
+    </tr>
+  </ng-template>
+</h-data-table>

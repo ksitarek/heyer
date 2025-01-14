@@ -4,7 +4,7 @@ import { ActiveJobOffersTileComponent } from './active-job-offers-tile/active-jo
 import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-statistics',
+  selector: 'h-statistics',
   imports: [PageHeaderComponent, ActiveJobOffersTileComponent, NgFor],
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss',
