@@ -30,4 +30,7 @@ internal class JobOffersRepository : IJobOffersRepository
         _context.JobOffers
             .Where(x => x.Id == jobOfferId)
             .FirstOrDefaultAsync(cancellationToken);
+
+    public IQueryable<JobOffer> GetPageQuery() =>
+        _context.JobOffers; // todo implement some sensible paging/sorting/filtering
 }

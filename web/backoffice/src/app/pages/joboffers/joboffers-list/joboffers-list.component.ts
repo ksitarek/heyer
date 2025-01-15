@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { JoboffersListService } from './joboffers-list.service';
+import { Component, OnInit } from '@angular/core';
 import { DataTableColumn } from '../../../layout/components/data-table/data-table-column';
 import { DataTableComponent } from '../../../layout/components/data-table/data-table.component';
 import { JobOfferListItem } from './joboffer-list-item';
@@ -11,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './joboffers-list.component.html',
   styleUrl: './joboffers-list.component.scss',
 })
-export class JoboffersListComponent {
+export class JoboffersListComponent implements OnInit {
   public dataTableColumns: DataTableColumn[] = [
     new DataTableColumn('id', ''),
     new DataTableColumn('offerSummary', 'Offer Summary'),
@@ -20,27 +21,11 @@ export class JoboffersListComponent {
     new DataTableColumn('actions', ''),
   ];
 
-  public data$: Observable<JobOfferListItem[]> = of([
-    new JobOfferListItem(
-      '1',
-      'Job Offer 1',
-      new Date(),
-      new Date(),
-      'Actions 1'
-    ),
-    new JobOfferListItem(
-      '2',
-      'Job Offer 2',
-      new Date(),
-      new Date(),
-      'Actions 2'
-    ),
-    new JobOfferListItem(
-      '3',
-      'Job Offer 3',
-      new Date(),
-      new Date(),
-      'Actions 3'
-    ),
-  ]);
+  public data$!: Observable<JobOfferListItem[]>;
+
+  constructor(public jobOffersListService: JoboffersListService) {}
+
+  public ngOnInit(): void {
+    this.data$ = this.jobOffersListService.getListOfJobs();
+  }
 }

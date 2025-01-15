@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  InjectionToken,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,6 +14,9 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideIcons } from '@ng-icons/core';
 
 import * as heroicons from '@ng-icons/heroicons/outline';
+import { environment } from '../environments/environment';
+
+export const heyerApiUrl = new InjectionToken<string>('heyerApiUrl');
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
     provideIcons(heroicons),
+    { provide: heyerApiUrl, useValue: environment.heyerApi },
   ],
 };
