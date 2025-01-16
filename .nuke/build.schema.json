@@ -30,6 +30,7 @@
         "Clean",
         "Compile",
         "IntegrationTests",
+        "LoadSampleData",
         "PrepareE2EEnv",
         "Restore",
         "RunAll",

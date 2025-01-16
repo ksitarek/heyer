@@ -2,18 +2,18 @@ export class JobOfferListItem {
   constructor(
     public id: string,
     public offerSummary: string,
-    public publishedAt: Date,
-    public publishedUntil: Date,
+    public publishedAt: Date | null,
+    public publishedUntil: Date | null,
     public actions: string
   ) {}
 
   public static from(item: any): JobOfferListItem {
     return new JobOfferListItem(
-      item.id,
-      item.offerSummary,
-      new Date(item.publishedAt),
-      new Date(item.publishedUntil),
-      item.actions
+      item.Id,
+      item.OfferSummary,
+      item.PublishedAt == null ? null : new Date(item.PublishedAt),
+      item.PublishedUntil == null ? null : new Date(item.PublishedUntil),
+      item.Actions
     );
   }
 }

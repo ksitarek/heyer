@@ -68,6 +68,14 @@ public partial class Build
                                         .SetNoCache(true));
         });
 
+    Target LoadSampleData => _ => _
+        .Executes(() =>
+        {
+            DotNetTasks.DotNetRun(_ => _
+                                      .SetProjectFile(_dbMigratorPath)
+                                      .SetApplicationArguments("load-sample-data"));
+        });
+
     Target RunAll => _ => _
         .DependsOn(RunBackend, RunWeb)
         .Executes(() =>
