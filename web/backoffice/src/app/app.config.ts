@@ -15,6 +15,7 @@ import { provideIcons } from '@ng-icons/core';
 
 import * as heroicons from '@ng-icons/heroicons/outline';
 import { environment } from '../environments/environment';
+import { provideAuth0 } from '@auth0/auth0-angular';
 
 export const heyerApiUrl = new InjectionToken<string>('heyerApiUrl');
 
@@ -25,6 +26,13 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
     provideIcons(heroicons),
+    provideAuth0({
+      domain: 'vtb.eu.auth0.com',
+      clientId: 'nzt4gROsplg8llThJS4ft4Hl0eJ9NsUQ',
+      authorizationParams: {
+        redirect_uri: window.location.origin,
+      },
+    }),
     { provide: heyerApiUrl, useValue: environment.heyerApi },
   ],
 };
