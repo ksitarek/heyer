@@ -1,19 +1,15 @@
-import { HlmIconModule } from '@spartan-ng/ui-icon-helm';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgIcon } from '@ng-icons/core';
 import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
 import {
   HlmMenuComponent,
   HlmMenuGroupComponent,
   HlmMenuItemDirective,
   HlmMenuItemIconDirective,
-  HlmMenuItemSubIndicatorComponent,
   HlmMenuLabelComponent,
   HlmMenuSeparatorComponent,
-  HlmMenuShortcutComponent,
-  HlmSubMenuComponent,
 } from '@spartan-ng/ui-menu-helm';
 import { Observable } from 'rxjs';
 
