@@ -1,12 +1,12 @@
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
+import { NgIcon } from '@ng-icons/core';
 import { Observable } from 'rxjs';
-import { HeaderUserMenuItemComponent } from '../header-user-menu-item/header-user-menu-item.component';
 
 @Component({
   selector: 'h-header-user-menu',
-  imports: [NgIf, AsyncPipe, HeaderUserMenuItemComponent],
+  imports: [NgIf, AsyncPipe, NgIcon],
   templateUrl: './header-user-menu.component.html',
   styleUrl: './header-user-menu.component.scss',
 })

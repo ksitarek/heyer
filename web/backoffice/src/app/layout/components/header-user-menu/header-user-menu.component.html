@@ -7,16 +7,11 @@
         class="w-6 mx-2 rounded-full"
       />
     </div>
-  </div>
 
-  <div
-    class="absolute z-10 flex flex-col w-40 px-3 py-3 bg-white border rounded-sm shadow-lg border-stone-50 focus:outline-none"
-  >
-    <h-header-user-menu-item icon="heroLifebuoy" label="Help" />
-    <h-header-user-menu-item
-      icon="heroPower"
-      label="Sign Out"
-      (onItemClicked)="logout()"
-    />
+    <div>
+      <button (click)="logout()">
+        <ng-icon name="heroPower" />
+      </button>
+    </div>
   </div>
 </ng-container>
