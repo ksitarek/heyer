@@ -17,7 +17,7 @@ import {
 } from '@angular/common/http';
 import { provideIcons } from '@ng-icons/core';
 
-import * as heroicons from '@ng-icons/heroicons/outline';
+import * as lucide from '@ng-icons/lucide';
 import { environment } from '../environments/environment';
 import { provideAuth0 } from '@auth0/auth0-angular';
 
@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([authHttpInterceptorFn])),
-    provideIcons(heroicons),
+    provideIcons(lucide),
     provideAuth0({
       domain: 'vtb.eu.auth0.com',
       clientId: 'nzt4gROsplg8llThJS4ft4Hl0eJ9NsUQ',

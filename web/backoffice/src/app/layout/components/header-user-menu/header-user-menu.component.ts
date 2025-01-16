@@ -1,12 +1,37 @@
+import { HlmIconModule } from '@spartan-ng/ui-icon-helm';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
-import { NgIcon } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
+import {
+  HlmMenuComponent,
+  HlmMenuGroupComponent,
+  HlmMenuItemDirective,
+  HlmMenuItemIconDirective,
+  HlmMenuItemSubIndicatorComponent,
+  HlmMenuLabelComponent,
+  HlmMenuSeparatorComponent,
+  HlmMenuShortcutComponent,
+  HlmSubMenuComponent,
+} from '@spartan-ng/ui-menu-helm';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'h-header-user-menu',
-  imports: [NgIf, AsyncPipe, NgIcon],
+  imports: [
+    NgIf,
+    AsyncPipe,
+    NgIcon,
+    BrnMenuTriggerDirective,
+
+    HlmMenuLabelComponent,
+    HlmMenuSeparatorComponent,
+    HlmMenuGroupComponent,
+    HlmMenuComponent,
+    HlmMenuItemDirective,
+    HlmMenuItemIconDirective,
+  ],
   templateUrl: './header-user-menu.component.html',
   styleUrl: './header-user-menu.component.scss',
 })

@@ -11,15 +11,11 @@ import { NgFor } from '@angular/common';
 })
 export class SidebarMenuComponent {
   public menuItems: Array<SidebarMenuItemDto> = [
-    new SidebarMenuItemDto('Statistics', 'heroPresentationChartLine', '/'),
-    new SidebarMenuItemDto(
-      'Job Offers',
-      'heroDocumentCurrencyDollar',
-      '/job-offers'
-    ),
+    new SidebarMenuItemDto('Statistics', 'lucideChartNoAxesCombined', '/'),
+    new SidebarMenuItemDto('Job Offers', 'lucideMegaphone', '/job-offers'),
     new SidebarMenuItemDto(
       'Candidates Pool',
-      'heroUserGroup',
+      'lucideUsers',
       '/candidates-pool'
     ),
   ];
