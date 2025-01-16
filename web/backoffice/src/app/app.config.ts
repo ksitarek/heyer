@@ -10,12 +10,18 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideIcons } from '@ng-icons/core';
 
 import * as heroicons from '@ng-icons/heroicons/outline';
 import { environment } from '../environments/environment';
 import { provideAuth0 } from '@auth0/auth0-angular';
+
+import { authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 export const heyerApiUrl = new InjectionToken<string>('heyerApiUrl');
 
@@ -24,13 +30,22 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([authHttpInterceptorFn])),
     provideIcons(heroicons),
     provideAuth0({
       domain: 'vtb.eu.auth0.com',
       clientId: 'nzt4gROsplg8llThJS4ft4Hl0eJ9NsUQ',
       authorizationParams: {
         redirect_uri: window.location.origin,
+        audience: 'http://heyer',
+      },
+
+      httpInterceptor: {
+        allowedList: [
+          {
+            uri: `${environment.heyerApi}/*`,
+          },
+        ],
       },
     }),
     { provide: heyerApiUrl, useValue: environment.heyerApi },

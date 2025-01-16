@@ -1,4 +1,4 @@
-using System.Text;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +18,9 @@ public static class AuthorizationExtensions
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
+                options.Authority = jwtConfiguration["ValidAuthority"];
+                options.Audience = jwtConfiguration["ValidAudience"];
+
                 options.TokenValidationParameters = GetTokenValidationParameters(jwtConfiguration);
             });
 
@@ -26,7 +29,6 @@ public static class AuthorizationExtensions
             options.AddPolicy("HasPermission",
                               policy =>
                               {
-                                  // policy.Requirements.Add(new HasPermissionAuthorizationRequirement());
                                   policy.RequireAuthenticatedUser();
                                   policy.AddAuthenticationSchemes("Bearer");
                               });
@@ -68,13 +70,15 @@ public static class AuthorizationExtensions
 
         return new TokenValidationParameters
         {
-            ValidateIssuer = bool.Parse(configuration["ValidateIssuer"] ?? "true"),
-            ValidateAudience = bool.Parse(configuration["ValidateAudience"] ?? "true"),
-            ValidateLifetime = bool.Parse(configuration["ValidateLifetime"] ?? "true"),
-            ValidateIssuerSigningKey = bool.Parse(configuration["ValidateIssuerSigningKey"] ?? "true"),
-            ValidIssuer = configuration["ValidIssuer"],
-            ValidAudience = configuration["ValidAudience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Secret"]!))
+            NameClaimType = ClaimTypes.NameIdentifier, LogValidationExceptions = true
+            // todo check what we can/should validate
+            // ValidateIssuer = bool.Parse(configuration["ValidateIssuer"] ?? "true"),
+            // ValidateAudience = bool.Parse(configuration["ValidateAudience"] ?? "true"),
+            // ValidateLifetime = bool.Parse(configuration["ValidateLifetime"] ?? "true"),
+            // ValidateIssuerSigningKey = bool.Parse(configuration["ValidateIssuerSigningKey"] ?? "true"),
+            // ValidIssuer = configuration["ValidIssuer"],
+            // ValidAudience = configuration["ValidAudience"],
+            // IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Secret"]!))
         };
     }
 }

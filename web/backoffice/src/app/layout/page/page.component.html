@@ -1,4 +1,4 @@
-<div class="flex flex-row min-h-screen">
+<div class="flex flex-row min-h-screen" *ngIf="isAuthenticated$ | async">
   <aside
     class="flex-none w-64 transition-transform duration-150 ease-in transform -translate-x-full md:translate-x-0 bg-stone-100"
   >
