@@ -1,4 +1,5 @@
 using Hangfire;
+using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure.HealthChecks;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -19,7 +20,7 @@ internal class Host
         _app.UseAuthorization();
         _app.UseModules();
         _app.UseHealthChecks("/health", new HealthCheckOptions { ResponseWriter = JsonResponseWriter.WriteResponse });
-        _app.UseCors();
+        _app.UsePreconfiguredCors();
         _app.UseHangfireDashboard();
     }
 

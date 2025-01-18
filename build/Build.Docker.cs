@@ -88,8 +88,6 @@ public partial class Build
         {
             StopDockerContainer(_apiContainerName);
 
-            //
-
             string[] environmentVariables =
             [
                 $"Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=heyer;TrustServerCertificate=True",
