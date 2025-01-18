@@ -1,0 +1,43 @@
+<div class="flex flex-row items-center justify-between pt-4 border-t">
+  <brn-select placeholder="{{ pageSize() }}" [(ngModel)]="pageSize">
+    <hlm-select-trigger class="inline-flex mr-1 w-15 h-9">
+      <hlm-select-value />
+    </hlm-select-trigger>
+    <hlm-select-content>
+      @for (size of pageSizes(); track size) {
+      <hlm-option [value]="size">
+        {{ size }}
+      </hlm-option>
+      }
+    </hlm-select-content>
+  </brn-select>
+
+  <div class="flex items-center justify-center">
+    <button
+      hlmBtn
+      variant="ghost"
+      [disabled]="!hasPreviousPage()"
+      (click)="previousPage()"
+    >
+      <ng-icon hlmIcon name="lucideMoveLeft" />&nbsp;Previous
+    </button>
+    <button
+      hlmBtn
+      variant="ghost"
+      [disabled]="!hasNextPage()"
+      (click)="nextPage()"
+    >
+      Next&nbsp;<ng-icon hlmIcon name="lucideMoveRight" />
+    </button>
+  </div>
+
+  <p hlmSmall *ngIf="totalCount() > 0">
+    <span hlmMuted>Showing </span>
+    <span>{{ from() }}</span>
+    <span hlmMuted> to </span>
+    <span>{{ to() }}</span>
+    <span hlmMuted> of </span>
+    <span>{{ totalCount() }}</span>
+    <span hlmMuted> entries</span>
+  </p>
+</div>

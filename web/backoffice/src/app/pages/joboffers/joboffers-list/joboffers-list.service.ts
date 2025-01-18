@@ -4,6 +4,7 @@ import { heyerApiUrl } from '../../../app.config';
 import { HttpErrorHandlerService } from '../../../http-error-handler.service';
 import { catchError, map, Observable, tap } from 'rxjs';
 import { JobOfferListItem } from './joboffer-list-item';
+import { ListResponse } from '../../../models/list-response';
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +16,16 @@ export class JoboffersListService {
     @Inject(heyerApiUrl) private api_url: string
   ) {}
 
-  getListOfJobs(): Observable<JobOfferListItem[]> {
-    return this.http.get<JobOfferListItem[]>(`${this.api_url}/job-offers`).pipe(
-      map((response) => response.map((item) => JobOfferListItem.from(item))),
+  getListOfJobs(): Observable<ListResponse<JobOfferListItem>> {
+    return this.http.get<any>(`${this.api_url}/job-offers`).pipe(
+      map(
+        (response) =>
+          new ListResponse<JobOfferListItem>(
+            response.PageSize,
+            response.TotalCount,
+            response.Items.map((x: any) => JobOfferListItem.from(x))
+          )
+      ),
       tap((response) => console.log(response)),
       catchError((error) => {
         this.errorHandler.handleError(error);

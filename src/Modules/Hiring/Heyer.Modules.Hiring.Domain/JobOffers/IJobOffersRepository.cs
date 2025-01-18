@@ -1,4 +1,5 @@
 using FluentResults;
+using Heyer.BuildingBlocks.Application.HttpLanguage;
 
 namespace Heyer.Modules.Hiring.Domain.JobOffers;
 
@@ -6,5 +7,5 @@ public interface IJobOffersRepository
 {
     Task<Result> AddAsync(JobOffer jobOffer, CancellationToken cancellationToken = default);
     Task<JobOffer?> GetJobOfferById(JobOfferId jobOfferId, CancellationToken cancellationToken = default);
-    IQueryable<JobOffer> GetPageQuery();
+    IQueryable<JobOffer> GetPageQuery(FilteredListRequest filteredListRequest);
 }

@@ -1,4 +1,5 @@
 using FluentResults;
+using Heyer.BuildingBlocks.Application.HttpLanguage;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,8 @@ internal class JobOffersRepository : IJobOffersRepository
             .Where(x => x.Id == jobOfferId)
             .FirstOrDefaultAsync(cancellationToken);
 
-    public IQueryable<JobOffer> GetPageQuery() =>
-        _context.JobOffers; // todo implement some sensible paging/sorting/filtering
+    public IQueryable<JobOffer> GetPageQuery(FilteredListRequest filteredListRequest) =>
+        _context.JobOffers
+            .Skip(filteredListRequest.PageIx * filteredListRequest.PageSize)
+            .Take(filteredListRequest.PageSize); // todo implement some sensible sorting/filtering
 }

@@ -1,60 +1,55 @@
-<brn-table
-  hlm
-  [dataSource]="data$"
-  [displayedColumns]="dataTableColumns()"
-  [trackBy]="trackBy"
->
-  <brn-column-def name="id" class="w-12">
-    <hlm-th *brnHeaderDef></hlm-th>
-    <hlm-td *brnCellDef="let element"></hlm-td>
-  </brn-column-def>
-
-  <brn-column-def name="actions" class="w-12">
-    <hlm-th *brnHeaderDef></hlm-th>
-    <hlm-td *brnCellDef="let element">
-      <div class="flex space-x-2">
-        <button hlmBtn variant="secondary">
-          <ng-icon name="lucideSend" />
-        </button>
-        <button hlmBtn variant="secondary">
-          <ng-icon name="lucideUndo" />
-        </button>
-        <button hlmBtn variant="secondary">
-          <ng-icon name="lucideFilePenLine" />
-        </button>
-      </div>
-    </hlm-td>
-  </brn-column-def>
-
-  <brn-column-def name="offerSummary" class="w-64">
-    <hlm-th *brnHeaderDef>Summary</hlm-th>
-    <hlm-td truncate *brnCellDef="let element">{{
-      element.offerSummary
-    }}</hlm-td>
-  </brn-column-def>
-
-  <brn-column-def name="publishedAt" class="w-40">
-    <hlm-th *brnHeaderDef>Published At</hlm-th>
-    <hlm-td *brnCellDef="let element">
-      @if (element.publishedAt == null) { &mdash; } @else {
-      {{ element.publishedAt | hDate }}
-      }
-    </hlm-td>
-  </brn-column-def>
-
-  <brn-column-def name="publishedUntil" class="w-40">
-    <hlm-th *brnHeaderDef>Published Until</hlm-th>
-    <hlm-td *brnCellDef="let element">
-      @if (element.publishedUntil == null) { &mdash; } @else {
-      {{ element.publishedUntil | hDate }}
-      }
-    </hlm-td>
-  </brn-column-def>
-
-  <div
-    class="flex items-center justify-center p-20 text-muted-foreground"
-    brnNoDataRow
+<ng-container *ngIf="data$ | async as data">
+  <brn-table
+    hlm
+    [dataSource]="data.items"
+    [displayedColumns]="dataTableColumns()"
+    [trackBy]="trackBy"
+    class="w-full"
   >
-    No data
-  </div>
-</brn-table>
+    <brn-column-def name="id" class="w-12">
+      <hlm-th *brnHeaderDef></hlm-th>
+      <hlm-td *brnCellDef="let element"></hlm-td>
+    </brn-column-def>
+
+    <brn-column-def name="actions" class="w-60">
+      <hlm-th *brnHeaderDef></hlm-th>
+      <hlm-td *brnCellDef="let element">
+        <h-joboffer-list-item-actions [item]="element" />
+      </hlm-td>
+    </brn-column-def>
+
+    <brn-column-def name="offerSummary" class="flex-1">
+      <hlm-th *brnHeaderDef>Summary</hlm-th>
+      <hlm-td truncate *brnCellDef="let element">{{
+        element.offerSummary
+      }}</hlm-td>
+    </brn-column-def>
+
+    <brn-column-def name="publishedAt" class="w-40">
+      <hlm-th *brnHeaderDef>Published At</hlm-th>
+      <hlm-td *brnCellDef="let element">
+        @if (element.publishedAt == null) { &mdash; } @else {
+        {{ element.publishedAt | hDate }}
+        }
+      </hlm-td>
+    </brn-column-def>
+
+    <brn-column-def name="publishedUntil" class="w-40">
+      <hlm-th *brnHeaderDef>Published Until</hlm-th>
+      <hlm-td *brnCellDef="let element">
+        @if (element.publishedUntil == null) { &mdash; } @else {
+        {{ element.publishedUntil | hDate }}
+        }
+      </hlm-td>
+    </brn-column-def>
+
+    <div
+      class="flex items-center justify-center p-20 text-muted-foreground"
+      brnNoDataRow
+    >
+      No data
+    </div>
+  </brn-table>
+
+  <h-pagination [totalCount]="data.totalCount" />
+</ng-container>

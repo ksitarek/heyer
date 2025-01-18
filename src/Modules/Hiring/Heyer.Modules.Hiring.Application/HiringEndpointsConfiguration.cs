@@ -1,4 +1,5 @@
 using Heyer.BuildingBlocks.Application.Authorization;
+using Heyer.BuildingBlocks.Application.HttpLanguage;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
@@ -60,7 +61,7 @@ public static class HiringEndpointsConfiguration
                           CancellationToken cancellationToken) =>
                    {
                        var result =
-                           await module.DispatchQuery<GetJobOffersList, IEnumerable<JobOfferListItem>>(
+                           await module.DispatchQuery<GetJobOffersList, ListResponse<JobOfferListItem>>(
                                new GetJobOffersList(),
                                cancellationToken);
 

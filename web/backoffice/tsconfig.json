@@ -39,6 +39,9 @@
       ],
       "@spartan-ng/ui-formfield-helm": [
         "./libs/ui/ui-formfield-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-tooltip-helm": [
+        "./libs/ui/ui-tooltip-helm/src/index.ts"
       ]
     }
   },
