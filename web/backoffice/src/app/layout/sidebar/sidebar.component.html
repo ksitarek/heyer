@@ -1,3 +1,23 @@
-<h3 class="mx-5 my-2 text-primary" hlmH3>Heyer</h3>
+<div class="flex flex-col justify-between">
+  <h-sidebar-menu />
 
-<h-sidebar-menu />
+  <button
+    hlmBtn
+    variant="ghost"
+    class="w-full"
+    *ngIf="expanded()"
+    (click)="toggle()"
+  >
+    <ng-icon name="lucidePanelLeftClose" />&nbsp;Collapse
+  </button>
+
+  <button
+    hlmBtn
+    variant="ghost"
+    class="w-full"
+    *ngIf="!expanded()"
+    (click)="toggle()"
+  >
+    <ng-icon name="lucidePanelLeftOpen" />
+  </button>
+</div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 import { SidebarMenuItemDto } from './sidebar-menu-item-dto';
 import { NgFor } from '@angular/common';

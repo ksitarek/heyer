@@ -1,12 +1,10 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { AuthService, User } from '@auth0/auth0-angular';
-import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 import { HeaderUserMenuComponent } from '../components/header-user-menu/header-user-menu.component';
+import { HlmH3Directive } from '@spartan-ng/ui-typography-helm';
 
 @Component({
   selector: 'h-header',
-  imports: [HeaderUserMenuComponent],
+  imports: [HeaderUserMenuComponent, HlmH3Directive],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
