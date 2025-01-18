@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import { provideAuth0 } from '@auth0/auth0-angular';
 
 import { authHttpInterceptorFn } from '@auth0/auth0-angular';
+import { DatePipe } from '@angular/common';
 
 export const heyerApiUrl = new InjectionToken<string>('heyerApiUrl');
 
@@ -49,5 +50,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     { provide: heyerApiUrl, useValue: environment.heyerApi },
+    DatePipe,
   ],
 };

@@ -1,4 +1,7 @@
-<a [routerLink]="dto.path" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-stone-200 dark:hover:bg-gray-700 group">
+<a
+  [routerLink]="dto.path"
+  class="flex items-center p-2 text-sm text-gray-900 rounded-lg dark:text-white hover:bg-primary-foreground dark:hover:bg-gray-700 group"
+>
   <ng-icon [name]="dto.icon" />
   <span class="ms-3">{{ dto.label }}</span>
 </a>

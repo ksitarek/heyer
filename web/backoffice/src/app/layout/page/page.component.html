@@ -1,13 +1,14 @@
-<div class="flex flex-row min-h-screen" *ngIf="isAuthenticated$ | async">
-  <aside
-    class="flex-none w-64 transition-transform duration-150 ease-in transform -translate-x-full md:translate-x-0 bg-stone-100"
-  >
+<div
+  class="flex flex-row min-h-screen mx-auto max-w-screen-2xl"
+  *ngIf="isAuthenticated$ | async"
+>
+  <aside class="flex-none w-64">
     <h-sidebar></h-sidebar>
   </aside>
   <div class="flex flex-col flex-grow">
     <h-header></h-header>
 
-    <div class="py-5 px-7">
+    <div class="py-5 pl-7">
       <router-outlet></router-outlet>
     </div>
     <h-footer></h-footer>
