@@ -129,7 +129,6 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
     private HiringDbContext _ctx;
     private JobOffer _jobOffer;
 
-
     public static IEnumerable<object[]> BadRequestTestCases()
     {
         yield return new object[] { new ContractDetails() };
@@ -137,12 +136,11 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
         yield return new object[] { new ContractDetails(EmploymentType.B2B, new SalaryRange(false, 0, 0), 8, 8) };
         yield return new object[] { new ContractDetails(EmploymentType.B2B, new SalaryRange(false, 1, 0), 8, 8) };
 
-        // todo make business rule validations to return 400 Bad Request
         // duplicate employment type
-        // yield return new object[]
-        // {
-        //     new ContractDetails(EmploymentType.ContractOfEmployment, new SalaryRange(false, 1, 2), 8, 8)
-        // };
+        yield return new object[]
+        {
+            new ContractDetails(EmploymentType.ContractOfEmployment, new SalaryRange(false, 1, 2), 8, 8)
+        };
     }
 
     [Test]

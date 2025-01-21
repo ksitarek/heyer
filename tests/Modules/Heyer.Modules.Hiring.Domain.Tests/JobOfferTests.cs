@@ -40,8 +40,7 @@ public class JobOfferTests
         var result = jobOffer.AddCandidate(candidateId);
 
         // Assert
-        result.Should().BeFailure()
-            .Which.Should().HaveError($"Candidate with id: {candidateId} has already applied for this job offer.");
+        result.Should().BeFailure($"Candidate with id: {candidateId} has already applied for this job offer.");
     }
 
     [Test]
@@ -120,8 +119,7 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure()
-            .Which.Should().HaveReason("Job offer must have at least one contract details when publishing.");
+        result.Should().BeFailure("Job offer must have at least one contract details when publishing.");
     }
 
     [Test]
@@ -135,8 +133,7 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure()
-            .Which.Should().HaveReason("Job offer must have location when publishing.");
+        result.Should().BeFailure("Job offer must have location when publishing.");
     }
 
     [Test]
@@ -154,8 +151,7 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure()
-            .Which.Should().HaveReason("Job offer must have requirements when publishing.");
+        result.Should().BeFailure("Job offer must have requirements when publishing.");
     }
 
     [Test]
@@ -175,8 +171,7 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure()
-            .Which.Should().HaveReason("Job offer must not be public.");
+        result.Should().BeFailure("Job offer must not be public.");
     }
 
     [Test]
@@ -195,8 +190,7 @@ public class JobOfferTests
         var result = jobOffer.Publish(DateTimeOffset.Now.AddDays(-1));
 
         // Assert
-        result.Should().BeFailure()
-            .Which.Should().HaveReason("Published until date must not be in the past.");
+        result.Should().BeFailure("Published until date must not be in the past.");
     }
 
     [Test]
@@ -262,8 +256,7 @@ public class JobOfferTests
         var result = jobOffer.TakeDown();
 
         // Assert
-        result.Should().BeFailure()
-            .Which.Should().HaveReason("Job offer must be published to take it down.");
+        result.Should().BeFailure("Job offer must be published to take it down.");
     }
 
     [Test]

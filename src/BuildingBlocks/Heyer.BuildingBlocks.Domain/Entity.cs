@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using FluentResults;
+using Heyer.BuildingBlocks.Application.Results;
 
 namespace Heyer.BuildingBlocks.Domain;
 
@@ -16,17 +17,26 @@ public abstract class Entity
 
     protected static Result ChallengeBusinessRules(params IBusinessRule[] businessRules)
     {
-        var validationResult = new Result();
+        var errors = new List<Error>();
         foreach (var businessRule in businessRules)
         {
             var result = businessRule.Challenge();
             if (result.IsFailed)
             {
-                validationResult.Reasons.AddRange(result.Reasons);
+                errors.Add(new Error(result.ToString()));
             }
         }
 
-        return validationResult;
+        if (!errors.Any())
+        {
+            return Result.Ok();
+        }
+
+        var businessRuleViolation = new BusinessRuleViolation();
+
+        businessRuleViolation.Reasons.AddRange(errors);
+
+        return businessRuleViolation;
     }
 
     protected void AddDomainEvent(DomainEvent @event)
