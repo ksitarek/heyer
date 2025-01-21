@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { JobOfferListItem } from '../joboffer-list-item';
 import { NgIcon } from '@ng-icons/core';
 import { HlmTooltipTriggerDirective } from '@spartan-ng/ui-tooltip-helm';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'h-joboffer-list-item-actions',
-  imports: [NgIcon, HlmTooltipTriggerDirective],
+  imports: [NgIcon, HlmTooltipTriggerDirective, RouterModule],
   templateUrl: './joboffer-list-item-actions.component.html',
   styleUrl: './joboffer-list-item-actions.component.scss',
 })

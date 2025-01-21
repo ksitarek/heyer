@@ -145,7 +145,6 @@ public partial class Build
             DockerTasks.DockerRun(x => x
                                       .SetImage("postgres:17")
                                       .SetName(_sqlEdgeContainerName)
-                                      .SetRm(true)
                                       .SetPublish($"{_posrgesPort}:5432")
                                       .SetDetach(true)
                                       .SetEnv(environmentVariables));

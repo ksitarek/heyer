@@ -1,0 +1,11 @@
+<div class="flex flex-row justify-around space-x-10">
+  <button
+    hlmBtn
+    (click)="updateValue(o.k)"
+    class="flex flex-row items-center"
+    *ngFor="let o of options"
+  >
+    <ng-icon [name]="getIcon(o.k)" [class]="getIconColor(o.k)" class="mr-2" />
+    <span>{{ o.v }}</span>
+  </button>
+</div>

@@ -81,7 +81,7 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
         claims = claims.Concat(permissions.Select(permission => new Claim("permissions", permission))).ToArray();
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.RsaSha256);
 
         var token = new JwtSecurityToken(
             jwtIssuer,

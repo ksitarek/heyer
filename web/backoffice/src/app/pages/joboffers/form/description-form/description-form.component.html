@@ -1,0 +1,29 @@
+<ng-container [formGroup]="form">
+  <ng-container formGroupName="description">
+    <label hlmLabel class="w-full">
+      Offer summary
+      <input
+        type="text"
+        class="w-full"
+        hlmInput
+        formControlName="offerSummary"
+      />
+    </label>
+
+    <label hlmLabel class="w-full">
+      Remote work
+      <div>
+        <h-remote-work-control formControlName="remoteWork" class="w-full" />
+      </div>
+    </label>
+
+    <label class="w-full" hlmLabel>
+      Job description
+      <textarea
+        hlmInput
+        class="w-full min-h-[280px]"
+        formControlName="jobDescription"
+      ></textarea>
+    </label>
+  </ng-container>
+</ng-container>

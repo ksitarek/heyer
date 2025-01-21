@@ -60,6 +60,12 @@ public class JobOfferTests
 
         // Assert
         result.Should().BeSuccess();
+
+        jobOffer.DomainEvents.Should().ContainSingle(
+            domainEvent => domainEvent.GetType() == typeof(ContractDetailsAdded)
+                           && ((ContractDetailsAdded)domainEvent).JobOfferId == jobOffer.Id
+                           && ((ContractDetailsAdded)domainEvent).EmploymentType ==
+                           EmploymentType.ContractOfEmployment);
     }
 
     [Test]

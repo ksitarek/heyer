@@ -16,6 +16,7 @@ using NSubstitute.ExceptionExtensions;
 namespace Heyer.Storage.API.Tests.UnitTests.Providers.Registry;
 
 [Category("Unit")]
+[Ignore("MongoDB is abandoned")]
 public class MongoDBRegistryStrategyTests
 {
     private readonly MongoDbFixture _mongoDbFixture = new();

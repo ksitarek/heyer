@@ -1,0 +1,18 @@
+<h-page-header>Edit offer</h-page-header>
+<form
+  [formGroup]="jobOfferForm"
+  class="flex flex-col items-end mt-10 space-y-6"
+>
+  <div class="flex flex-row w-full space-x-10">
+    <div class="flex-1 max-w-2xl">
+      <h-description-form [form]="jobOfferForm" />
+    </div>
+    <div class="w-full">
+      <h-location-form [form]="jobOfferForm" />
+
+      <h-contracts-details-form [form]="jobOfferForm" />
+
+      <h-requirements-form [form]="jobOfferForm" />
+    </div>
+  </div>
+</form>

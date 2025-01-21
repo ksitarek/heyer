@@ -5,7 +5,12 @@
   <button hlmBtn variant="ghost" [hlmTooltipTrigger]="'Take down'">
     <ng-icon hlmIcon name="lucideUndo" />
   </button>
-  <button hlmBtn variant="ghost" [hlmTooltipTrigger]="'Edit'">
+  <a
+    hlmBtn
+    variant="ghost"
+    [hlmTooltipTrigger]="'Edit'"
+    [routerLink]="['/job-offers', 'edit', item.id]"
+  >
     <ng-icon hlmIcon name="lucideFilePenLine" />
-  </button>
+  </a>
 </div>

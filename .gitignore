@@ -44,6 +44,8 @@ out/
 *.log
 *.svclog
 *.scc
+*.cer
+*.pem
 
 # Visual C++ cache files
 ipch/

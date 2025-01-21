@@ -1,0 +1,110 @@
+<fieldset [formGroup]="form">
+  <legend class="mb-2 font-semibold">Available contracts</legend>
+
+  <ng-container formArrayName="contractsDetails">
+    <ng-container
+      *ngFor="let contractFormGroup of contractsDetails.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <div class="px-4 py-2 mb-4 rounded-md bg-secondary">
+        <label
+          hlmLabel
+          class="flex flex-row items-center justify-between w-full"
+        >
+          <span>
+            {{
+              getEmploymentTypeLabelByControlValue(
+                contractFormGroup.get("employmentType")!
+              )
+            }}
+          </span>
+
+          <button
+            hlmBtn
+            variant="secondary"
+            (click)="removeContract(i)"
+            class="ml-2"
+          >
+            <ng-icon name="lucideX" class="text-secondary-foreground"></ng-icon>
+          </button>
+        </label>
+
+        <input
+          type="hidden"
+          class="w-full"
+          hlmInput
+          formControlName="employmentType"
+        />
+
+        <div
+          class="flex flex-row items-center mt-4 space-x-2"
+          formGroupName="salaryRange"
+        >
+          <div>Salary from</div>
+          <div>
+            <input
+              type="text"
+              class="w-20 text-right"
+              hlmInput
+              formControlName="from"
+            />
+          </div>
+          <div>to</div>
+          <div>
+            <input
+              type="text"
+              class="w-20 text-right"
+              hlmInput
+              formControlName="to"
+            />
+          </div>
+          <div>
+            <label hlmLabel class="flex items-center">
+              <hlm-checkbox formControlName="isPublished" class="mr-2" />
+              public
+            </label>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <button
+      hlmBtn
+      variant="secondary"
+      class="w-full"
+      [brnMenuTriggerFor]="addContractMenu"
+      *ngIf="availableContractTypes.length > 1"
+    >
+      <ng-icon name="lucidePlus" class="mr-2" />Add contract type
+    </button>
+
+    <ng-container *ngIf="availableContractTypes.length == 1">
+      <button
+        hlmBtn
+        variant="secondary"
+        class="w-full"
+        [brnMenuTriggerFor]="addContractMenu"
+        *ngFor="let type of availableContractTypes; let i = index"
+        (click)="addContract(type)"
+      >
+        <ng-icon name="lucidePlus" hlmMenuIcon></ng-icon>
+        Add {{ getEmploymentTypeLabel(type) }}
+      </button>
+    </ng-container>
+  </ng-container>
+</fieldset>
+
+<ng-template #addContractMenu>
+  <hlm-menu class="w-56">
+    <hlm-menu-group>
+      <button
+        hlmMenuItem
+        *ngFor="let type of availableContractTypes; let i = index"
+        (click)="addContract(type)"
+      >
+        <ng-icon hlm name="lucidePlus" hlmMenuIcon />
+        <span>{{ getEmploymentTypeLabel(type) }}</span>
+      </button>
+    </hlm-menu-group>
+  </hlm-menu>
+</ng-template>

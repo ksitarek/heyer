@@ -19,4 +19,13 @@
     <ProjectReference Include="..\Heyer.Modules.Hiring.Domain\Heyer.Modules.Hiring.Domain.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="JobOffers\ContractDetails\AddContractDetails\"/>
+    <Folder Include="JobOffers\ContractDetails\RemoveContractDetails\"/>
+    <Folder Include="JobOffers\ContractDetails\UpdateContractDetails\"/>
+    <Folder Include="JobOffers\Details\Update\"/>
+    <Folder Include="JobOffers\SetOfficeLocation\"/>
+    <Folder Include="JobOffers\SetRequirements\"/>
+  </ItemGroup>
+
 </Project>

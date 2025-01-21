@@ -82,6 +82,8 @@ public class JobOffer : Entity
 
         ContractsDetails.Add(newContractDetails);
 
+        AddDomainEvent(new ContractDetailsAdded(Id, newContractDetails.EmploymentType));
+
         return Result.Ok();
     }
 
@@ -107,6 +109,29 @@ public class JobOffer : Entity
         return Result.Ok();
     }
 
+    public Result RemoveContractDetails(EmploymentType employmentType)
+    {
+        if (ContractsDetails is null)
+        {
+            return Result.Ok();
+        }
+
+        var validationResult = ChallengeBusinessRules(
+            new JobOfferMustHaveEmploymentType(ContractsDetails, employmentType));
+
+        if (validationResult.IsFailed)
+        {
+            return validationResult;
+        }
+
+        ContractsDetails = ContractsDetails
+            .Where(x => x.EmploymentType != employmentType)
+            .ToList();
+
+        AddDomainEvent(new ContractDetailsRemoved(Id, employmentType));
+
+        return Result.Ok();
+    }
 
     public Result SetOfficeLocation(OfficeLocation location)
     {
@@ -142,6 +167,9 @@ public class JobOffer : Entity
 
         return Result.Ok();
     }
+
+    public Result UpdateContractDetailsSalaryRange(EmploymentType employmentType, SalaryRange newSalaryRange) =>
+        throw new NotImplementedException();
 
     public Result UpdateDescription(string offerSummary, string jobDescription)
     {

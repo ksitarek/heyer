@@ -61,14 +61,8 @@ public static class AuthorizationExtensions
         return services;
     }
 
-    private static TokenValidationParameters GetTokenValidationParameters(IConfiguration configuration)
-    {
-        if (string.IsNullOrWhiteSpace(configuration["Secret"]))
-        {
-            throw new ArgumentException("Secret is required for JWT authentication.");
-        }
-
-        return new TokenValidationParameters
+    private static TokenValidationParameters GetTokenValidationParameters(IConfiguration configuration) =>
+        new()
         {
             NameClaimType = ClaimTypes.NameIdentifier, LogValidationExceptions = true
             // todo check what we can/should validate
@@ -80,5 +74,4 @@ public static class AuthorizationExtensions
             // ValidAudience = configuration["ValidAudience"],
             // IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Secret"]!))
         };
-    }
 }
