@@ -1,3 +1,4 @@
+using Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.AddContractDetails;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Domain.JobOffers;
@@ -15,6 +16,9 @@ public static class JobOfferMappings
             request.OfferSummary,
             request.JobDescription,
             request.RemoteWork);
+
+    public static AddContractDetails MapToCommand(this AddContractDetailsRequest request) =>
+        new(new JobOfferId(request.JobOfferId), request.ContractDetails);
 
     public static JobOfferDetails MapToJobOfferDetails(this JobOffer jobOffer) =>
         new(jobOffer.Id.Guid,

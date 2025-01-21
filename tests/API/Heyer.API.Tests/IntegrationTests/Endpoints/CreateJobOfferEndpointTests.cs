@@ -105,7 +105,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Client1Id,
-            HiringPermissions.CreateJobOffer);
+            HiringPermissions.UpdateJobOffer);
         var request = new CreateJobOfferRequest(offerSummary, jobDescription, remoteWork);
 
         // Act
@@ -161,7 +161,7 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(
             ApplicationFactoryConfiguration.Client1Id,
-            HiringPermissions.CreateJobOffer);
+            HiringPermissions.UpdateJobOffer);
         var request = CreateJobOfferRequest();
 
         // Act

@@ -5,6 +5,9 @@ namespace Heyer.API.Client;
 
 public interface IApiClient : IDisposable
 {
+    [Post("/job-offers/add-contract-details")]
+    Task AddContractDetails([Body] AddContractDetailsRequest addContractDetailsRequest);
+
     [Post("/job-offers/create")]
     Task<Guid> CreateJobOffer([Body] CreateJobOfferRequest createJobOfferRequestRequest);
 

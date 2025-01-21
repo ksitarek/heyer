@@ -17,12 +17,28 @@ public static class HiringEndpointsConfiguration
 {
     public static void MapEndpoints(WebApplication app)
     {
+        MapAddContractDetailsEndpoint(app);
         MapCreateJobOfferEndpoint(app);
         MapGetJobOfferByIdEndpoint(app);
         MapGetJobOffersListEndpoint(app);
         MapNewCandidateApplyEndpoint(app);
         MapPublishJobOfferEndpoint(app);
     }
+
+    private static void MapAddContractDetailsEndpoint(WebApplication app) =>
+        app.MapPost("/job-offers/add-contract-details",
+                    async (IHiringModule module,
+                           AddContractDetailsRequest request,
+                           CancellationToken cancellationToken) =>
+                    {
+                        var command = request.MapToCommand();
+
+                        var result = await module.DispatchCommand(command, cancellationToken);
+
+                        return result.IsSuccess
+                            ? Results.Ok()
+                            : ResponseErrorHandling.Handle(result);
+                    }).RequirePermission(HiringPermissions.UpdateJobOffer);
 
     private static void MapCreateJobOfferEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/create",
@@ -37,7 +53,7 @@ public static class HiringEndpointsConfiguration
                         return result.IsSuccess
                             ? Results.Ok(result.Value)
                             : ResponseErrorHandling.Handle(result);
-                    }).RequirePermission(HiringPermissions.CreateJobOffer);
+                    }).RequirePermission(HiringPermissions.UpdateJobOffer);
 
     private static void MapGetJobOfferByIdEndpoint(WebApplication app) =>
         app.MapGet("/job-offers/{jobOfferId}",
