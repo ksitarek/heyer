@@ -75,13 +75,13 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim("CompanyId", companyId.ToString()), new Claim("CompanyName", $"ACME Corporation {companyId}")
+            new Claim("companyId", companyId.ToString()), new Claim("companyName", $"ACME Corporation {companyId}")
         };
 
         claims = claims.Concat(permissions.Select(permission => new Claim("permissions", permission))).ToArray();
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.RsaSha256);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
             jwtIssuer,

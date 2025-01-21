@@ -16,6 +16,7 @@ internal static class Config
     public const string Jwt_ValidateIssuer = "Jwt:ValidateIssuer";
     public const string Jwt_ValidateLifetime = "Jwt:ValidateLifetime";
     public const string Jwt_ValidAudience = "Jwt:ValidAudience";
+    public const string Jwt_ValidAuthority = "Jwt:ValidAuthority";
     public const string Jwt_ValidIssuer = "Jwt:ValidIssuer";
 
     public const string Npgsql_ConnectionString = "Npgsql:ConnectionString";
