@@ -3,16 +3,16 @@ using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 
-namespace Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.AddContractDetails;
+namespace Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.RemoveContractDetails;
 
-public class AddContractDetailsHandler : ICommandHandler<AddContractDetails>
+public class RemoveContractDetailsHandler : ICommandHandler<RemoveContractDetails>
 {
     private readonly IJobOffersRepository _jobOffersRepository;
 
-    public AddContractDetailsHandler(IJobOffersRepository jobOffersRepository) =>
+    public RemoveContractDetailsHandler(IJobOffersRepository jobOffersRepository) =>
         _jobOffersRepository = jobOffersRepository;
 
-    public async Task<Result> Handle(AddContractDetails request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RemoveContractDetails request, CancellationToken cancellationToken)
     {
         var jobOffer = await _jobOffersRepository.GetJobOfferById(request.Id, cancellationToken);
 
@@ -21,6 +21,6 @@ public class AddContractDetailsHandler : ICommandHandler<AddContractDetails>
             return new NotFoundError();
         }
 
-        return jobOffer.AddContractDetails(request.ContractDetails);
+        return jobOffer.RemoveContractDetails(request.EmploymentType);
     }
 }

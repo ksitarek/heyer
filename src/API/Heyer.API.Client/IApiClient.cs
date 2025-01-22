@@ -23,4 +23,10 @@ public interface IApiClient : IDisposable
 
     [Post("/job-offers/publish")]
     Task PublishJobOffer([Body] PublishJobOfferRequest publishJobOfferRequest);
+
+    [Post("/job-offers/remove-contract-details")]
+    Task RemoveContractDetails([Body] RemoveContractDetailsRequest removeContractDetailsRequest);
+
+    [Post("/job-offers/update-contract-details")]
+    Task UpdateContractDetails([Body] UpdateContractDetailsRequest updateContractDetailsRequest);
 }

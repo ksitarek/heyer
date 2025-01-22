@@ -111,11 +111,6 @@ public class JobOffer : Entity
 
     public Result RemoveContractDetails(EmploymentType employmentType)
     {
-        if (ContractsDetails is null)
-        {
-            return Result.Ok();
-        }
-
         var validationResult = ChallengeBusinessRules(
             new JobOfferMustHaveEmploymentType(ContractsDetails, employmentType));
 
@@ -124,11 +119,14 @@ public class JobOffer : Entity
             return validationResult;
         }
 
-        ContractsDetails = ContractsDetails
-            .Where(x => x.EmploymentType != employmentType)
-            .ToList();
+        if (ContractsDetails != null)
+        {
+            ContractsDetails = ContractsDetails
+                .Where(x => x.EmploymentType != employmentType)
+                .ToList();
 
-        AddDomainEvent(new ContractDetailsRemoved(Id, employmentType));
+            AddDomainEvent(new ContractDetailsRemoved(Id, employmentType));
+        }
 
         return Result.Ok();
     }

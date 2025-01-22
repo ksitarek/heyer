@@ -23,6 +23,8 @@ public static class HiringEndpointsConfiguration
         MapGetJobOffersListEndpoint(app);
         MapNewCandidateApplyEndpoint(app);
         MapPublishJobOfferEndpoint(app);
+        MapRemoveContractDetailsEndpoint(app);
+        MapUpdateContractDetailsEndpoint(app);
     }
 
     private static void MapAddContractDetailsEndpoint(WebApplication app) =>
@@ -115,4 +117,34 @@ public static class HiringEndpointsConfiguration
                             ? Results.Ok()
                             : ResponseErrorHandling.Handle(result);
                     }).RequirePermission(HiringPermissions.PublishJobOffer);
+
+    private static void MapRemoveContractDetailsEndpoint(WebApplication app) =>
+        app.MapPost("/job-offers/remove-contract-details",
+                    async (IHiringModule module,
+                           RemoveContractDetailsRequest request,
+                           CancellationToken cancellationToken) =>
+                    {
+                        var command = request.MapToCommand();
+
+                        var result = await module.DispatchCommand(command, cancellationToken);
+
+                        return result.IsSuccess
+                            ? Results.Ok()
+                            : ResponseErrorHandling.Handle(result);
+                    }).RequirePermission(HiringPermissions.UpdateJobOffer);
+
+    private static void MapUpdateContractDetailsEndpoint(WebApplication app) =>
+        app.MapPost("/job-offers/update-contract-details",
+                    async (IHiringModule module,
+                           UpdateContractDetailsRequest request,
+                           CancellationToken cancellationToken) =>
+                    {
+                        var command = request.MapToCommand();
+
+                        var result = await module.DispatchCommand(command, cancellationToken);
+
+                        return result.IsSuccess
+                            ? Results.Ok()
+                            : ResponseErrorHandling.Handle(result);
+                    }).RequirePermission(HiringPermissions.UpdateJobOffer);
 }

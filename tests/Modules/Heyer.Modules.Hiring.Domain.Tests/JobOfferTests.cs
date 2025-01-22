@@ -216,6 +216,69 @@ public class JobOfferTests
     }
 
     [Test]
+    public void RemoveContractDetails_FailsWhenNoContractDetails()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+
+        // Act
+        var result = jobOffer.RemoveContractDetails(EmploymentType.B2B);
+
+        // Assert
+        result.Should().BeFailure($"Job offer must have contract details for employment type: {EmploymentType.B2B}.");
+    }
+
+    [Test]
+    public void RemoveContractDetails_ShouldFailWhenNoEmploymentTypeInOffer()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
+
+        // Act
+        var result = jobOffer.RemoveContractDetails(EmploymentType.ContractOfEmployment);
+
+        // Assert
+        result.Should()
+            .BeFailure(
+                $"Job offer must have contract details for employment type: {EmploymentType.ContractOfEmployment}.");
+    }
+
+    [Test]
+    public void RemoveContractDetails_ShouldRemoveContractDetailsByEmploymentType()
+    {
+        // Arrange
+        var jobOffer = CreateTestJobOffer();
+
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.B2B,
+                                                        new SalaryRange(false, 10000, 20000),
+                                                        8,
+                                                        8));
+
+        jobOffer.AddContractDetails(new ContractDetails(EmploymentType.ContractOfEmployment,
+                                                        new SalaryRange(false, 12000, 22000),
+                                                        8,
+                                                        8));
+
+        // Act
+        var result = jobOffer.RemoveContractDetails(EmploymentType.B2B);
+
+        // Assert
+        result.Should().BeSuccess();
+
+        jobOffer.ContractsDetails.Should()
+            .NotContain(contractDetails => contractDetails.EmploymentType == EmploymentType.B2B);
+
+        jobOffer.DomainEvents.Should().ContainSingle(
+            domainEvent => domainEvent.GetType() == typeof(ContractDetailsRemoved)
+                           && ((ContractDetailsRemoved)domainEvent).JobOfferId == jobOffer.Id
+                           && ((ContractDetailsRemoved)domainEvent).EmploymentType == EmploymentType.B2B);
+    }
+
+    [Test]
     public void SetOfficeLocation_ShouldSetOfficeLocation()
     {
         // Arrange

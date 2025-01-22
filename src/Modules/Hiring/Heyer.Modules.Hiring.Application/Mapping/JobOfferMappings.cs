@@ -1,4 +1,6 @@
 using Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.AddContractDetails;
+using Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.RemoveContractDetails;
+using Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.UpdateContractDetails;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Domain.JobOffers;
@@ -19,6 +21,16 @@ public static class JobOfferMappings
 
     public static AddContractDetails MapToCommand(this AddContractDetailsRequest request) =>
         new(new JobOfferId(request.JobOfferId), request.ContractDetails);
+
+    public static RemoveContractDetails MapToCommand(this RemoveContractDetailsRequest request) =>
+        new(new JobOfferId(request.JobOfferId), request.EmploymentType);
+
+    public static UpdateContractDetails MapToCommand(this UpdateContractDetailsRequest request) =>
+        new(new JobOfferId(request.JobOfferId),
+            request.EmploymentType,
+            request.SalaryRange,
+            request.TimeNumerator,
+            request.TimeDenominator);
 
     public static JobOfferDetails MapToJobOfferDetails(this JobOffer jobOffer) =>
         new(jobOffer.Id.Guid,

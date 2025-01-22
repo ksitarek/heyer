@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="JobOffers\ContractDetails\RemoveContractDetails\"/>
-    <Folder Include="JobOffers\ContractDetails\UpdateContractDetails\"/>
     <Folder Include="JobOffers\SetOfficeLocation\"/>
     <Folder Include="JobOffers\SetRequirements\"/>
     <Folder Include="JobOffers\Update\"/>

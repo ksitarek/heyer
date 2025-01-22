@@ -2,6 +2,8 @@ using System.Text.RegularExpressions;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.BuildingBlocks.Tests.Fixtures;
 using Heyer.Meta.DbMigrator;
+using Npgsql;
+using Serilog;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
@@ -10,6 +12,8 @@ public class IntegrationTestsFixture
 {
     private readonly Migrator _migrator = new();
     private readonly PostgresFixture _npgsqlFixture = new();
+
+    private readonly List<string> _testDatabases = new();
 
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
@@ -37,11 +41,32 @@ public class IntegrationTestsFixture
     }
 
     [OneTimeTearDown]
-    public async Task OneTimeTearDown() => await _npgsqlFixture.DisposeAsync();
+    public async Task OneTimeTearDown()
+    {
+        await using var connection = new NpgsqlConnection(_npgsqlFixture.ConnectionString);
+
+        await connection.OpenAsync();
+
+        foreach (var testDatabase in _testDatabases)
+        {
+            try
+            {
+                await DropTestDatabase(connection, testDatabase);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Drop db failed");
+            }
+        }
+
+        await connection.CloseAsync();
+
+        await _npgsqlFixture.DisposeAsync();
+    }
 
     private void ConfigureClientDb(Guid clientId)
     {
-        var connectionString = GetConnectionString($"TEST_{Guid.NewGuid()}");
+        var connectionString = GetConnectionString($"C_{clientId}");
 
         ApplicationFactoryConfiguration.AddClientConfig(
             clientId,
@@ -51,8 +76,25 @@ public class IntegrationTestsFixture
         _migrator.Migrate("HiringContext", connectionString);
     }
 
-    private string GetConnectionString(string databaseName) =>
-        Regex.Replace(_npgsqlFixture.ConnectionString,
-                      "Database=(.*?)",
-                      $"Database={databaseName}");
+    private async Task DropTestDatabase(NpgsqlConnection connection, string dbName)
+    {
+        var dropDatabaseCommand = $@"DROP DATABASE ""{dbName}"" WITH (FORCE);";
+
+        await using var dropCommand = new NpgsqlCommand(
+            dropDatabaseCommand,
+            connection);
+
+        await dropCommand.ExecuteNonQueryAsync();
+    }
+
+    private string GetConnectionString(string databaseName)
+    {
+        databaseName += Guid.NewGuid();
+
+        _testDatabases.Add(databaseName);
+
+        return Regex.Replace(_npgsqlFixture.ConnectionString,
+                             "Database=(.*?);",
+                             $"Database={databaseName};");
+    }
 }
