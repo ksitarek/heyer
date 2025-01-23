@@ -22,21 +22,21 @@ export class JobOfferForms {
 
   public contractDetailsGroup(values: ContractDetails | null) {
     return this.fb.group({
-      employmentType: new FormControl(values?.employmentType ?? '', []),
+      employmentType: new FormControl(values?.EmploymentType ?? '', []),
       salaryRange: this.fb.group({
-        from: new FormControl(values?.salaryRange.from ?? '', [
+        from: new FormControl(values?.SalaryRange.From ?? '', [
           Validators.min(0),
         ]),
-        to: new FormControl(values?.salaryRange.to ?? '', [Validators.min(0)]), // todo add "greater than" validation
-        isPublished: new FormControl(values?.salaryRange.isPublished ?? true),
+        to: new FormControl(values?.SalaryRange.To ?? '', [Validators.min(0)]), // todo add "greater than" validation
+        isPublished: new FormControl(values?.SalaryRange.IsPublished ?? true),
       }),
     });
   }
 
   public skillGroup(values: Skill | null) {
     return this.fb.group({
-      label: new FormControl(values?.label ?? '', []),
-      level: new FormControl(values?.level ?? SkillLevel.NiceToHave, []),
+      label: new FormControl(values?.Label ?? '', []),
+      level: new FormControl(values?.Level ?? SkillLevel.NiceToHave, []),
     });
   }
 

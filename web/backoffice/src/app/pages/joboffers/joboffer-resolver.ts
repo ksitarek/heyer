@@ -3,7 +3,6 @@ import {
   MaybeAsync,
   RedirectCommand,
   Resolve,
-  RouterStateSnapshot,
 } from '@angular/router';
 import { JobOfferDetails } from './joboffer-details';
 import { JobOfferDetailsService } from './joboffers-details.service';
@@ -15,8 +14,7 @@ import { Injectable } from '@angular/core';
 export class JobOfferResolver implements Resolve<JobOfferDetails> {
   constructor(private jobOfferDetailsService: JobOfferDetailsService) {}
   public resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    route: ActivatedRouteSnapshot
   ): MaybeAsync<JobOfferDetails | RedirectCommand> {
     const id = route.params['id'];
 

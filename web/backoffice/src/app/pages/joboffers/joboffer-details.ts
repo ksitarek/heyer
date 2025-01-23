@@ -1,16 +1,16 @@
 export class JobOfferDetails {
   constructor(
-    public offerSummary: string,
-    public jobDescription: string,
-    public remoteWork: string,
-    public publishedAt: Date,
-    public publishedUntil: Date,
-    public officeLocation: OfficeLocation,
-    public requirements: Requirements,
-    public contractsDetails: ContractDetails[]
+    public OfferSummary: string,
+    public JobDescription: string,
+    public RemoteWork: string,
+    public PublishedAt: Date,
+    public PublishedUntil: Date,
+    public OfficeLocation: OfficeLocation,
+    public Requirements: Requirements,
+    public ContractsDetails: ContractDetails[]
   ) {}
 
-  public static from(obj: any): JobOfferDetails {
+  public static from(obj: JobOfferDetails): JobOfferDetails {
     return new JobOfferDetails(
       obj.OfferSummary,
 
@@ -20,7 +20,7 @@ export class JobOfferDetails {
       obj.PublishedUntil,
       OfficeLocation.from(obj.OfficeLocation),
       Requirements.from(obj.Requirements),
-      obj.ContractsDetails.map((contractDetails: any) =>
+      obj.ContractsDetails.map((contractDetails: ContractDetails) =>
         ContractDetails.from(contractDetails)
       )
     );
@@ -28,10 +28,10 @@ export class JobOfferDetails {
 }
 
 export class OfficeLocation {
-  constructor(public city: string, public country: string) {}
+  constructor(public City: string, public Country: string) {}
 
-  public static from(obj: any | null): OfficeLocation {
-    return new OfficeLocation(obj?.City, obj?.Country);
+  public static from(obj: OfficeLocation | null): OfficeLocation {
+    return new OfficeLocation(obj?.City ?? '', obj?.Country ?? '');
   }
 }
 
@@ -57,35 +57,35 @@ export enum EmploymentType {
 
 export class Requirements {
   constructor(
-    public experienceLevel: ExperienceLevel,
-    public skills: Skill[]
+    public ExperienceLevel: ExperienceLevel,
+    public Skills: Skill[]
   ) {}
 
-  public static from(obj: any): Requirements {
+  public static from(obj: Requirements): Requirements {
     return new Requirements(
       obj?.ExperienceLevel,
-      obj?.Skills?.map((skill: any) => Skill.from(skill))
+      obj?.Skills?.map((skill: Skill) => Skill.from(skill))
     );
   }
 }
 
 export class Skill {
-  constructor(public label: string, public level: SkillLevel) {}
+  constructor(public Label: string, public Level: SkillLevel) {}
 
-  public static from(obj: any): Skill {
+  public static from(obj: Skill): Skill {
     return new Skill(obj?.Label, obj?.Level);
   }
 }
 
 export class ContractDetails {
   constructor(
-    public employmentType: EmploymentType,
-    public salaryRange: SalaryRange,
-    public timeNumerator: number,
-    public timeDenumerator: number
+    public EmploymentType: EmploymentType,
+    public SalaryRange: SalaryRange,
+    public TimeNumerator: number,
+    public TimeDenumerator: number
   ) {}
 
-  public static from(obj: any): ContractDetails {
+  public static from(obj: ContractDetails): ContractDetails {
     return new ContractDetails(
       obj?.EmploymentType,
       SalaryRange.from(obj?.SalaryRange),
@@ -97,12 +97,12 @@ export class ContractDetails {
 
 export class SalaryRange {
   constructor(
-    public isPublished: boolean,
-    public from: number,
-    public to: number
+    public IsPublished: boolean,
+    public From: number,
+    public To: number
   ) {}
 
-  public static from(obj: any): SalaryRange {
+  public static from(obj: SalaryRange): SalaryRange {
     return new SalaryRange(obj?.IsPublished, obj?.From, obj?.To);
   }
 }

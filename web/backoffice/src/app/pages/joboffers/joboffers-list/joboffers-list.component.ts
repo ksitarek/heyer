@@ -1,14 +1,8 @@
 import { JoboffersListService } from './joboffers-list.service';
-import {
-  Component,
-  computed,
-  OnInit,
-  signal,
-  TrackByFunction,
-} from '@angular/core';
+import { Component, computed, TrackByFunction } from '@angular/core';
 import { JobOfferListItem } from './joboffer-list-item';
-import { map, Observable } from 'rxjs';
-import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
+import { Observable } from 'rxjs';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { HlmTableModule } from '../../../../../libs/ui/ui-table-helm/src/index';
 import { BrnTableModule, useBrnColumnManager } from '@spartan-ng/brain/table';
 import { HlmMenuModule } from '@spartan-ng/ui-menu-helm';
@@ -58,7 +52,7 @@ export class JoboffersListComponent {
   protected readonly trackBy: TrackByFunction<JobOfferListItem> = (
     _: number,
     p: JobOfferListItem
-  ) => p.id;
+  ) => p.Id;
 
   constructor(public jobOffersListService: JoboffersListService) {
     this.data$ = this.jobOffersListService.getListOfJobs();

@@ -1,13 +1,13 @@
 export class JobOfferListItem {
   constructor(
-    public id: string,
-    public offerSummary: string,
-    public publishedAt: Date | null,
-    public publishedUntil: Date | null,
-    public actions: string
+    public Id: string,
+    public OfferSummary: string,
+    public PublishedAt: Date | null,
+    public PublishedUntil: Date | null,
+    public Actions: string
   ) {}
 
-  public static from(item: any): JobOfferListItem {
+  public static from(item: JobOfferListItem): JobOfferListItem {
     return new JobOfferListItem(
       item.Id,
       item.OfferSummary,

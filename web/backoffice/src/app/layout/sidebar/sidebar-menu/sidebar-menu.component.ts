@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component } from '@angular/core';
 import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 import { SidebarMenuItemDto } from './sidebar-menu-item-dto';
 import { NgFor } from '@angular/common';
@@ -10,7 +10,7 @@ import { NgFor } from '@angular/common';
   styleUrl: './sidebar-menu.component.scss',
 })
 export class SidebarMenuComponent {
-  public menuItems: Array<SidebarMenuItemDto> = [
+  public menuItems: SidebarMenuItemDto[] = [
     new SidebarMenuItemDto('Statistics', 'lucideChartNoAxesCombined', '/'),
     new SidebarMenuItemDto('Job Offers', 'lucideMegaphone', '/job-offers'),
     new SidebarMenuItemDto(

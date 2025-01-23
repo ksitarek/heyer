@@ -1,11 +1,11 @@
 export class ListResponse<T> {
   constructor(
-    public pageSize: number,
-    public totalCount: number,
-    public items: T[]
+    public PageSize: number,
+    public TotalCount: number,
+    public Items: T[]
   ) {}
 
-  public static from<T>(response: any): ListResponse<T> {
+  public static from<T>(response: ListResponse<T>): ListResponse<T> {
     const x = new ListResponse<T>(
       response.PageSize,
       response.TotalCount,

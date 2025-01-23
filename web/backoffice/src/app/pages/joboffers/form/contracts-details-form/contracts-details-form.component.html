@@ -22,10 +22,10 @@
           <button
             hlmBtn
             variant="secondary"
-            (click)="removeContract(i)"
             class="ml-2"
+            (click)="removeContract(i)"
           >
-            <ng-icon name="lucideX" class="text-secondary-foreground"></ng-icon>
+            <ng-icon name="lucideX" class="text-secondary-foreground" />
           </button>
         </label>
 
@@ -69,25 +69,25 @@
     </ng-container>
 
     <button
+      *ngIf="availableContractTypes.length > 1"
       hlmBtn
       variant="secondary"
       class="w-full"
       [brnMenuTriggerFor]="addContractMenu"
-      *ngIf="availableContractTypes.length > 1"
     >
       <ng-icon name="lucidePlus" class="mr-2" />Add contract type
     </button>
 
     <ng-container *ngIf="availableContractTypes.length == 1">
       <button
+        *ngFor="let type of availableContractTypes; let i = index"
         hlmBtn
         variant="secondary"
         class="w-full"
         [brnMenuTriggerFor]="addContractMenu"
-        *ngFor="let type of availableContractTypes; let i = index"
         (click)="addContract(type)"
       >
-        <ng-icon name="lucidePlus" hlmMenuIcon></ng-icon>
+        <ng-icon name="lucidePlus" hlmMenuIcon />
         Add {{ getEmploymentTypeLabel(type) }}
       </button>
     </ng-container>
@@ -98,8 +98,8 @@
   <hlm-menu class="w-56">
     <hlm-menu-group>
       <button
-        hlmMenuItem
         *ngFor="let type of availableContractTypes; let i = index"
+        hlmMenuItem
         (click)="addContract(type)"
       >
         <ng-icon hlm name="lucidePlus" hlmMenuIcon />

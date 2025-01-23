@@ -9,8 +9,8 @@
 
       <div hlmLabel formGroupName="skills">
         <div
-          class="px-4 pt-4 pb-2 mb-4 rounded-md bg-secondary"
           *ngFor="let skillFormGroup of skills.controls; let i = index"
+          class="px-4 pt-4 pb-2 mb-4 rounded-md bg-secondary"
           [formGroupName]="i"
         >
           <div class="flex flex-row">
@@ -23,13 +23,13 @@
             <button
               hlmBtn
               variant="secondary"
-              (click)="removeSkill(i)"
               class="ml-2"
+              (click)="removeSkill(i)"
             >
               <ng-icon
                 name="lucideX"
                 class="text-secondary-foreground"
-              ></ng-icon>
+              />
             </button>
           </div>
           <h-skill-level-control formControlName="level" />

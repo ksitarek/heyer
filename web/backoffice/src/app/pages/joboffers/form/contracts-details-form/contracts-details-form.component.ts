@@ -3,7 +3,6 @@ import { Component, Input } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -20,8 +19,6 @@ import {
   HlmMenuGroupComponent,
   HlmMenuItemDirective,
   HlmMenuItemIconDirective,
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
 } from '@spartan-ng/ui-menu-helm';
 
 @Component({
@@ -79,17 +76,17 @@ export class ContractsDetailsFormComponent {
   }
 
   public get availableContractTypes(): EmploymentType[] {
-    var usedEmploymentTypes = this.contractsDetails.controls.map(
+    const usedEmploymentTypes = this.contractsDetails.controls.map(
       (control) => control.get('employmentType')?.value
     );
 
     return Object.values(EmploymentType).filter(
-      (value) => usedEmploymentTypes.indexOf(value) === -1
+      (value) => !usedEmploymentTypes.includes(value)
     );
   }
 
   public addContract(type: EmploymentType): void {
-    let contractDetailsGroup = this.jobOfferForms.contractDetailsGroup(null);
+    const contractDetailsGroup = this.jobOfferForms.contractDetailsGroup(null);
 
     contractDetailsGroup.get('employmentType')?.setValue(type);
 

@@ -29,24 +29,24 @@ export class SkillLevelControlComponent implements ControlValueAccessor {
   ];
   protected isDisabled = false;
 
-  private onChange = (value: string) => {};
+  private onChange: (value: SkillLevel) => void = () => {};
 
-  private onTouched = () => {};
+  private onTouched: () => void = () => {};
 
   public updateValue(v: SkillLevel) {
     this.currentValue = v;
     this.onChange(this.currentValue);
   }
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: SkillLevel): void {
     this.currentValue = obj;
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: SkillLevel) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

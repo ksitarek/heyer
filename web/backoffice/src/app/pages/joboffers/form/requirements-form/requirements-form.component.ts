@@ -1,10 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ExperienceLevelControlComponent } from '../experience-level-control/experience-level-control.component';
 import { NgFor } from '@angular/common';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';

@@ -7,7 +7,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class HDatePipe implements PipeTransform {
   constructor(private datePipe: DatePipe) {}
 
-  transform(value: any): string {
-    return this.datePipe.transform(value, 'yyyy-MM-dd')!;
+  transform(value: Date | string | null | undefined): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
+
+    const formatted = this.datePipe.transform(value, 'yyyy-MM-dd')!;
+
+    return formatted ?? '';
   }
 }

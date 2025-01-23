@@ -1,10 +1,9 @@
-import { EmploymentType, JobOfferDetails } from './../joboffer-details';
+import { JobOfferDetails } from './../joboffer-details';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageHeaderComponent } from '../../../layout/components/page-header/page-header.component';
 import {
   FormArray,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -14,7 +13,6 @@ import { DescriptionFormComponent } from '../form/description-form/description-f
 import { LocationFormComponent } from '../form/location-form/location-form.component';
 import { ContractsDetailsFormComponent } from '../form/contracts-details-form/contracts-details-form.component';
 import { RequirementsFormComponent } from '../form/requirements-form/requirements-form.component';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'h-edit-joboffer',
@@ -48,29 +46,29 @@ export class EditJobofferComponent implements OnInit {
 
       this.jobOfferForm.patchValue({
         description: {
-          offerSummary: this.jobOffer.offerSummary,
-          jobDescription: this.jobOffer.jobDescription,
-          remoteWork: this.jobOffer.remoteWork,
+          offerSummary: this.jobOffer.OfferSummary,
+          jobDescription: this.jobOffer.JobDescription,
+          remoteWork: this.jobOffer.RemoteWork,
         },
 
         location: {
-          city: this.jobOffer.officeLocation.city,
-          country: this.jobOffer.officeLocation.country,
+          city: this.jobOffer.OfficeLocation.City,
+          country: this.jobOffer.OfficeLocation.Country,
         },
 
         requirements: {
-          experienceLevel: this.jobOffer.requirements?.experienceLevel,
+          experienceLevel: this.jobOffer.Requirements.ExperienceLevel,
         },
       });
     });
 
-    for (const contractDetails of this.jobOffer.contractsDetails ?? []) {
+    for (const contractDetails of this.jobOffer.ContractsDetails ?? []) {
       this.contractsDetails.push(
         this.forms.contractDetailsGroup(contractDetails)
       );
     }
 
-    for (const skill of this.jobOffer.requirements.skills ?? []) {
+    for (const skill of this.jobOffer.Requirements.Skills ?? []) {
       this.skills.push(this.forms.skillGroup(skill));
     }
   }

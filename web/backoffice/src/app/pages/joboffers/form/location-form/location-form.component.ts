@@ -1,5 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
-import { JobOfferForms } from '../joboffer-forms';
+import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';

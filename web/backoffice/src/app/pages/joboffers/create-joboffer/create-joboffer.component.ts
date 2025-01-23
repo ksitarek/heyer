@@ -2,7 +2,7 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { PageHeaderComponent } from '../../../layout/components/page-header/page-header.component';
 import { NgIcon } from '@ng-icons/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CreateJobOfferService } from './create-job-offer.service';
 import { Router } from '@angular/router';
 import { JobOfferForms } from '../form/joboffer-forms';

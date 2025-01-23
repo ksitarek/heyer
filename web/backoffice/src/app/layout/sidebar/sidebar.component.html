@@ -2,20 +2,20 @@
   <h-sidebar-menu />
 
   <button
+    *ngIf="expanded()"
     hlmBtn
     variant="ghost"
     class="w-full"
-    *ngIf="expanded()"
     (click)="toggle()"
   >
     <ng-icon name="lucidePanelLeftClose" />&nbsp;Collapse
   </button>
 
   <button
+    *ngIf="!expanded()"
     hlmBtn
     variant="ghost"
     class="w-full"
-    *ngIf="!expanded()"
     (click)="toggle()"
   >
     <ng-icon name="lucidePanelLeftOpen" />

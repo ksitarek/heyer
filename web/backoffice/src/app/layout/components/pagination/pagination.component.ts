@@ -3,15 +3,12 @@ import {
   Component,
   computed,
   effect,
-  EventEmitter,
   input,
-  Input,
   output,
-  Output,
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrnSelectComponent, BrnSelectImports } from '@spartan-ng/brain/select';
+import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import {
   HlmSelectContentDirective,
@@ -24,7 +21,6 @@ import {
   HlmMutedDirective,
   HlmSmallDirective,
 } from '@spartan-ng/ui-typography-helm';
-import { HlmIconDirective } from '../../../../../libs/ui/ui-icon-helm/src/lib/hlm-icon.directive';
 import { NgIcon } from '@ng-icons/core';
 
 @Component({
@@ -59,12 +55,12 @@ export class PaginationComponent {
     Math.min(this.currentPage() * this.pageSize(), this.totalCount())
   );
 
-  protected pageChangedEfft = effect(() => {
-    var page = this.pageIx();
+  protected pageChangedEffect = effect(() => {
+    const page = this.pageIx();
     this.pageChanged.emit(page);
   });
 
-  protected pageSizeChangedEfft = effect(() => {
+  protected pageSizeChangedEffect = effect(() => {
     this.currentPage.set(1);
   });
 

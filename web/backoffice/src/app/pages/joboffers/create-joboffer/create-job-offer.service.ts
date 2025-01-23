@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { heyerApiUrl } from '../../../app.config';
 import { HttpErrorHandlerService } from '../../../http-error-handler.service';
 import { RemoteWork } from '../remote-work-control/remote-work';
-import { catchError, map, Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

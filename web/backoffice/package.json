@@ -1,13 +1,21 @@
 {
   "name": "backoffice",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration local",
     "build": "ng build",
     "watch": "ng build --watch --configuration local",
     "test": "ng test",
-    "serve:ssr:Backoffice": "node dist/backoffice/server/server.mjs"
+    "lint": "eslint -f mo \"**/*.{js,ts,html,json}\"",
+    "lint:style": "stylelint \"**/*.{css,scss}\"",
+    "lint:spelling": "cspell --quiet \"**/*\"",
+    "lint:tsc:app": "tsc --noEmit -p tsconfig.app.json",
+    "lint:tsc:spec": "tsc --noEmit -p tsconfig.spec.json",
+    "lint:tsc:all": "npm run lint:tsc:app && npm run lint:tsc:spec",
+    "lint:format": "npm run format:base -- --check",
+    "lint:all": "npm run lint:tsc:all && npm run lint && npm run lint:style && npm run lint:spelling && npm run lint:format"
   },
   "private": true,
   "dependencies": {
@@ -36,19 +44,29 @@
     "@angular-devkit/build-angular": "^19.0.7",
     "@angular/cli": "^19.0.7",
     "@angular/compiler-cli": "^19.0.0",
+    "@eslint/js": "^9.18.0",
     "@spartan-ng/cli": "^0.0.1-alpha.388",
     "@types/jasmine": "~5.1.0",
+    "angular-eslint": "19.0.2",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-formatter-mo": "^2.1.0",
+    "eslint-plugin-jasmine": "^4.2.2",
+    "eslint-plugin-jsonc": "^2.18.2",
+    "globals": "^15.14.0",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lint-staged": "^15.3.0",
     "postcss": "^8.5.0",
     "tailwind-merge": "^2.2.0",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.6",
-    "typescript": "~5.6.2"
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.0"
   }
 }

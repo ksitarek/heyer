@@ -1,18 +1,18 @@
 <ng-container *ngIf="data$ | async as data">
   <brn-table
     hlm
-    [dataSource]="data.items"
+    class="w-full"
+    [dataSource]="data.Items"
     [displayedColumns]="dataTableColumns()"
     [trackBy]="trackBy"
-    class="w-full"
   >
     <brn-column-def name="id" class="w-12">
-      <hlm-th *brnHeaderDef></hlm-th>
-      <hlm-td *brnCellDef="let element"></hlm-td>
+      <hlm-th *brnHeaderDef />
+      <hlm-td *brnCellDef="let element" />
     </brn-column-def>
 
     <brn-column-def name="actions" class="w-60">
-      <hlm-th *brnHeaderDef></hlm-th>
+      <hlm-th *brnHeaderDef />
       <hlm-td *brnCellDef="let element">
         <h-joboffer-list-item-actions [item]="element" />
       </hlm-td>
@@ -20,16 +20,16 @@
 
     <brn-column-def name="offerSummary" class="flex-1">
       <hlm-th *brnHeaderDef>Summary</hlm-th>
-      <hlm-td truncate *brnCellDef="let element">{{
-        element.offerSummary
+      <hlm-td *brnCellDef="let element" truncate>{{
+        element.OfferSummary
       }}</hlm-td>
     </brn-column-def>
 
     <brn-column-def name="publishedAt" class="w-40">
       <hlm-th *brnHeaderDef>Published At</hlm-th>
       <hlm-td *brnCellDef="let element">
-        @if (element.publishedAt == null) { &mdash; } @else {
-        {{ element.publishedAt | hDate }}
+        @if (element.PublishedAt == null) { &mdash; } @else {
+        {{ element.PublishedAt | hDate }}
         }
       </hlm-td>
     </brn-column-def>
@@ -37,8 +37,8 @@
     <brn-column-def name="publishedUntil" class="w-40">
       <hlm-th *brnHeaderDef>Published Until</hlm-th>
       <hlm-td *brnCellDef="let element">
-        @if (element.publishedUntil == null) { &mdash; } @else {
-        {{ element.publishedUntil | hDate }}
+        @if (element.PublishedUntil == null) { &mdash; } @else {
+        {{ element.PublishedUntil | hDate }}
         }
       </hlm-td>
     </brn-column-def>
@@ -51,5 +51,5 @@
     </div>
   </brn-table>
 
-  <h-pagination [totalCount]="data.totalCount" />
+  <h-pagination [totalCount]="data.TotalCount" />
 </ng-container>

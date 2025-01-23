@@ -39,24 +39,24 @@ export class RemoteWorkControlComponent implements ControlValueAccessor {
 
   protected isDisabled = false;
 
-  private onChange = (value: string) => {};
+  private onChange: (value: string) => void = () => {};
 
-  private onTouched = () => {};
+  private onTouched: () => void = () => {};
 
-  public updateValue($event: any) {
+  public updateValue($event: RemoteWork) {
     this.remoteWork = $event;
     this.onChange(this.remoteWork);
   }
 
-  public writeValue(obj: any): void {
-    this.remoteWork = obj;
+  public writeValue(value: RemoteWork): void {
+    this.remoteWork = value;
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

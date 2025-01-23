@@ -1,7 +1,7 @@
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { JobOfferForms } from '../joboffer-forms';
 import { RemoteWorkControlComponent } from './../../remote-work-control/remote-work-control.component';
-import { Component, inject, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 
