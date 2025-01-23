@@ -36,4 +36,9 @@ internal class JobOffersRepository : IJobOffersRepository
         _context.JobOffers
             .Skip(filteredListRequest.PageIx * filteredListRequest.PageSize)
             .Take(filteredListRequest.PageSize); // todo implement some sensible sorting/filtering
+
+    public Task<long> GetTotalCount(FilteredListRequest filteredListRequest,
+                                    CancellationToken cancellationToken = default) =>
+        _context.JobOffers
+            .LongCountAsync(cancellationToken);
 }

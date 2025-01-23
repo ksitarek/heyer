@@ -1,3 +1,4 @@
+using Heyer.BuildingBlocks.Application.HttpLanguage;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
 using Heyer.BuildingBlocks.Infrastructure.Npgsql;
 using Heyer.Modules.Hiring.Domain.Candidates;
@@ -18,6 +19,11 @@ internal class HiringDbContext : DbContext, IInboxContext, IOutboxContext
 
     public DbSet<JobOffer> JobOffers { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }
+
+    public Task<long> GetTotalCount(FilteredListRequest filteredListRequest,
+                                    CancellationToken cancellationToken = default) =>
+        JobOffers
+            .LongCountAsync(cancellationToken);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

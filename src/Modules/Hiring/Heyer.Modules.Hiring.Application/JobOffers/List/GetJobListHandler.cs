@@ -20,7 +20,7 @@ public class GetJobListHandler : IRequestHandler<GetJobOffersList, Result<ListRe
         {
             var pagedQuery = _jobOffersRepository.GetPageQuery(request);
 
-            var totalCount = await pagedQuery.CountAsync(cancellationToken);
+            var totalCount = await _jobOffersRepository.GetTotalCount(request, cancellationToken);
 
             var jobOffers = pagedQuery
                 .Select(x => new JobOfferListItem(x.Id.Guid, x.OfferSummary, x.PublishedAt, x.PublishedUntil));

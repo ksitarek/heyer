@@ -76,11 +76,13 @@ public static class HiringEndpointsConfiguration
     private static void MapGetJobOffersListEndpoint(WebApplication app) =>
         app.MapGet("/job-offers",
                    async (IHiringModule module,
+                          [FromQuery] int page,
+                          [FromQuery] int pageSize,
                           CancellationToken cancellationToken) =>
                    {
                        var result =
                            await module.DispatchQuery<GetJobOffersList, ListResponse<JobOfferListItem>>(
-                               new GetJobOffersList(),
+                               new GetJobOffersList(page, pageSize),
                                cancellationToken);
 
                        return result.IsSuccess

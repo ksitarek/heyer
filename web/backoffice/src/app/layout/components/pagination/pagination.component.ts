@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
@@ -42,21 +35,16 @@ import {
 })
 export class PaginationComponent {
   public readonly totalCount = input(0);
-  public readonly pageChanged = output<number>();
-  public readonly pageSizes = input([20, 50, 100]);
+  public readonly pageSizes = input([10, 50, 100]);
 
-  protected readonly currentPage = signal(1);
-  protected readonly pageSize = signal(20);
+  public readonly currentPage = model<number>(0);
+  public readonly pageSize = model<number>(0);
+
   protected readonly pageIx = computed(() => this.currentPage() - 1);
   protected readonly from = computed(() => this.pageSize() * this.pageIx() + 1);
   protected readonly to = computed(() =>
     Math.min(this.currentPage() * this.pageSize(), this.totalCount()),
   );
-
-  protected pageChangedEffect = effect(() => {
-    const page = this.pageIx();
-    this.pageChanged.emit(page);
-  });
 
   protected pageSizeChangedEffect = effect(() => {
     this.currentPage.set(1);
