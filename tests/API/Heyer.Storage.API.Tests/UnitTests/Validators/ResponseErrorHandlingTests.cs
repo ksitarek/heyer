@@ -1,8 +1,8 @@
-using FluentAssertions;
 using FluentValidation.Results;
 using Heyer.BuildingBlocks.Application.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Shouldly;
 using Result = FluentResults.Result;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Validators;
@@ -20,7 +20,7 @@ public class ResponseErrorHandlingTests
         var result = ResponseErrorHandling.Handle(error);
 
         // Assert
-        result.Should().BeSameAs(Results.NotFound());
+        result.ShouldBeSameAs(Results.NotFound());
     }
 
     [Test]
@@ -54,9 +54,18 @@ public class ResponseErrorHandlingTests
             new("Another Test Property", ["Test Error Message #3"])
         };
 
-        result.Should().BeOfType<ProblemHttpResult>()
-            .Which.ProblemDetails.Should().BeOfType<HttpValidationProblemDetails>()
-            .Which.Errors.Should().BeEquivalentTo(errors);
+        result.ShouldBeOfType<ProblemHttpResult>();
+
+        var problemDetails = ((ProblemHttpResult)result).ProblemDetails;
+        problemDetails.ShouldBeOfType<HttpValidationProblemDetails>();
+
+        var httpValidationProblemDetails = (HttpValidationProblemDetails)problemDetails;
+
+        foreach (var e in errors)
+        {
+            httpValidationProblemDetails.Errors.ShouldContainKey(e.Key);
+            httpValidationProblemDetails.Errors[e.Key].ShouldBeEquivalentTo(e.Value);
+        }
     }
 
     [Test]
@@ -69,6 +78,6 @@ public class ResponseErrorHandlingTests
         var result = ResponseErrorHandling.Handle(fail);
 
         // Assert
-        result.Should().BeSameAs(Results.StatusCode(StatusCodes.Status500InternalServerError));
+        result.ShouldBeSameAs(Results.StatusCode(StatusCodes.Status500InternalServerError));
     }
 }

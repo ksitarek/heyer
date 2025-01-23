@@ -1,10 +1,10 @@
 using System.Net;
-using FluentAssertions;
 using Heyer.BuildingBlocks.Json;
 using Heyer.Storage.API.Tests.Utils;
 using Heyer.Storage.API.Tests.Utils.Validators;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
@@ -21,15 +21,18 @@ public class StoreEndpointTests : StorageApiIntegrationTestsBase
         var action = async () => await client.Store("Utils/TestFiles/test-file.docx");
 
         // Assert
-        var exception = await action.Should().ThrowAsync<ApiException>()
-            .Where(e => e.StatusCode == HttpStatusCode.BadRequest);
+        var exception = await action.ShouldThrowAsync<ApiException>();
 
-        var validationDetails = exception.Which.Content!.Deserialize<ValidationProblemDetails>()!;
+        exception.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-        validationDetails.Should().NotBeNull();
-        validationDetails.Errors.Should().HaveCount(2).And.ContainKeys("File.FileName", "File");
-        validationDetails.Errors["File"].Should().Contain("Invalid file format.");
-        validationDetails.Errors["File.FileName"].Should().Contain("Invalid file extension.");
+
+        var validationDetails = exception.Content!.Deserialize<ValidationProblemDetails>()!;
+
+        validationDetails.ShouldNotBeNull();
+        validationDetails.Errors.Count.ShouldBe(2);
+        validationDetails.Errors.Keys.ShouldContain("File.FileName", "File");
+        validationDetails.Errors["File"].ShouldContain("Invalid file format.");
+        validationDetails.Errors["File.FileName"].ShouldContain("Invalid file extension.");
     }
 
     [Test]
@@ -42,8 +45,8 @@ public class StoreEndpointTests : StorageApiIntegrationTestsBase
         var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Assert
-        storeResult.Should().NotBeNull();
-        storeResult.FileHandle.Should().NotBeNull();
+        storeResult.ShouldNotBeNull();
+        storeResult.FileHandle.ShouldNotBeNull();
 
         await _appFactory.GetRequiredService<IStorageStrategyValidator>()
             .ValidateFileIsPresent(storeResult.FileHandle);

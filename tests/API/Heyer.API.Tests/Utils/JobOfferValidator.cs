@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
@@ -25,8 +25,8 @@ public class JobOfferValidator : IDisposable
     {
         var record = await Set.Where(x => x.Id == new JobOfferId(id)).Select(x => x.Id).FirstOrDefaultAsync();
 
-        record.Should().NotBeNull();
-        record!.Guid.Should().Be(id);
+        record.ShouldNotBeNull();
+        record!.Guid.ShouldBe(id);
     }
 
     private HiringDbContext GetContext()

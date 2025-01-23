@@ -1,8 +1,8 @@
 using System.Net;
-using FluentAssertions;
 using Heyer.Storage.API.Tests.Utils;
 using Heyer.Storage.API.Tests.Utils.Validators;
 using RestEase;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
@@ -19,7 +19,7 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
         var action = async () => await client.Delete(Guid.NewGuid().ToString());
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await action.ShouldNotThrowAsync();
     }
 
     [Test]
@@ -32,7 +32,8 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
         var action = async () => await client.Delete(Guid.NewGuid().ToString());
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Test]

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Heyer.BuildingBlocks.Tests.Extensions;
+using Shouldly;
 
 namespace Heyer.BuildingBlocks.Domain.Tests;
 
@@ -15,11 +16,13 @@ public class EntityTests
         var testEntity = new TestEntity(id);
 
         // Assert
-        var @event = testEntity.DomainEvents.Should().HaveCount(1).And.Subject.Single();
-        @event.Should().BeOfType<TestEntityCreated>();
-        @event.As<TestEntityCreated>().EventId.Should().NotBeEmpty();
-        @event.As<TestEntityCreated>().OccurredOn.Should().BeWithin(TimeSpan.FromMilliseconds(10));
-        @event.As<TestEntityCreated>().TestEntityId.Should().Be(id);
+        testEntity.DomainEvents.Count.ShouldBe(1);
+
+        var @event = testEntity.DomainEvents.First() as TestEntityCreated;
+        @event.ShouldBeOfType<TestEntityCreated>();
+        @event.EventId.ShouldNotBeEmpty();
+        @event.OccurredOn.ShouldBeWithin(TimeSpan.FromMilliseconds(10));
+        @event.TestEntityId.ShouldBe(id);
     }
 
     [Test]
@@ -33,7 +36,7 @@ public class EntityTests
         testEntity.ClearDomainEvents();
 
         // Assert
-        var @event = testEntity.DomainEvents.Should().HaveCount(0);
+        testEntity.DomainEvents.Count.ShouldBe(0);
     }
 
     internal class TestEntity : Entity

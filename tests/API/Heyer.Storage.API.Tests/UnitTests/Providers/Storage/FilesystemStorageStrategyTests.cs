@@ -1,10 +1,10 @@
 using System.Reflection;
-using FluentAssertions;
 using FluentResults;
 using Heyer.Storage.API.Providers.Storage.Filesystem;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NUnit.Framework.Internal;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Providers.Storage;
 
@@ -26,9 +26,9 @@ public class FilesystemStorageStrategyTests
         var action = async () => result = await _strategy.DeleteAsync(key);
 
         // Assert
-        await action.Should().NotThrowAsync();
-        result!.Should().NotBeNull();
-        result!.IsSuccess.Should().BeFalse();
+        await action.ShouldNotThrowAsync();
+        result!.ShouldNotBeNull();
+        result!.IsSuccess.ShouldBeFalse();
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class FilesystemStorageStrategyTests
 
         // Assert
         var filePath = Path.Combine(_options.RootPath, key);
-        File.Exists(filePath).Should().BeFalse();
+        File.Exists(filePath).ShouldBeFalse();
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class FilesystemStorageStrategyTests
         var result = await _strategy.GetAsync(key);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
 
         var resultText = await GetTextFromStreamAsync(result.Value);
         Assert.That(resultText, Is.EqualTo("test-data"));
@@ -72,8 +72,8 @@ public class FilesystemStorageStrategyTests
         var result = await _strategy.GetAsync("non-existing-key");
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Errors[0].Message.Should().Be("Not found.");
+        result.IsSuccess.ShouldBeFalse();
+        result.Errors[0].Message.ShouldBe("Not found.");
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class FilesystemStorageStrategyTests
         var result = await _strategy.PreserveAsync(Guid.NewGuid().ToString());
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
     }
 
     [SetUp]
@@ -112,9 +112,9 @@ public class FilesystemStorageStrategyTests
         var action = async () => result = await _strategy.StoreAsync(key, stream);
 
         // Assert
-        await action.Should().NotThrowAsync();
-        result!.Should().NotBeNull();
-        result!.IsSuccess.Should().BeFalse();
+        await action.ShouldNotThrowAsync();
+        result!.ShouldNotBeNull();
+        result!.IsSuccess.ShouldBeFalse();
     }
 
     [Test]
@@ -131,8 +131,8 @@ public class FilesystemStorageStrategyTests
         var result = await _strategy.StoreAsync(key, stream2);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Errors[0].Message.Should().Be("File already exists.");
+        result.IsSuccess.ShouldBeFalse();
+        result.Errors[0].Message.ShouldBe("File already exists.");
 
         var filePath = Path.Combine(_options.RootPath, key);
         Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data1"));
@@ -150,7 +150,7 @@ public class FilesystemStorageStrategyTests
 
         // Assert
         var filePath = Path.Combine(_options.RootPath, key);
-        File.Exists(filePath).Should().BeTrue();
+        File.Exists(filePath).ShouldBeTrue();
         Assert.That(await File.ReadAllTextAsync(filePath), Is.EqualTo("test-data"));
     }
 

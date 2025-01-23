@@ -1,6 +1,5 @@
 using System.Net;
 using Bogus;
-using FluentAssertions;
 using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Json;
 using Heyer.BuildingBlocks.Tests;
@@ -8,6 +7,7 @@ using Heyer.Modules.Hiring.Application;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
+using Shouldly;
 using RemoteWork = Heyer.Modules.Hiring.PublishedLanguage.DTOs.RemoteWork;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
@@ -112,17 +112,18 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         var action = async () => await client.CreateJobOffer(request);
 
         // Assert
-        var exception = (await action.Should().ThrowAsync<ApiException>()).Subject.First();
-        exception.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
         var validationDetails = exception.Content!.Deserialize<ValidationProblemDetails>()!;
 
-        validationDetails.Should().NotBeNull();
-        validationDetails.Errors.Should().HaveCount(1).And.ContainKeys(erroredField);
-        validationDetails.Errors[erroredField].Should().HaveCount(validationErrors.Length);
+        validationDetails.ShouldNotBeNull();
+        validationDetails.Errors.Count.ShouldBe(1);
+        validationDetails.Errors.Keys.ShouldContain(erroredField);
+        validationDetails.Errors[erroredField].Length.ShouldBe(validationErrors.Length);
         foreach (var error in validationErrors)
         {
-            validationDetails.Errors[erroredField].Should().Contain(error);
+            validationDetails.Errors[erroredField].ShouldContain(error);
         }
     }
 
@@ -137,7 +138,8 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         var action = async () => await client.CreateJobOffer(request);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Test]
@@ -152,7 +154,8 @@ public class CreateJobOfferEndpointTests : IntegrationTestsBase
         var action = async () => await client.CreateJobOffer(request);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
     }
 
     [Test]

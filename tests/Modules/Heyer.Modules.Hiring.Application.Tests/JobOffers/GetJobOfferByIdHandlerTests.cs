@@ -1,12 +1,12 @@
-using FluentAssertions;
-using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.Hiring.Application.JobOffers.GetById;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using NSubstitute;
 using NSubstitute.Extensions;
+using Shouldly;
 
 namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 
@@ -27,8 +27,9 @@ public class GetJobOfferByIdHandlerTests
         var result = await _handler.Handle(new GetJobOfferById(_testJobOffer.Id.Guid), _cancellationToken);
 
         // Assert
-        result.Should().BeSuccess();
-        result.Value.Should().NotBeNull().And.BeOfType<JobOfferDetails>();
+        result.ShouldBeSuccess();
+        result.Value.ShouldNotBeNull();
+        result.Value.ShouldBeOfType<JobOfferDetails>();
     }
 
     [Test]
@@ -42,8 +43,8 @@ public class GetJobOfferByIdHandlerTests
         var result = await _handler.Handle(new GetJobOfferById(_testJobOffer.Id.Guid), _cancellationToken);
 
         // Assert
-        result.Should().BeFailure();
-        result.Errors.Should().ContainSingle().Which.Should().BeOfType<NotFoundError>();
+        result.ShouldBeFailure();
+        result.ShouldHaveError<NotFoundError>();
     }
 
     [SetUp]

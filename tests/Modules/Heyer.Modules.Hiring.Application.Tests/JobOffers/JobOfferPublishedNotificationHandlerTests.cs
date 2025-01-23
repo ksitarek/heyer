@@ -1,7 +1,7 @@
-using FluentAssertions;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Processing;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
@@ -9,6 +9,7 @@ using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.Hiring.PublishedLanguage.IntegrationEvents;
 using NSubstitute;
 using NSubstitute.Extensions;
+using Shouldly;
 using ExecutionContext = Heyer.BuildingBlocks.Application.Authorization.ExecutionContext;
 
 namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
@@ -47,8 +48,19 @@ public class JobOfferPublishedNotificationHandlerTests
             _publishedUntil,
             _testJobOffer.Requirements!);
 
-        _eventBus.IntegrationEvents.Should().ContainSingle()
-            .Which.Should().BeEquivalentTo(expectedIntegrationEvent, opts => opts.Excluding(e => e.Id));
+        _eventBus.IntegrationEvents.ShouldContainSingle();
+
+        var integrationEvent = _eventBus.IntegrationEvents.OfType<JobOfferPublishedIntegrationEvent>().First();
+        integrationEvent.OccurredOn.ShouldBe(expectedIntegrationEvent.OccurredOn);
+        integrationEvent.JobOfferId.ShouldBe(expectedIntegrationEvent.JobOfferId);
+        integrationEvent.CompanyDetails.ShouldBe(expectedIntegrationEvent.CompanyDetails);
+        integrationEvent.OfferSummary.ShouldBe(expectedIntegrationEvent.OfferSummary);
+        integrationEvent.JobDescription.ShouldBe(expectedIntegrationEvent.JobDescription);
+        integrationEvent.RemoteWork.ShouldBe(expectedIntegrationEvent.RemoteWork);
+        integrationEvent.ContractsDetails.ShouldBe(expectedIntegrationEvent.ContractsDetails);
+        integrationEvent.Location.ShouldBe(expectedIntegrationEvent.Location);
+        integrationEvent.PublishedUntil.ShouldBe(expectedIntegrationEvent.PublishedUntil);
+        integrationEvent.Requirements.ShouldBe(expectedIntegrationEvent.Requirements);
     }
 
     [Test]
@@ -62,10 +74,10 @@ public class JobOfferPublishedNotificationHandlerTests
         var act = async () => await _handler.Handle(_notification, _cancellationToken);
 
         // Assert
-        await act.Should().ThrowAsync<InvalidOperationException>()
-            .WithMessage($"Job offer with id {_testJobOffer.Id} not found");
+        var exception = await act.ShouldThrowAsync<InvalidOperationException>();
+        exception.Message.ShouldBe($"Job offer with id {_testJobOffer.Id} not found");
 
-        _eventBus.IntegrationEvents.Should().BeEmpty();
+        _eventBus.IntegrationEvents.ShouldBeEmpty();
     }
 
     [SetUp]

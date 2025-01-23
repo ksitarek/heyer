@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.Mapping;
@@ -27,10 +27,10 @@ public class JobOfferMappingsTests
         var result = request.MapToCommand();
 
         // Assert
-        result.Should().BeOfType<CreateJobOffer>();
-        result.OfferSummary.Should().Be(request.OfferSummary);
-        result.JobDescription.Should().Be(request.JobDescription);
-        result.RemoteWork.Should().Be(expectedRemoteWork);
+        result.ShouldBeOfType<CreateJobOffer>();
+        result.OfferSummary.ShouldBe(request.OfferSummary);
+        result.JobDescription.ShouldBe(request.JobDescription);
+        result.RemoteWork.ShouldBe(expectedRemoteWork);
     }
 
     [Test]
@@ -47,15 +47,15 @@ public class JobOfferMappingsTests
         var result = jobOffer.MapToJobOfferDetails();
 
         // Assert
-        result.Should().BeOfType<JobOfferDetails>();
-        result.Id.Should().Be(jobOffer.Id.Guid);
-        result.OfferSummary.Should().Be(jobOffer.OfferSummary);
-        result.JobDescription.Should().Be(jobOffer.JobDescription);
-        result.PublishedAt.Should().Be(jobOffer.PublishedAt);
-        result.PublishedUntil.Should().Be(jobOffer.PublishedUntil);
-        result.OfficeLocation.Should().Be(jobOffer.Location);
-        result.RemoteWork.Should().Be(jobOffer.RemoteWork);
-        result.Requirements.Should().BeEquivalentTo(jobOffer.Requirements);
-        result.ContractsDetails.Should().BeEquivalentTo(jobOffer.ContractsDetails);
+        result.ShouldBeOfType<JobOfferDetails>();
+        result.Id.ShouldBe(jobOffer.Id.Guid);
+        result.OfferSummary.ShouldBe(jobOffer.OfferSummary);
+        result.JobDescription.ShouldBe(jobOffer.JobDescription);
+        result.PublishedAt.ShouldBe(jobOffer.PublishedAt);
+        result.PublishedUntil.ShouldBe(jobOffer.PublishedUntil);
+        result.OfficeLocation.ShouldBe(jobOffer.Location);
+        result.RemoteWork.ShouldBe(jobOffer.RemoteWork);
+        result.Requirements.ShouldBe(jobOffer.Requirements);
+        result.ContractsDetails.ShouldBe(jobOffer.ContractsDetails);
     }
 }

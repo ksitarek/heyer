@@ -1,7 +1,6 @@
-using FluentAssertions;
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Authorization;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
@@ -30,8 +29,7 @@ public class CreateJobOfferHandlerTests
         var result = await _handler.Handle(_testRequest, _cancellationToken);
 
         // Assert
-        result.Should().BeFailure();
-        result.Errors.Should().ContainSingle().Which.Message.Should().Be("Error");
+        result.ShouldBeFailure("Error");
     }
 
     [Test]
@@ -43,8 +41,8 @@ public class CreateJobOfferHandlerTests
         var result = await _handler.Handle(_testRequest, _cancellationToken);
 
         // Assert
-        result.Should().BeSuccess();
-        result.Value.Should().NotBeEmpty();
+        result.ShouldBeSuccess();
+        result.Value.ShouldNotBeEmpty();
 
         await _jobOffersRepository.Received(1)
             .AddAsync(Arg.Is<JobOffer>(jo => jo.Id.Guid == result.Value), _cancellationToken);

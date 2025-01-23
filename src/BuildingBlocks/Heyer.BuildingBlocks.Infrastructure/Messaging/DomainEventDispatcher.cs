@@ -49,7 +49,7 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
         }
         catch (Exception e)
         {
-            return Result.Fail(new Error("Failed to dispatch domain events.").CausedBy(e));
+            return Result.Fail(new ExceptionalError("Failed to dispatch domain events.", e));
         }
 
         return Result.Ok();

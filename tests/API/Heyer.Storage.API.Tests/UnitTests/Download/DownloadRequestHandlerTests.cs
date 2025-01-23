@@ -1,5 +1,5 @@
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Client.PublishedLanguage;
 using Heyer.Storage.API.Download;
 using Heyer.Storage.API.Providers.Registry;
@@ -36,8 +36,7 @@ public class DownloadRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess()
-            .And.HaveValue(new DownloadResponse("test-file.png", "image/png", fileStream));
+        result.ShouldBeSuccess(new DownloadResponse("test-file.png", "image/png", fileStream));
     }
 
     [Test]
@@ -52,7 +51,7 @@ public class DownloadRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("error");
+        result.ShouldBeFailure("error");
     }
 
     [Test]
@@ -67,7 +66,7 @@ public class DownloadRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("error");
+        result.ShouldBeFailure("error");
     }
 
     [SetUp]

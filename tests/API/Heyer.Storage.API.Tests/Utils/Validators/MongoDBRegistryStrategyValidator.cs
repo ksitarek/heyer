@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using MongoDB.Driver;
 using StorageRegistryEntry = Heyer.Storage.API.Providers.Registry.MongoDB.StorageRegistryEntry;
 
@@ -16,15 +16,15 @@ internal class MongoDBRegistryStrategyValidator : IRegistryStrategyValidator
         var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
         var result = await _collection.Find(filter).AnyAsync();
 
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     public async Task ValidateFileIsPreserved(string key)
     {
         var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
         var entry = await _collection.Find(filter).FirstOrDefaultAsync();
-        entry.Should().NotBeNull();
-        entry.Preserve.Should().BeTrue();
+        entry.ShouldNotBeNull();
+        entry.Preserve.ShouldBeTrue();
     }
 
     public async Task ValidateFilePropertiesAsync(string key,
@@ -35,8 +35,8 @@ internal class MongoDBRegistryStrategyValidator : IRegistryStrategyValidator
         var filter = Builders<StorageRegistryEntry>.Filter.Eq(x => x.Key, key);
         var entry = await _collection.Find(filter).FirstAsync();
 
-        entry.FileName.Should().Be(expectedFileName);
-        entry.ContentType.Should().Be(expectedContentType);
-        entry.Size.Should().Be(expectedSize);
+        entry.FileName.ShouldBe(expectedFileName);
+        entry.ContentType.ShouldBe(expectedContentType);
+        entry.Size.ShouldBe(expectedSize);
     }
 }

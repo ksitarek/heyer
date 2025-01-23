@@ -1,6 +1,5 @@
-using FluentAssertions;
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.CleanupTempFiles;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Registry.MongoDB;
@@ -33,7 +32,7 @@ public class CleanupTempFilesTests
         var result = await _handler.Handle(new CleanupTempFilesRequest(), CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
 
         foreach (var file in files)
         {
@@ -58,9 +57,7 @@ public class CleanupTempFilesTests
         var result = await _handler.Handle(new CleanupTempFilesRequest(), CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure()
-            .And.HaveError("Failed to retrieve expired temp files.")
-            .And.HaveReason("Reason");
+        result.ShouldBeFailure("Failed to retrieve expired temp files.", "Reason");
 
         await _storageStrategy.DidNotReceive().DeleteAsync(
             Arg.Any<string>(),
@@ -82,7 +79,7 @@ public class CleanupTempFilesTests
         var result = await _handler.Handle(new CleanupTempFilesRequest(), CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
 
         await _storageStrategy.DidNotReceive().DeleteAsync(
             Arg.Any<string>(),
@@ -114,9 +111,7 @@ public class CleanupTempFilesTests
         var result = await _handler.Handle(new CleanupTempFilesRequest(), CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure()
-            .And.HaveError("Failed to delete temp file with key test-key2.")
-            .That.BeOfType<Error>().Which.Reasons.Select(x => x.Message).Should().Contain("Reason");
+        result.ShouldBeFailure("Failed to delete temp file with key test-key2.", "Reason");
     }
 
     [SetUp]

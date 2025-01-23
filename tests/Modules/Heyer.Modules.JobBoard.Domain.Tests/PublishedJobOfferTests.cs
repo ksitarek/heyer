@@ -1,6 +1,7 @@
-using FluentAssertions;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.JobBoard.Domain.JobOffers.Events;
+using Shouldly;
 
 namespace Heyer.Modules.JobBoard.Domain.Tests;
 
@@ -17,9 +18,9 @@ public class PublishedJobOfferTests
             .BuildTestData();
 
         // Assert
-        jobOffer.Should().NotBeNull();
-        jobOffer.Id.Should().NotBeNull();
-        jobOffer.DomainEvents.Should().ContainSingle(
+        jobOffer.ShouldNotBeNull();
+        jobOffer.Id.ShouldNotBeNull();
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(JobOfferPublished)
                            && ((JobOfferPublished)domainEvent).PublishedJobOfferId == jobOffer.Id);
     }

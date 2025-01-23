@@ -1,7 +1,7 @@
 using System.Net;
-using FluentAssertions;
 using Heyer.Storage.API.Tests.Utils;
 using RestEase;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
@@ -18,7 +18,8 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
         var action = async () => await client.Download(Guid.NewGuid().ToString());
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [Test]
@@ -31,7 +32,8 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
         var action = async () => await client.Download(Guid.NewGuid().ToString());
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Test]
@@ -46,18 +48,18 @@ public class DownloadEndpointTests : StorageApiIntegrationTestsBase
         var fileResponse = await client.Download(storeResult.FileHandle);
 
         // Assert
-        fileResponse.ResponseMessage.Content.Headers.ContentDisposition!.FileName.Should().Be("test-file.png");
-        fileResponse.ResponseMessage.Content.Headers.ContentType!.MediaType.Should().Be("image/png");
+        fileResponse.ResponseMessage.Content.Headers.ContentDisposition!.FileName.ShouldBe("test-file.png");
+        fileResponse.ResponseMessage.Content.Headers.ContentType!.MediaType.ShouldBe("image/png");
 
         await using var downloadedFileStream = await fileResponse.ResponseMessage.Content.ReadAsStreamAsync();
         await using var testFile = File.OpenRead(filePath);
         using var fromDisk = new StreamContent(testFile);
 
-        downloadedFileStream.Length.Should().Be(fromDisk.Headers.ContentLength);
+        downloadedFileStream.Length.ShouldBe(fromDisk.Headers.ContentLength!.Value);
 
         AreStreamsEqual(
             downloadedFileStream,
-            await fromDisk.ReadAsStreamAsync()).Should().BeTrue();
+            await fromDisk.ReadAsStreamAsync()).ShouldBeTrue();
     }
 
     private bool AreStreamsEqual(Stream stream, Stream other)

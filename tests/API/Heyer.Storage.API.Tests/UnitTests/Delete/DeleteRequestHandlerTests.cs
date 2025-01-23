@@ -1,5 +1,5 @@
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Client.PublishedLanguage;
 using Heyer.Storage.API.Delete;
 using Heyer.Storage.API.Providers.Registry;
@@ -27,7 +27,7 @@ public class DeleteRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class DeleteRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("error");
+        result.ShouldBeFailure("error");
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class DeleteRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("error");
+        result.ShouldBeFailure("error");
     }
 
     [SetUp]

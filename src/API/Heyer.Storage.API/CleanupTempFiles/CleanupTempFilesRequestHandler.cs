@@ -1,6 +1,5 @@
 using FluentResults;
 using Heyer.Storage.API.Providers.Registry;
-using Heyer.Storage.API.Providers.Registry.MongoDB;
 using Heyer.Storage.API.Providers.Storage;
 using MediatR;
 
@@ -28,8 +27,12 @@ public class CleanupTempFilesRequestHandler : IRequestHandler<CleanupTempFilesRe
 
         if (expiredTempFiles.IsFailed)
         {
-            _logger.LogError("Failed to retrieve expired temp files: {errors}", expiredTempFiles.Errors);
-            return Result.Fail("Failed to retrieve expired temp files.").WithErrors(expiredTempFiles.Errors);
+            var error = new Error("Failed to retrieve expired temp files.")
+                .CausedBy(expiredTempFiles.Errors);
+
+            _logger.LogError(error.ToString());
+
+            return Result.Fail(error);
         }
 
         var result = Result.Ok();

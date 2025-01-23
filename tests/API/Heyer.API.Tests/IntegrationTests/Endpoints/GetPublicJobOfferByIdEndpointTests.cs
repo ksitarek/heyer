@@ -1,5 +1,4 @@
 using System.Net;
-using FluentAssertions;
 using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.BuildingBlocks.Tests;
@@ -7,6 +6,7 @@ using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.Infrastructure.Persistence;
 using RestEase;
+using Shouldly;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
@@ -27,10 +27,8 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
         var jobOffer = await client.GetPublishedJobOfferById(_publishedJobOffer.Id.Guid);
 
         // Assert
-        jobOffer.Should().NotBeNull();
-        jobOffer.Should()
-            .BeEquivalentTo(
-                _expectedDetails);
+        jobOffer.ShouldNotBeNull();
+        jobOffer.ShouldBeEquivalentTo(_expectedDetails);
     }
 
     [Test]
@@ -43,8 +41,8 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
         var action = async () => await client.GetPublishedJobOfferById(Guid.NewGuid());
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>())
-            .And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [Test]
@@ -60,8 +58,8 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
         var action = async () => await client.GetPublishedJobOfferById(_publishedJobOffer.Id.Guid);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>())
-            .And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [SetUp]

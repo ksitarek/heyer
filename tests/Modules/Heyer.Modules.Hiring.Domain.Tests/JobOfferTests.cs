@@ -1,9 +1,9 @@
-using FluentAssertions;
-using FluentResults.Extensions.FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
+using Shouldly;
 
 namespace Heyer.Modules.Hiring.Domain.Tests;
 
@@ -21,8 +21,8 @@ public class JobOfferTests
         var result = jobOffer.AddCandidate(candidateId);
 
         // Assert
-        result.Should().BeSuccess();
-        jobOffer.DomainEvents.Should().ContainSingle(
+        result.ShouldBeSuccess();
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(CandidateApplied)
                            && ((CandidateApplied)domainEvent).JobOfferId == jobOffer.Id
                            && ((CandidateApplied)domainEvent).CandidateId == candidateId);
@@ -40,7 +40,8 @@ public class JobOfferTests
         var result = jobOffer.AddCandidate(candidateId);
 
         // Assert
-        result.Should().BeFailure($"Candidate with id: {candidateId} has already applied for this job offer.");
+        result.ShouldBeFailure("Business rule violation.",
+                               $"Candidate with id: {candidateId} has already applied for this job offer.");
     }
 
     [Test]
@@ -58,9 +59,9 @@ public class JobOfferTests
                 8));
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
 
-        jobOffer.DomainEvents.Should().ContainSingle(
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(ContractDetailsAdded)
                            && ((ContractDetailsAdded)domainEvent).JobOfferId == jobOffer.Id
                            && ((ContractDetailsAdded)domainEvent).EmploymentType ==
@@ -88,7 +89,7 @@ public class JobOfferTests
                 8));
 
         // Assert
-        result.Should().BeFailure();
+        result.ShouldBeFailure();
     }
 
     [Test]
@@ -100,9 +101,9 @@ public class JobOfferTests
         var jobOffer = CreateTestJobOffer();
 
         // Assert
-        jobOffer.Should().NotBeNull();
-        jobOffer.Id.Should().NotBeNull();
-        jobOffer.DomainEvents.Should().ContainSingle(
+        jobOffer.ShouldNotBeNull();
+        jobOffer.Id.ShouldNotBeNull();
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(JobOfferCreated)
                            && ((JobOfferCreated)domainEvent).JobOfferId == jobOffer.Id);
     }
@@ -119,7 +120,8 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure("Job offer must have at least one contract details when publishing.");
+        result.ShouldBeFailure("Business rule violation.",
+                               "Job offer must have at least one contract details when publishing.");
     }
 
     [Test]
@@ -133,7 +135,7 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure("Job offer must have location when publishing.");
+        result.ShouldBeFailure("Business rule violation.", "Job offer must have location when publishing.");
     }
 
     [Test]
@@ -151,7 +153,7 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure("Job offer must have requirements when publishing.");
+        result.ShouldBeFailure("Business rule violation.", "Job offer must have requirements when publishing.");
     }
 
     [Test]
@@ -171,7 +173,7 @@ public class JobOfferTests
         var result = jobOffer.Publish();
 
         // Assert
-        result.Should().BeFailure("Job offer must not be public.");
+        result.ShouldBeFailure("Business rule violation.", "Job offer must not be public.");
     }
 
     [Test]
@@ -190,7 +192,7 @@ public class JobOfferTests
         var result = jobOffer.Publish(DateTimeOffset.Now.AddDays(-1));
 
         // Assert
-        result.Should().BeFailure("Published until date must not be in the past.");
+        result.ShouldBeFailure("Business rule violation.", "Published until date must not be in the past.");
     }
 
     [Test]
@@ -209,8 +211,8 @@ public class JobOfferTests
         var result = jobOffer.Publish(DateTimeOffset.UtcNow.AddDays(1));
 
         // Assert
-        result.Should().BeSuccess();
-        jobOffer.DomainEvents.Should().ContainSingle(
+        result.ShouldBeSuccess();
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(JobOfferPublished)
                            && ((JobOfferPublished)domainEvent).JobOfferId == jobOffer.Id);
     }
@@ -225,7 +227,8 @@ public class JobOfferTests
         var result = jobOffer.RemoveContractDetails(EmploymentType.B2B);
 
         // Assert
-        result.Should().BeFailure($"Job offer must have contract details for employment type: {EmploymentType.B2B}.");
+        result.ShouldBeFailure("Business rule violation.",
+                               $"Job offer must have contract details for employment type: {EmploymentType.B2B}.");
     }
 
     [Test]
@@ -242,9 +245,8 @@ public class JobOfferTests
         var result = jobOffer.RemoveContractDetails(EmploymentType.ContractOfEmployment);
 
         // Assert
-        result.Should()
-            .BeFailure(
-                $"Job offer must have contract details for employment type: {EmploymentType.ContractOfEmployment}.");
+        result.ShouldBeFailure("Business rule violation.",
+                               $"Job offer must have contract details for employment type: {EmploymentType.ContractOfEmployment}.");
     }
 
     [Test]
@@ -267,12 +269,12 @@ public class JobOfferTests
         var result = jobOffer.RemoveContractDetails(EmploymentType.B2B);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
 
-        jobOffer.ContractsDetails.Should()
-            .NotContain(contractDetails => contractDetails.EmploymentType == EmploymentType.B2B);
+        jobOffer.ContractsDetails!.ShouldNotContain(contractDetails =>
+                                                        contractDetails.EmploymentType == EmploymentType.B2B);
 
-        jobOffer.DomainEvents.Should().ContainSingle(
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(ContractDetailsRemoved)
                            && ((ContractDetailsRemoved)domainEvent).JobOfferId == jobOffer.Id
                            && ((ContractDetailsRemoved)domainEvent).EmploymentType == EmploymentType.B2B);
@@ -289,7 +291,7 @@ public class JobOfferTests
         var result = jobOffer.SetOfficeLocation(location);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
     }
 
     [Test]
@@ -306,7 +308,7 @@ public class JobOfferTests
         var result = jobOffer.SetRequirements(experienceLevel, skills);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
     }
 
     [Test]
@@ -319,7 +321,7 @@ public class JobOfferTests
         var result = jobOffer.TakeDown();
 
         // Assert
-        result.Should().BeFailure("Job offer must be published to take it down.");
+        result.ShouldBeFailure("Business rule violation.", "Job offer must be published to take it down.");
     }
 
     [Test]
@@ -340,7 +342,7 @@ public class JobOfferTests
         var result = jobOffer.TakeDown();
 
         // Assert
-        result.Should().BeFailure();
+        result.ShouldBeFailure();
     }
 
     [Test]
@@ -360,8 +362,8 @@ public class JobOfferTests
         var result = jobOffer.TakeDown();
 
         // Assert
-        result.Should().BeSuccess();
-        jobOffer.DomainEvents.Should().ContainSingle(
+        result.ShouldBeSuccess();
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(JobOfferTakenDown)
                            && ((JobOfferTakenDown)domainEvent).JobOfferId == jobOffer.Id);
     }
@@ -379,8 +381,8 @@ public class JobOfferTests
         var result = jobOffer.UpdateDescription(offerSummary, jobDescription);
 
         // Assert
-        result.Should().BeSuccess();
-        jobOffer.DomainEvents.Should().ContainSingle(
+        result.ShouldBeSuccess();
+        jobOffer.DomainEvents.ShouldContainSingle(
             domainEvent => domainEvent.GetType() == typeof(JobOfferDescriptionUpdated)
                            && ((JobOfferDescriptionUpdated)domainEvent).JobOfferId == jobOffer.Id);
     }

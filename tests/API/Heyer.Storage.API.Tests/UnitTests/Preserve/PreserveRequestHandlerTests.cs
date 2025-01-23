@@ -1,5 +1,5 @@
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Preserve;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
@@ -26,7 +26,7 @@ public class PreserveRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
 
         await _storageStrategy.Received(1).PreserveAsync("key", Arg.Any<CancellationToken>());
         await _registryStrategy.Received(1).SetPreserveAsync("key", true, Arg.Any<CancellationToken>());
@@ -44,7 +44,7 @@ public class PreserveRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("error");
+        result.ShouldBeFailure("error");
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class PreserveRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("error");
+        result.ShouldBeFailure("error");
     }
 
     [SetUp]

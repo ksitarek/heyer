@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Heyer.Storage.API.Providers.Storage.Filesystem;
 using Microsoft.Extensions.Options;
 
@@ -13,7 +13,7 @@ internal class FilesystemStorageStrategyValidator : IStorageStrategyValidator
     public Task ValidateFileIsNotPresent(string key)
     {
         File.Exists($"{_options.Value.RootPath}/{key}")
-            .Should().BeFalse();
+            .ShouldBeFalse();
 
         return Task.CompletedTask;
     }
@@ -21,7 +21,7 @@ internal class FilesystemStorageStrategyValidator : IStorageStrategyValidator
     public Task ValidateFileIsPresent(string key)
     {
         File.Exists($"{_options.Value.RootPath}/{key}")
-            .Should().BeTrue();
+            .ShouldBeTrue();
 
         return Task.CompletedTask;
     }

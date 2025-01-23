@@ -1,11 +1,11 @@
-using FluentAssertions;
-using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using NSubstitute;
 using NSubstitute.Extensions;
+using Shouldly;
 
 namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 
@@ -30,8 +30,8 @@ public class PublishJobOfferHandlerTests
         var result = await _handler.Handle(_testRequest, _cancellationToken);
 
         // Assert
-        result.Should().BeFailure();
-        result.Errors.Should().ContainSingle().Which.Should().BeOfType<NotFoundError>();
+        result.ShouldBeFailure();
+        result.ShouldHaveError<NotFoundError>();
     }
 
     [Test]
@@ -43,9 +43,9 @@ public class PublishJobOfferHandlerTests
         var result = await _handler.Handle(_testRequest, _cancellationToken);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
 
-        _testJobOffer.PublishedUntil.Should().Be(_publishedUntil);
+        _testJobOffer.PublishedUntil.ShouldBe(_publishedUntil);
 
         await _jobOffersRepository.Received(1).GetJobOfferById(_testJobOffer.Id, _cancellationToken);
     }

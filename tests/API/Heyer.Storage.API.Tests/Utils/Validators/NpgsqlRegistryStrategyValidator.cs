@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Heyer.Storage.API.Providers.Registry.Npgsql;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,13 +13,13 @@ internal class NpgsqlRegistryStrategyValidator : IRegistryStrategyValidator
     public async Task ValidateFileIsNotPresent(string key)
     {
         var result = await _context.StorageRegistryEntries.AnyAsync(x => x.Key == key);
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     public async Task ValidateFileIsPreserved(string key)
     {
         var result = await _context.StorageRegistryEntries.FirstAsync(x => x.Key == key);
-        result.Preserve.Should().BeTrue();
+        result.Preserve.ShouldBeTrue();
     }
 
     public async Task ValidateFilePropertiesAsync(string key,
@@ -28,9 +28,9 @@ internal class NpgsqlRegistryStrategyValidator : IRegistryStrategyValidator
                                                   int expectedSize)
     {
         var result = await _context.StorageRegistryEntries.FirstAsync(x => x.Key == key);
-        result.Should().NotBeNull();
-        result.FileName.Should().Be(expectedFileName);
-        result.ContentType.Should().Be(expectedContentType);
-        result.Size.Should().Be(expectedSize);
+        result.ShouldNotBeNull();
+        result.FileName.ShouldBe(expectedFileName);
+        result.ContentType.ShouldBe(expectedContentType);
+        result.Size.ShouldBe(expectedSize);
     }
 }

@@ -1,8 +1,7 @@
-using FluentAssertions;
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Infrastructure;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.BuildingBlocks.Tests.Fixtures;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Registry.MongoDB;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Providers.Registry;
 
@@ -36,10 +36,10 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.DeleteAsync("test-key", CancellationToken.None);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
 
         var entry = await _collection.Find(x => x.Key == "test-key").SingleOrDefaultAsync();
-        entry.Should().BeNull();
+        entry.ShouldBeNull();
     }
 
     [Test]
@@ -62,9 +62,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.DeleteAsync("test-key", CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure()
-            .And.HaveError("Failed to delete storage registry entry.")
-            .Which.HasException<Exception>(e => e.Message == "Test exception").Should().BeTrue();
+        result.ShouldBeFailure("Failed to delete storage registry entry.");
+        result.ShouldHaveException<Exception>(e => e.Message == "Test exception");
     }
 
     [Test]
@@ -76,10 +75,10 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.DeleteAsync("test-key", CancellationToken.None);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
 
         var entry = await _collection.Find(x => x.Key == "test-key").SingleOrDefaultAsync();
-        entry.Should().BeNull();
+        entry.ShouldBeNull();
     }
 
     [Test]
@@ -103,8 +102,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.GetAsync("test-key", CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveReason("Failed to get storage registry entry.")
-            .Which.HasException<Exception>(x => x.Message == "Test exception").Should().BeTrue();
+        result.ShouldBeFailure("Failed to get storage registry entry.");
+        result.ShouldHaveException<Exception>(x => x.Message == "Test exception");
     }
 
     [Test]
@@ -117,7 +116,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.GetAsync(key, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveReason<NotFoundError>("Not found.");
+        result.ShouldBeFailure();
+        result.ShouldHaveError<NotFoundError>("Not found.");
     }
 
     [Test]
@@ -141,8 +141,7 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.GetAsync(key, CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess()
-            .And.Subject.Value.Should().BeEquivalentTo(expectedEntry);
+        result.ShouldBeSuccess(expectedEntry);
     }
 
     [Test]
@@ -165,8 +164,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.GetExpiredTempFiles(CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
-        result.Value.Should().BeEmpty();
+        result.ShouldBeSuccess();
+        result.Value.ShouldBeEmpty();
     }
 
     [Test]
@@ -189,8 +188,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.GetExpiredTempFiles(CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
-        result.Value.Should().BeEmpty();
+        result.ShouldBeSuccess();
+        result.Value.ShouldBeEmpty();
     }
 
     [Test]
@@ -224,9 +223,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.GetExpiredTempFiles(CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
-        result.Value.Should().ContainSingle()
-            .Which.Should().BeEquivalentTo(expiredEntry);
+        result.ShouldBeSuccess();
+        result.Value.ShouldContainSingle(expiredEntry);
     }
 
     [OneTimeSetUp]
@@ -255,10 +253,11 @@ public class MongoDBRegistryStrategyTests
             "test-file.txt");
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
 
         var entry = await _collection.Find(x => x.Key == "test-key").FirstOrDefaultAsync();
-        entry.Should().NotBeNull().And.BeEquivalentTo(expectedEntry);
+        entry.ShouldNotBeNull();
+        entry.ShouldBeEquivalentTo(expectedEntry);
     }
 
     [Test]
@@ -273,10 +272,11 @@ public class MongoDBRegistryStrategyTests
 
 
         // Assert
-        result.Should().BeFailure();
+        result.ShouldBeFailure();
 
         var testEntry = await _collection.Find(x => x.Key == "test-key").SingleOrDefaultAsync();
-        testEntry.Should().NotBeNull().And.BeEquivalentTo(firstEntry);
+        testEntry.ShouldNotBeNull();
+        testEntry.ShouldBeEquivalentTo(firstEntry);
     }
 
     [Test]
@@ -301,8 +301,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.SetPreserveAsync("test-key", true);
 
         // Assert
-        result.Should().BeFailure().And.HaveReason("Failed to set preserve flag.")
-            .Which.HasException<Exception>(x => x.Message == "Test exception").Should().BeTrue();
+        result.ShouldBeFailure("Failed to set preserve flag.");
+        result.ShouldHaveException<Exception>(x => x.Message == "Test exception");
     }
 
     [Test]
@@ -314,7 +314,8 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.SetPreserveAsync("test-key", true);
 
         // Assert
-        result.Should().BeFailure().And.HaveReason<NotFoundError>("Not found.");
+        result.ShouldBeFailure();
+        result.ShouldHaveError<NotFoundError>("Not found.");
     }
 
     [Test]
@@ -327,10 +328,11 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.SetPreserveAsync("test-key", true);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
 
         var entry = await _collection.Find(x => x.Key == "test-key").SingleOrDefaultAsync();
-        entry.Should().NotBeNull().And.BeEquivalentTo(new { Preserve = true });
+        entry.ShouldNotBeNull();
+        entry.ShouldBeEquivalentTo(new { Preserve = true });
     }
 
     [SetUp]
@@ -358,7 +360,7 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.ValidateKeyAsync("test-key", CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure().And.HaveReason("Key not found.");
+        result.ShouldBeFailure("Key not found.");
     }
 
     [Test]
@@ -371,7 +373,7 @@ public class MongoDBRegistryStrategyTests
         var result = await _strategy.ValidateKeyAsync("test-key", CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
     }
 
     private async Task<Result> InsertStorageEntry(string key, byte[] content, string name)

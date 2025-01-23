@@ -1,10 +1,9 @@
-using FluentAssertions;
-using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.Notifications;
 using Heyer.BuildingBlocks.Domain;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
@@ -37,7 +36,7 @@ public class DomainEventDispatcherTests
         var result = await _domainEventDispatcher.DispatchDomainEventsAsync(_cancellationToken);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
         await _mediator.Received(2).Publish(Arg.Any<DomainEvent>(), _cancellationToken);
         _domainEventsAccessor.Received(1).ClearAllDomainEvents();
     }
@@ -55,8 +54,8 @@ public class DomainEventDispatcherTests
         var result = await _domainEventDispatcher.DispatchDomainEventsAsync(_cancellationToken);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("Failed to dispatch domain events.")
-            .Which.HasException<Exception>(x => x.Message == "Test Exception").Should().BeTrue();
+        result.ShouldBeFailure("Failed to dispatch domain events.");
+        result.ShouldHaveException<Exception>(x => x.Message == "Test Exception");
 
         _domainEventsAccessor.DidNotReceive().ClearAllDomainEvents();
     }

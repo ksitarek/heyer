@@ -29,7 +29,7 @@ public class UnitOfWork : IUnitOfWork
         }
         catch (Exception e)
         {
-            return Result.Fail<int>(new Error("An error occurred while saving changes to the database.").CausedBy(e));
+            return Result.Fail<int>(new ExceptionalError("An error occurred while saving changes to the database.", e));
         }
     }
 }

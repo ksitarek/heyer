@@ -12,7 +12,7 @@ public static class ResponseErrorHandling
         return error switch
         {
             NotFoundError => Microsoft.AspNetCore.Http.Results.NotFound(),
-            BusinessRuleViolation => Microsoft.AspNetCore.Http.Results.BadRequest(),
+            BusinessRuleViolationError => Microsoft.AspNetCore.Http.Results.BadRequest(),
             ValidationError => HandleValidationError(response.Errors),
 
             _ => Microsoft.AspNetCore.Http.Results.StatusCode(StatusCodes.Status500InternalServerError)

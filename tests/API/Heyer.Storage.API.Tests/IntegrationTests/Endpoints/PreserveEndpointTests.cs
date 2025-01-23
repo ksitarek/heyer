@@ -1,8 +1,8 @@
 using System.Net;
-using FluentAssertions;
 using Heyer.Storage.API.Tests.Utils;
 using Heyer.Storage.API.Tests.Utils.Validators;
 using RestEase;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
@@ -37,7 +37,8 @@ public class PreserveEndpointTests : StorageApiIntegrationTestsBase
         var action = async () => await client.Preserve("invalid-key");
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [Test]

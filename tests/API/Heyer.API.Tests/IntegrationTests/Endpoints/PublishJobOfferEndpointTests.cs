@@ -1,5 +1,4 @@
 using System.Net;
-using FluentAssertions;
 using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.BuildingBlocks.Tests;
@@ -8,6 +7,7 @@ using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using RestEase;
+using Shouldly;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
@@ -40,8 +40,8 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
 
         // Assert
         var publishedOffer = await client.GetPublishedJobOfferById(jobOffer.Id.Guid);
-        publishedOffer.Should().NotBeNull();
-        publishedOffer.Id.Should().Be(jobOffer.Id.Guid);
+        publishedOffer.ShouldNotBeNull();
+        publishedOffer.Id.ShouldBe(jobOffer.Id.Guid);
     }
 
     [Test]
@@ -54,7 +54,8 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
         var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Test]
@@ -67,7 +68,8 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
         var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
     }
 
     [Test]
@@ -82,7 +84,8 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
         var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [SetUp]

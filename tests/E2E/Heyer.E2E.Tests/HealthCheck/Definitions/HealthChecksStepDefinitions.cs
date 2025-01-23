@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Heyer.BuildingBlocks.Json;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using OpenQA.Selenium;
@@ -23,7 +23,7 @@ public class HealthChecksStepDefinitions : IDisposable
         var json = _p.Driver.FindElement(By.TagName("pre")).Text;
         var health = json.Deserialize<HealthReport>()!;
 
-        health.Status.Should().Be(HealthCheckStatus.Healthy);
+        health.Status.ShouldBe(HealthCheckStatus.Healthy);
     }
 
     [When(@"I check the healthcheck endpoint")]

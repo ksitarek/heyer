@@ -17,26 +17,19 @@ public abstract class Entity
 
     protected static Result ChallengeBusinessRules(params IBusinessRule[] businessRules)
     {
-        var errors = new List<Error>();
+        var businessRuleViolationError = new BusinessRuleViolationError();
         foreach (var businessRule in businessRules)
         {
             var result = businessRule.Challenge();
             if (result.IsFailed)
             {
-                errors.Add(new Error(result.ToString()));
+                businessRuleViolationError.Reasons.Add(result.Errors.OfType<Error>().First());
             }
         }
 
-        if (!errors.Any())
-        {
-            return Result.Ok();
-        }
-
-        var businessRuleViolation = new BusinessRuleViolation();
-
-        businessRuleViolation.Reasons.AddRange(errors);
-
-        return businessRuleViolation;
+        return businessRuleViolationError.Reasons.Any()
+            ? Result.Fail(businessRuleViolationError)
+            : Result.Ok();
     }
 
     protected void AddDomainEvent(DomainEvent @event)

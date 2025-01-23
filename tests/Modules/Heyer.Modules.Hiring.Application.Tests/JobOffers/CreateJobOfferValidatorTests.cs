@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using FluentValidation.TestHelper;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
@@ -67,7 +67,7 @@ public class CreateJobOfferValidatorTests
         var result = _validator.TestValidate(request);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.IsValid.ShouldBeFalse();
         result.ShouldHaveValidationErrorFor(x => x.JobDescription)
             .WithErrorMessage(expectedErrorMessage);
     }
@@ -83,7 +83,7 @@ public class CreateJobOfferValidatorTests
         var result = _validator.TestValidate(request);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.IsValid.ShouldBeFalse();
 
         result.ShouldHaveValidationErrorFor(x => x.OfferSummary)
             .WithErrorMessage(expectedErrorMessage);
@@ -100,7 +100,7 @@ public class CreateJobOfferValidatorTests
         var result = _validator.TestValidate(request);
 
         // Assert
-        result.IsValid.Should().BeFalse();
+        result.IsValid.ShouldBeFalse();
         result.ShouldHaveValidationErrorFor(x => x.RemoteWork)
             .WithErrorMessage(expectedErrorMessage);
     }
@@ -115,6 +115,6 @@ public class CreateJobOfferValidatorTests
         var result = _validator.TestValidate(request);
 
         // Assert
-        result.IsValid.Should().BeTrue();
+        result.IsValid.ShouldBeTrue();
     }
 }

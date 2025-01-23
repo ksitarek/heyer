@@ -1,9 +1,10 @@
-using FluentAssertions;
 using FluentValidation;
 using FluentValidation.TestHelper;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Store;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Store;
 
@@ -37,8 +38,8 @@ public class StoreRequestValidatorTests
         var result = _validator.Validate(request);
 
         // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(e => e.ErrorMessage == "File is required.");
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldContainSingle(e => e.ErrorMessage == "File is required.");
     }
 
     [Test]
@@ -51,6 +52,6 @@ public class StoreRequestValidatorTests
         var result = _validator.Validate(request);
 
         // Assert
-        result.IsValid.Should().BeTrue();
+        result.IsValid.ShouldBeTrue();
     }
 }

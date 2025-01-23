@@ -1,5 +1,4 @@
 using System.Net;
-using FluentAssertions;
 using Heyer.API.Tests.Utils;
 using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
 using Heyer.BuildingBlocks.Tests;
@@ -9,6 +8,7 @@ using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Microsoft.EntityFrameworkCore;
 using RestEase;
+using Shouldly;
 
 namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
@@ -20,16 +20,16 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
 
     public static IEnumerable<object[]> BadRequestTestCases()
     {
-        yield return new object[] { new ContractDetails() };
-        yield return new object[] { new ContractDetails(EmploymentType.B2B, new SalaryRange(), 8, 8) };
-        yield return new object[] { new ContractDetails(EmploymentType.B2B, new SalaryRange(false, 0, 0), 8, 8) };
-        yield return new object[] { new ContractDetails(EmploymentType.B2B, new SalaryRange(false, 1, 0), 8, 8) };
+        yield return [new ContractDetails()];
+        yield return [new ContractDetails(EmploymentType.B2B, new SalaryRange(), 8, 8)];
+        yield return [new ContractDetails(EmploymentType.B2B, new SalaryRange(false, 0, 0), 8, 8)];
+        yield return [new ContractDetails(EmploymentType.B2B, new SalaryRange(false, 1, 0), 8, 8)];
 
         // duplicate employment type
-        yield return new object[]
-        {
+        yield return
+        [
             new ContractDetails(EmploymentType.ContractOfEmployment, new SalaryRange(false, 1, 2), 8, 8)
-        };
+        ];
     }
 
     [Test]
@@ -52,11 +52,11 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
         var action = async () => await client.AddContractDetails(request);
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await action.ShouldNotThrowAsync();
 
         var jobOffer = await _ctx.JobOffers.AsNoTracking().FirstAsync(x => x.Id == _jobOffer.Id);
         jobOffer.ContractsDetails!
-            .Any(x => x.EmploymentType == contractDetails.EmploymentType).Should().BeTrue();
+            .Any(x => x.EmploymentType == contractDetails.EmploymentType).ShouldBeTrue();
     }
 
     [Theory]
@@ -74,7 +74,8 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
         var action = async () => await client.AddContractDetails(request);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
 
     [Test]
@@ -97,7 +98,8 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
         var action = async () => await client.AddContractDetails(request);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [Test]
@@ -120,7 +122,8 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
         var action = async () => await client.AddContractDetails(request);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [Test]
@@ -134,7 +137,8 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
         var action = async () => await client.AddContractDetails(request);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Test]
@@ -148,7 +152,8 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
         var action = async () => await client.AddContractDetails(request);
 
         // Assert
-        (await action.Should().ThrowAsync<ApiException>()).And.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        var exception = await action.ShouldThrowAsync<ApiException>();
+        exception.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
     }
 
     [SetUp]

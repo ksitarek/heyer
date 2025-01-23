@@ -1,5 +1,5 @@
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Providers.Registry;
 using Heyer.Storage.API.Providers.Storage;
 using Heyer.Storage.API.Store;
@@ -48,8 +48,7 @@ public class StoreRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure()
-            .Which.HasError(e => e.Message == "Registry strategy failed");
+        result.ShouldBeFailure("Registry strategy failed");
 
         await _storageStrategy
             .Received(1)
@@ -79,8 +78,7 @@ public class StoreRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeFailure()
-            .Which.HasError(e => e.Message == "Storage strategy failed");
+        result.ShouldBeFailure("Storage strategy failed");
 
         await _storageStrategy
             .Received(1)
@@ -107,7 +105,7 @@ public class StoreRequestHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
 
         await _storageStrategy
             .Received(1)

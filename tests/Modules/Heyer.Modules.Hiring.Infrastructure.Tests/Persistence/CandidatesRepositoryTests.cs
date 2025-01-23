@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
-using FluentResults.Extensions.FluentAssertions;
-using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
+﻿using Heyer.BuildingBlocks.Domain.Tests.TestDataBuilders;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Shouldly;
 
 namespace Heyer.Modules.Hiring.Infrastructure.Tests.Persistence;
 
@@ -23,7 +23,7 @@ public class CandidatesRepositoryTests
         var result = await _repository.AddCandidate(candidate);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class CandidatesRepositoryTests
         var result = await _repository.AddCandidate(default!);
 
         // Assert
-        result.Should().BeFailure();
+        result.ShouldBeFailure();
     }
 
     [Test]
@@ -52,7 +52,7 @@ public class CandidatesRepositoryTests
         var result = await _repository.GetCandidateById(candidate.Id);
 
         // Assert
-        result.Should().Be(candidate);
+        result.ShouldBe(candidate);
     }
 
     [Test]
@@ -64,7 +64,7 @@ public class CandidatesRepositoryTests
         var result = await _repository.GetCandidateById(CandidateId.CreateNew());
 
         // Assert
-        result.Should().BeNull();
+        result.ShouldBeNull();
     }
 
     [SetUp]

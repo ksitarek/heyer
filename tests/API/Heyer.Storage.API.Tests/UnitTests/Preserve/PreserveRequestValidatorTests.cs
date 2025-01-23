@@ -1,5 +1,6 @@
-using FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Preserve;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Preserve;
 
@@ -21,8 +22,8 @@ public class PreserveRequestValidatorTests
         var result = _validator.Validate(request);
 
         // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(x => x.ErrorMessage == "Key is required.");
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldContainSingle(x => x.ErrorMessage == "Key is required.");
     }
 
     [Test]
@@ -35,7 +36,7 @@ public class PreserveRequestValidatorTests
         var result = _validator.Validate(request);
 
         // Assert
-        result.IsValid.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
+        result.IsValid.ShouldBeTrue();
+        result.Errors.ShouldBeEmpty();
     }
 }

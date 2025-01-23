@@ -1,7 +1,6 @@
-using FluentAssertions;
 using FluentResults;
-using FluentResults.Extensions.FluentAssertions;
 using Heyer.BuildingBlocks.Application.Results;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers;
@@ -11,6 +10,7 @@ using Heyer.Storage.API.Client;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NSubstitute.Extensions;
+using Shouldly;
 
 namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 
@@ -42,8 +42,7 @@ public class NewCandidateApplyToJobOfferHandlerTests
         var result = await _handler.Handle(_request, _cancellationToken);
 
         // Assert
-        result.Should().BeFailure()
-            .And.HaveError("Error");
+        result.ShouldBeFailure("Error");
 
         await _iPublishedJobOffersRepository.Received(1)
             .GetJobOfferById(_publishedJobOffer.Id, _cancellationToken);
@@ -63,9 +62,8 @@ public class NewCandidateApplyToJobOfferHandlerTests
         var result = await _handler.Handle(_request, _cancellationToken);
 
         // Assert
-        result.Should().BeFailure().And.HaveError("Failed to preserve resume")
-            .And.Subject.HasException<Exception>(x => x.Message == "Error").Should().BeTrue();
-
+        result.ShouldBeFailure("Failed to preserve resume");
+        result.ShouldHaveException<Exception>(x => x.Message == "Error");
 
         await _iPublishedJobOffersRepository.Received(1)
             .GetJobOfferById(_publishedJobOffer.Id, _cancellationToken);
@@ -85,8 +83,8 @@ public class NewCandidateApplyToJobOfferHandlerTests
         var result = await _handler.Handle(_request, _cancellationToken);
 
         // Assert
-        result.Should().BeFailure()
-            .And.HaveError("Not found.").Which.HasError<NotFoundError>().Should().BeTrue();
+        result.ShouldBeFailure("Not found.");
+        result.ShouldHaveError<NotFoundError>();
 
         await _storageApiClient.Received(0)
             .Preserve(Arg.Any<string>());
@@ -104,11 +102,11 @@ public class NewCandidateApplyToJobOfferHandlerTests
         var result = await _handler.Handle(_request, _cancellationToken);
 
         // Assert
-        result.Should().BeSuccess();
+        result.ShouldBeSuccess();
         var candidateApplied = _publishedJobOffer.DomainEvents.First() as CandidateApplied;
 
-        candidateApplied.Should().NotBeNull();
-        candidateApplied!.JobOfferId.Should().Be(_publishedJobOffer.Id);
+        candidateApplied.ShouldNotBeNull();
+        candidateApplied!.JobOfferId.ShouldBe(_publishedJobOffer.Id);
 
         await _iPublishedJobOffersRepository.Received(1)
             .GetJobOfferById(_publishedJobOffer.Id, _cancellationToken);

@@ -1,4 +1,3 @@
-using FluentAssertions;
 using FluentResults;
 using Heyer.Storage.API.BackgroundTasks;
 using Heyer.Storage.API.CleanupTempFiles;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.UnitTests.BackgroundTasks;
 
@@ -48,7 +48,7 @@ public class CleanupServiceTests
         };
 
         // Assert
-        await action.Should().NotThrowAsync();
+        await action.ShouldNotThrowAsync();
     }
 
     [Test]

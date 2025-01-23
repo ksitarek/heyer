@@ -1,7 +1,8 @@
-using FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Validators;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Validators;
 
@@ -24,8 +25,8 @@ public class FileValidatorTests
         var result = _validator.Validate(file);
 
         // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(x => x.ErrorMessage == "Invalid file extension.");
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldContainSingle(x => x.ErrorMessage == "Invalid file extension.");
     }
 
     [Test]
@@ -42,8 +43,8 @@ public class FileValidatorTests
         var result = _validator.Validate(file);
 
         // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(x => x.ErrorMessage == "Invalid file format.");
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldContainSingle(x => x.ErrorMessage == "Invalid file format.");
     }
 
     [Test]
@@ -60,8 +61,8 @@ public class FileValidatorTests
         var result = _validator.Validate(file);
 
         // Assert
-        result.IsValid.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
+        result.IsValid.ShouldBeTrue();
+        result.Errors.ShouldBeEmpty();
     }
 
     [Test]
@@ -78,8 +79,8 @@ public class FileValidatorTests
         var result = _validator.Validate(file);
 
         // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(x => x.ErrorMessage == "Max file size is 10MB.");
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldContainSingle(x => x.ErrorMessage == "Max file size is 10MB.");
     }
 
     [Test]
@@ -96,8 +97,8 @@ public class FileValidatorTests
         var result = _validator.Validate(file);
 
         // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(x => x.ErrorMessage == "File is empty.");
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldContainSingle(x => x.ErrorMessage == "File is empty.");
     }
 
     [SetUp]

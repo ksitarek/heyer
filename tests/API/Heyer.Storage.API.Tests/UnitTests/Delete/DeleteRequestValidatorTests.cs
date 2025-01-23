@@ -1,6 +1,7 @@
-using FluentAssertions;
+using Heyer.BuildingBlocks.Tests.Extensions;
 using Heyer.Storage.API.Client.PublishedLanguage;
 using Heyer.Storage.API.Delete;
+using Shouldly;
 
 namespace Heyer.Storage.API.Tests.UnitTests.Delete;
 
@@ -19,8 +20,8 @@ public class DeleteRequestValidatorTests
         var result = _validator.Validate(request);
 
         // Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(x => x.ErrorMessage == "Key is required.");
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldContainSingle(x => x.ErrorMessage == "Key is required.");
     }
 
     [Test]
@@ -33,8 +34,8 @@ public class DeleteRequestValidatorTests
         var result = _validator.Validate(request);
 
         // Assert
-        result.IsValid.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
+        result.IsValid.ShouldBeTrue();
+        result.Errors.ShouldBeEmpty();
     }
 
     [SetUp]
