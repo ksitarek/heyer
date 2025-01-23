@@ -11,7 +11,7 @@ import type { ClassValue } from 'clsx';
   providers: [provideIcons({ lucideCheck })],
   imports: [NgIcon, HlmIconDirective],
   template: `
-    <!-- Using 1rem for size to mimick h-4 w-4 -->
+    <!-- Using 1rem for size to mimic h-4 w-4 -->
     <ng-icon hlm size="1rem" name="lucideCheck" />
   `,
   host: {

@@ -110,7 +110,7 @@ export class HlmCheckboxComponent {
     this.changed.emit(!previousChecked);
   }
 
-  /** CONROL VALUE ACCESSOR */
+  /** CONTROL VALUE ACCESSOR */
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   writeValue(value: any): void {

@@ -11,7 +11,7 @@ import type { ClassValue } from 'clsx';
   providers: [provideIcons({ lucideCircle })],
   imports: [NgIcon, HlmIconDirective],
   template: `
-    <!-- Using 0.5rem for size to mimick h-2 w-2 -->
+    <!-- Using 0.5rem for size to mimic h-2 w-2 -->
     <ng-icon hlm size="0.5rem" class="*:*:fill-current" name="lucideCircle" />
   `,
   host: {

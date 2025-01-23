@@ -35,7 +35,7 @@ export const appConfig: ApplicationConfig = {
     provideIcons(lucide),
     provideAuth0({
       domain: 'vtb.eu.auth0.com',
-      clientId: 'nzt4gROsplg8llThJS4ft4Hl0eJ9NsUQ',
+      clientId: 'nzt4gROsplg8llThJS4ft4Hl0eJ9NsUQ', // cspell:disable-line
       authorizationParams: {
         redirect_uri: window.location.origin,
         audience: 'http://heyer',
