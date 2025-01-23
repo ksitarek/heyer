@@ -54,7 +54,7 @@ export class ContractsDetailsFormComponent {
   }
 
   public getEmploymentTypeLabelByControlValue(
-    employmentTypeControl: AbstractControl
+    employmentTypeControl: AbstractControl,
   ): string {
     const employmentType = employmentTypeControl.value;
     return this.getEmploymentTypeLabel(employmentType);
@@ -77,11 +77,11 @@ export class ContractsDetailsFormComponent {
 
   public get availableContractTypes(): EmploymentType[] {
     const usedEmploymentTypes = this.contractsDetails.controls.map(
-      (control) => control.get('employmentType')?.value
+      (control) => control.get('employmentType')?.value,
     );
 
     return Object.values(EmploymentType).filter(
-      (value) => !usedEmploymentTypes.includes(value)
+      (value) => !usedEmploymentTypes.includes(value),
     );
   }
 

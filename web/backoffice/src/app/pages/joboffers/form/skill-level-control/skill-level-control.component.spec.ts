@@ -8,9 +8,8 @@ describe('SkillLevelControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkillLevelControlComponent]
-    })
-    .compileComponents();
+      imports: [SkillLevelControlComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SkillLevelControlComponent);
     component = fixture.componentInstance;

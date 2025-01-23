@@ -7,7 +7,7 @@ export class JobOfferDetails {
     public PublishedUntil: Date,
     public OfficeLocation: OfficeLocation,
     public Requirements: Requirements,
-    public ContractsDetails: ContractDetails[]
+    public ContractsDetails: ContractDetails[],
   ) {}
 
   public static from(obj: JobOfferDetails): JobOfferDetails {
@@ -21,14 +21,17 @@ export class JobOfferDetails {
       OfficeLocation.from(obj.OfficeLocation),
       Requirements.from(obj.Requirements),
       obj.ContractsDetails.map((contractDetails: ContractDetails) =>
-        ContractDetails.from(contractDetails)
-      )
+        ContractDetails.from(contractDetails),
+      ),
     );
   }
 }
 
 export class OfficeLocation {
-  constructor(public City: string, public Country: string) {}
+  constructor(
+    public City: string,
+    public Country: string,
+  ) {}
 
   public static from(obj: OfficeLocation | null): OfficeLocation {
     return new OfficeLocation(obj?.City ?? '', obj?.Country ?? '');
@@ -58,19 +61,22 @@ export enum EmploymentType {
 export class Requirements {
   constructor(
     public ExperienceLevel: ExperienceLevel,
-    public Skills: Skill[]
+    public Skills: Skill[],
   ) {}
 
   public static from(obj: Requirements): Requirements {
     return new Requirements(
       obj?.ExperienceLevel,
-      obj?.Skills?.map((skill: Skill) => Skill.from(skill))
+      obj?.Skills?.map((skill: Skill) => Skill.from(skill)),
     );
   }
 }
 
 export class Skill {
-  constructor(public Label: string, public Level: SkillLevel) {}
+  constructor(
+    public Label: string,
+    public Level: SkillLevel,
+  ) {}
 
   public static from(obj: Skill): Skill {
     return new Skill(obj?.Label, obj?.Level);
@@ -82,7 +88,7 @@ export class ContractDetails {
     public EmploymentType: EmploymentType,
     public SalaryRange: SalaryRange,
     public TimeNumerator: number,
-    public TimeDenumerator: number
+    public TimeDenumerator: number,
   ) {}
 
   public static from(obj: ContractDetails): ContractDetails {
@@ -90,7 +96,7 @@ export class ContractDetails {
       obj?.EmploymentType,
       SalaryRange.from(obj?.SalaryRange),
       obj?.TimeNumerator,
-      obj?.TimeDenumerator
+      obj?.TimeDenumerator,
     );
   }
 }
@@ -99,7 +105,7 @@ export class SalaryRange {
   constructor(
     public IsPublished: boolean,
     public From: number,
-    public To: number
+    public To: number,
   ) {}
 
   public static from(obj: SalaryRange): SalaryRange {

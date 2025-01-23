@@ -13,7 +13,7 @@ export class JoboffersListService {
   constructor(
     private http: HttpClient,
     private errorHandler: HttpErrorHandlerService,
-    @Inject(heyerApiUrl) private api_url: string
+    @Inject(heyerApiUrl) private api_url: string,
   ) {}
 
   getListOfJobs(): Observable<ListResponse<JobOfferListItem>> {
@@ -26,9 +26,9 @@ export class JoboffersListService {
               response.PageSize,
               response.TotalCount,
               response.Items.map((x: JobOfferListItem) =>
-                JobOfferListItem.from(x)
-              )
-            )
+                JobOfferListItem.from(x),
+              ),
+            ),
         ),
         tap((response) => {
           console.log(response);
@@ -36,7 +36,7 @@ export class JoboffersListService {
         catchError((error) => {
           this.errorHandler.handleError(error);
           return [];
-        })
+        }),
       );
   }
 }

@@ -28,8 +28,10 @@
     <brn-column-def name="publishedAt" class="w-40">
       <hlm-th *brnHeaderDef>Published At</hlm-th>
       <hlm-td *brnCellDef="let element">
-        @if (element.PublishedAt == null) { &mdash; } @else {
-        {{ element.PublishedAt | hDate }}
+        @if (element.PublishedAt == null) {
+          &mdash;
+        } @else {
+          {{ element.PublishedAt | hDate }}
         }
       </hlm-td>
     </brn-column-def>
@@ -37,8 +39,10 @@
     <brn-column-def name="publishedUntil" class="w-40">
       <hlm-th *brnHeaderDef>Published Until</hlm-th>
       <hlm-td *brnCellDef="let element">
-        @if (element.PublishedUntil == null) { &mdash; } @else {
-        {{ element.PublishedUntil | hDate }}
+        @if (element.PublishedUntil == null) {
+          &mdash;
+        } @else {
+          {{ element.PublishedUntil | hDate }}
         }
       </hlm-td>
     </brn-column-def>

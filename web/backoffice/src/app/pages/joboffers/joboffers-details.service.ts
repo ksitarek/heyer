@@ -12,7 +12,7 @@ export class JobOfferDetailsService {
   constructor(
     private http: HttpClient,
     private errorHandler: HttpErrorHandlerService,
-    @Inject(heyerApiUrl) private api_url: string
+    @Inject(heyerApiUrl) private api_url: string,
   ) {}
 
   public getJobOfferDetails(id: string): Observable<JobOfferDetails> {
@@ -23,7 +23,7 @@ export class JobOfferDetailsService {
         catchError((error) => {
           this.errorHandler.handleError(error);
           return EMPTY;
-        })
+        }),
       );
   }
 }

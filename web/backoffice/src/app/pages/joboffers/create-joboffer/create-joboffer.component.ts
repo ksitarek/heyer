@@ -36,7 +36,7 @@ export class CreateJobofferComponent {
 
   constructor(
     private createJobOfferService: CreateJobOfferService,
-    private router: Router
+    private router: Router,
   ) {}
 
   public saveDraft(): void {
@@ -48,7 +48,7 @@ export class CreateJobofferComponent {
       .saveDraft(
         description.offerSummary,
         description.jobDescription,
-        description.remoteWork
+        description.remoteWork,
       )
       .subscribe((res) => {
         if (res.length > 0) {

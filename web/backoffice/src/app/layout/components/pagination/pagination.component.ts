@@ -52,7 +52,7 @@ export class PaginationComponent {
   protected readonly pageIx = computed(() => this.currentPage() - 1);
   protected readonly from = computed(() => this.pageSize() * this.pageIx() + 1);
   protected readonly to = computed(() =>
-    Math.min(this.currentPage() * this.pageSize(), this.totalCount())
+    Math.min(this.currentPage() * this.pageSize(), this.totalCount()),
   );
 
   protected pageChangedEffect = effect(() => {
@@ -66,7 +66,7 @@ export class PaginationComponent {
 
   protected readonly hasPreviousPage = computed(() => this.pageIx() > 0);
   protected readonly hasNextPage = computed(
-    () => this.to() < this.totalCount()
+    () => this.to() < this.totalCount(),
   );
 
   protected previousPage(): void {

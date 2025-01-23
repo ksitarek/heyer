@@ -14,7 +14,7 @@ import { Injectable } from '@angular/core';
 export class JobOfferResolver implements Resolve<JobOfferDetails> {
   constructor(private jobOfferDetailsService: JobOfferDetailsService) {}
   public resolve(
-    route: ActivatedRouteSnapshot
+    route: ActivatedRouteSnapshot,
   ): MaybeAsync<JobOfferDetails | RedirectCommand> {
     const id = route.params['id'];
 

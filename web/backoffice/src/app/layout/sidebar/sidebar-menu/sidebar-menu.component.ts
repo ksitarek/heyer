@@ -16,7 +16,7 @@ export class SidebarMenuComponent {
     new SidebarMenuItemDto(
       'Candidates Pool',
       'lucideUsers',
-      '/candidates-pool'
+      '/candidates-pool',
     ),
   ];
 }

@@ -12,13 +12,13 @@ export class CreateJobOfferService {
   constructor(
     private http: HttpClient,
     private errorHandler: HttpErrorHandlerService,
-    @Inject(heyerApiUrl) private api_url: string
+    @Inject(heyerApiUrl) private api_url: string,
   ) {}
 
   public saveDraft(
     offerSummary: string,
     jobDescription: string,
-    remoteWork: RemoteWork
+    remoteWork: RemoteWork,
   ): Observable<string> {
     return this.http
       .post<string>(`${this.api_url}/job-offers/create`, {
@@ -30,7 +30,7 @@ export class CreateJobOfferService {
         catchError((error) => {
           this.errorHandler.handleError(error);
           return '';
-        })
+        }),
       );
   }
 }

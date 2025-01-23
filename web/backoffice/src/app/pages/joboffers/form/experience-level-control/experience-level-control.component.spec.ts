@@ -8,9 +8,8 @@ describe('ExperienceLevelControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExperienceLevelControlComponent]
-    })
-    .compileComponents();
+      imports: [ExperienceLevelControlComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ExperienceLevelControlComponent);
     component = fixture.componentInstance;

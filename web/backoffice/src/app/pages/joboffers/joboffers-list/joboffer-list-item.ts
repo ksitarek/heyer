@@ -4,7 +4,7 @@ export class JobOfferListItem {
     public OfferSummary: string,
     public PublishedAt: Date | null,
     public PublishedUntil: Date | null,
-    public Actions: string
+    public Actions: string,
   ) {}
 
   public static from(item: JobOfferListItem): JobOfferListItem {
@@ -13,7 +13,7 @@ export class JobOfferListItem {
       item.OfferSummary,
       item.PublishedAt == null ? null : new Date(item.PublishedAt),
       item.PublishedUntil == null ? null : new Date(item.PublishedUntil),
-      item.Actions
+      item.Actions,
     );
   }
 }

@@ -51,7 +51,7 @@ export class JoboffersListComponent {
 
   protected readonly trackBy: TrackByFunction<JobOfferListItem> = (
     _: number,
-    p: JobOfferListItem
+    p: JobOfferListItem,
   ) => p.Id;
 
   constructor(public jobOffersListService: JoboffersListService) {

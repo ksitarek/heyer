@@ -33,7 +33,10 @@ export class EditJobofferComponent implements OnInit {
   protected jobOffer!: JobOfferDetails;
   protected readonly jobOfferForm!: FormGroup;
 
-  constructor(private route: ActivatedRoute, private forms: JobOfferForms) {
+  constructor(
+    private route: ActivatedRoute,
+    private forms: JobOfferForms,
+  ) {
     this.jobOfferForm = this.forms.editJobOfferForm;
   }
 
@@ -64,7 +67,7 @@ export class EditJobofferComponent implements OnInit {
 
     for (const contractDetails of this.jobOffer.ContractsDetails ?? []) {
       this.contractsDetails.push(
-        this.forms.contractDetailsGroup(contractDetails)
+        this.forms.contractDetailsGroup(contractDetails),
       );
     }
 

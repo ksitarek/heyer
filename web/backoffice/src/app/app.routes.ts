@@ -6,14 +6,14 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/statistics/statistics.component').then(
-        (m) => m.StatisticsComponent
+        (m) => m.StatisticsComponent,
       ),
   },
   {
     path: 'job-offers',
     loadComponent: () =>
       import('./pages/joboffers/joboffer.component').then(
-        (m) => m.JoboffersComponent
+        (m) => m.JoboffersComponent,
       ),
   },
   {
@@ -30,7 +30,7 @@ export const routes: Routes = [
     },
     loadComponent: () =>
       import('./pages/joboffers/edit-joboffer/edit-joboffer.component').then(
-        (m) => m.EditJobofferComponent
+        (m) => m.EditJobofferComponent,
       ),
   },
 ];
