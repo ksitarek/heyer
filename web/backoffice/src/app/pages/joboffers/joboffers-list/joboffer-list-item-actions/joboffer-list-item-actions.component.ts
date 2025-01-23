@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { JobOfferListItem } from '../joboffer-list-item';
+import { Component, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { HlmTooltipTriggerDirective } from '@spartan-ng/ui-tooltip-helm';
-import { RouterModule } from '@angular/router';
+import { JobOfferListItem } from '../joboffer-list-item';
 
 @Component({
   selector: 'h-joboffer-list-item-actions',
@@ -11,5 +11,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './joboffer-list-item-actions.component.scss',
 })
 export class JobofferListItemActionsComponent {
-  @Input({ required: true }) public item!: JobOfferListItem;
+  public readonly item = input.required<JobOfferListItem>();
 }

@@ -1,5 +1,5 @@
 import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
 import { NgIcon } from '@ng-icons/core';
 import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
@@ -31,10 +31,8 @@ import { Observable } from 'rxjs';
   templateUrl: './header-user-menu.component.html',
   styleUrl: './header-user-menu.component.scss',
 })
-export class HeaderUserMenuComponent implements OnInit {
+export class HeaderUserMenuComponent {
   constructor(private authService: AuthService) {}
-
-  public ngOnInit(): void {}
 
   public logout(): void {
     this.authService.logout();

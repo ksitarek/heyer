@@ -1,11 +1,13 @@
 <div class="flex flex-row justify-around space-x-4">
-  <button
-    *ngFor="let o of options"
-    hlmBtn
-    class="flex flex-row items-center"
-    (click)="updateValue(o.k)"
-  >
-    <ng-icon class="mr-2" [name]="getIcon(o.k)" [class]="getIconColor(o.k)" />
-    <span>{{ o.v }}</span>
-  </button>
+  @for (o of options; track o.k) {
+    <button
+      type="button"
+      hlmBtn
+      class="flex flex-row items-center"
+      (click)="updateValue(o.k)"
+    >
+      <ng-icon [name]="getIcon(o.k)" [class]="getIconClasses(o.k)" />
+      <span>{{ o.v }}</span>
+    </button>
+  }
 </div>

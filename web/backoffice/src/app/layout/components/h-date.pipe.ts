@@ -12,7 +12,7 @@ export class HDatePipe implements PipeTransform {
       return '';
     }
 
-    const formatted = this.datePipe.transform(value, 'yyyy-MM-dd')!;
+    const formatted = this.datePipe.transform(value, 'yyyy-MM-dd');
 
     return formatted ?? '';
   }

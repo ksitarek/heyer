@@ -1,3 +1,5 @@
 <ul class="px-2 mt-6">
-  <li *ngFor="let item of menuItems"><h-sidebar-menu-item [dto]="item" /></li>
+  @for (item of menuItems; let i = $index; track i) {
+    <li><h-sidebar-menu-item [dto]="item" /></li>
+  }
 </ul>

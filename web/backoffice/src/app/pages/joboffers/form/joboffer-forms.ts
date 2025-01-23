@@ -1,9 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { RemoteWork } from '../remote-work-control/remote-work';
 import { ContractDetails, Skill, SkillLevel } from '../joboffer-details';
+import { RemoteWork } from '../remote-work-control/remote-work';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class JobOfferForms {
   private readonly fb: FormBuilder = inject(FormBuilder);
 
@@ -20,7 +22,7 @@ export class JobOfferForms {
     remoteWork: new FormControl(RemoteWork.Hybrid),
   });
 
-  public contractDetailsGroup(values: ContractDetails | null) {
+  public contractDetailsGroup(values: ContractDetails | null = null) {
     return this.fb.group({
       employmentType: new FormControl(values?.EmploymentType ?? '', []),
       salaryRange: this.fb.group({
@@ -33,7 +35,7 @@ export class JobOfferForms {
     });
   }
 
-  public skillGroup(values: Skill | null) {
+  public skillGroup(values: Skill | null = null) {
     return this.fb.group({
       label: new FormControl(values?.Label ?? '', []),
       level: new FormControl(values?.Level ?? SkillLevel.NiceToHave, []),
@@ -43,17 +45,17 @@ export class JobOfferForms {
   public readonly createJobOfferForm = this.fb.group({
     description: this.descriptionGroup,
 
-    location: this.fb.group({
-      city: new FormControl('', []),
-      country: new FormControl('', []),
-    }),
+    // location: this.fb.group({
+    //   city: new FormControl('', []),
+    //   country: new FormControl('', []),
+    // }),
 
-    contractsDetails: this.fb.array([this.contractDetailsGroup]),
+    // contractsDetails: this.fb.array([this.contractDetailsGroup()]),
 
-    requirements: this.fb.group({
-      experienceLevel: new FormControl('', []),
-      skills: this.fb.array([this.skillGroup]),
-    }),
+    // requirements: this.fb.group({
+    //   experienceLevel: new FormControl('', []),
+    //   skills: this.fb.array([this.skillGroup()]),
+    // }),
   });
 
   public readonly editJobOfferForm = this.fb.group({
@@ -64,11 +66,11 @@ export class JobOfferForms {
       country: new FormControl('', []),
     }),
 
-    contractsDetails: this.fb.array([this.contractDetailsGroup(null)]),
+    contractsDetails: this.fb.array([this.contractDetailsGroup()]),
 
     requirements: this.fb.group({
       experienceLevel: new FormControl('', []),
-      skills: this.fb.array([this.skillGroup(null)]),
+      skills: this.fb.array([this.skillGroup()]),
     }),
   });
 }

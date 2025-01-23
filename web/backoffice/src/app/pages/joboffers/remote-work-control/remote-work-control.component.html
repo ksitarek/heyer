@@ -5,28 +5,19 @@
   (ngModelChange)="updateValue($event)"
 >
   <brn-radio hlm value="Yes" class="group" [disabled]="isDisabled">
-    <div
-      class="flex flex-col items-center justify-between p-4 border-2 rounded-md w-52 bg-popover"
-      [class]="radioClasses"
-    >
+    <div [class]="radioClasses">
       <ng-icon hlm name="lucideHouse" size="24px" class="mb-3" />
       Remote
     </div>
   </brn-radio>
   <brn-radio hlm value="Hybrid" class="group" [disabled]="isDisabled">
-    <div
-      class="flex flex-col items-center justify-between p-4 border-2 rounded-md w-52 bg-popover"
-      [class]="radioClasses"
-    >
+    <div [class]="radioClasses">
       <ng-icon hlm name="lucideRefreshCw" size="24px" class="mb-3" />
       Hybrid
     </div>
   </brn-radio>
   <brn-radio hlm value="No" class="group" [disabled]="isDisabled">
-    <div
-      class="flex flex-col items-center justify-between p-4 border-2 rounded-md w-52 bg-popover"
-      [class]="radioClasses"
-    >
+    <div [class]="radioClasses">
       <ng-icon hlm name="lucideBuilding" size="24px" class="mb-3" />
       Office
     </div>

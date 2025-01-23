@@ -1,8 +1,8 @@
-import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ExperienceLevel } from '../../joboffer-details';
 import { NgFor } from '@angular/common';
+import { Component } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
+import { ExperienceLevel } from '../../joboffer-details';
 
 @Component({
   selector: 'h-experience-level-control',
@@ -13,7 +13,7 @@ import { NgIcon } from '@ng-icons/core';
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: forwardRef(() => ExperienceLevelControlComponent),
+      useExisting: ExperienceLevelControlComponent,
     },
   ],
 })
@@ -62,11 +62,15 @@ export class ExperienceLevelControlComponent implements ControlValueAccessor {
     }
   }
 
-  public getIconColor(v: ExperienceLevel) {
+  public getIconClasses(v: ExperienceLevel) {
+    let classes = 'mr-2';
+
     if (v == this.currentValue) {
-      return 'text-primary';
+      classes += ' text-primary mr-2';
     } else {
-      return 'text-black';
+      classes += ' text-black mr-2';
     }
+
+    return classes;
   }
 }

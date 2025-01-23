@@ -60,7 +60,7 @@ export class HlmLabelDirective {
       labelVariants({
         variant: this.variant(),
         error: this.state().error(),
-        disabled: this._brn?.dataDisabled() ?? 'auto',
+        disabled: this._brn.dataDisabled() ?? 'auto',
       }),
       '[&.ng-invalid.ng-touched]:text-destructive',
       this.userClass(),

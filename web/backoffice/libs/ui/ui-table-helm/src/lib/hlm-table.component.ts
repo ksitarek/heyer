@@ -39,8 +39,13 @@ export class HlmTableComponent {
   public readonly labeledBy = signal<string | null | undefined>(undefined);
 
   constructor() {
-    effect(() => this.labeledBy.set(this._labeledByInput()), {
-      allowSignalWrites: true,
-    });
+    effect(
+      () => {
+        this.labeledBy.set(this._labeledByInput());
+      },
+      {
+        allowSignalWrites: true,
+      },
+    );
   }
 }

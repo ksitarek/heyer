@@ -1,23 +1,27 @@
 <div class="flex flex-col justify-between">
   <h-sidebar-menu />
 
-  <button
-    *ngIf="expanded()"
-    hlmBtn
-    variant="ghost"
-    class="w-full"
-    (click)="toggle()"
-  >
-    <ng-icon name="lucidePanelLeftClose" />&nbsp;Collapse
-  </button>
+  @if (expanded()) {
+    <button
+      type="button"
+      hlmBtn
+      variant="ghost"
+      class="w-full"
+      (click)="toggle()"
+    >
+      <ng-icon name="lucidePanelLeftClose" />&nbsp;Collapse
+    </button>
+  }
 
-  <button
-    *ngIf="!expanded()"
-    hlmBtn
-    variant="ghost"
-    class="w-full"
-    (click)="toggle()"
-  >
-    <ng-icon name="lucidePanelLeftOpen" />
-  </button>
+  @if (!expanded()) {
+    <button
+      type="button"
+      hlmBtn
+      variant="ghost"
+      class="w-full"
+      (click)="toggle()"
+    >
+      <ng-icon name="lucidePanelLeftOpen" />
+    </button>
+  }
 </div>

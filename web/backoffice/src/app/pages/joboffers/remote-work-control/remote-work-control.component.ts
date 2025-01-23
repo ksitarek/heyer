@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   ControlValueAccessor,
   FormsModule,
@@ -23,7 +23,7 @@ import { RemoteWork } from './remote-work';
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: forwardRef(() => RemoteWorkControlComponent),
+      useExisting: RemoteWorkControlComponent,
     },
   ],
   templateUrl: './remote-work-control.component.html',
@@ -32,6 +32,8 @@ import { RemoteWork } from './remote-work';
 export class RemoteWorkControlComponent implements ControlValueAccessor {
   protected remoteWork = RemoteWork.Hybrid;
 
+  private static readonly commonRadioClasses =
+    'flex flex-col items-center justify-between p-4 border-2 rounded-md w-52 bg-popover';
   private static readonly enabledRadioClasses =
     'border-muted cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[checked=true]:border-primary';
   private static readonly disabledRadioClasses =
@@ -65,8 +67,10 @@ export class RemoteWorkControlComponent implements ControlValueAccessor {
   }
 
   public get radioClasses(): string {
-    return this.isDisabled
+    const stateClasses = this.isDisabled
       ? RemoteWorkControlComponent.disabledRadioClasses
       : RemoteWorkControlComponent.enabledRadioClasses;
+
+    return `${RemoteWorkControlComponent.commonRadioClasses} ${stateClasses}`;
   }
 }

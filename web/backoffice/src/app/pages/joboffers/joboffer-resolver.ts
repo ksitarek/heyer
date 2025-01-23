@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   MaybeAsync,
@@ -6,7 +7,6 @@ import {
 } from '@angular/router';
 import { JobOfferDetails } from './joboffer-details';
 import { JobOfferDetailsService } from './joboffers-details.service';
-import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +16,16 @@ export class JobOfferResolver implements Resolve<JobOfferDetails> {
   public resolve(
     route: ActivatedRouteSnapshot,
   ): MaybeAsync<JobOfferDetails | RedirectCommand> {
-    const id = route.params['id'];
+    const id = this.getIdFromRoute(route);
 
     return this.jobOfferDetailsService.getJobOfferDetails(id);
+  }
+
+  private getIdFromRoute(route: ActivatedRouteSnapshot): string {
+    const params = route.params as Record<string, unknown>;
+
+    const id = params['id'];
+
+    return id?.toString() ?? '';
   }
 }

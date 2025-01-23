@@ -64,10 +64,10 @@ export class Requirements {
     public Skills: Skill[],
   ) {}
 
-  public static from(obj: Requirements): Requirements {
+  public static from(obj: Requirements | null): Requirements {
     return new Requirements(
-      obj?.ExperienceLevel,
-      obj?.Skills?.map((skill: Skill) => Skill.from(skill)),
+      obj?.ExperienceLevel ?? ExperienceLevel.Junior,
+      obj?.Skills.map((skill: Skill) => Skill.from(skill)) ?? [],
     );
   }
 }
@@ -79,7 +79,7 @@ export class Skill {
   ) {}
 
   public static from(obj: Skill): Skill {
-    return new Skill(obj?.Label, obj?.Level);
+    return new Skill(obj.Label, obj.Level);
   }
 }
 
@@ -93,10 +93,10 @@ export class ContractDetails {
 
   public static from(obj: ContractDetails): ContractDetails {
     return new ContractDetails(
-      obj?.EmploymentType,
-      SalaryRange.from(obj?.SalaryRange),
-      obj?.TimeNumerator,
-      obj?.TimeDenumerator,
+      obj.EmploymentType,
+      SalaryRange.from(obj.SalaryRange),
+      obj.TimeNumerator,
+      obj.TimeDenumerator,
     );
   }
 }
@@ -109,6 +109,6 @@ export class SalaryRange {
   ) {}
 
   public static from(obj: SalaryRange): SalaryRange {
-    return new SalaryRange(obj?.IsPublished, obj?.From, obj?.To);
+    return new SalaryRange(obj.IsPublished, obj.From, obj.To);
   }
 }

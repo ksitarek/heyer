@@ -16,9 +16,9 @@ import { HlmIconDirective } from './hlm-icon.directive';
       hlm
       class="test"
       name="lucideCheck"
-      [size]="size"
       color="red"
       strokeWidth="2"
+      [size]="size"
     />
   `,
 })

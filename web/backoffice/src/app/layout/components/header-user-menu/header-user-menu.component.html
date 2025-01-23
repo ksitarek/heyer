@@ -1,6 +1,6 @@
-<ng-container *ngIf="user$ | async as user">
+@if (user$ | async; as user) {
   <div class="flex flex-row justify-end h-full">
-    <button [brnMenuTriggerFor]="menu">
+    <button type="button" [brnMenuTriggerFor]="menu">
       <img
         class="w-6 mx-2 rounded-full"
         [src]="user.picture"
@@ -14,16 +14,16 @@
       <hlm-menu-label>{{ user.name }}</hlm-menu-label>
       <hlm-menu-separator />
       <hlm-menu-group>
-        <button hlmMenuItem>
+        <button type="button" hlmMenuItem>
           <ng-icon name="lucideLifeBuoy" hlmMenuIcon />
           <span>Help</span>
         </button>
 
-        <button hlmMenuItem (click)="logout()">
+        <button type="button" hlmMenuItem (click)="logout()">
           <ng-icon name="lucidePower" hlmMenuIcon />
           <span>Sign Out</span>
         </button>
       </hlm-menu-group>
     </hlm-menu>
   </ng-template>
-</ng-container>
+}

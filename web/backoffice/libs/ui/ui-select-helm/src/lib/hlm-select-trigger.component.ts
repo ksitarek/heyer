@@ -46,11 +46,11 @@ type SelectTriggerVariants = VariantProps<typeof selectTriggerVariants>;
 
   template: `
     <button
-      [class]="_computedClass()"
       #button
       hlmInput
       brnSelectTrigger
       type="button"
+      [class]="_computedClass()"
     >
       <ng-content />
       @if (icon()) {

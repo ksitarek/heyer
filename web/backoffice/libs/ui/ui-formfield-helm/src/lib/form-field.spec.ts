@@ -31,11 +31,11 @@ const DIRECTIVES = [
       <input
         data-testid="hlm-input"
         aria-label="Your Name"
-        [formControl]="name"
         class="w-80"
         hlmInput
         type="text"
         placeholder="Your Name"
+        [formControl]="name"
       />
       <hlm-error data-testid="hlm-error">Your name is required</hlm-error>
       <hlm-hint data-testid="hlm-hint"
@@ -57,11 +57,11 @@ class SingleFormFieldMock {
       <input
         data-testid="hlm-input"
         aria-label="Your Name"
-        [formControl]="name"
         class="w-80"
         hlmInput
         type="text"
         placeholder="Your Name"
+        [formControl]="name"
       />
       <hlm-error data-testid="hlm-error">Your name is required</hlm-error>
       <hlm-hint data-testid="hlm-hint"

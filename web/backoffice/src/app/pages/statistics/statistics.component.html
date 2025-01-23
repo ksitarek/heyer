@@ -1,7 +1,7 @@
 <h-page-header>Stats</h-page-header>
 
 <div class="grid grid-cols-3 gap-5">
-  <div *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+  @for (i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; track i) {
     <h-active-job-offers-tile />
-  </div>
+  }
 </div>

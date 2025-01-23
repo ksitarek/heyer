@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ExperienceLevelControlComponent } from '../experience-level-control/experience-level-control.component';
 import { NgFor } from '@angular/common';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { SkillLevelControlComponent } from '../skill-level-control/skill-level-control.component';
+import { Component, input } from '@angular/core';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
+import { ExperienceLevelControlComponent } from '../experience-level-control/experience-level-control.component';
 import { JobOfferForms } from '../joboffer-forms';
+import { SkillLevelControlComponent } from '../skill-level-control/skill-level-control.component';
 
 @Component({
   selector: 'h-requirements-form',
@@ -23,12 +23,12 @@ import { JobOfferForms } from '../joboffer-forms';
   styleUrl: './requirements-form.component.scss',
 })
 export class RequirementsFormComponent {
-  @Input({ required: true }) form!: FormGroup;
+  protected readonly form = input.required<FormGroup>();
 
   constructor(private jobOfferForms: JobOfferForms) {}
 
   public get skills(): FormArray {
-    return this.form.get('requirements.skills') as FormArray;
+    return this.form().get('requirements.skills') as FormArray;
   }
 
   public addSkill(): void {

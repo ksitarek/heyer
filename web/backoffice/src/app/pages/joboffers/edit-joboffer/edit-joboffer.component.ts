@@ -1,18 +1,18 @@
-import { JobOfferDetails } from './../joboffer-details';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { PageHeaderComponent } from '../../../layout/components/page-header/page-header.component';
 import {
   FormArray,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { JobOfferForms } from '../form/joboffer-forms';
-import { DescriptionFormComponent } from '../form/description-form/description-form.component';
-import { LocationFormComponent } from '../form/location-form/location-form.component';
+import { ActivatedRoute } from '@angular/router';
+import { PageHeaderComponent } from '../../../layout/components/page-header/page-header.component';
 import { ContractsDetailsFormComponent } from '../form/contracts-details-form/contracts-details-form.component';
+import { DescriptionFormComponent } from '../form/description-form/description-form.component';
+import { JobOfferForms } from '../form/joboffer-forms';
+import { LocationFormComponent } from '../form/location-form/location-form.component';
 import { RequirementsFormComponent } from '../form/requirements-form/requirements-form.component';
+import { JobOfferDetails } from './../joboffer-details';
 
 @Component({
   selector: 'h-edit-joboffer',
@@ -45,7 +45,7 @@ export class EditJobofferComponent implements OnInit {
     this.skills.clear();
 
     this.route.data.subscribe((data) => {
-      this.jobOffer = data['jobOffer'];
+      this.jobOffer = data['jobOffer'] as JobOfferDetails;
 
       this.jobOfferForm.patchValue({
         description: {
@@ -65,13 +65,13 @@ export class EditJobofferComponent implements OnInit {
       });
     });
 
-    for (const contractDetails of this.jobOffer.ContractsDetails ?? []) {
+    for (const contractDetails of this.jobOffer.ContractsDetails) {
       this.contractsDetails.push(
         this.forms.contractDetailsGroup(contractDetails),
       );
     }
 
-    for (const skill of this.jobOffer.Requirements.Skills ?? []) {
+    for (const skill of this.jobOffer.Requirements.Skills) {
       this.skills.push(this.forms.skillGroup(skill));
     }
   }

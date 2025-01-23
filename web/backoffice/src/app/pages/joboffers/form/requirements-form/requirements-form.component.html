@@ -1,4 +1,4 @@
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="form()">
   <ng-container formGroupName="requirements">
     <fieldset>
       <legend class="mb-2 font-semibold">Experience</legend>
@@ -8,29 +8,35 @@
       </div>
 
       <div hlmLabel formGroupName="skills">
-        <div
-          *ngFor="let skillFormGroup of skills.controls; let i = index"
-          class="px-4 pt-4 pb-2 mb-4 rounded-md bg-secondary"
-          [formGroupName]="i"
-        >
-          <div class="flex flex-row">
-            <input
-              type="text"
-              class="w-full mb-4"
-              hlmInput
-              formControlName="label"
-            />
-            <button
-              hlmBtn
-              variant="secondary"
-              class="ml-2"
-              (click)="removeSkill(i)"
-            >
-              <ng-icon name="lucideX" class="text-secondary-foreground" />
-            </button>
+        @for (
+          skillFormGroup of skills.controls;
+          let i = $index;
+          track skillFormGroup
+        ) {
+          <div
+            class="px-4 pt-4 pb-2 mb-4 rounded-md bg-secondary"
+            [formGroupName]="i"
+          >
+            <div class="flex flex-row">
+              <input
+                type="text"
+                class="w-full mb-4"
+                hlmInput
+                formControlName="label"
+              />
+              <button
+                hlmBtn
+                type="button"
+                variant="secondary"
+                class="ml-2"
+                (click)="removeSkill(i)"
+              >
+                <ng-icon name="lucideX" class="text-secondary-foreground" />
+              </button>
+            </div>
+            <h-skill-level-control formControlName="level" />
           </div>
-          <h-skill-level-control formControlName="level" />
-        </div>
+        }
       </div>
 
       <button

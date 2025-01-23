@@ -1,19 +1,18 @@
-import { NgFor } from '@angular/common';
-import { Component, forwardRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
 import { SkillLevel } from '../../joboffer-details';
 
 @Component({
   selector: 'h-skill-level-control',
-  imports: [NgFor, NgIcon],
+  imports: [NgIcon],
   templateUrl: './skill-level-control.component.html',
   styleUrl: './skill-level-control.component.scss',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: forwardRef(() => SkillLevelControlComponent),
+      useExisting: SkillLevelControlComponent,
     },
   ],
 })
@@ -62,11 +61,15 @@ export class SkillLevelControlComponent implements ControlValueAccessor {
     }
   }
 
-  public getIconColor(v: SkillLevel) {
+  public getIconClasses(v: SkillLevel) {
+    let classes = 'mr-2';
+
     if (v == this.currentValue) {
-      return 'text-primary';
+      classes += ' text-primary mr-2';
     } else {
-      return 'text-black';
+      classes += ' text-black mr-2';
     }
+
+    return classes;
   }
 }

@@ -33,7 +33,7 @@ export class JoboffersListService {
         tap((response) => {
           console.log(response);
         }),
-        catchError((error) => {
+        catchError((error: unknown) => {
           this.errorHandler.handleError(error);
           return [];
         }),

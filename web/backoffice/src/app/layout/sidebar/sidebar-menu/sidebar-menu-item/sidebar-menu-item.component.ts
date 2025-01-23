@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { SidebarMenuItemDto } from '../sidebar-menu-item-dto';
-import { NgIcon } from '@ng-icons/core';
+import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
+import { SidebarMenuItemDto } from '../sidebar-menu-item-dto';
 
 @Component({
   selector: 'h-sidebar-menu-item',
@@ -11,5 +11,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './sidebar-menu-item.component.scss',
 })
 export class SidebarMenuItemComponent {
-  @Input({ required: true }) dto!: SidebarMenuItemDto;
+  protected readonly dto = input.required<SidebarMenuItemDto>();
 }

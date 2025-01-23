@@ -1,23 +1,22 @@
-import { JoboffersListService } from './joboffers-list.service';
+import { AsyncPipe } from '@angular/common';
 import { Component, computed, TrackByFunction } from '@angular/core';
-import { JobOfferListItem } from './joboffer-list-item';
-import { Observable } from 'rxjs';
-import { AsyncPipe, NgIf } from '@angular/common';
-import { HlmTableModule } from '../../../../../libs/ui/ui-table-helm/src/index';
-import { BrnTableModule, useBrnColumnManager } from '@spartan-ng/brain/table';
-import { HlmMenuModule } from '@spartan-ng/ui-menu-helm';
-import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
-import { BrnSelectModule } from '@spartan-ng/brain/select';
-import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
 import { FormsModule } from '@angular/forms';
+import { BrnSelectModule } from '@spartan-ng/brain/select';
+import { BrnTableModule, useBrnColumnManager } from '@spartan-ng/brain/table';
+import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
+import { HlmMenuModule } from '@spartan-ng/ui-menu-helm';
+import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
+import { Observable } from 'rxjs';
+import { HlmTableModule } from '../../../../../libs/ui/ui-table-helm/src/index';
 import { HDatePipe } from '../../../layout/components/h-date.pipe';
-import { JobofferListItemActionsComponent } from './joboffer-list-item-actions/joboffer-list-item-actions.component';
 import { PaginationComponent } from '../../../layout/components/pagination/pagination.component';
 import { ListResponse } from '../../../models/list-response';
+import { JobOfferListItem } from './joboffer-list-item';
+import { JobofferListItemActionsComponent } from './joboffer-list-item-actions/joboffer-list-item-actions.component';
+import { JoboffersListService } from './joboffers-list.service';
 
 @Component({
   imports: [
-    NgIf,
     HDatePipe,
     AsyncPipe,
     FormsModule,

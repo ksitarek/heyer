@@ -116,9 +116,9 @@ export class HlmCheckboxComponent {
   writeValue(value: any): void {
     this.checked.set(!!value);
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-function,,@typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ,@typescript-eslint/no-explicit-any
   protected _onChange = (_: any) => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   protected _onTouched = () => {};
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

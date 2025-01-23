@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgIcon } from '@ng-icons/core';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import {
@@ -21,7 +22,6 @@ import {
   HlmMutedDirective,
   HlmSmallDirective,
 } from '@spartan-ng/ui-typography-helm';
-import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'h-pagination',
@@ -43,9 +43,9 @@ import { NgIcon } from '@ng-icons/core';
   styleUrl: './pagination.component.scss',
 })
 export class PaginationComponent {
-  public totalCount = input(0);
-  public pageChanged = output<number>();
-  public pageSizes = input([20, 50, 100]);
+  public readonly totalCount = input(0);
+  public readonly pageChanged = output<number>();
+  public readonly pageSizes = input([20, 50, 100]);
 
   protected readonly currentPage = signal(1);
   protected readonly pageSize = signal(20);
