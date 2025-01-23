@@ -17,7 +17,9 @@
     "lint:tsc:spec": "tsc --noEmit -p tsconfig.spec.json",
     "lint:tsc:all": "npm run lint:tsc:app && npm run lint:tsc:spec",
     "lint:format": "npm run format:base -- --check",
-    "lint:all": "npm run lint:tsc:all && npm run lint && npm run lint:style && npm run lint:spelling && npm run lint:format"
+    "ci:all": "npm run lint:all && npm run test:ci",
+    "lint:all": "npm run lint:tsc:all && npm run lint && npm run lint:style && npm run lint:spelling && npm run lint:format",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -49,15 +51,16 @@
     "@eslint/js": "^9.18.0",
     "@spartan-ng/cli": "^0.0.1-alpha.388",
     "@types/jasmine": "~5.1.0",
-    "cspell": "^8.17.1",
     "angular-eslint": "19.0.2",
     "autoprefixer": "^10.4.20",
+    "cspell": "^8.17.1",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-formatter-mo": "^2.1.0",
     "eslint-plugin-jasmine": "^4.2.2",
     "eslint-plugin-jsonc": "^2.18.2",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
