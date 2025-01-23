@@ -10,5 +10,5 @@ import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
   styleUrl: './location-form.component.scss',
 })
 export class LocationFormComponent {
-  protected readonly form = input.required<FormGroup>();
+  readonly form = input.required<FormGroup>();
 }

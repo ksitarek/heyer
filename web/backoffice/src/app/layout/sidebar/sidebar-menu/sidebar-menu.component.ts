@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 import { SidebarMenuItemDto } from './sidebar-menu-item-dto';
-import { NgFor } from '@angular/common';
+import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 
 @Component({
   selector: 'h-sidebar-menu',
-  imports: [SidebarMenuItemComponent, NgFor],
+  imports: [SidebarMenuItemComponent],
   templateUrl: './sidebar-menu.component.html',
   styleUrl: './sidebar-menu.component.scss',
 })

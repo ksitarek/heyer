@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
   Component,
   computed,
@@ -26,7 +25,6 @@ import {
 @Component({
   selector: 'h-pagination',
   imports: [
-    NgIf,
     FormsModule,
     BrnSelectImports,
     HlmSelectImports,

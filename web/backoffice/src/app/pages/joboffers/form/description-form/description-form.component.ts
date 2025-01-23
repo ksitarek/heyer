@@ -18,5 +18,5 @@ import { RemoteWorkControlComponent } from './../../remote-work-control/remote-w
   styleUrl: './description-form.component.scss',
 })
 export class DescriptionFormComponent {
-  protected readonly form = input.required<FormGroup>();
+  readonly form = input.required<FormGroup>();
 }

@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
@@ -11,7 +10,6 @@ import { SkillLevelControlComponent } from '../skill-level-control/skill-level-c
 @Component({
   selector: 'h-requirements-form',
   imports: [
-    NgFor,
     ReactiveFormsModule,
     ExperienceLevelControlComponent,
     HlmInputDirective,
@@ -23,7 +21,7 @@ import { SkillLevelControlComponent } from '../skill-level-control/skill-level-c
   styleUrl: './requirements-form.component.scss',
 })
 export class RequirementsFormComponent {
-  protected readonly form = input.required<FormGroup>();
+  readonly form = input.required<FormGroup>();
 
   constructor(private jobOfferForms: JobOfferForms) {}
 
