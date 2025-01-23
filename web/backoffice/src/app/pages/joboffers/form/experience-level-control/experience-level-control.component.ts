@@ -1,12 +1,10 @@
-import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgIcon } from '@ng-icons/core';
 import { ExperienceLevel } from '../../joboffer-details';
 
 @Component({
   selector: 'h-experience-level-control',
-  imports: [NgFor, NgIcon],
+  imports: [cNgIcon],
   templateUrl: './experience-level-control.component.html',
   styleUrl: './experience-level-control.component.scss',
   providers: [

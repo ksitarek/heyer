@@ -1,12 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { SidebarMenuComponent } from './sidebar-menu/sidebar-menu.component';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { NgIcon } from '@ng-icons/core';
-import { NgIf } from '@angular/common';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { SidebarMenuComponent } from './sidebar-menu/sidebar-menu.component';
 
 @Component({
   selector: 'h-sidebar',
-  imports: [SidebarMenuComponent, HlmButtonDirective, NgIcon, NgIf],
+  imports: [SidebarMenuComponent, HlmButtonDirective, NgIcon],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })

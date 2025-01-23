@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component, input } from '@angular/core';
 import {
   AbstractControl,
@@ -24,8 +23,6 @@ import { EmploymentType } from './../../joboffer-details';
 @Component({
   selector: 'h-contracts-details-form',
   imports: [
-    NgFor,
-    NgIf,
     NgIcon,
     ReactiveFormsModule,
     HlmLabelDirective,
@@ -45,7 +42,7 @@ import { EmploymentType } from './../../joboffer-details';
   styleUrl: './contracts-details-form.component.scss',
 })
 export class ContractsDetailsFormComponent {
-  protected readonly form = input.required<FormGroup>();
+  readonly form = input.required<FormGroup>();
 
   constructor(private jobOfferForms: JobOfferForms) {}
 

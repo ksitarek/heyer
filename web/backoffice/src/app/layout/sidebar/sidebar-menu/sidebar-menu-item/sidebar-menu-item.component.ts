@@ -11,5 +11,5 @@ import { SidebarMenuItemDto } from '../sidebar-menu-item-dto';
   styleUrl: './sidebar-menu-item.component.scss',
 })
 export class SidebarMenuItemComponent {
-  protected readonly dto = input.required<SidebarMenuItemDto>();
+  readonly dto = input.required<SidebarMenuItemDto>();
 }

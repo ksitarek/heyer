@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
 import { NgIcon } from '@ng-icons/core';
@@ -16,7 +16,6 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'h-header-user-menu',
   imports: [
-    NgIf,
     AsyncPipe,
     NgIcon,
     BrnMenuTriggerDirective,
