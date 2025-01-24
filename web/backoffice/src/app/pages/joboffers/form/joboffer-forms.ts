@@ -1,12 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ContractDetails, Skill, SkillLevel } from '../joboffer-details';
 import { RemoteWork } from '../remote-work-control/remote-work';
 
@@ -17,15 +10,8 @@ export class JobOfferForms {
   private readonly fb: FormBuilder = inject(FormBuilder);
 
   public readonly descriptionGroup = this.fb.group({
-    offerSummary: new FormControl('', [
-      Validators.required,
-      Validators.minLength(10),
-      Validators.maxLength(100),
-    ]),
-    jobDescription: new FormControl('', [
-      Validators.required,
-      Validators.minLength(100),
-    ]),
+    offerSummary: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
+    jobDescription: new FormControl('', [Validators.required, Validators.minLength(100)]),
     remoteWork: new FormControl(RemoteWork.Hybrid),
   });
 
@@ -33,13 +19,8 @@ export class JobOfferForms {
     return this.fb.group({
       employmentType: new FormControl(values?.EmploymentType ?? '', []),
       salaryRange: this.fb.group({
-        from: new FormControl(values?.SalaryRange.From ?? '', [
-          Validators.min(0),
-        ]),
-        to: new FormControl(values?.SalaryRange.To ?? '', [
-          Validators.min(0),
-          this.greaterThan('from'),
-        ]),
+        from: new FormControl(values?.SalaryRange.From ?? '', [Validators.min(0)]),
+        to: new FormControl(values?.SalaryRange.To ?? '', [Validators.min(0), this.greaterThan('from')]),
         isPublished: new FormControl(values?.SalaryRange.IsPublished ?? true),
       }),
     });
@@ -61,8 +42,8 @@ export class JobOfferForms {
     description: this.descriptionGroup,
 
     location: this.fb.group({
-      city: new FormControl('', []),
-      country: new FormControl('', []),
+      city: new FormControl('', [Validators.required]),
+      country: new FormControl('', [Validators.required]),
     }),
 
     contractsDetails: this.fb.array([this.contractDetailsGroup()]),

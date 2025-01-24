@@ -30,6 +30,7 @@ export class LocationFormComponent implements OnInit, OnDestroy {
         distinct(),
 
         filter(() => location?.dirty ?? false),
+        filter(() => location?.valid ?? false),
         filter(({ city, country }) => city.length > 0 && country.length > 0),
 
         switchMap(({ city, country }) =>
