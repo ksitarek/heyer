@@ -80,8 +80,6 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
   }
 
   public removeContract(i: number): void {
-    console.log(this.contractsDetails.controls);
-
     const detailsToRemove = this.contractsDetails.controls[i];
     const employmentType = detailsToRemove.get('employmentType')?.value as EmploymentType;
 
