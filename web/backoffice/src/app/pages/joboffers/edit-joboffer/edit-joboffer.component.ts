@@ -48,6 +48,8 @@ export class EditJobofferComponent implements OnInit {
       this.jobOffer = data['jobOffer'] as JobOfferDetails;
 
       this.jobOfferForm.patchValue({
+        id: this.jobOffer.Id,
+
         description: {
           offerSummary: this.jobOffer.OfferSummary,
           jobDescription: this.jobOffer.JobDescription,
@@ -75,6 +77,7 @@ export class EditJobofferComponent implements OnInit {
       this.skills.push(this.forms.skillGroup(skill));
     }
   }
+
   public get contractsDetails(): FormArray {
     return this.jobOfferForm.get('contractsDetails') as FormArray;
   }

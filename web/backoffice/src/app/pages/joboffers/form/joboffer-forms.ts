@@ -57,6 +57,7 @@ export class JobOfferForms {
   });
 
   public readonly editJobOfferForm = this.fb.group({
+    id: new FormControl('', []),
     description: this.descriptionGroup,
 
     location: this.fb.group({

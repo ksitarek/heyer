@@ -1,5 +1,6 @@
 export class JobOfferDetails {
   constructor(
+    public Id: string,
     public OfferSummary: string,
     public JobDescription: string,
     public RemoteWork: string,
@@ -12,6 +13,7 @@ export class JobOfferDetails {
 
   public static from(obj: JobOfferDetails): JobOfferDetails {
     return new JobOfferDetails(
+      obj.Id,
       obj.OfferSummary,
 
       obj.JobDescription,

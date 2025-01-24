@@ -3,6 +3,7 @@ using Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.RemoveContractD
 using Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.UpdateContractDetails;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
+using Heyer.Modules.Hiring.Application.JobOffers.SetOfficeLocation;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 
@@ -31,6 +32,9 @@ public static class JobOfferMappings
             request.SalaryRange,
             request.TimeNumerator,
             request.TimeDenominator);
+
+    public static SetOfficeLocation MapToCommand(this SetOfficeLocationRequest request) =>
+        new(new JobOfferId(request.JobOfferId), new OfficeLocation(request.City, request.Country));
 
     public static JobOfferDetails MapToJobOfferDetails(this JobOffer jobOffer) =>
         new(jobOffer.Id.Guid,

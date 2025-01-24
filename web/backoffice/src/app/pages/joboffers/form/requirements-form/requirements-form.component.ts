@@ -3,6 +3,7 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
+import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { ExperienceLevelControlComponent } from '../experience-level-control/experience-level-control.component';
 import { JobOfferForms } from '../joboffer-forms';
 import { SkillLevelControlComponent } from '../skill-level-control/skill-level-control.component';
@@ -10,12 +11,13 @@ import { SkillLevelControlComponent } from '../skill-level-control/skill-level-c
 @Component({
   selector: 'h-requirements-form',
   imports: [
-    ReactiveFormsModule,
     ExperienceLevelControlComponent,
-    HlmInputDirective,
-    SkillLevelControlComponent,
-    NgIcon,
     HlmButtonDirective,
+    HlmInputDirective,
+    HlmLabelDirective,
+    NgIcon,
+    ReactiveFormsModule,
+    SkillLevelControlComponent,
   ],
   templateUrl: './requirements-form.component.html',
   styleUrl: './requirements-form.component.scss',
