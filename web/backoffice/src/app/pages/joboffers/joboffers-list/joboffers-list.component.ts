@@ -31,10 +31,10 @@ import { JoboffersListService } from './joboffers-list.service';
 })
 export class JoboffersListComponent {
   public readonly items = computed(
-    () => this.jobOffersListService.listSignal.value()?.Items,
+    () => this.jobOffersListService.listSignal.value()?.Items ?? [],
   );
   public readonly totalCount = computed(
-    () => this.jobOffersListService.listSignal.value()?.TotalCount,
+    () => this.jobOffersListService.listSignal.value()?.TotalCount ?? 0,
   );
 
   protected readonly columnManager = useBrnColumnManager({
