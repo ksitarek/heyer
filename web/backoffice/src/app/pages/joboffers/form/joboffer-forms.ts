@@ -31,8 +31,8 @@ export class JobOfferForms {
 
   public skillGroup(values: Skill | null = null) {
     return this.fb.group({
-      label: new FormControl(values?.Label ?? '', []),
-      level: new FormControl(values?.Level ?? SkillLevel.NiceToHave, []),
+      label: new FormControl(values?.Label ?? '', [Validators.required]),
+      level: new FormControl(values?.Level ?? SkillLevel.NiceToHave, [Validators.required]),
     });
   }
 
@@ -52,7 +52,7 @@ export class JobOfferForms {
     contractsDetails: this.fb.array([this.contractDetailsGroup()]),
 
     requirements: this.fb.group({
-      experienceLevel: new FormControl('', []),
+      experienceLevel: new FormControl('', [Validators.required]),
       skills: this.fb.array([this.skillGroup()]),
     }),
   });

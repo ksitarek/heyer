@@ -4,6 +4,7 @@ using Heyer.Modules.Hiring.Application.JobOffers.ContractDetails.UpdateContractD
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Application.JobOffers.SetOfficeLocation;
+using Heyer.Modules.Hiring.Application.JobOffers.SetRequirements;
 using Heyer.Modules.Hiring.Application.JobOffers.Update;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
@@ -36,6 +37,9 @@ public static class JobOfferMappings
 
     public static SetOfficeLocation MapToCommand(this SetOfficeLocationRequest request) =>
         new(new JobOfferId(request.JobOfferId), new OfficeLocation(request.City, request.Country));
+
+    public static SetRequirements MapToCommand(this SetRequirementsRequest request) =>
+        new(new JobOfferId(request.JobOfferId), request.Requirements);
 
     public static UpdateJobOffer MapToCommand(this UpdateJobOfferRequest request) => new(
         new JobOfferId(request.JobOfferId),

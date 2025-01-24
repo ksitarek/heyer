@@ -3,7 +3,14 @@ import { Inject, Injectable } from '@angular/core';
 import { catchError, EMPTY, map, Observable } from 'rxjs';
 import { heyerApiUrl } from '../../app.config';
 import { HttpErrorHandlerService } from '../../http-error-handler.service';
-import { ContractDetails, EmploymentType, JobOfferDetails } from './joboffer-details';
+import {
+  ContractDetails,
+  EmploymentType,
+  ExperienceLevel,
+  JobOfferDetails,
+  Requirements,
+  Skill,
+} from './joboffer-details';
 import { RemoteWork } from './remote-work-control/remote-work';
 
 @Injectable({
@@ -38,6 +45,19 @@ export class JobOfferDetailsService {
 
   public removeContractDetails(jobOfferId: string, employmentType: EmploymentType) {
     return this.http.post(`${this.api_url}/job-offers/remove-contract-details`, { jobOfferId, employmentType }).pipe(
+      catchError((error) => {
+        this.errorHandler.handleError(error);
+        return EMPTY;
+      }),
+    );
+  }
+
+  public setRequirements(jobOfferId: string, experienceLevel: ExperienceLevel, skills: Skill[]) {
+    const payload = {
+      jobOfferId,
+      requirements: new Requirements(experienceLevel, skills),
+    };
+    return this.http.post(`${this.api_url}/job-offers/set-requirements`, payload).pipe(
       catchError((error) => {
         this.errorHandler.handleError(error);
         return EMPTY;
