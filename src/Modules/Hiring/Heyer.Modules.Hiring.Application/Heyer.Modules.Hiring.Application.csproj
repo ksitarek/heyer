@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="JobOffers\SetRequirements\"/>
-    <Folder Include="JobOffers\Update\"/>
   </ItemGroup>
 
 </Project>

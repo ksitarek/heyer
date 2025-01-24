@@ -376,9 +376,10 @@ public class JobOfferTests
 
         var offerSummary = "OfferSummary";
         var jobDescription = "JobDescription";
+        var remoteWork = RemoteWork.No; // :(
 
         // Act
-        var result = jobOffer.UpdateDescription(offerSummary, jobDescription);
+        var result = jobOffer.UpdateDescription(offerSummary, jobDescription, remoteWork);
 
         // Assert
         result.ShouldBeSuccess();

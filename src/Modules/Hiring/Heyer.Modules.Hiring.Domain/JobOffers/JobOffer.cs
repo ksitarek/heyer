@@ -169,10 +169,11 @@ public class JobOffer : Entity
     public Result UpdateContractDetailsSalaryRange(EmploymentType employmentType, SalaryRange newSalaryRange) =>
         throw new NotImplementedException();
 
-    public Result UpdateDescription(string offerSummary, string jobDescription)
+    public Result UpdateDescription(string offerSummary, string jobDescription, RemoteWork remoteWork)
     {
         OfferSummary = offerSummary;
         JobDescription = jobDescription;
+        RemoteWork = remoteWork;
 
         AddDomainEvent(new JobOfferDescriptionUpdated(Id));
 

@@ -26,6 +26,7 @@ public static class HiringEndpointsConfiguration
         MapRemoveContractDetailsEndpoint(app);
         MapSetOfficeLocationEndpoint(app);
         MapUpdateContractDetailsEndpoint(app);
+        MapUpdateJobOfferEndpoint(app);
     }
 
     private static void MapAddContractDetailsEndpoint(WebApplication app) =>
@@ -155,6 +156,21 @@ public static class HiringEndpointsConfiguration
         app.MapPost("/job-offers/update-contract-details",
                     async (IHiringModule module,
                            UpdateContractDetailsRequest request,
+                           CancellationToken cancellationToken) =>
+                    {
+                        var command = request.MapToCommand();
+
+                        var result = await module.DispatchCommand(command, cancellationToken);
+
+                        return result.IsSuccess
+                            ? Results.Ok()
+                            : ResponseErrorHandling.Handle(result);
+                    }).RequirePermission(HiringPermissions.UpdateJobOffer);
+
+    private static void MapUpdateJobOfferEndpoint(WebApplication app) =>
+        app.MapPost("/job-offers/update",
+                    async (IHiringModule module,
+                           UpdateJobOfferRequest request,
                            CancellationToken cancellationToken) =>
                     {
                         var command = request.MapToCommand();
