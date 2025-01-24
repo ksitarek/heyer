@@ -44,18 +44,6 @@ export class JobOfferForms {
 
   public readonly createJobOfferForm = this.fb.group({
     description: this.descriptionGroup,
-
-    // location: this.fb.group({
-    //   city: new FormControl('', []),
-    //   country: new FormControl('', []),
-    // }),
-
-    // contractsDetails: this.fb.array([this.contractDetailsGroup()]),
-
-    // requirements: this.fb.group({
-    //   experienceLevel: new FormControl('', []),
-    //   skills: this.fb.array([this.skillGroup()]),
-    // }),
   });
 
   public readonly editJobOfferForm = this.fb.group({
