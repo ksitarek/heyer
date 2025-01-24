@@ -70,6 +70,9 @@ export class JobOfferForms {
       return { invalidRange: true };
     }
 
+    fromControl?.setErrors(null);
+    toControl?.setErrors(null);
+
     return null;
   };
 }

@@ -123,9 +123,6 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(500),
         distinct(),
-        tap(() => {
-          this.updateValueAndValidity(contractDetailsGroup);
-        }),
         filter(() => contractDetailsGroup.dirty),
         filter(() => contractDetailsGroup.valid),
 
@@ -176,9 +173,6 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(500),
         distinct(),
-        tap(() => {
-          this.updateValueAndValidity(formGroup);
-        }),
         filter(() => formGroup.dirty),
         filter(() => formGroup.valid),
         switchMap(
@@ -204,12 +198,5 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.contractDetailsSubscriptions.push(subscription);
-  }
-
-  private updateValueAndValidity(formGroup: FormGroup): void {
-    formGroup.get('salaryRange.from')?.updateValueAndValidity();
-    formGroup.get('salaryRange.to')?.updateValueAndValidity();
-    formGroup.get('salaryRange')?.updateValueAndValidity();
-    formGroup.updateValueAndValidity();
   }
 }
