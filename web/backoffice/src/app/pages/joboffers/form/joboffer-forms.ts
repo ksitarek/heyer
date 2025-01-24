@@ -1,5 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { ContractDetails, Skill, SkillLevel } from '../joboffer-details';
 import { RemoteWork } from '../remote-work-control/remote-work';
 
@@ -29,7 +36,10 @@ export class JobOfferForms {
         from: new FormControl(values?.SalaryRange.From ?? '', [
           Validators.min(0),
         ]),
-        to: new FormControl(values?.SalaryRange.To ?? '', [Validators.min(0)]), // todo add "greater than" validation
+        to: new FormControl(values?.SalaryRange.To ?? '', [
+          Validators.min(0),
+          this.greaterThan('from'),
+        ]),
         isPublished: new FormControl(values?.SalaryRange.IsPublished ?? true),
       }),
     });
@@ -61,4 +71,27 @@ export class JobOfferForms {
       skills: this.fb.array([this.skillGroup()]),
     }),
   });
+
+  greaterThan(fieldKey: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const group = control.parent;
+      if (!group) {
+        return null;
+      }
+
+      const field = group.get(fieldKey);
+      if (!field) {
+        return null;
+      }
+
+      const value = control.value as number;
+      const referenceValue = field.value as number;
+
+      if (value < referenceValue) {
+        return { greaterThan: true };
+      }
+
+      return null;
+    };
+  }
 }
