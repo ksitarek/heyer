@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { catchError, EMPTY, map, Observable } from 'rxjs';
 import { heyerApiUrl } from '../../app.config';
 import { HttpErrorHandlerService } from '../../http-error-handler.service';
-import { JobOfferDetails } from './joboffer-details';
+import { ContractDetails, EmploymentType, JobOfferDetails } from './joboffer-details';
 import { RemoteWork } from './remote-work-control/remote-work';
 
 @Injectable({
@@ -19,6 +19,41 @@ export class JobOfferDetailsService {
   public getJobOfferDetails(id: string): Observable<JobOfferDetails> {
     return this.http.get<JobOfferDetails>(`${this.api_url}/job-offers/${id}`).pipe(
       map((response) => JobOfferDetails.from(response)),
+      catchError((error) => {
+        this.errorHandler.handleError(error);
+        return EMPTY;
+      }),
+    );
+  }
+
+  public addContractDetails(jobOfferId: string, contractDetails: ContractDetails) {
+    const payload = { jobOfferId, contractDetails };
+    return this.http.post(`${this.api_url}/job-offers/add-contract-details`, payload).pipe(
+      catchError((error) => {
+        this.errorHandler.handleError(error);
+        return EMPTY;
+      }),
+    );
+  }
+
+  public removeContractDetails(jobOfferId: string, employmentType: EmploymentType) {
+    return this.http.post(`${this.api_url}/job-offers/remove-contract-details`, { jobOfferId, employmentType }).pipe(
+      catchError((error) => {
+        this.errorHandler.handleError(error);
+        return EMPTY;
+      }),
+    );
+  }
+
+  public updateContractDetails(jobOfferId: string, contractDetails: ContractDetails) {
+    const payload = {
+      jobOfferId,
+      employmentType: contractDetails.EmploymentType,
+      salaryRange: contractDetails.SalaryRange,
+      timeNumerator: 8,
+      timeDenominator: 8,
+    };
+    return this.http.post(`${this.api_url}/job-offers/update-contract-details`, payload).pipe(
       catchError((error) => {
         this.errorHandler.handleError(error);
         return EMPTY;

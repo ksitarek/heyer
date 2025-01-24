@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, Validators } from '@angular/forms';
 import { ContractDetails, Skill, SkillLevel } from '../joboffer-details';
 import { RemoteWork } from '../remote-work-control/remote-work';
 
@@ -18,11 +18,14 @@ export class JobOfferForms {
   public contractDetailsGroup(values: ContractDetails | null = null) {
     return this.fb.group({
       employmentType: new FormControl(values?.EmploymentType ?? '', []),
-      salaryRange: this.fb.group({
-        from: new FormControl(values?.SalaryRange.From ?? '', [Validators.min(0)]),
-        to: new FormControl(values?.SalaryRange.To ?? '', [Validators.min(0), this.greaterThan('from')]),
-        isPublished: new FormControl(values?.SalaryRange.IsPublished ?? true),
-      }),
+      salaryRange: this.fb.group(
+        {
+          from: new FormControl(values?.SalaryRange.From ?? 0, [Validators.min(1)]),
+          to: new FormControl(values?.SalaryRange.To ?? 0, [Validators.min(1)]),
+          isPublished: new FormControl(values?.SalaryRange.IsPublished ?? true),
+        },
+        { validators: this.salaryRangeValidator },
+      ),
     });
   }
 
@@ -54,26 +57,19 @@ export class JobOfferForms {
     }),
   });
 
-  greaterThan(fieldKey: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const group = control.parent;
-      if (!group) {
-        return null;
-      }
+  salaryRangeValidator = (group: AbstractControl): ValidationErrors | null => {
+    const fromControl = group.get('from');
+    const toControl = group.get('to');
+    const from = fromControl?.value as number;
+    const to = toControl?.value as number;
 
-      const field = group.get(fieldKey);
-      if (!field) {
-        return null;
-      }
+    if (from >= to) {
+      fromControl?.setErrors({ invalidRange: true });
+      toControl?.setErrors({ invalidRange: true });
 
-      const value = control.value as number;
-      const referenceValue = field.value as number;
+      return { invalidRange: true };
+    }
 
-      if (value < referenceValue) {
-        return { greaterThan: true };
-      }
-
-      return null;
-    };
-  }
+    return null;
+  };
 }

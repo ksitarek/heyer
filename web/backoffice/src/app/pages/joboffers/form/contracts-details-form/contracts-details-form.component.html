@@ -2,66 +2,29 @@
   <label hlmLabel class="mb-2">Available contracts</label>
 
   <ng-container formArrayName="contractsDetails">
-    @for (
-      contractFormGroup of contractsDetails.controls;
-      let i = $index;
-      track i
-    ) {
+    @for (contractFormGroup of contractsDetails.controls; let i = $index; track contractFormGroup) {
       <ng-container [formGroupName]="i">
         <div class="px-4 py-2 mb-4 rounded-md bg-secondary">
-          <label
-            hlmLabel
-            class="flex flex-row items-center justify-between w-full"
-          >
+          <label hlmLabel class="flex flex-row items-center justify-between w-full">
             <span>
-              {{
-                getEmploymentTypeLabelByControlValue(
-                  contractFormGroup.get("employmentType")!
-                )
-              }}
+              {{ getEmploymentTypeLabelByControlValue(contractFormGroup.get("employmentType")!) }}
             </span>
 
-            <button
-              hlmBtn
-              type="button"
-              variant="secondary"
-              class="ml-2"
-              (click)="removeContract(i)"
-            >
+            <button hlmBtn type="button" variant="secondary" class="ml-2" (click)="removeContract(i)">
               <ng-icon name="lucideX" class="text-secondary-foreground" />
             </button>
           </label>
 
-          <input
-            type="hidden"
-            class="w-full"
-            hlmInput
-            formControlName="employmentType"
-          />
+          <input type="hidden" class="w-full" hlmInput formControlName="employmentType" />
 
-          <div
-            class="flex flex-row items-center mt-4 space-x-2"
-            formGroupName="salaryRange"
-          >
+          <div class="flex flex-row items-center mt-4 space-x-2" formGroupName="salaryRange">
             <div>Salary from</div>
             <div>
-              <input
-                type="number"
-                step="0.01"
-                class="w-20 text-right"
-                hlmInput
-                formControlName="from"
-              />
+              <input type="number" step="0.01" class="w-20 text-right" hlmInput formControlName="from" />
             </div>
             <div>to</div>
             <div>
-              <input
-                type="number"
-                step="0.01"
-                class="w-20 text-right"
-                hlmInput
-                formControlName="to"
-              />
+              <input type="number" step="0.01" class="w-20 text-right" hlmInput formControlName="to" />
             </div>
             <div>
               <label hlmLabel class="flex items-center">
@@ -75,19 +38,13 @@
     }
 
     @if (availableContractTypes.length > 1) {
-      <button
-        hlmBtn
-        type="button"
-        variant="secondary"
-        class="w-full"
-        [brnMenuTriggerFor]="addContractMenu"
-      >
+      <button hlmBtn type="button" variant="secondary" class="w-full" [brnMenuTriggerFor]="addContractMenu">
         <ng-icon name="lucidePlus" class="mr-2" />Add contract type
       </button>
     }
 
     @if (availableContractTypes.length === 1) {
-      @for (type of availableContractTypes; let i = $index; track i) {
+      @for (type of availableContractTypes; let i = $index; track type) {
         <button
           hlmBtn
           type="button"
@@ -107,7 +64,7 @@
 <ng-template #addContractMenu>
   <hlm-menu class="w-56">
     <hlm-menu-group>
-      @for (type of availableContractTypes; let i = $index; track i) {
+      @for (type of availableContractTypes; let i = $index; track type) {
         <button type="button" hlmMenuItem (click)="addContract(type)">
           <ng-icon hlm name="lucidePlus" hlmMenuIcon />
           <span>{{ getEmploymentTypeLabel(type) }}</span>
