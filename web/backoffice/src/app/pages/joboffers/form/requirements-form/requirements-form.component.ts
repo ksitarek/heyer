@@ -38,10 +38,6 @@ export class RequirementsFormComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.requirementsSubscription = this.requirements.valueChanges
       .pipe(
-        tap(() => {
-          console.log(this.requirements.dirty);
-          console.log(this.requirements.valid);
-        }),
         debounceTime(500),
         distinct(),
         filter(() => this.requirements.dirty),
