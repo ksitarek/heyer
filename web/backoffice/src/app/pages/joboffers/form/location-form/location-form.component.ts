@@ -16,7 +16,7 @@ export class LocationFormComponent implements OnInit, OnDestroy {
 
   private locationChangedSubscription!: Subscription;
 
-  constructor(private JobOfferLocationService: JobOfferLocationService) {}
+  constructor(private jobOfferLocationService: JobOfferLocationService) {}
 
   public ngOnInit(): void {
     const idControl = this.form().get('id');
@@ -31,10 +31,9 @@ export class LocationFormComponent implements OnInit, OnDestroy {
 
         filter(() => location?.dirty ?? false),
         filter(() => location?.valid ?? false),
-        filter(({ city, country }) => city.length > 0 && country.length > 0),
 
         switchMap(({ city, country }) =>
-          this.JobOfferLocationService.setOfficeLocation(idControl?.value as string, city, country),
+          this.jobOfferLocationService.setOfficeLocation(idControl?.value as string, city, country),
         ),
 
         tap(() => location?.markAsPristine()),
