@@ -1,1 +1,5 @@
 cd web/backoffice && npm run ci:all
+
+cd ../../
+dotnet test --filter Category=Unit
+dotnet test --filter Category=Integration
