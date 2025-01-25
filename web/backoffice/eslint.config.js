@@ -74,10 +74,7 @@ export default config(
   },
   {
     files: ["**/*.json"],
-    extends: [
-      ...jsoncConfigs["flat/recommended-with-jsonc"],
-      ...jsoncConfigs["flat/prettier"],
-    ],
+    extends: [...jsoncConfigs["flat/recommended-with-jsonc"], ...jsoncConfigs["flat/prettier"]],
     rules: {},
   },
   {

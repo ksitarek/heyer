@@ -7,13 +7,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'h-joboffers',
-  imports: [
-    PageHeaderComponent,
-    JoboffersListComponent,
-    NgIcon,
-    HlmButtonDirective,
-    RouterModule,
-  ],
+  imports: [PageHeaderComponent, JoboffersListComponent, NgIcon, HlmButtonDirective, RouterModule],
   templateUrl: './joboffers.component.html',
   styleUrl: './joboffers.component.scss',
 })

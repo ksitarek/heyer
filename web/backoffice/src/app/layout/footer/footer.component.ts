@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  HlmMutedDirective,
-  HlmSmallDirective,
-} from '@spartan-ng/ui-typography-helm';
+import { HlmMutedDirective, HlmSmallDirective } from '@spartan-ng/ui-typography-helm';
 
 @Component({
   selector: 'h-footer',

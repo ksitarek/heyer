@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PageHeaderComponent } from '../../../layout/components/page-header/page-header.component';
 import { ContractsDetailsFormComponent } from '../form/contracts-details-form/contracts-details-form.component';
@@ -68,9 +63,7 @@ export class EditJobofferComponent implements OnInit {
     });
 
     for (const contractDetails of this.jobOffer.ContractsDetails) {
-      this.contractsDetails.push(
-        this.forms.contractDetailsGroup(contractDetails),
-      );
+      this.contractsDetails.push(this.forms.contractDetailsGroup(contractDetails));
     }
 
     for (const skill of this.jobOffer.Requirements.Skills) {

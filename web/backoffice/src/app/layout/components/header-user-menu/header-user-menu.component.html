@@ -1,11 +1,7 @@
 @if (user$ | async; as user) {
   <div class="flex flex-row justify-end h-full">
     <button type="button" [brnMenuTriggerFor]="menu">
-      <img
-        class="w-6 mx-2 rounded-full"
-        [src]="user.picture"
-        [alt]="user.name"
-      />
+      <img class="w-6 mx-2 rounded-full" [src]="user.picture" [alt]="user.name" />
     </button>
   </div>
 

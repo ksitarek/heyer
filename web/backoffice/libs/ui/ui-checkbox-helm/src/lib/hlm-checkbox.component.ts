@@ -1,13 +1,4 @@
-import {
-  Component,
-  booleanAttribute,
-  computed,
-  forwardRef,
-  input,
-  model,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, booleanAttribute, computed, forwardRef, input, model, output, signal } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BrnCheckboxComponent } from '@spartan-ng/brain/checkbox';
 import { hlm } from '@spartan-ng/brain/core';
@@ -38,10 +29,7 @@ export const HLM_CHECKBOX_VALUE_ACCESSOR = {
       (changed)="_handleChange()"
       (touched)="_onTouched()"
     >
-      <hlm-checkbox-checkicon
-        [class]="checkIconClass()"
-        [iconName]="checkIconName()"
-      />
+      <hlm-checkbox-checkicon [class]="checkIconClass()" [iconName]="checkIconName()" />
     </brn-checkbox>
   `,
   host: {
@@ -103,9 +91,7 @@ export class HlmCheckboxComponent {
     if (this.state().disabled()) return;
 
     const previousChecked = this.checked();
-    this.checked.set(
-      previousChecked === 'indeterminate' ? true : !previousChecked,
-    );
+    this.checked.set(previousChecked === 'indeterminate' ? true : !previousChecked);
     this._onChange(!previousChecked);
     this.changed.emit(!previousChecked);
   }

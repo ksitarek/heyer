@@ -11,16 +11,7 @@ import { HlmIconDirective } from './hlm-icon.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [HlmIconDirective, NgIcon],
   providers: [provideIcons({ lucideCheck })],
-  template: `
-    <ng-icon
-      hlm
-      class="test"
-      name="lucideCheck"
-      color="red"
-      strokeWidth="2"
-      [size]="size"
-    />
-  `,
+  template: ` <ng-icon hlm class="test" name="lucideCheck" color="red" strokeWidth="2" [size]="size" /> `,
 })
 class HlmMockComponent {
   @Input() public size = 'base';

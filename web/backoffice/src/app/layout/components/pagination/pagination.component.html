@@ -13,22 +13,10 @@
   </brn-select>
 
   <div class="flex items-center justify-center">
-    <button
-      type="button"
-      hlmBtn
-      variant="ghost"
-      [disabled]="!hasPreviousPage()"
-      (click)="previousPage()"
-    >
+    <button type="button" hlmBtn variant="ghost" [disabled]="!hasPreviousPage()" (click)="previousPage()">
       <ng-icon hlmIcon name="lucideMoveLeft" class="mr-2" />Previous
     </button>
-    <button
-      type="button"
-      hlmBtn
-      variant="ghost"
-      [disabled]="!hasNextPage()"
-      (click)="nextPage()"
-    >
+    <button type="button" hlmBtn variant="ghost" [disabled]="!hasNextPage()" (click)="nextPage()">
       Next<ng-icon hlmIcon name="lucideMoveRight" class="ml-2" />
     </button>
   </div>

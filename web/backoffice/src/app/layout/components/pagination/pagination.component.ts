@@ -10,10 +10,7 @@ import {
   HlmSelectTriggerComponent,
   HlmSelectValueDirective,
 } from '@spartan-ng/ui-select-helm';
-import {
-  HlmMutedDirective,
-  HlmSmallDirective,
-} from '@spartan-ng/ui-typography-helm';
+import { HlmMutedDirective, HlmSmallDirective } from '@spartan-ng/ui-typography-helm';
 
 @Component({
   selector: 'h-pagination',
@@ -42,18 +39,14 @@ export class PaginationComponent {
 
   protected readonly pageIx = computed(() => this.currentPage() - 1);
   protected readonly from = computed(() => this.pageSize() * this.pageIx() + 1);
-  protected readonly to = computed(() =>
-    Math.min(this.currentPage() * this.pageSize(), this.totalCount()),
-  );
+  protected readonly to = computed(() => Math.min(this.currentPage() * this.pageSize(), this.totalCount()));
 
   protected pageSizeChangedEffect = effect(() => {
     this.currentPage.set(1);
   });
 
   protected readonly hasPreviousPage = computed(() => this.pageIx() > 0);
-  protected readonly hasNextPage = computed(
-    () => this.to() < this.totalCount(),
-  );
+  protected readonly hasNextPage = computed(() => this.to() < this.totalCount());
 
   protected previousPage(): void {
     if (this.hasPreviousPage()) {

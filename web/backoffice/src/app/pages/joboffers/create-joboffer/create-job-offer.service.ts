@@ -15,11 +15,7 @@ export class CreateJobOfferService {
     @Inject(heyerApiUrl) private api_url: string,
   ) {}
 
-  public saveDraft(
-    offerSummary: string,
-    jobDescription: string,
-    remoteWork: RemoteWork,
-  ): Observable<string> {
+  public saveDraft(offerSummary: string, jobDescription: string, remoteWork: RemoteWork): Observable<string> {
     return this.http
       .post<string>(`${this.api_url}/job-offers/create`, {
         offerSummary,

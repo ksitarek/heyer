@@ -12,20 +12,13 @@ import { CreateJobOfferService } from './create-job-offer.service';
 
 @Component({
   selector: 'h-create-joboffer',
-  imports: [
-    NgIcon,
-    HlmButtonDirective,
-    PageHeaderComponent,
-    ReactiveFormsModule,
-    DescriptionFormComponent,
-  ],
+  imports: [NgIcon, HlmButtonDirective, PageHeaderComponent, ReactiveFormsModule, DescriptionFormComponent],
   providers: [JobOfferForms],
   templateUrl: './create-joboffer.component.html',
   styleUrl: './create-joboffer.component.scss',
 })
 export class CreateJobofferComponent {
-  protected readonly jobOfferForm: FormGroup =
-    inject(JobOfferForms).createJobOfferForm;
+  protected readonly jobOfferForm: FormGroup = inject(JobOfferForms).createJobOfferForm;
 
   protected readonly saveInProgress = signal(false);
   protected readonly saveInProgressEffect = effect(() => {
@@ -62,11 +55,7 @@ export class CreateJobofferComponent {
     }
 
     this.createJobOfferService
-      .saveDraft(
-        description.offerSummary,
-        description.jobDescription,
-        description.remoteWork,
-      )
+      .saveDraft(description.offerSummary, description.jobDescription, description.remoteWork)
       .pipe(
         tap((res) => {
           if (res.length > 0) {

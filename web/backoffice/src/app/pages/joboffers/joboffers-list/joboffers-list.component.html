@@ -1,10 +1,4 @@
-<brn-table
-  hlm
-  class="w-full"
-  [dataSource]="items()"
-  [displayedColumns]="dataTableColumns()"
-  [trackBy]="trackBy"
->
+<brn-table hlm class="w-full" [dataSource]="items()" [displayedColumns]="dataTableColumns()" [trackBy]="trackBy">
   <brn-column-def name="id" class="w-12">
     <hlm-th *brnHeaderDef />
     <hlm-td *brnCellDef="let element" />
@@ -19,9 +13,7 @@
 
   <brn-column-def name="offerSummary" class="flex-1">
     <hlm-th *brnHeaderDef>Summary</hlm-th>
-    <hlm-td *brnCellDef="let element" truncate>{{
-      element.OfferSummary
-    }}</hlm-td>
+    <hlm-td *brnCellDef="let element" truncate>{{ element.OfferSummary }}</hlm-td>
   </brn-column-def>
 
   <brn-column-def name="publishedAt" class="w-40">
@@ -46,16 +38,7 @@
     </hlm-td>
   </brn-column-def>
 
-  <div
-    class="flex items-center justify-center p-20 text-muted-foreground"
-    brnNoDataRow
-  >
-    No data
-  </div>
+  <div class="flex items-center justify-center p-20 text-muted-foreground" brnNoDataRow>No data</div>
 </brn-table>
 
-<h-pagination
-  [totalCount]="totalCount()"
-  [(currentPage)]="currentPage"
-  [(pageSize)]="pageSize"
-/>
+<h-pagination [totalCount]="totalCount()" [(currentPage)]="currentPage" [(pageSize)]="pageSize" />

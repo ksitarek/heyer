@@ -20,7 +20,5 @@ const btnLike =
 })
 export class HlmRadioIndicatorComponent {
   public readonly userClass = input<ClassValue>('', { alias: 'class' });
-  protected _computedClass = computed(() =>
-    hlm('relative inline-flex h-4 w-4', this.userClass()),
-  );
+  protected _computedClass = computed(() => hlm('relative inline-flex h-4 w-4', this.userClass()));
 }

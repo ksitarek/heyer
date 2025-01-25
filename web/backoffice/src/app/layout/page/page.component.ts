@@ -9,13 +9,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'h-page',
-  imports: [
-    AsyncPipe,
-    HeaderComponent,
-    FooterComponent,
-    RouterOutlet,
-    SidebarComponent,
-  ],
+  imports: [AsyncPipe, HeaderComponent, FooterComponent, RouterOutlet, SidebarComponent],
   templateUrl: './page.component.html',
   styleUrl: './page.component.scss',
 })

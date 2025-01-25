@@ -12,10 +12,6 @@ export class SidebarMenuComponent {
   public menuItems: SidebarMenuItemDto[] = [
     new SidebarMenuItemDto('Statistics', 'lucideChartNoAxesCombined', '/'),
     new SidebarMenuItemDto('Job Offers', 'lucideMegaphone', '/job-offers'),
-    new SidebarMenuItemDto(
-      'Candidates Pool',
-      'lucideUsers',
-      '/candidates-pool',
-    ),
+    new SidebarMenuItemDto('Candidates Pool', 'lucideUsers', '/candidates-pool'),
   ];
 }

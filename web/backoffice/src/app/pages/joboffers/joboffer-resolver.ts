@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  MaybeAsync,
-  RedirectCommand,
-  Resolve,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, MaybeAsync, RedirectCommand, Resolve } from '@angular/router';
 import { JobOfferDetails } from './joboffer-details';
 import { JobOfferDetailsService } from './joboffers-details.service';
 
@@ -13,9 +8,7 @@ import { JobOfferDetailsService } from './joboffers-details.service';
 })
 export class JobOfferResolver implements Resolve<JobOfferDetails> {
   constructor(private jobOfferDetailsService: JobOfferDetailsService) {}
-  public resolve(
-    route: ActivatedRouteSnapshot,
-  ): MaybeAsync<JobOfferDetails | RedirectCommand> {
+  public resolve(route: ActivatedRouteSnapshot): MaybeAsync<JobOfferDetails | RedirectCommand> {
     const id = this.getIdFromRoute(route);
 
     return this.jobOfferDetailsService.getJobOfferDetails(id);

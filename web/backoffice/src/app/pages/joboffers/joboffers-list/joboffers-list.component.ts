@@ -30,12 +30,8 @@ import { JoboffersListService } from './joboffers-list.service';
   styleUrl: './joboffers-list.component.scss',
 })
 export class JoboffersListComponent {
-  public readonly items = computed(
-    () => this.jobOffersListService.listSignal.value()?.Items ?? [],
-  );
-  public readonly totalCount = computed(
-    () => this.jobOffersListService.listSignal.value()?.TotalCount ?? 0,
-  );
+  public readonly items = computed(() => this.jobOffersListService.listSignal.value()?.Items ?? []);
+  public readonly totalCount = computed(() => this.jobOffersListService.listSignal.value()?.TotalCount ?? 0);
 
   protected readonly columnManager = useBrnColumnManager({
     offerSummary: { visible: true, label: 'Offer Summary' },
@@ -43,16 +39,9 @@ export class JoboffersListComponent {
     publishedUntil: { visible: true, label: 'Published until' },
   });
 
-  protected readonly dataTableColumns = computed(() => [
-    'id',
-    ...this.columnManager.displayedColumns(),
-    'actions',
-  ]);
+  protected readonly dataTableColumns = computed(() => ['id', ...this.columnManager.displayedColumns(), 'actions']);
 
-  protected readonly trackBy: TrackByFunction<JobOfferListItem> = (
-    _: number,
-    p: JobOfferListItem,
-  ) => p.Id;
+  protected readonly trackBy: TrackByFunction<JobOfferListItem> = (_: number, p: JobOfferListItem) => p.Id;
 
   constructor(public jobOffersListService: JoboffersListService) {}
 

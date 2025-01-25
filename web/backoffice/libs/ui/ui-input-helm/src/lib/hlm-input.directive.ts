@@ -1,13 +1,4 @@
-import {
-  Directive,
-  type DoCheck,
-  Injector,
-  computed,
-  effect,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { Directive, type DoCheck, Injector, computed, effect, inject, input, signal } from '@angular/core';
 import { FormGroupDirective, NgControl, NgForm } from '@angular/forms';
 import { hlm } from '@spartan-ng/brain/core';
 import { BrnFormFieldControl } from '@spartan-ng/brain/form-field';
@@ -62,18 +53,12 @@ export class HlmInputDirective implements BrnFormFieldControl, DoCheck {
 
   public readonly userClass = input<ClassValue>('', { alias: 'class' });
   protected readonly _computedClass = computed(() =>
-    hlm(
-      inputVariants({ size: this.size(), error: this.state().error() }),
-      this.userClass(),
-    ),
+    hlm(inputVariants({ size: this.size(), error: this.state().error() }), this.userClass()),
   );
 
   private readonly _injector = inject(Injector);
 
-  public readonly ngControl: NgControl | null = this._injector.get(
-    NgControl,
-    null,
-  );
+  public readonly ngControl: NgControl | null = this._injector.get(NgControl, null);
 
   private readonly _errorStateTracker: ErrorStateTracker;
 
@@ -83,9 +68,7 @@ export class HlmInputDirective implements BrnFormFieldControl, DoCheck {
     optional: true,
   });
 
-  public readonly errorState = computed(() =>
-    this._errorStateTracker.errorState(),
-  );
+  public readonly errorState = computed(() => this._errorStateTracker.errorState());
 
   constructor() {
     this._errorStateTracker = new ErrorStateTracker(

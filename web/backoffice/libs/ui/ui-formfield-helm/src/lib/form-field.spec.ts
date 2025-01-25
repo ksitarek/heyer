@@ -7,20 +7,12 @@ import userEvent from '@testing-library/user-event';
 
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 
-import {
-  ErrorStateMatcher,
-  ShowOnDirtyErrorStateMatcher,
-} from '@spartan-ng/brain/forms';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@spartan-ng/brain/forms';
 import { HlmErrorDirective } from './hlm-error.directive';
 import { HlmFormFieldComponent } from './hlm-form-field.component';
 import { HlmHintDirective } from './hlm-hint.directive';
 
-const DIRECTIVES = [
-  HlmFormFieldComponent,
-  HlmErrorDirective,
-  HlmHintDirective,
-  HlmInputDirective,
-];
+const DIRECTIVES = [HlmFormFieldComponent, HlmErrorDirective, HlmHintDirective, HlmInputDirective];
 
 @Component({
   standalone: true,
@@ -38,9 +30,7 @@ const DIRECTIVES = [
         [formControl]="name"
       />
       <hlm-error data-testid="hlm-error">Your name is required</hlm-error>
-      <hlm-hint data-testid="hlm-hint"
-        >This is your public display name.</hlm-hint
-      >
+      <hlm-hint data-testid="hlm-hint">This is your public display name.</hlm-hint>
     </hlm-form-field>
   `,
 })
@@ -64,14 +54,10 @@ class SingleFormFieldMock {
         [formControl]="name"
       />
       <hlm-error data-testid="hlm-error">Your name is required</hlm-error>
-      <hlm-hint data-testid="hlm-hint"
-        >This is your public display name.</hlm-hint
-      >
+      <hlm-hint data-testid="hlm-hint">This is your public display name.</hlm-hint>
     </hlm-form-field>
   `,
-  providers: [
-    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
-  ],
+  providers: [{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }],
 })
 class SingleFormFieldDirtyMock {
   public name = new FormControl('', Validators.required);
@@ -126,8 +112,7 @@ describe('Hlm Form Field Component', () => {
 
   describe('SingleFormFieldDirty', () => {
     it('should not display the error if the input does not have the dirty state due to the ErrorStateMatcher', async () => {
-      const { error, user, trigger } =
-        await setupFormFieldWithErrorStateDirty();
+      const { error, user, trigger } = await setupFormFieldWithErrorStateDirty();
 
       await user.click(trigger);
 
@@ -137,8 +122,7 @@ describe('Hlm Form Field Component', () => {
     });
 
     it('should display the error if the input has the dirty state due to the ErrorStateMatcher', async () => {
-      const { error, user, trigger } =
-        await setupFormFieldWithErrorStateDirty();
+      const { error, user, trigger } = await setupFormFieldWithErrorStateDirty();
 
       await user.click(trigger);
       await user.type(trigger, 'a');

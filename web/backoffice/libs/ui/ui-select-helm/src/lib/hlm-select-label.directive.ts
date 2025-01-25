@@ -14,9 +14,7 @@ import { HlmSelectContentDirective } from './hlm-select-content.directive';
 })
 export class HlmSelectLabelDirective {
   private readonly _selectContent = inject(HlmSelectContentDirective);
-  private readonly _stickyLabels = computed(() =>
-    this._selectContent.stickyLabels(),
-  );
+  private readonly _stickyLabels = computed(() => this._selectContent.stickyLabels());
   public readonly userClass = input<ClassValue>('', { alias: 'class' });
   protected _computedClass = computed(() =>
     hlm(

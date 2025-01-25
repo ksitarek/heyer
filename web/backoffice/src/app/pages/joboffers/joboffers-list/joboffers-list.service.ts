@@ -16,8 +16,7 @@ export class JoboffersListService {
   public readonly pageSize = signal<number>(10);
 
   public readonly url = computed(
-    () =>
-      `${this.api_url}/job-offers?Page=${this.currentPage().toString()}&PageSize=${this.pageSize().toString()}`,
+    () => `${this.api_url}/job-offers?Page=${this.currentPage().toString()}&PageSize=${this.pageSize().toString()}`,
   );
 
   constructor(
@@ -40,9 +39,7 @@ export class JoboffersListService {
           new ListResponse<JobOfferListItem>(
             response.PageSize,
             response.TotalCount,
-            response.Items.map((x: JobOfferListItem) =>
-              JobOfferListItem.from(x),
-            ),
+            response.Items.map((x: JobOfferListItem) => JobOfferListItem.from(x)),
           ),
       ),
       tap((response) => {

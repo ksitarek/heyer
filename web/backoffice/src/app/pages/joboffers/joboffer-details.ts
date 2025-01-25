@@ -22,9 +22,7 @@ export class JobOfferDetails {
       obj.PublishedUntil,
       OfficeLocation.from(obj.OfficeLocation),
       Requirements.from(obj.Requirements),
-      obj.ContractsDetails.map((contractDetails: ContractDetails) =>
-        ContractDetails.from(contractDetails),
-      ),
+      obj.ContractsDetails.map((contractDetails: ContractDetails) => ContractDetails.from(contractDetails)),
     );
   }
 }

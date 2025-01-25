@@ -10,16 +10,12 @@ import type { ClassValue } from 'clsx';
   standalone: true,
   providers: [provideIcons({ lucideChevronRight })],
   imports: [NgIcon, HlmIconDirective],
-  template: `
-    <ng-icon hlm size="none" class="h-full w-full" name="lucideChevronRight" />
-  `,
+  template: ` <ng-icon hlm size="none" class="h-full w-full" name="lucideChevronRight" /> `,
   host: {
     '[class]': '_computedClass()',
   },
 })
 export class HlmMenuItemSubIndicatorComponent {
   public readonly userClass = input<ClassValue>('', { alias: 'class' });
-  protected _computedClass = computed(() =>
-    hlm('inline-block ml-auto h-4 w-4', this.userClass()),
-  );
+  protected _computedClass = computed(() => hlm('inline-block ml-auto h-4 w-4', this.userClass()));
 }

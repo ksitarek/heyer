@@ -28,9 +28,7 @@ let captionIdSequence = 0;
 export class HlmCaptionComponent {
   private readonly _table = inject(HlmTableComponent, { optional: true });
 
-  protected readonly id = input<string | null | undefined>(
-    `${captionIdSequence++}`,
-  );
+  protected readonly id = input<string | null | undefined>(`${captionIdSequence++}`);
 
   public readonly hidden = input(false, { transform: booleanAttribute });
   public readonly userClass = input<ClassValue>('', { alias: 'class' });

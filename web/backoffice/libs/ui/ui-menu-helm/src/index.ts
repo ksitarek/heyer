@@ -43,21 +43,14 @@ export const HlmMenuItemImports = [
   HlmMenuItemCheckboxDirective,
   HlmMenuItemRadioDirective,
 ];
-export const HlmMenuStructureImports = [
-  HlmMenuLabelComponent,
-  HlmMenuSeparatorComponent,
-] as const;
+export const HlmMenuStructureImports = [HlmMenuLabelComponent, HlmMenuSeparatorComponent] as const;
 export const HlmMenuImports = [
   ...HlmMenuItemImports,
   ...HlmMenuStructureImports,
   HlmMenuComponent,
   HlmSubMenuComponent,
 ] as const;
-export const HlmMenuBarImports = [
-  ...HlmMenuImports,
-  HlmMenuBarComponent,
-  HlmMenuBarItemDirective,
-] as const;
+export const HlmMenuBarImports = [...HlmMenuImports, HlmMenuBarComponent, HlmMenuBarItemDirective] as const;
 
 @NgModule({
   imports: [...HlmMenuItemImports],

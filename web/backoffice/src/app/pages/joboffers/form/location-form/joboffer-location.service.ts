@@ -14,24 +14,18 @@ export class JobOfferLocationService {
     @Inject(heyerApiUrl) private api_url: string,
   ) {}
 
-  public setOfficeLocation(
-    jobOfferId: string,
-    city: string,
-    country: string,
-  ): Observable<unknown> {
+  public setOfficeLocation(jobOfferId: string, city: string, country: string): Observable<unknown> {
     const payload = {
       jobOfferId,
       city,
       country,
     };
 
-    return this.http
-      .post(`${this.api_url}/job-offers/set-office-location`, payload)
-      .pipe(
-        catchError((error: unknown) => {
-          this.errorHandler.handleError(error);
-          return [];
-        }),
-      );
+    return this.http.post(`${this.api_url}/job-offers/set-office-location`, payload).pipe(
+      catchError((error: unknown) => {
+        this.errorHandler.handleError(error);
+        return [];
+      }),
+    );
   }
 }

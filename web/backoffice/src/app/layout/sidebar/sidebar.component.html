@@ -2,25 +2,13 @@
   <h-sidebar-menu />
 
   @if (expanded()) {
-    <button
-      type="button"
-      hlmBtn
-      variant="ghost"
-      class="w-full"
-      (click)="toggle()"
-    >
+    <button type="button" hlmBtn variant="ghost" class="w-full" (click)="toggle()">
       <ng-icon name="lucidePanelLeftClose" />&nbsp;Collapse
     </button>
   }
 
   @if (!expanded()) {
-    <button
-      type="button"
-      hlmBtn
-      variant="ghost"
-      class="w-full"
-      (click)="toggle()"
-    >
+    <button type="button" hlmBtn variant="ghost" class="w-full" (click)="toggle()">
       <ng-icon name="lucidePanelLeftOpen" />
     </button>
   }
