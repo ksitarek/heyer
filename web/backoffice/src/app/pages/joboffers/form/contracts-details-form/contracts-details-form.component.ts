@@ -119,7 +119,7 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
 
     contractDetailsGroup.valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(200),
         distinct(),
         filter(() => contractDetailsGroup.dirty),
         filter(() => contractDetailsGroup.valid),
@@ -169,7 +169,7 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
   private subscribeToContractDetailsChanges(formGroup: FormGroup): void {
     const subscription = formGroup.valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(200),
         distinct(),
         filter(() => formGroup.dirty),
         filter(() => formGroup.valid),

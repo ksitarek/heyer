@@ -34,6 +34,7 @@ internal class JobOffersRepository : IJobOffersRepository
 
     public IQueryable<JobOffer> GetPageQuery(FilteredListRequest filteredListRequest) =>
         _context.JobOffers
+            .OrderBy(x => x.OfferSummary)
             .Skip(filteredListRequest.PageIx * filteredListRequest.PageSize)
             .Take(filteredListRequest.PageSize); // todo implement some sensible sorting/filtering
 

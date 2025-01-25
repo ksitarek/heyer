@@ -56,5 +56,5 @@ public static class JobOfferMappings
             jobOffer.Location!,
             jobOffer.RemoteWork,
             jobOffer.Requirements!,
-            jobOffer.ContractsDetails!.ToList());
+            jobOffer.ContractsDetails!.OrderBy(x => Enum.GetName(x.EmploymentType)).ToList());
 }

@@ -28,7 +28,7 @@ export class DescriptionFormComponent implements OnInit, OnDestroy {
 
     this.descriptionSubscription = description$
       .pipe(
-        debounceTime(500),
+        debounceTime(200),
         distinct(),
 
         filter(() => this.autosave()),

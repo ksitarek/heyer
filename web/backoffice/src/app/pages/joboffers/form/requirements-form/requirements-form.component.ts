@@ -38,7 +38,7 @@ export class RequirementsFormComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.requirementsSubscription = this.requirements.valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(200),
         distinct(),
         filter(() => this.requirements.dirty),
         filter(() => this.requirements.valid),

@@ -26,7 +26,7 @@ export class LocationFormComponent implements OnInit, OnDestroy {
 
     this.locationChangedSubscription = location$
       .pipe(
-        debounceTime(500),
+        debounceTime(200),
         distinct(),
 
         filter(() => location?.dirty ?? false),
