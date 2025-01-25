@@ -14,7 +14,7 @@ const DEFAULT_TOOLTIP_CONTENT_CLASSES =
   providers: [
     provideBrnTooltipDefaultOptions({
       showDelay: 150,
-      hideDelay: 300,
+      hideDelay: 30,
       exitAnimationDuration: 150,
       tooltipContentClasses: DEFAULT_TOOLTIP_CONTENT_CLASSES,
     }),

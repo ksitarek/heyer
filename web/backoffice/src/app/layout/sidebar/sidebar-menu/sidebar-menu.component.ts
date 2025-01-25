@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { SidebarMenuItemDto } from './sidebar-menu-item-dto';
 import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.component';
 
@@ -9,6 +9,8 @@ import { SidebarMenuItemComponent } from './sidebar-menu-item/sidebar-menu-item.
   styleUrl: './sidebar-menu.component.scss',
 })
 export class SidebarMenuComponent {
+  public readonly expanded = input.required<boolean>();
+
   public menuItems: SidebarMenuItemDto[] = [
     new SidebarMenuItemDto('Statistics', 'lucideChartNoAxesCombined', '/'),
     new SidebarMenuItemDto('Job Offers', 'lucideMegaphone', '/job-offers'),

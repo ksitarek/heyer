@@ -1,5 +1,5 @@
-<div class="flex flex-col justify-between">
-  <h-sidebar-menu />
+<div [class]="sidebarClasses">
+  <h-sidebar-menu [expanded]="expanded()" />
 
   @if (expanded()) {
     <button type="button" hlmBtn variant="ghost" class="w-full" (click)="toggle()">

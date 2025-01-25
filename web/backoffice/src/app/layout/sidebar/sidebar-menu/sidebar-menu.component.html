@@ -1,5 +1,5 @@
-<ul class="px-2 mt-6">
+<ul class="mt-6">
   @for (item of menuItems; let i = $index; track item) {
-    <li><h-sidebar-menu-item [dto]="item" /></li>
+    <li><h-sidebar-menu-item [dto]="item" [expanded]="expanded()" /></li>
   }
 </ul>
