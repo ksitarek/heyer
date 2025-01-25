@@ -9,7 +9,7 @@ namespace Heyer.Storage.API.Tests.UnitTests.Validators;
 [Category("Unit")]
 public class FileValidatorTests
 {
-    private FileValidator _validator;
+    private FileValidator _validator = null!;
 
     [Test]
     public void FileValidator_WhenFileExtensionIsNotSupported_ShouldReturnValidationError()

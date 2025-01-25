@@ -22,12 +22,12 @@ public class DomainEventDispatcherTests
         new FakeDomainEvent(Guid.NewGuid()), new FakeDomainEvent(Guid.NewGuid())
     };
 
-    private DomainEventDispatcher _domainEventDispatcher;
-    private DomainEventNotificationsRegistry _domainEventNotificationsRegistry;
-    private IDomainEventsAccessor _domainEventsAccessor;
-    private IMediator _mediator;
-    private IOutboxStore _outboxStore;
-    private ValueUserDataProvider _userDataProvider;
+    private DomainEventDispatcher _domainEventDispatcher = null!;
+    private DomainEventNotificationsRegistry _domainEventNotificationsRegistry = null!;
+    private IDomainEventsAccessor _domainEventsAccessor = null!;
+    private IMediator _mediator = null!;
+    private IOutboxStore _outboxStore = null!;
+    private ValueUserDataProvider _userDataProvider = null!;
 
     [Test]
     public async Task DispatchEventsAsync_WhenCalled_ShouldPublishAllDomainEvents()
@@ -88,7 +88,7 @@ public class DomainEventDispatcherTests
 
     internal class OutboxContext : DbContext
     {
-        public DbSet<OutboxMessage> OutboxMessages { get; init; }
+        public required DbSet<OutboxMessage> OutboxMessages { get; init; }
     }
 
     internal record FakeDomainEvent(Guid Id) : DomainEvent;

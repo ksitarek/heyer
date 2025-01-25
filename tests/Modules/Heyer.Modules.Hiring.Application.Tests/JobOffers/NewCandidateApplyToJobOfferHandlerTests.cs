@@ -25,11 +25,11 @@ public class NewCandidateApplyToJobOfferHandlerTests
         "Description",
         RemoteWork.Hybrid);
 
-    private ICandidatesRepository _candidatesRepository;
-    private NewCandidateApplyToJobOfferHandler _handler;
-    private IJobOffersRepository _iPublishedJobOffersRepository;
-    private NewCandidateApplyToJobOffer _request;
-    private IStorageApiClient _storageApiClient;
+    private ICandidatesRepository _candidatesRepository = null!;
+    private NewCandidateApplyToJobOfferHandler _handler = null!;
+    private IJobOffersRepository _iPublishedJobOffersRepository = null!;
+    private NewCandidateApplyToJobOffer _request = null!;
+    private IStorageApiClient _storageApiClient = null!;
 
     [Test]
     public async Task Handle_ShouldReturnErrorWhenAddCandidateFails()

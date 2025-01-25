@@ -15,7 +15,7 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 [Category("Integration")]
 public class RemoveContractDetailsEndpointTests : IntegrationTestsBase
 {
-    private JobOfferId _jobOfferId;
+    private JobOfferId _jobOfferId = null!;
 
     [Test]
     public async Task RemoveContractDetailsEndpoint_WillReturn200()

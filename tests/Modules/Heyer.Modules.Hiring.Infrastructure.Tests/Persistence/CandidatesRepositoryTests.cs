@@ -10,8 +10,8 @@ namespace Heyer.Modules.Hiring.Infrastructure.Tests.Persistence;
 [Category("Integration")]
 public class CandidatesRepositoryTests
 {
-    private HiringDbContext _dbContext;
-    private CandidatesRepository _repository;
+    private HiringDbContext _dbContext = null!;
+    private CandidatesRepository _repository = null!;
 
     [Test]
     public async Task AddCandidate_ShouldReturnOkResult()

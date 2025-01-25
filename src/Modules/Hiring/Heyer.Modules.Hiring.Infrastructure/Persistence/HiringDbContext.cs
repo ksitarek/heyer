@@ -13,12 +13,10 @@ internal class HiringDbContext : DbContext, IInboxContext, IOutboxContext
     {
     }
 
-    public DbSet<Candidate> Candidates { get; init; }
-
-    public DbSet<InboxMessage> InboxMessages { get; init; }
-
-    public DbSet<JobOffer> JobOffers { get; init; }
-    public DbSet<OutboxMessage> OutboxMessages { get; init; }
+    public DbSet<Candidate> Candidates { get; init; } = null!;
+    public DbSet<InboxMessage> InboxMessages { get; init; } = null!;
+    public DbSet<JobOffer> JobOffers { get; init; } = null!;
+    public DbSet<OutboxMessage> OutboxMessages { get; init; } = null!;
 
     public Task<long> GetTotalCount(FilteredListRequest filteredListRequest,
                                     CancellationToken cancellationToken = default) =>

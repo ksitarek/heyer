@@ -14,9 +14,9 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 [Category("Integration")]
 public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
 {
-    private HiringDbContext _ctx;
-    private JobOfferDetails _expectedDetails;
-    private JobOffer _jobOffer;
+    private HiringDbContext _ctx = null!;
+    private JobOfferDetails _expectedDetails = null!;
+    private JobOffer _jobOffer = null!;
 
     [Test]
     public async Task GetJobOfferByIdEndpoint_ForOtherClient_WillReturn404()

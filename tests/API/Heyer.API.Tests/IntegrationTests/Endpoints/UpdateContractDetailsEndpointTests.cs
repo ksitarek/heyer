@@ -15,7 +15,7 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 [Category("Integration")]
 public class UpdateContractDetailsEndpointTests : IntegrationTestsBase
 {
-    private JobOfferId _jobOfferId;
+    private JobOfferId _jobOfferId = null!;
 
     public static IEnumerable<object[]> BadRequestTestCases()
     {

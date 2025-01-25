@@ -15,8 +15,8 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 [Category("Integration")]
 public class AddContractDetailsEndpointTests : IntegrationTestsBase
 {
-    private HiringDbContext _ctx;
-    private JobOffer _jobOffer;
+    private HiringDbContext _ctx = null!;
+    private JobOffer _jobOffer = null!;
 
     public static IEnumerable<object[]> BadRequestTestCases()
     {

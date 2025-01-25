@@ -10,13 +10,13 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 
 public abstract class IntegrationTestsBase
 {
-    internal IApplicationFactory<IApiClient> _appFactory;
+    internal IApplicationFactory<IApiClient> _appFactory = null!;
 
     internal readonly Faker _faker = new();
 
-    protected IServiceScope HiringModuleCompositionRootScope;
+    protected IServiceScope HiringModuleCompositionRootScope = null!;
 
-    protected IServiceScope JobBoardModuleCompositionRootScope;
+    protected IServiceScope JobBoardModuleCompositionRootScope = null!;
 
     [OneTimeSetUp]
     public virtual Task SetUpIntegrationTestsBase()

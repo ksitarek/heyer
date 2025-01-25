@@ -14,9 +14,9 @@ namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 public class GetJobOfferByIdHandlerTests
 {
     private static readonly CancellationToken _cancellationToken = CancellationToken.None;
-    private GetJobOfferByIdHandler _handler;
-    private IJobOffersRepository _jobOffersRepository;
-    private JobOffer _testJobOffer;
+    private GetJobOfferByIdHandler _handler = null!;
+    private IJobOffersRepository _jobOffersRepository = null!;
+    private JobOffer _testJobOffer = null!;
 
     [Test]
     public async Task Handle_ShouldReturnJobOfferDetails()

@@ -2,3 +2,4 @@ cd web/backoffice && npm exec lint-staged
 
 cd ../../
 dotnet build Heyer.sln
+dotnet format --verify-no-changes --no-restore

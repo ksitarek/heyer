@@ -7,7 +7,7 @@ namespace Heyer.Storage.API.Tests.UnitTests.Preserve;
 [Category("Unit")]
 public class PreserveRequestValidatorTests
 {
-    private PreserveRequestValidator _validator;
+    private PreserveRequestValidator _validator = null!;
 
     [SetUp]
     public void SetUp() => _validator = new PreserveRequestValidator();

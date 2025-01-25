@@ -12,9 +12,9 @@ namespace Heyer.BuildingBlocks.Infrastructure.Tests;
 public class UnitOfWorkTests
 {
     private static readonly CancellationToken _cancellationToken = CancellationToken.None;
-    private DbContext _context;
-    private IDomainEventDispatcher _domainEventDispatcher;
-    private UnitOfWork _unitOfWork;
+    private DbContext _context = null!;
+    private IDomainEventDispatcher _domainEventDispatcher = null!;
+    private UnitOfWork _unitOfWork = null!;
 
     [SetUp]
     public void Setup()

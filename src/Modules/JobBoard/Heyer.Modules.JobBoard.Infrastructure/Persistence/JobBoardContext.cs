@@ -11,10 +11,9 @@ internal class JobBoardContext : DbContext, IInboxContext, IOutboxContext
     {
     }
 
-    public DbSet<InboxMessage> InboxMessages { get; init; }
-    public DbSet<OutboxMessage> OutboxMessages { get; init; }
-
-    public DbSet<PublishedJobOffer> PublishedJobOffers { get; init; }
+    public DbSet<InboxMessage> InboxMessages { get; init; } = null!;
+    public DbSet<OutboxMessage> OutboxMessages { get; init; } = null!;
+    public DbSet<PublishedJobOffer> PublishedJobOffers { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

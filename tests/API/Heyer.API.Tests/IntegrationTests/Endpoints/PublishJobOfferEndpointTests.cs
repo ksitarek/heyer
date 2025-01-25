@@ -14,7 +14,7 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 [Category("Integration")]
 public class PublishJobOfferEndpointTests : IntegrationTestsBase
 {
-    private HiringDbContext _ctx;
+    private HiringDbContext _ctx = null!;
 
     [Test]
     public async Task PublishJobOffer_WillReturn200()

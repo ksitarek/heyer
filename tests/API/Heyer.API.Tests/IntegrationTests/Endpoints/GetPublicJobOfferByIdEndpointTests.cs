@@ -13,8 +13,8 @@ namespace Heyer.API.Tests.IntegrationTests.Endpoints;
 [Category("Integration")]
 public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
 {
-    private JobBoardContext _ctx;
-    private PublishedJobOfferDetails _expectedDetails;
+    private JobBoardContext _ctx = null!;
+    private PublishedJobOfferDetails _expectedDetails = null!;
     private PublishedJobOffer _publishedJobOffer = null!;
 
     [Test]

@@ -20,11 +20,11 @@ namespace Heyer.Storage.API.Tests.UnitTests.Providers.Registry;
 public class MongoDBRegistryStrategyTests
 {
     private readonly MongoDbFixture _mongoDbFixture = new();
-    private IMongoCollection<StorageRegistryEntry> _collection;
-    private IDateTimeProvider _dateTimeProvider;
-    private RegistryStrategyOptions _options;
+    private IMongoCollection<StorageRegistryEntry> _collection = null!;
+    private IDateTimeProvider _dateTimeProvider = null!;
+    private RegistryStrategyOptions _options = null!;
     private DateTime _refDate;
-    private MongoDBRegistryStrategy _strategy;
+    private MongoDBRegistryStrategy _strategy = null!;
 
     [Test]
     public async Task DeleteAsync_ShouldDeleteExistingEntry()

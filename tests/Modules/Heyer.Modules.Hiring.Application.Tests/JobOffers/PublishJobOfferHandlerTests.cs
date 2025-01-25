@@ -13,11 +13,11 @@ namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 public class PublishJobOfferHandlerTests
 {
     private static readonly CancellationToken _cancellationToken = CancellationToken.None;
-    private PublishJobOfferHandler _handler;
-    private IJobOffersRepository _jobOffersRepository;
+    private PublishJobOfferHandler _handler = null!;
+    private IJobOffersRepository _jobOffersRepository = null!;
     private DateTimeOffset _publishedUntil;
-    private JobOffer _testJobOffer;
-    private PublishJobOffer _testRequest;
+    private JobOffer _testJobOffer = null!;
+    private PublishJobOffer _testRequest = null!;
 
     [Test]
     public async Task Handle_ShouldReturnNotFoundErrorWhenJobOfferIsNotFound()

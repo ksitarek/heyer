@@ -10,9 +10,9 @@ namespace Heyer.Storage.API.Tests.UnitTests.Preserve;
 [Category("Unit")]
 public class PreserveRequestHandlerTests
 {
-    private PreserveRequestHandler _handler;
-    private IRegistryStrategy _registryStrategy;
-    private IStorageStrategy _storageStrategy;
+    private PreserveRequestHandler _handler = null!;
+    private IRegistryStrategy _registryStrategy = null!;
+    private IStorageStrategy _storageStrategy = null!;
 
     [Test]
     public async Task DownloadRequest_WhenBothStrategiesSucceed_ShouldReturnOkResult()

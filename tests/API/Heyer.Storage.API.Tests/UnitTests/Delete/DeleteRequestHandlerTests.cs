@@ -11,9 +11,9 @@ namespace Heyer.Storage.API.Tests.UnitTests.Delete;
 [Category("Unit")]
 public class DeleteRequestHandlerTests
 {
-    private DeleteRequestHandler _handler;
-    private IRegistryStrategy _registryStrategy;
-    private IStorageStrategy _storageStrategy;
+    private DeleteRequestHandler _handler = null!;
+    private IRegistryStrategy _registryStrategy = null!;
+    private IStorageStrategy _storageStrategy = null!;
 
     [Test]
     public async Task DeleteRequestHandler_WhenBothStrategiesSucceed_ShouldReturnOkResult()

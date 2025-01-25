@@ -11,8 +11,8 @@ namespace Heyer.Storage.API.Tests.UnitTests.Providers.Storage;
 [Category("Unit")]
 public class FilesystemStorageStrategyTests
 {
-    private FilesystemStorageOptions _options;
-    private FilesystemStorageStrategy _strategy;
+    private FilesystemStorageOptions _options = null!;
+    private FilesystemStorageStrategy _strategy = null!;
 
     [Test]
     public async Task DeleteAsync_ShouldHandleExceptions()

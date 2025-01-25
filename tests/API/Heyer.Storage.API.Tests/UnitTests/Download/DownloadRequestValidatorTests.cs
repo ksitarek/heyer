@@ -7,7 +7,7 @@ namespace Heyer.Storage.API.Tests.UnitTests.Download;
 [Category("Unit")]
 public class DownloadRequestValidatorTests
 {
-    private DownloadRequestValidator _validator;
+    private DownloadRequestValidator _validator = null!;
 
     [SetUp]
     public void SetUp() => _validator = new DownloadRequestValidator();

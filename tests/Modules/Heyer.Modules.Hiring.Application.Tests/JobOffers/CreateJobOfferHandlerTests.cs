@@ -13,10 +13,10 @@ namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 public class CreateJobOfferHandlerTests
 {
     private static readonly CancellationToken _cancellationToken = CancellationToken.None;
-    private CreateJobOfferHandler _handler;
-    private IJobOffersRepository _jobOffersRepository;
-    private CreateJobOffer _testRequest;
-    private IUserDataProvider _userDataProvider;
+    private CreateJobOfferHandler _handler = null!;
+    private IJobOffersRepository _jobOffersRepository = null!;
+    private CreateJobOffer _testRequest = null!;
+    private IUserDataProvider _userDataProvider = null!;
 
     [Test]
     public async Task Handle_ShouldNotThrowWhenJobOffersRepositoryFails()

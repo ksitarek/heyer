@@ -11,8 +11,8 @@ namespace Heyer.Storage.API.Tests.UnitTests.Store;
 [Category("Unit")]
 public class StoreRequestValidatorTests
 {
-    private IValidator<IFormFile> _fileValidator;
-    private StoreRequestValidator _validator;
+    private IValidator<IFormFile> _fileValidator = null!;
+    private StoreRequestValidator _validator = null!;
 
     [SetUp]
     public void Setup()

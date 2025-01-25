@@ -1,7 +1,7 @@
-using Shouldly;
 using FluentValidation.TestHelper;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
+using Shouldly;
 
 namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 
@@ -18,7 +18,7 @@ public class CreateJobOfferValidatorTests
         "saacpecnienlzckquxujarumjjothtjzewflnjfrjcsemhdqxjybttlurbgkongmaorbedvmoocpibvbwxfljntgcvplywqgipiryoxapjvphpwtrqmuqavehdkjvadf";
 
     private const string ValidOfferSummary = "umcxmhkhhdvqmmyklfjx";
-    private CreateJobOfferValidator _validator;
+    private CreateJobOfferValidator _validator = null!;
 
     public static IEnumerable<object[]> JobDescriptionErrorTestCases()
     {

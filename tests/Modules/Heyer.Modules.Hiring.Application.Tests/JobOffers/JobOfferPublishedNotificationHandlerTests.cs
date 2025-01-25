@@ -18,13 +18,13 @@ namespace Heyer.Modules.Hiring.Application.Tests.JobOffers;
 public class JobOfferPublishedNotificationHandlerTests
 {
     private static readonly CancellationToken _cancellationToken = CancellationToken.None;
-    private EventBusStub _eventBus;
-    private ExecutionContext _executionContext;
-    private JobOfferPublishedNotificationHandler _handler;
-    private IJobOffersRepository _jobOfferRepository;
-    private JobOfferPublishedNotification _notification;
+    private EventBusStub _eventBus = null!;
+    private ExecutionContext _executionContext = null!;
+    private JobOfferPublishedNotificationHandler _handler = null!;
+    private IJobOffersRepository _jobOfferRepository = null!;
+    private JobOfferPublishedNotification _notification = null!;
     private DateTimeOffset _publishedUntil;
-    private JobOffer _testJobOffer;
+    private JobOffer _testJobOffer = null!;
 
     [Test]
     public async Task Handle_ShouldPublishJobOfferPublishedIntegrationEvent_OnEventBus()

@@ -8,7 +8,7 @@ internal class StorageDbContext : DbContext
     {
     }
 
-    public DbSet<StorageRegistryEntry> StorageRegistryEntries { get; set; }
+    public DbSet<StorageRegistryEntry> StorageRegistryEntries { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,8 +1,8 @@
-using Shouldly;
 using Heyer.BuildingBlocks.Tests;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Shouldly;
 
 namespace Heyer.API.Tests.Utils;
 

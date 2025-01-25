@@ -8,7 +8,7 @@ namespace Heyer.Storage.API.Tests.UnitTests.Delete;
 [Category("Unit")]
 public class DeleteRequestValidatorTests
 {
-    private DeleteRequestValidator _validator;
+    private DeleteRequestValidator _validator = null!;
 
     [Test]
     public void DeleteRequestValidator_WhenIdIsEmpty_ShouldReturnValidationError()

@@ -13,9 +13,9 @@ namespace Heyer.Storage.API.Tests.UnitTests.BackgroundTasks;
 [Category("Unit")]
 public class CleanupServiceTests
 {
-    private IMediator _mediatorMock;
-    private CleanupServiceOptions _options;
-    private CleanupService _service;
+    private IMediator _mediatorMock = null!;
+    private CleanupServiceOptions _options = null!;
+    private CleanupService _service = null!;
 
     [SetUp]
     public Task SetUp()

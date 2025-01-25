@@ -12,9 +12,9 @@ namespace Heyer.Storage.API.Tests.UnitTests;
 [Category("Unit")]
 public class CleanupTempFilesTests
 {
-    private CleanupTempFilesRequestHandler _handler;
-    private IRegistryStrategy _registryStrategy;
-    private IStorageStrategy _storageStrategy;
+    private CleanupTempFilesRequestHandler _handler = null!;
+    private IRegistryStrategy _registryStrategy = null!;
+    private IStorageStrategy _storageStrategy = null!;
 
     [Test]
     public async Task Handle_WhenExpiredFilesPresent_ShouldCallStorageAndRegistry()

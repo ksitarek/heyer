@@ -5,7 +5,7 @@ namespace Heyer.Storage.API.Tests.IntegrationTests.Endpoints;
 
 public abstract class StorageApiIntegrationTestsBase
 {
-    internal IApplicationFactory<IStorageApiClient> _appFactory;
+    internal IApplicationFactory<IStorageApiClient> _appFactory = null!;
 
     [SetUp]
     public Task SetUp()

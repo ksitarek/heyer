@@ -12,9 +12,9 @@ namespace Heyer.Storage.API.Tests.UnitTests.Download;
 [Category("Unit")]
 public class DownloadRequestHandlerTests
 {
-    private DownloadRequestHandler _handler;
-    private IRegistryStrategy _registryStrategy;
-    private IStorageStrategy _storageStrategy;
+    private DownloadRequestHandler _handler = null!;
+    private IRegistryStrategy _registryStrategy = null!;
+    private IStorageStrategy _storageStrategy = null!;
 
     [Test]
     public async Task DownloadRequest_WhenBothStrategiesSucceed_ShouldReturnOkResult()
@@ -22,7 +22,9 @@ public class DownloadRequestHandlerTests
         // Arrange
         var storageRegistryEntry = new StorageRegistryEntry
         {
-            Key = "key", FileName = "test-file.png", ContentType = "image/png"
+            Key = "key",
+            FileName = "test-file.png",
+            ContentType = "image/png"
         };
 
         await using var fileStream = File.OpenRead("Utils/TestFiles/test-file.png");

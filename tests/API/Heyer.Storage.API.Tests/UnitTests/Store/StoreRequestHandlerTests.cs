@@ -11,9 +11,9 @@ namespace Heyer.Storage.API.Tests.UnitTests.Store;
 [Category("Unit")]
 public class StoreRequestHandlerTests
 {
-    private StoreRequestHandler _handler;
-    private IRegistryStrategy _registryStrategy;
-    private IStorageStrategy _storageStrategy;
+    private StoreRequestHandler _handler = null!;
+    private IRegistryStrategy _registryStrategy = null!;
+    private IStorageStrategy _storageStrategy = null!;
 
     [SetUp]
     public void SetUp()
