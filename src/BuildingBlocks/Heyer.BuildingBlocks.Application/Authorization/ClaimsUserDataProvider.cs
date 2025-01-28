@@ -15,6 +15,6 @@ internal class ClaimsUserDataProvider : IUserDataProvider
 
     public string CompanyName => _httpContextAccessor.HttpContext?.User.FindFirstValue("companyName") ?? string.Empty;
 
-    public Guid UserId => Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) ??
+    public Guid UserId => Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue("userId") ??
                                      Guid.Empty.ToString());
 }

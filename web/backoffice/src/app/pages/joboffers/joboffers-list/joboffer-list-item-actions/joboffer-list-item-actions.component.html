@@ -1,11 +1,22 @@
 <div class="flex space-x-5">
-  <button type="button" hlmBtn variant="ghost" [hlmTooltipTrigger]="'Publish'">
+  <!-- <button type="button" hlmBtn variant="ghost" [hlmTooltipTrigger]="'Publish'">
     <ng-icon hlmIcon name="lucideSend" />
-  </button>
-  <button type="button" hlmBtn variant="ghost" [hlmTooltipTrigger]="'Take down'">
-    <ng-icon hlmIcon name="lucideUndo" />
-  </button>
-  <a hlmBtn variant="ghost" [hlmTooltipTrigger]="'Edit'" [routerLink]="['/job-offers', 'edit', item().Id]">
-    <ng-icon hlmIcon name="lucideFilePenLine" />
-  </a>
+  </button> -->
+  @if (canTakeDown()) {
+    <button type="button" hlmBtn variant="ghost" [hlmTooltipTrigger]="'Take down'">
+      <ng-icon hlmIcon name="lucideUndo" />
+    </button>
+  }
+
+  @if (canEdit() || true) {
+    <a hlmBtn variant="ghost" [hlmTooltipTrigger]="'Edit'" [routerLink]="['/job-offers', 'edit', item().Id]">
+      <ng-icon hlmIcon name="lucideFilePenLine" />
+    </a>
+  }
+
+  @if (!canEdit()) {
+    <a hlmBtn variant="ghost" [hlmTooltipTrigger]="'Copy'">
+      <ng-icon hlmIcon name="lucideCopy" />
+    </a>
+  }
 </div>

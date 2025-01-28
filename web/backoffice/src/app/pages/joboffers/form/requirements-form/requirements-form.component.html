@@ -12,7 +12,14 @@
           <div class="px-4 pt-4 pb-4 mb-4 rounded-md bg-secondary" [formGroupName]="i">
             <div class="flex flex-row">
               <input type="text" class="w-full mb-4" hlmInput formControlName="label" />
-              <button hlmBtn type="button" variant="secondary" class="ml-2" (click)="removeSkill(i)">
+              <button
+                hlmBtn
+                type="button"
+                variant="secondary"
+                class="ml-2"
+                [disabled]="requirements.disabled"
+                (click)="removeSkill(i)"
+              >
                 <ng-icon name="lucideX" class="text-secondary-foreground" />
               </button>
             </div>
@@ -21,7 +28,14 @@
         }
       </div>
 
-      <button type="button" hlmBtn variant="secondary" class="w-full" (click)="addSkill()">
+      <button
+        type="button"
+        hlmBtn
+        variant="secondary"
+        class="w-full"
+        [disabled]="requirements.disabled"
+        (click)="addSkill()"
+      >
         <ng-icon name="lucidePlus" class="mr-2" /> Add requirement
       </button>
     </fieldset>

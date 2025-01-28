@@ -16,4 +16,16 @@ export class JobOfferListItem {
       item.Actions,
     );
   }
+
+  public get isPublished() {
+    return (
+      this.PublishedAt !== null &&
+      this.PublishedAt <= new Date() &&
+      ((this.PublishedUntil !== null && this.PublishedUntil >= new Date()) || this.PublishedUntil === null)
+    );
+  }
+
+  public get wasPublished() {
+    return !this.isPublished && this.PublishedUntil !== null;
+  }
 }

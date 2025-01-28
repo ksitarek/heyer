@@ -1,0 +1,10 @@
+<div class="flex flex-row space-x-2">
+  <button hlmBtn type="button" size="sm" class="w-full" [disabled]="!canPublish" (click)="publish()">
+    Publish
+    <ng-icon hlmIcon name="lucideSend" class="ml-2" />
+  </button>
+  <!-- <button hlmBtn type="button" variant="secondary" size="sm" class="w-full" [disabled]="!canPublish">
+    Publish until...
+    <ng-icon hlmIcon name="lucideCalendar" class="ml-2" />
+  </button> -->
+</div>

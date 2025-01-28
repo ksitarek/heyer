@@ -1,0 +1,20 @@
+<hlm-dialog>
+  <hlm-dialog-header>
+    <h3 hlmDialogTitle>Job offer already exists</h3>
+    <p hlmDialogDescription>
+      Hey! We've just noticed that you already have offer with the same summary already published.
+    </p>
+    <p hlmDialogDescription>Do you want to replace it with current job offer or do you want to change the summary?</p>
+  </hlm-dialog-header>
+
+  <hlm-dialog-footer>
+    <button hlmBtn type="button" (click)="changeSummary()">
+      <ng-icon name="lucideFilePenLine" class="mr-2" />
+      Change summary
+    </button>
+    <button hlmBtn variant="secondary" type="button" (click)="replace()">
+      <ng-icon name="lucideReplace" class="mr-2" />
+      Replace
+    </button>
+  </hlm-dialog-footer>
+</hlm-dialog>

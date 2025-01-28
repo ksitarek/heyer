@@ -26,6 +26,15 @@ internal class JobOffersRepository : IJobOffersRepository
         }
     }
 
+    public Task<bool> CheckForConflicts(JobOffer subject,
+                                        CancellationToken cancellationToken = default) =>
+        _context.JobOffers
+            .Where(x => x.Id != subject.Id)
+            .Where(x => x.OfferSummary == subject.OfferSummary)
+            .Where(x => x.PublishedAt != null && x.PublishedAt <= DateTime.UtcNow &&
+                        (x.PublishedUntil == null || x.PublishedUntil >= DateTime.UtcNow))
+            .AnyAsync(cancellationToken);
+
     public Task<JobOffer?> GetJobOfferById(JobOfferId jobOfferId,
                                            CancellationToken cancellationToken = default) =>
         _context.JobOffers

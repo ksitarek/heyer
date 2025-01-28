@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, ValidationErrors, Validators } from '@angular/forms';
 import { ContractDetails, Skill, SkillLevel } from '../joboffer-details';
 import { RemoteWork } from '../remote-work-control/remote-work';
 
@@ -8,6 +8,16 @@ import { RemoteWork } from '../remote-work-control/remote-work';
 })
 export class JobOfferForms {
   private readonly fb: FormBuilder = inject(FormBuilder);
+
+  atLeastOne = (control: AbstractControl): ValidationErrors | null => {
+    const array = control as FormArray;
+
+    if (array.controls.length === 0) {
+      return { atLeastOne: true };
+    }
+
+    return null;
+  };
 
   public readonly descriptionGroup = this.fb.group({
     offerSummary: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]),
@@ -49,11 +59,11 @@ export class JobOfferForms {
       country: new FormControl('', [Validators.required]),
     }),
 
-    contractsDetails: this.fb.array([this.contractDetailsGroup()]),
+    contractsDetails: this.fb.array([this.contractDetailsGroup()], [this.atLeastOne]),
 
     requirements: this.fb.group({
       experienceLevel: new FormControl('', [Validators.required]),
-      skills: this.fb.array([this.skillGroup()]),
+      skills: this.fb.array([this.skillGroup()], [this.atLeastOne]),
     }),
   });
 

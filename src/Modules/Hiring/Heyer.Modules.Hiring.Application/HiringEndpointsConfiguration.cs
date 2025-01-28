@@ -2,10 +2,12 @@ using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.HttpLanguage;
 using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
+using Heyer.Modules.Hiring.Application.JobOffers.CheckForConflicts;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.GetById;
 using Heyer.Modules.Hiring.Application.JobOffers.List;
 using Heyer.Modules.Hiring.Application.Mapping;
+using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +20,7 @@ public static class HiringEndpointsConfiguration
     public static void MapEndpoints(WebApplication app)
     {
         MapAddContractDetailsEndpoint(app);
+        MapCheckForConflictsEndpoint(app);
         MapCreateJobOfferEndpoint(app);
         MapGetJobOfferByIdEndpoint(app);
         MapGetJobOffersListEndpoint(app);
@@ -44,6 +47,20 @@ public static class HiringEndpointsConfiguration
                             ? Results.Ok()
                             : ResponseErrorHandling.Handle(result);
                     }).RequirePermission(HiringPermissions.UpdateJobOffer);
+
+    private static void MapCheckForConflictsEndpoint(WebApplication app) =>
+        app.MapGet("/job-offers/{jobOfferId}/check-for-conflicts",
+                   async (IHiringModule module,
+                          [FromRoute] Guid jobOfferId,
+                          CancellationToken cancellationToken) =>
+                   {
+                       var query = new CheckForConflicts(new JobOfferId(jobOfferId));
+                       var result = await module.DispatchQuery<CheckForConflicts, bool>(query, cancellationToken);
+
+                       return result.IsSuccess
+                           ? Results.Ok(result.Value)
+                           : ResponseErrorHandling.Handle(result);
+                   }).RequirePermission(HiringPermissions.UpdateJobOffer);
 
     private static void MapCreateJobOfferEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/create",

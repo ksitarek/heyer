@@ -166,9 +166,6 @@ public class JobOffer : Entity
         return Result.Ok();
     }
 
-    public Result UpdateContractDetailsSalaryRange(EmploymentType employmentType, SalaryRange newSalaryRange) =>
-        throw new NotImplementedException();
-
     public Result UpdateDescription(string offerSummary, string jobDescription, RemoteWork remoteWork)
     {
         OfferSummary = offerSummary;

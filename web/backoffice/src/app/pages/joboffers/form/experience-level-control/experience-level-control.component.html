@@ -1,6 +1,6 @@
 <div class="flex flex-row justify-around space-x-10">
   @for (o of options; track o) {
-    <button type="button" hlmBtn class="flex flex-row items-center" (click)="updateValue(o.k)">
+    <button type="button" hlmBtn class="flex flex-row items-center" [disabled]="isDisabled" (click)="updateValue(o.k)">
       <ng-icon [name]="getIcon(o.k)" [class]="getIconClasses(o.k)" />
       <span>{{ o.v }}</span>
     </button>

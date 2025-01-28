@@ -86,6 +86,7 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
     if (this.hasTempEmploymentType(employmentType)) {
       // This contract was not yet saved to the server
       this.contractsDetails.controls.splice(i, 1);
+      this.contractsDetails.updateValueAndValidity();
       this.removeTempEmploymentType(employmentType);
     } else {
       this.jobOfferDetailsService
@@ -94,6 +95,7 @@ export class ContractsDetailsFormComponent implements OnInit, OnDestroy {
           take(1),
           tap(() => {
             this.contractsDetails.controls.splice(i, 1);
+            this.contractsDetails.updateValueAndValidity();
           }),
         )
         .subscribe();

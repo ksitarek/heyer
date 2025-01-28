@@ -52,4 +52,14 @@ export class JoboffersListComponent {
   public get pageSize() {
     return this.jobOffersListService.pageSize;
   }
+
+  public getRowClass(item: JobOfferListItem): string {
+    if (item.isPublished) {
+      return 'bg-sky-50';
+    } else if (item.wasPublished) {
+      return 'bg-slate-100';
+    } else {
+      return 'bg-transparent';
+    }
+  }
 }

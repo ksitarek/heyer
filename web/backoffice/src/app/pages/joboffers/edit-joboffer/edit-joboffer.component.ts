@@ -8,6 +8,7 @@ import { JobOfferForms } from '../form/joboffer-forms';
 import { LocationFormComponent } from '../form/location-form/location-form.component';
 import { RequirementsFormComponent } from '../form/requirements-form/requirements-form.component';
 import { JobOfferDetails } from './../joboffer-details';
+import { PublishJobofferButtonComponent } from './publish-joboffer-button/publish-joboffer-button.component';
 
 @Component({
   selector: 'h-edit-joboffer',
@@ -19,6 +20,7 @@ import { JobOfferDetails } from './../joboffer-details';
     LocationFormComponent,
     ContractsDetailsFormComponent,
     RequirementsFormComponent,
+    PublishJobofferButtonComponent,
   ],
   providers: [JobOfferForms],
   templateUrl: './edit-joboffer.component.html',

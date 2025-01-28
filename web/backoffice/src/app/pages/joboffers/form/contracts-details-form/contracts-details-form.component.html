@@ -12,7 +12,14 @@
               </span>
             </label>
 
-            <button hlmBtn type="button" variant="secondary" class="ml-2" (click)="removeContract(i)">
+            <button
+              hlmBtn
+              type="button"
+              variant="secondary"
+              class="ml-2"
+              [disabled]="contractsDetails.disabled"
+              (click)="removeContract(i)"
+            >
               <ng-icon name="lucideX" class="text-secondary-foreground" />
             </button>
           </div>
@@ -40,7 +47,14 @@
     }
 
     @if (availableContractTypes.length > 1) {
-      <button hlmBtn type="button" variant="secondary" class="w-full" [brnMenuTriggerFor]="addContractMenu">
+      <button
+        hlmBtn
+        type="button"
+        variant="secondary"
+        class="w-full"
+        [brnMenuTriggerFor]="addContractMenu"
+        [disabled]="contractsDetails.disabled"
+      >
         <ng-icon name="lucidePlus" class="mr-2" />Add contract type
       </button>
     }
@@ -53,6 +67,7 @@
           variant="secondary"
           class="w-full"
           [brnMenuTriggerFor]="addContractMenu"
+          [disabled]="contractsDetails.disabled"
           (click)="addContract(type)"
         >
           <ng-icon name="lucidePlus" hlmMenuIcon />
@@ -67,7 +82,7 @@
   <hlm-menu class="w-56">
     <hlm-menu-group>
       @for (type of availableContractTypes; let i = $index; track type) {
-        <button type="button" hlmMenuItem (click)="addContract(type)">
+        <button type="button" hlmMenuItem [disabled]="contractsDetails.disabled" (click)="addContract(type)">
           <ng-icon hlm name="lucidePlus" hlmMenuIcon />
           <span>{{ getEmploymentTypeLabel(type) }}</span>
         </button>
