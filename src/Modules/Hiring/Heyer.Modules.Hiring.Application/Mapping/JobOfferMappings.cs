@@ -5,6 +5,7 @@ using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
 using Heyer.Modules.Hiring.Application.JobOffers.SetOfficeLocation;
 using Heyer.Modules.Hiring.Application.JobOffers.SetRequirements;
+using Heyer.Modules.Hiring.Application.JobOffers.TakeDown;
 using Heyer.Modules.Hiring.Application.JobOffers.Update;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
@@ -40,6 +41,9 @@ public static class JobOfferMappings
 
     public static SetRequirements MapToCommand(this SetRequirementsRequest request) =>
         new(new JobOfferId(request.JobOfferId), request.Requirements);
+
+    public static TakeDownJobOffer MapToCommand(this TakeDownRequest request) =>
+        new(new JobOfferId(request.JobOfferId));
 
     public static UpdateJobOffer MapToCommand(this UpdateJobOfferRequest request) => new(
         new JobOfferId(request.JobOfferId),

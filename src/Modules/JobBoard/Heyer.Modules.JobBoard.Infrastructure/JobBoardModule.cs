@@ -70,6 +70,7 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
         var inboxStore = _serviceProvider.GetRequiredService<IInboxStore>();
 
         _eventBus.Subscribe(new GenericEventHandler<JobOfferPublishedIntegrationEvent>(inboxStore));
+        _eventBus.Subscribe(new GenericEventHandler<JobOfferTakenDownIntegrationEvent>(inboxStore));
     }
 
     private void ConfigureServices(IConfiguration configuration, ServiceCollection services)

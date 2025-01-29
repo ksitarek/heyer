@@ -37,7 +37,7 @@ CREATE TABLE "job_board"."JobOfferContractsDetails"
     "TimeDenominator"         INT            NOT NULL,
     PRIMARY KEY ("PublishedJobOfferId", "Id"),
     CONSTRAINT FK_JobOfferContractsDetails_JobOffers_PublishedJobOfferId FOREIGN KEY ("PublishedJobOfferId")
-        REFERENCES "job_board"."JobOffers" ("Id")
+        REFERENCES "job_board"."JobOffers" ("Id") ON DELETE CASCADE
 );
 
 -- Table: job_board.OutboxMessages
@@ -59,5 +59,5 @@ CREATE TABLE "job_board"."Skills"
     "Level"                           INT  NOT NULL,
     PRIMARY KEY ("RequirementsPublishedJobOfferId", "Id"),
     CONSTRAINT FK_Skills_JobOffers_RequirementsPublishedJobOfferId FOREIGN KEY ("RequirementsPublishedJobOfferId")
-        REFERENCES "job_board"."JobOffers" ("Id")
+        REFERENCES "job_board"."JobOffers" ("Id") ON DELETE CASCADE
 );

@@ -2,7 +2,9 @@ import { Component, computed, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { HlmTooltipTriggerDirective } from '@spartan-ng/ui-tooltip-helm';
+import { take } from 'rxjs';
 import { JobOfferListItem } from '../joboffer-list-item';
+import { JobofferActionService } from './joboffer-action.service';
 
 @Component({
   selector: 'h-joboffer-list-item-actions',
@@ -20,4 +22,10 @@ export class JobofferListItemActionsComponent {
   public readonly canTakeDown = computed(() => {
     return this.item().isPublished;
   });
+
+  constructor(private jobofferActionService: JobofferActionService) {}
+
+  public takeDown(): void {
+    this.jobofferActionService.takeDown(this.item().Id).pipe(take(1)).subscribe();
+  }
 }

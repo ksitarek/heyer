@@ -10,6 +10,7 @@ using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.Hiring.Application;
 using Heyer.Modules.Hiring.Application.JobOffers.Publish;
+using Heyer.Modules.Hiring.Application.JobOffers.TakeDown;
 using Heyer.Modules.Hiring.Domain.JobOffers.Events;
 using Heyer.Modules.Hiring.Infrastructure.Configuration;
 using Heyer.Modules.Hiring.Infrastructure.Integration;
@@ -63,6 +64,7 @@ public class HiringModule : ModuleRunner, IHiringModule
 
         var notificationsRegistry = new DomainEventNotificationsRegistry();
         notificationsRegistry.Add<JobOfferPublishedNotification, JobOfferPublished>();
+        notificationsRegistry.Add<JobOfferTakenDownNotification, JobOfferTakenDown>();
 
         var assembly = typeof(HiringEndpointsConfiguration).Assembly;
 

@@ -6,6 +6,8 @@ public interface IPublishedJobOffersRepository
 {
     Task<Result> AddAsync(PublishedJobOffer publishedJobOffer, CancellationToken cancellationToken = default);
 
+    Task<Result> DeleteAsync(PublishedJobOfferId publishedJobOfferId, CancellationToken cancellationToken);
+
     Task<PublishedJobOffer?> GetJobOfferById(PublishedJobOfferId publishedJobOfferId,
                                              CancellationToken cancellationToken = default);
 

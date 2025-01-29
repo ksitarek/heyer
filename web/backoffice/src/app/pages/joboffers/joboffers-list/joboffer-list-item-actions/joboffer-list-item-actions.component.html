@@ -3,12 +3,12 @@
     <ng-icon hlmIcon name="lucideSend" />
   </button> -->
   @if (canTakeDown()) {
-    <button type="button" hlmBtn variant="ghost" [hlmTooltipTrigger]="'Take down'">
+    <button type="button" hlmBtn variant="ghost" [hlmTooltipTrigger]="'Take down'" (click)="takeDown()">
       <ng-icon hlmIcon name="lucideUndo" />
     </button>
   }
 
-  @if (canEdit() || true) {
+  @if (canEdit()) {
     <a hlmBtn variant="ghost" [hlmTooltipTrigger]="'Edit'" [routerLink]="['/job-offers', 'edit', item().Id]">
       <ng-icon hlmIcon name="lucideFilePenLine" />
     </a>

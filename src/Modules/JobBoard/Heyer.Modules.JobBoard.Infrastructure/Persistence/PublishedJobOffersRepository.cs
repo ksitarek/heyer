@@ -31,6 +31,22 @@ internal class PublishedJobOffersRepository : IPublishedJobOffersRepository
         }
     }
 
+    public async Task<Result> DeleteAsync(PublishedJobOfferId publishedJobOfferId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _context.PublishedJobOffers
+                .Where(x => x.Id == publishedJobOfferId)
+                .ExecuteDeleteAsync(cancellationToken);
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            return Result.Fail(new ExceptionalError("Could not delete published job offer", e));
+        }
+    }
+
     public Task<PublishedJobOffer?> GetJobOfferById(PublishedJobOfferId publishedJobOfferId,
                                                     CancellationToken cancellationToken = default) =>
         _context.PublishedJobOffers

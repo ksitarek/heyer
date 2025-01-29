@@ -68,9 +68,16 @@ public abstract class GenericInboxProcessingJob
                                                            domainNotification.ExecutionContext.CompanyName);
             }
 
-            await _mediator!.Publish(command!);
+            try
+            {
+                await _mediator!.Publish(command!); // todo when this fails, we should not set the message as processed
 
-            await _inboxStore!.SetProcessedAt(message.Id, DateTime.UtcNow);
+                await _inboxStore!.SetProcessedAt(message.Id, DateTime.UtcNow);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "{TypeName}: Error processing message", GetType().Namespace);
+            }
         }
     }
 }

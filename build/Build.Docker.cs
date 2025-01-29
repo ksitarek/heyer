@@ -22,7 +22,7 @@ public partial class Build
     [Parameter] string _apiTag = "local";
     string _mongoDbContainerName = "Heyer-MongoDB";
     int _mongoDbPort = 27117;
-    int _posrgesPort = 41433;
+    int _postgresPort = 41433;
     string _sqlEdgeContainerName = "Heyer-SqlEdge";
     string _storageApiContainerName = "Heyer-Storage-API";
     int _storageApiPort = 3002;
@@ -73,6 +73,9 @@ public partial class Build
         {
             DotNetTasks.DotNetRun(_ => _
                                       .SetProjectFile(_dbMigratorPath)
+                                      .SetApplicationArguments("migrate-all-databases"));
+            DotNetTasks.DotNetRun(_ => _
+                                      .SetProjectFile(_dbMigratorPath)
                                       .SetApplicationArguments("load-sample-data"));
         });
 
@@ -90,11 +93,11 @@ public partial class Build
 
             string[] environmentVariables =
             [
-                $"Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=heyer;TrustServerCertificate=True",
-                $"Scheduler__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=scheduler;TrustServerCertificate=True",
+                $"Npgsql__ConnectionString=Host=localhost;Port={_postgresPort};Username=postgres;Password=yourStrong(!)Password;Database=heyer;TrustServerCertificate=True",
+                $"Scheduler__Npgsql__ConnectionString=Host=localhost;Port={_postgresPort};Username=postgres;Password=yourStrong(!)Password;Database=scheduler;TrustServerCertificate=True",
                 // $"HiringModule__InboxOutbox__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=hiring;TrustServerCertificate=True",
-                $"Companies__A62C048C-8E0F-41E2-84D4-BD061F9DDE97__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=C_A62C048C-8E0F-41E2-84D4-BD061F9DDE97;TrustServerCertificate=True",
-                $"Companies__0692183B-CE56-432D-88B5-B59280A678C5__Npgsql__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=C_0692183B-CE56-432D-88B5-B59280A678C5;TrustServerCertificate=True"
+                $"Companies__A62C048C-8E0F-41E2-84D4-BD061F9DDE97__Npgsql__ConnectionString=Host=localhost;Port={_postgresPort};Username=postgres;Password=yourStrong(!)Password;Database=C_A62C048C-8E0F-41E2-84D4-BD061F9DDE97;TrustServerCertificate=True",
+                $"Companies__0692183B-CE56-432D-88B5-B59280A678C5__Npgsql__ConnectionString=Host=localhost;Port={_postgresPort};Username=postgres;Password=yourStrong(!)Password;Database=C_0692183B-CE56-432D-88B5-B59280A678C5;TrustServerCertificate=True"
             ];
 
             DockerTasks.DockerRun(x => x
@@ -145,12 +148,12 @@ public partial class Build
             DockerTasks.DockerRun(x => x
                                       .SetImage("postgres:17")
                                       .SetName(_sqlEdgeContainerName)
-                                      .SetPublish($"{_posrgesPort}:5432")
+                                      .SetPublish($"{_postgresPort}:5432")
                                       .SetDetach(true)
                                       .SetEnv(environmentVariables));
 
             var connectionString =
-                $"Host=localhost:{_posrgesPort};Username=postgres;Password={password};Database=postgres;TrustServerCertificate=True";
+                $"Host=localhost:{_postgresPort};Username=postgres;Password={password};Database=postgres;TrustServerCertificate=True";
 
             await WaitForPostgresDb(connectionString);
 
@@ -172,7 +175,7 @@ public partial class Build
                                       .SetPublish($"{_storageApiPort}:8080")
                                       .SetDetach(true)
                                       .SetEnv(
-                                          $"RegistryStrategy__NpgsqlRegistry__ConnectionString=Host=localhost;Port={_posrgesPort};Username=postgres;Password=yourStrong(!)Password;Database=storage;TrustServerCertificate=True"));
+                                          $"RegistryStrategy__NpgsqlRegistry__ConnectionString=Host=localhost;Port={_postgresPort};Username=postgres;Password=yourStrong(!)Password;Database=storage;TrustServerCertificate=True"));
         });
 
     Target RunWeb => _ => _

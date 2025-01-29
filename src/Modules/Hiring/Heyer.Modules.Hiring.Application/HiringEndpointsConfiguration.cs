@@ -29,6 +29,7 @@ public static class HiringEndpointsConfiguration
         MapRemoveContractDetailsEndpoint(app);
         MapSetOfficeLocationEndpoint(app);
         MapSetRequirementsEndpoint(app);
+        MapTakeDownJobOfferEndpoint(app);
         MapUpdateContractDetailsEndpoint(app);
         MapUpdateJobOfferEndpoint(app);
     }
@@ -184,6 +185,21 @@ public static class HiringEndpointsConfiguration
                             ? Results.Ok()
                             : ResponseErrorHandling.Handle(result);
                     }).RequirePermission(HiringPermissions.UpdateJobOffer);
+
+    private static void MapTakeDownJobOfferEndpoint(WebApplication app) =>
+        app.MapPost("/job-offers/take-down",
+                    async (IHiringModule module,
+                           TakeDownRequest request,
+                           CancellationToken cancellationToken) =>
+                    {
+                        var command = request.MapToCommand();
+
+                        var result = await module.DispatchCommand(command, cancellationToken);
+
+                        return result.IsSuccess
+                            ? Results.Ok()
+                            : ResponseErrorHandling.Handle(result);
+                    }).RequirePermission(HiringPermissions.TakeDownJobOffer);
 
     private static void MapUpdateContractDetailsEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/update-contract-details",
