@@ -1,11 +1,13 @@
 <hlm-dialog>
   <hlm-dialog-header>
-    <h3 hlmDialogTitle>Job offer already exists</h3>
-    <p hlmDialogDescription>
-      Hey! We've just noticed that you already have offer with the same summary already published.
-    </p>
-    <p hlmDialogDescription>Do you want to replace it with current job offer or do you want to change the summary?</p>
+    <h3 hlmDialogTitle>Similar job offer already exists</h3>
   </hlm-dialog-header>
+
+  <div class="flex flex-col my-6 space-y-4">
+    <p>Hey! We've just noticed that you already have offer with the same summary, and it's already published.</p>
+
+    <p>Do you want to replace it with current job offer or do you want to change the summary?</p>
+  </div>
 
   <hlm-dialog-footer>
     <button hlmBtn type="button" (click)="changeSummary()">
