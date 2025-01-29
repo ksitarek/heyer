@@ -1,8 +1,8 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { HlmTooltipTriggerDirective } from '@spartan-ng/ui-tooltip-helm';
-import { take } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { JobOfferListItem } from '../joboffer-list-item';
 import { JobofferActionService } from './joboffer-action.service';
 
@@ -15,6 +15,8 @@ import { JobofferActionService } from './joboffer-action.service';
 export class JobofferListItemActionsComponent {
   public readonly item = input.required<JobOfferListItem>();
 
+  public readonly reloadRequested = output();
+
   public readonly canEdit = computed(() => {
     return !this.item().isPublished;
   });
@@ -26,6 +28,14 @@ export class JobofferListItemActionsComponent {
   constructor(private jobofferActionService: JobofferActionService) {}
 
   public takeDown(): void {
-    this.jobofferActionService.takeDown(this.item().Id).pipe(take(1)).subscribe();
+    this.jobofferActionService
+      .takeDown(this.item().Id)
+      .pipe(
+        take(1),
+        tap(() => {
+          this.reloadRequested.emit(undefined);
+        }),
+      )
+      .subscribe();
   }
 }

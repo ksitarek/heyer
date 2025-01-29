@@ -7,7 +7,7 @@
   <brn-column-def name="actions" class="w-60">
     <hlm-th *brnHeaderDef />
     <hlm-td *brnCellDef="let element" [class]="getRowClass(element)">
-      <h-joboffer-list-item-actions [item]="element" />
+      <h-joboffer-list-item-actions [item]="element" (reloadRequested)="reload()" />
     </hlm-td>
   </brn-column-def>
 

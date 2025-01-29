@@ -1,4 +1,4 @@
-import { Component, computed, TrackByFunction } from '@angular/core';
+import { Component, computed, inject, OnInit, TrackByFunction } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrnSelectModule } from '@spartan-ng/brain/select';
 import { BrnTableModule, useBrnColumnManager } from '@spartan-ng/brain/table';
@@ -29,9 +29,12 @@ import { JoboffersListService } from './joboffers-list.service';
   templateUrl: './joboffers-list.component.html',
   styleUrl: './joboffers-list.component.scss',
 })
-export class JoboffersListComponent {
-  public readonly items = computed(() => this.jobOffersListService.listSignal.value()?.Items ?? []);
-  public readonly totalCount = computed(() => this.jobOffersListService.listSignal.value()?.TotalCount ?? 0);
+export class JoboffersListComponent implements OnInit {
+  private readonly jobOffersListService = inject(JoboffersListService);
+
+  public readonly items = this.jobOffersListService.items;
+
+  public readonly totalCount = this.jobOffersListService.totalCount;
 
   protected readonly columnManager = useBrnColumnManager({
     offerSummary: { visible: true, label: 'Offer Summary' },
@@ -43,10 +46,12 @@ export class JoboffersListComponent {
 
   protected readonly trackBy: TrackByFunction<JobOfferListItem> = (_: number, p: JobOfferListItem) => p.Id;
 
-  constructor(public jobOffersListService: JoboffersListService) {}
+  public ngOnInit(): void {
+    this.jobOffersListService.reloadList();
+  }
 
   public get currentPage() {
-    return this.jobOffersListService.currentPage;
+    return this.jobOffersListService.page;
   }
 
   public get pageSize() {
@@ -61,5 +66,9 @@ export class JoboffersListComponent {
     } else {
       return 'bg-transparent';
     }
+  }
+
+  public reload() {
+    this.jobOffersListService.reloadList();
   }
 }

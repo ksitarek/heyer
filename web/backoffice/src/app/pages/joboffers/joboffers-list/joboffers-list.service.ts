@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, Inject, Injectable, Resource, signal } from '@angular/core';
+import { computed, Inject, Injectable, ResourceRef, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { catchError, map, tap } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import { heyerApiUrl } from '../../../app.config';
 import { HttpErrorHandlerService } from '../../../http-error-handler.service';
 import { ListResponse } from '../../../models/list-response';
@@ -11,13 +11,15 @@ import { JobOfferListItem } from './joboffer-list-item';
   providedIn: 'root',
 })
 export class JoboffersListService {
-  public readonly listSignal: Resource<ListResponse<JobOfferListItem>>;
-  public readonly currentPage = signal<number>(1);
-  public readonly pageSize = signal<number>(10);
+  private readonly listSignal: ResourceRef<ListResponse<JobOfferListItem>>;
 
-  public readonly url = computed(
-    () => `${this.api_url}/job-offers?Page=${this.currentPage().toString()}&PageSize=${this.pageSize().toString()}`,
-  );
+  public readonly page = signal(1);
+  public readonly pageSize = signal(10);
+
+  private readonly reloadSignal = signal(1);
+
+  public readonly items = computed(() => this.listSignal.value()?.Items ?? []);
+  public readonly totalCount = computed(() => this.listSignal.value()?.TotalCount ?? 0);
 
   constructor(
     private http: HttpClient,
@@ -26,13 +28,20 @@ export class JoboffersListService {
   ) {
     this.listSignal = rxResource({
       request: () => ({
-        url: this.url(),
+        page: this.page(),
+        pageSize: this.pageSize(),
+        reload: this.reloadSignal(),
       }),
-      loader: ({ request }) => this.fetch(request.url),
+
+      loader: ({ request }) => {
+        return this.fetch(request.page, request.pageSize);
+      },
     });
   }
 
-  private fetch(url: string) {
+  private fetch(currentPage: number, pageSize: number): Observable<ListResponse<JobOfferListItem>> {
+    const url = `${this.api_url}/job-offers?Page=${currentPage.toString()}&PageSize=${pageSize.toString()}`;
+
     return this.http.get<ListResponse<JobOfferListItem>>(url).pipe(
       map(
         (response) =>
@@ -42,13 +51,14 @@ export class JoboffersListService {
             response.Items.map((x: JobOfferListItem) => JobOfferListItem.from(x)),
           ),
       ),
-      tap((response) => {
-        console.log(response);
-      }),
       catchError((error: unknown) => {
         this.errorHandler.handleError(error);
         return [];
       }),
     );
+  }
+
+  public reloadList(): void {
+    this.reloadSignal.set(this.reloadSignal() * -1);
   }
 }
