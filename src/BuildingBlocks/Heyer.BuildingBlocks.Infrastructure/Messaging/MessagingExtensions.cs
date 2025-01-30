@@ -13,7 +13,7 @@ public static class MessagingExtensions
 
         notificationsRegistry.LoadFromAssembly(assembly);
 
-        return services.AddSingleton(notificationsRegistry)
+        return services.AddSingleton<IDomainEventNotificationsRegistry>(notificationsRegistry)
             .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
             .AddScoped<IDomainEventsAccessor, DomainEventsAccessor>();
     }
