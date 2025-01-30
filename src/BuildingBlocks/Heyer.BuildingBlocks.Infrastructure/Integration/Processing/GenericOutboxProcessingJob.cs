@@ -67,9 +67,15 @@ public abstract class GenericOutboxProcessingJob
                                                            domainNotification.ExecutionContext.CompanyName);
             }
 
-            await _mediator.Publish(command!);
-
-            await _outboxStore.SetProcessedAt(message.Id, DateTime.UtcNow);
+            try
+            {
+                await _mediator.Publish(command!);
+                await _outboxStore.SetProcessedAt(message.Id, DateTime.UtcNow);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "{TypeName}: Error processing outbox message", GetType().Namespace);
+            }
         }
     }
 }
