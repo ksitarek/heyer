@@ -1,7 +1,6 @@
 using FluentValidation;
 using Hangfire;
 using Heyer.BuildingBlocks.Application.Authorization;
-using Heyer.BuildingBlocks.Application.Notifications;
 using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.HealthChecks;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
@@ -75,8 +74,6 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
 
     private void ConfigureServices(IConfiguration configuration, ServiceCollection services)
     {
-        var domainEventNotificationsRegistry = new DomainEventNotificationsRegistry();
-
         var assembly = typeof(JobBoardEndpointsConfiguration).Assembly;
 
         services
@@ -91,7 +88,7 @@ public class JobBoardModule : ModuleRunner, IJobBoardModule
                          typeof(ValidationMiddleware<,>),
                          typeof(UnitOfWorkMiddleware<,>))
             .AddStorageApiClient(configuration["StorageApi:Url"])
-            .AddDomainEventDispatcher(domainEventNotificationsRegistry)
+            .AddDomainEventDispatcher(assembly)
             .AddUserDataProvider()
             .AddValidatorsFromAssembly(assembly)
             .AddJobBoardContext(configuration["Npgsql:ConnectionString"]!)

@@ -1,7 +1,6 @@
 using FluentValidation;
 using Hangfire;
 using Heyer.BuildingBlocks.Application.Authorization;
-using Heyer.BuildingBlocks.Application.Notifications;
 using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
@@ -9,9 +8,6 @@ using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.Hiring.Application;
-using Heyer.Modules.Hiring.Application.JobOffers.Publish;
-using Heyer.Modules.Hiring.Application.JobOffers.TakeDown;
-using Heyer.Modules.Hiring.Domain.JobOffers.Events;
 using Heyer.Modules.Hiring.Infrastructure.Configuration;
 using Heyer.Modules.Hiring.Infrastructure.Integration;
 using Heyer.Storage.API.Client;
@@ -62,10 +58,6 @@ public class HiringModule : ModuleRunner, IHiringModule
     {
         services.AddSingleton(_eventBus);
 
-        var notificationsRegistry = new DomainEventNotificationsRegistry();
-        notificationsRegistry.Add<JobOfferPublishedNotification, JobOfferPublished>();
-        notificationsRegistry.Add<JobOfferTakenDownNotification, JobOfferTakenDown>();
-
         var assembly = typeof(HiringEndpointsConfiguration).Assembly;
 
         services
@@ -75,7 +67,7 @@ public class HiringModule : ModuleRunner, IHiringModule
                          typeof(ValidationMiddleware<,>),
                          typeof(UnitOfWorkMiddleware<,>))
             .AddStorageApiClient(configuration["StorageApi:Url"])
-            .AddDomainEventDispatcher(notificationsRegistry)
+            .AddDomainEventDispatcher(assembly)
             .AddUserDataProvider();
 
         services
