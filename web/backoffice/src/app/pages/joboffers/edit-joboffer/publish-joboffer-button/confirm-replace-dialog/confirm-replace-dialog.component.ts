@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { BrnDialogRef } from '@spartan-ng/brain/dialog';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { HlmDialogComponent, HlmDialogDescriptionDirective, HlmDialogTitleDirective } from '@spartan-ng/ui-dialog-helm';
+import { HlmDialogComponent, HlmDialogTitleDirective } from '@spartan-ng/ui-dialog-helm';
 import { HlmDialogFooterComponent } from '../../../../../../../libs/ui/ui-dialog-helm/src/lib/hlm-dialog-footer.component';
 import { HlmDialogHeaderComponent } from './../../../../../../../libs/ui/ui-dialog-helm/src/lib/hlm-dialog-header.component';
 
@@ -14,7 +14,6 @@ import { HlmDialogHeaderComponent } from './../../../../../../../libs/ui/ui-dial
     HlmDialogComponent,
     HlmDialogHeaderComponent,
     HlmDialogTitleDirective,
-    HlmDialogDescriptionDirective,
     HlmDialogFooterComponent,
   ],
   templateUrl: './confirm-replace-dialog.component.html',

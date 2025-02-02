@@ -1,5 +1,6 @@
 using FluentResults;
 using Heyer.BuildingBlocks.Application.HttpLanguage;
+using Heyer.BuildingBlocks.Infrastructure.Extensions;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,7 +46,8 @@ internal class JobOffersRepository : IJobOffersRepository
         _context.JobOffers
             .OrderBy(x => x.OfferSummary)
             .Skip(filteredListRequest.PageIx * filteredListRequest.PageSize)
-            .Take(filteredListRequest.PageSize); // todo implement some sensible sorting/filtering
+            .Take(filteredListRequest.PageSize)
+            .Sort(filteredListRequest.Sort);
 
     public Task<long> GetTotalCount(FilteredListRequest filteredListRequest,
                                     CancellationToken cancellationToken = default) =>

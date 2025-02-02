@@ -15,6 +15,8 @@ export class JoboffersListService {
 
   public readonly page = signal(1);
   public readonly pageSize = signal(10);
+  public readonly sortBy = signal('PublishedAt');
+  public readonly sortOrder = signal('asc');
 
   private readonly reloadSignal = signal(1);
 
@@ -30,17 +32,24 @@ export class JoboffersListService {
       request: () => ({
         page: this.page(),
         pageSize: this.pageSize(),
+        sortBy: this.sortBy(),
+        sortOrder: this.sortOrder(),
         reload: this.reloadSignal(),
       }),
 
       loader: ({ request }) => {
-        return this.fetch(request.page, request.pageSize);
+        return this.fetch(request.page, request.pageSize, request.sortBy, request.sortOrder);
       },
     });
   }
 
-  private fetch(currentPage: number, pageSize: number): Observable<ListResponse<JobOfferListItem>> {
-    const url = `${this.api_url}/job-offers?Page=${currentPage.toString()}&PageSize=${pageSize.toString()}`;
+  private fetch(
+    currentPage: number,
+    pageSize: number,
+    sortBy: string,
+    sortOrder: string,
+  ): Observable<ListResponse<JobOfferListItem>> {
+    const url = `${this.api_url}/job-offers?Page=${currentPage.toString()}&PageSize=${pageSize.toString()}&SortBy=${sortBy}&SortOrder=${sortOrder}`;
 
     return this.http.get<ListResponse<JobOfferListItem>>(url).pipe(
       map(

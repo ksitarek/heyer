@@ -99,11 +99,15 @@ public static class HiringEndpointsConfiguration
                    async (IHiringModule module,
                           [FromQuery] int page,
                           [FromQuery] int pageSize,
+                          [FromQuery] string sortBy,
+                          [FromQuery] string sortOrder,
                           CancellationToken cancellationToken) =>
                    {
                        var result =
                            await module.DispatchQuery<GetJobOffersList, ListResponse<JobOfferListItem>>(
-                               new GetJobOffersList(page, pageSize),
+                               new GetJobOffersList(page,
+                                                    pageSize,
+                                                    SortRequest.From(sortBy, sortOrder)),
                                cancellationToken);
 
                        return result.IsSuccess

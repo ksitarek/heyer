@@ -12,12 +12,20 @@
   </brn-column-def>
 
   <brn-column-def name="offerSummary" class="flex-1">
-    <hlm-th *brnHeaderDef>Summary</hlm-th>
+    <hlm-th *brnHeaderDef>
+      <h-data-table-header class="w-full" key="OfferSummary" [(sortBy)]="sortBy" [(sortOrder)]="sortOrder">
+        Summary
+      </h-data-table-header>
+    </hlm-th>
     <hlm-td *brnCellDef="let element" truncate [class]="getRowClass(element)">{{ element.OfferSummary }}</hlm-td>
   </brn-column-def>
 
-  <brn-column-def name="publishedAt" class="w-40">
-    <hlm-th *brnHeaderDef>Published At</hlm-th>
+  <brn-column-def name="publishedAt" class="w-56">
+    <hlm-th *brnHeaderDef>
+      <h-data-table-header class="w-full" key="PublishedAt" [(sortBy)]="sortBy" [(sortOrder)]="sortOrder">
+        Published At
+      </h-data-table-header>
+    </hlm-th>
     <hlm-td *brnCellDef="let element" [class]="getRowClass(element)">
       @if (element.PublishedAt === null) {
         &mdash;
@@ -27,8 +35,12 @@
     </hlm-td>
   </brn-column-def>
 
-  <brn-column-def name="publishedUntil" class="w-40">
-    <hlm-th *brnHeaderDef>Published Until</hlm-th>
+  <brn-column-def name="publishedUntil" class="w-56">
+    <hlm-th *brnHeaderDef>
+      <h-data-table-header class="w-full" key="PublishedUntil" [(sortBy)]="sortBy" [(sortOrder)]="sortOrder">
+        Published Until
+      </h-data-table-header>
+    </hlm-th>
     <hlm-td *brnCellDef="let element" [class]="getRowClass(element)">
       @if (element.PublishedUntil === null) {
         &mdash;

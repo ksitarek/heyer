@@ -1,11 +1,13 @@
 import { Component, computed, inject, OnInit, TrackByFunction } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgIcon } from '@ng-icons/core';
 import { BrnSelectModule } from '@spartan-ng/brain/select';
 import { BrnTableModule, useBrnColumnManager } from '@spartan-ng/brain/table';
 import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
 import { HlmMenuModule } from '@spartan-ng/ui-menu-helm';
 import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
 import { HlmTableModule } from '../../../../../libs/ui/ui-table-helm/src/index';
+import { DataTableHeaderComponent } from '../../../layout/components/data-table-header/data-table-header.component';
 import { HDatePipe } from '../../../layout/components/h-date.pipe';
 import { PaginationComponent } from '../../../layout/components/pagination/pagination.component';
 import { JobOfferListItem } from './joboffer-list-item';
@@ -15,6 +17,7 @@ import { JoboffersListService } from './joboffers-list.service';
 @Component({
   imports: [
     HDatePipe,
+    NgIcon,
     FormsModule,
     HlmMenuModule,
     BrnTableModule,
@@ -24,6 +27,7 @@ import { JoboffersListService } from './joboffers-list.service';
     HlmSelectModule,
     JobofferListItemActionsComponent,
     PaginationComponent,
+    DataTableHeaderComponent,
   ],
   selector: 'h-joboffers-list',
   templateUrl: './joboffers-list.component.html',
@@ -70,5 +74,22 @@ export class JoboffersListComponent implements OnInit {
 
   public reload() {
     this.jobOffersListService.reloadList();
+  }
+
+  public get sortBy() {
+    return this.jobOffersListService.sortBy;
+  }
+
+  public get sortOrder() {
+    return this.jobOffersListService.sortOrder;
+  }
+
+  public updateSort(sortBy: string): void {
+    if (this.jobOffersListService.sortBy() === sortBy) {
+      this.jobOffersListService.sortOrder.set(this.jobOffersListService.sortOrder() === 'asc' ? 'desc' : 'asc');
+    } else {
+      this.jobOffersListService.sortBy.set(sortBy);
+      this.jobOffersListService.sortOrder.set('asc');
+    }
   }
 }
