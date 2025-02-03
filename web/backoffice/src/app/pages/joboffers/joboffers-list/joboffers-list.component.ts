@@ -1,6 +1,5 @@
 import { Component, computed, inject, OnInit, TrackByFunction } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgIcon } from '@ng-icons/core';
 import { BrnSelectModule } from '@spartan-ng/brain/select';
 import { BrnTableModule, useBrnColumnManager } from '@spartan-ng/brain/table';
 import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
@@ -17,7 +16,6 @@ import { JoboffersListService } from './joboffers-list.service';
 @Component({
   imports: [
     HDatePipe,
-    NgIcon,
     FormsModule,
     HlmMenuModule,
     BrnTableModule,
