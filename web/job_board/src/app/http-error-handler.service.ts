@@ -1,11 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpErrorHandlerService {
-  public handleError(error: HttpErrorResponse): void {
+  public handleError(error: unknown): void {
     console.error('An error occurred:', error);
   }
 }

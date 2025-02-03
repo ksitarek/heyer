@@ -1,3 +1,4 @@
+cd web/job_board && npm exec lint-staged
 cd web/backoffice && npm exec lint-staged
 
 cd ../../

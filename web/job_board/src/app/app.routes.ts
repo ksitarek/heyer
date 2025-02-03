@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
-import { ListComponent } from './pages/jobboard/list/list.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: ListComponent,
-
-  }
+    loadComponent: () => import('./pages/job-board/job-board.component').then((m) => m.JobBoardComponent),
+  },
 ];

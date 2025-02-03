@@ -1,17 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { environment } from '../environments/environment';
-import { JsonPipe } from '@angular/common';
-import { ListComponent } from "./pages/jobboard/list/list.component";
-import { MainComponent } from "./layout/main/main.component";
+import { PageComponent } from './layout/components/page/page.component';
 
 @Component({
-  selector: 'app-root',
-  imports: [MainComponent],
+  selector: 'h-root',
+  imports: [PageComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'Heyer';
-  env = environment;
+  title = 'Backoffice';
 }

@@ -1,17 +1,13 @@
-import {
-  ApplicationConfig,
-  InjectionToken,
-  provideZoneChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, InjectionToken, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { routes } from './app.routes';
-import {
-  provideClientHydration,
-  withEventReplay,
-} from '@angular/platform-browser';
-import { environment } from '../environments/environment';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideIcons } from '@ng-icons/core';
+import { routes } from './app.routes';
+
+import * as lucide from '@ng-icons/lucide';
+import { environment } from '../environments/environment';
 
 export const heyerApiUrl = new InjectionToken<string>('heyerApiUrl');
 
@@ -21,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
+    provideIcons(lucide),
     { provide: heyerApiUrl, useValue: environment.heyerApi },
   ],
 };

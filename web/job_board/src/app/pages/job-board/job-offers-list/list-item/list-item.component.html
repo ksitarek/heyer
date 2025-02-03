@@ -1,0 +1,20 @@
+<div hlmCard>
+  <div class="flex flex-row items-center justify-between">
+    <div class="text-center w-36">
+      <ng-icon name="lucideBuilding2" class="text-3xl" />
+    </div>
+    <div class="flex-grow">
+      <div hlmCardHeader>
+        <h3 hlmCardTitle>{{ item().OfferSummary }}</h3>
+
+        <p hlmCardDescription>
+          {{ item().CompanyName }}<br />
+          {{ item().LocationCity }}, {{ item().LocationCountry }}
+        </p>
+      </div>
+    </div>
+    <div class="mx-10 text-right w-36">
+      <span>{{ minSalary }}</span> &ndash; <span>{{ maxSalary }}</span>
+    </div>
+  </div>
+</div>
