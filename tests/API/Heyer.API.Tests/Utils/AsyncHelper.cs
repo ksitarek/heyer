@@ -84,6 +84,7 @@ internal static class AsyncHelper
         valueUserDataProvider!.SetExecutionContext(Guid.Empty, company, string.Empty);
 
         var inboxContext = scope.ServiceProvider.GetRequiredService<IInboxStore>();
+
         var outboxContext = scope.ServiceProvider.GetRequiredService<IOutboxStore>();
 
         var hasAnyInboxMessages = await inboxContext.GetUnprocessedMessages();

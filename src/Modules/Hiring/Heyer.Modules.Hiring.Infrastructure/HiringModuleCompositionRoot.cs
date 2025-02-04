@@ -4,9 +4,22 @@ namespace Heyer.Modules.Hiring.Infrastructure;
 
 internal static class HiringModuleCompositionRoot
 {
-    private static IServiceProvider _serviceProvider = null!;
+    private static IServiceProvider? _serviceProvider;
 
-    public static IServiceScope CreateScope() => _serviceProvider.CreateScope();
+    public static IServiceScope CreateScope()
+    {
+        EnsureServiceProviderIsSet();
+
+        return _serviceProvider!.CreateScope();
+    }
 
     internal static void SetServiceProvider(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
+
+    private static void EnsureServiceProviderIsSet()
+    {
+        if (_serviceProvider == null)
+        {
+            throw new InvalidOperationException("Service provider is not set");
+        }
+    }
 }

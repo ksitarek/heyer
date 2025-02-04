@@ -14,9 +14,8 @@ var builder = new HostBuilder(WebApplication.CreateBuilder(args));
 
 builder
     .ConfigureLogging()
-    .AddModule<IHiringModule, HiringModule>()
-    .AddModule<IJobBoardModule, JobBoardModule>()
-    .ConfigureHealthChecks();
+    .AddModule<IHiringModuleInstaller, HiringModuleInstaller>()
+    .AddModule<IJobBoardModuleInstaller, JobBoardModuleInstaller>();
 var host = builder.Build();
 
 await host.RunAsync();
