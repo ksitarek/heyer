@@ -80,7 +80,7 @@ public class FilesystemStorageStrategyTests
     public async Task PreserveAsync_ShouldAlwaysReturnOk()
     {
         // Act
-        var result = await _strategy.PreserveAsync(Guid.NewGuid().ToString());
+        var result = await _strategy.PreserveAsync(Guid.CreateVersion7().ToString());
 
         // Assert
         result.IsSuccess.ShouldBeTrue();

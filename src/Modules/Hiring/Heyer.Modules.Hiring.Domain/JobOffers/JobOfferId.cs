@@ -10,5 +10,5 @@ public record JobOfferId
 
     public JobOfferId(Guid guid) => Guid = guid;
 
-    public static JobOfferId CreateNew() => new(Guid.NewGuid());
+    public static JobOfferId CreateNew() => new(Guid.CreateVersion7());
 }

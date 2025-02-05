@@ -71,7 +71,7 @@ public class CandidatesRepositoryTests
     public void SetUp()
     {
         var options = new DbContextOptionsBuilder<HiringDbContext>()
-            .UseNpgsql(PersistenceTestsFixture.ConnectionString.Replace("master", Guid.NewGuid().ToString()))
+            .UseNpgsql(PersistenceTestsFixture.ConnectionString.Replace("master", Guid.CreateVersion7().ToString()))
             .Options;
 
         _dbContext = new HiringDbContext(options);

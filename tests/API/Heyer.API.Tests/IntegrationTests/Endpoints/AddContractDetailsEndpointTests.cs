@@ -92,7 +92,7 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
             8,
             8);
 
-        var request = new AddContractDetailsRequest(Guid.NewGuid(), contractDetails);
+        var request = new AddContractDetailsRequest(Guid.CreateVersion7(), contractDetails);
 
         // Act
         var action = async () => await client.AddContractDetails(request);
@@ -131,7 +131,7 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateApiClient();
-        var request = new AddContractDetailsRequest(Guid.NewGuid(), new ContractDetails());
+        var request = new AddContractDetailsRequest(Guid.CreateVersion7(), new ContractDetails());
 
         // Act
         var action = async () => await client.AddContractDetails(request);
@@ -146,7 +146,7 @@ public class AddContractDetailsEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Client1Id);
-        var request = new AddContractDetailsRequest(Guid.NewGuid(), new ContractDetails());
+        var request = new AddContractDetailsRequest(Guid.CreateVersion7(), new ContractDetails());
 
         // Act
         var action = async () => await client.AddContractDetails(request);

@@ -25,15 +25,19 @@ public class UpdateContractDetailsEndpointTests : IntegrationTestsBase
         };
         yield return new object[]
         {
-            new UpdateContractDetailsRequest(Guid.NewGuid(), default, new SalaryRange(true, 1, 2), 8, 8)
+            new UpdateContractDetailsRequest(Guid.CreateVersion7(), default, new SalaryRange(true, 1, 2), 8, 8)
         };
         yield return new object[]
         {
-            new UpdateContractDetailsRequest(Guid.NewGuid(), EmploymentType.B2B, new SalaryRange(), 8, 8)
+            new UpdateContractDetailsRequest(Guid.CreateVersion7(), EmploymentType.B2B, new SalaryRange(), 8, 8)
         };
         yield return new object[]
         {
-            new UpdateContractDetailsRequest(Guid.NewGuid(), EmploymentType.B2B, new SalaryRange(true, 1, 0), 8, 8)
+            new UpdateContractDetailsRequest(Guid.CreateVersion7(),
+                                             EmploymentType.B2B,
+                                             new SalaryRange(true, 1, 0),
+                                             8,
+                                             8)
         };
     }
 

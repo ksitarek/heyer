@@ -38,7 +38,7 @@ public class
         }
 
         var integrationEvent = new JobOfferPublishedIntegrationEvent(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             jobOfferPublished.OccurredOn,
             jobOfferPublished.JobOfferId.Guid,
             companyDetails,

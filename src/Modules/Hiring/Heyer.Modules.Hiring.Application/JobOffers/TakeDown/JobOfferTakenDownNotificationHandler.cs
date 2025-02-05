@@ -31,7 +31,7 @@ public class
         }
 
         var integrationEvent = new JobOfferTakenDownIntegrationEvent(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             notification.DomainEvent.OccurredOn,
             notification.DomainEvent.JobOfferId.Guid);
 

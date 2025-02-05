@@ -10,5 +10,5 @@ public record CompanyId
 
     public CompanyId(Guid id) => Id = id;
 
-    public static CompanyId CreateNew() => new(Guid.NewGuid());
+    public static CompanyId CreateNew() => new(Guid.CreateVersion7());
 }

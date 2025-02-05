@@ -19,7 +19,7 @@ public class DomainEventDispatcherTests
 
     private readonly List<DomainEvent> _domainEvents = new()
     {
-        new FakeDomainEvent(Guid.NewGuid()), new FakeDomainEvent(Guid.NewGuid())
+        new FakeDomainEvent(Guid.CreateVersion7()), new FakeDomainEvent(Guid.CreateVersion7())
     };
 
     private DomainEventDispatcher _domainEventDispatcher = null!;

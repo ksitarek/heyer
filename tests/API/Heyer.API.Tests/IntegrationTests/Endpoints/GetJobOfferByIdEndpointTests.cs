@@ -43,7 +43,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
             HiringPermissions.ListJobOffers);
 
         // Act
-        var action = async () => await client.GetJobOfferById(Guid.NewGuid());
+        var action = async () => await client.GetJobOfferById(Guid.CreateVersion7());
 
         // Assert
         var exception = await action.ShouldThrowAsync<ApiException>();
@@ -55,7 +55,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateApiClient();
-        var jobOfferId = Guid.NewGuid();
+        var jobOfferId = Guid.CreateVersion7();
 
         // Act
         var action = async () => await client.GetJobOfferById(jobOfferId);
@@ -70,7 +70,7 @@ public class GetJobOfferByIdEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Client1Id);
-        var jobOfferId = Guid.NewGuid();
+        var jobOfferId = Guid.CreateVersion7();
 
         // Act
         var action = async () => await client.GetJobOfferById(jobOfferId);

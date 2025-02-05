@@ -14,7 +14,7 @@ public class PublishedJobOfferTests
         // Arrange
 
         // Act
-        var jobOffer = TestPublishedJobOfferBuilder.Create(Guid.NewGuid())
+        var jobOffer = TestPublishedJobOfferBuilder.Create(Guid.CreateVersion7())
             .BuildTestData();
 
         // Assert

@@ -10,7 +10,7 @@ public class EntityTests
     public void TestEntity_ShouldHaveOneDomainEvent()
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = Guid.CreateVersion7();
 
         // Act
         var testEntity = new TestEntity(id);
@@ -29,7 +29,7 @@ public class EntityTests
     public void TestEntity_ShouldRemoveAllEvents_WhenClearDomainEventsCalled()
     {
         // Arrange
-        var id = Guid.NewGuid();
+        var id = Guid.CreateVersion7();
 
         // Act
         var testEntity = new TestEntity(id);

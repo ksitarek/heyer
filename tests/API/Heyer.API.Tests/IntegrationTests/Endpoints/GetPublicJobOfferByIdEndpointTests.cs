@@ -38,7 +38,7 @@ public class GetPublicJobOfferByIdEndpointTests : IntegrationTestsBase
         var client = _appFactory.CreateApiClient();
 
         // Act
-        var action = async () => await client.GetPublishedJobOfferById(Guid.NewGuid());
+        var action = async () => await client.GetPublishedJobOfferById(Guid.CreateVersion7());
 
         // Assert
         var exception = await action.ShouldThrowAsync<ApiException>();

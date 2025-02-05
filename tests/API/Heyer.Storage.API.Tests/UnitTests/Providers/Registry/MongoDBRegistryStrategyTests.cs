@@ -397,7 +397,7 @@ public class MongoDBRegistryStrategyTests
     private Task SetupMongoCollection()
     {
         var mongoClient = new MongoClient(_mongoDbFixture.ConnectionString);
-        var database = mongoClient.GetDatabase(Guid.NewGuid().ToString());
+        var database = mongoClient.GetDatabase(Guid.CreateVersion7().ToString());
         _collection = database.GetCollection<StorageRegistryEntry>("test-collection");
         return Task.CompletedTask;
     }

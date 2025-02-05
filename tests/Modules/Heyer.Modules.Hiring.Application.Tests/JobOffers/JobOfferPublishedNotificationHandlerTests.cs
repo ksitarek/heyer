@@ -36,7 +36,7 @@ public class JobOfferPublishedNotificationHandlerTests
 
         // Assert
         var expectedIntegrationEvent = new JobOfferPublishedIntegrationEvent(
-            Guid.NewGuid(),
+            Guid.CreateVersion7(),
             _notification.DomainEvent.OccurredOn,
             _testJobOffer.Id.Guid,
             new CompanyDetails(_executionContext.CompanyId, _executionContext.CompanyName),
@@ -85,9 +85,9 @@ public class JobOfferPublishedNotificationHandlerTests
     {
         _publishedUntil = DateTimeOffset.UtcNow.AddDays(7);
         _executionContext = new ExecutionContext(
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid().ToString());
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7(),
+            Guid.CreateVersion7().ToString());
 
         PrepareJobOffer();
 

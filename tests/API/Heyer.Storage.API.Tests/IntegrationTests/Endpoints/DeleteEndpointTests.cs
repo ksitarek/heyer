@@ -13,10 +13,10 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithInvalidKey_WillReturnOk()
     {
         // Arrange
-        var client = _appFactory.CreateAuthorizedApiClient(Guid.NewGuid());
+        var client = _appFactory.CreateAuthorizedApiClient(Guid.CreateVersion7());
 
         // Act
-        var action = async () => await client.Delete(Guid.NewGuid().ToString());
+        var action = async () => await client.Delete(Guid.CreateVersion7().ToString());
 
         // Assert
         await action.ShouldNotThrowAsync();
@@ -29,7 +29,7 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
         var client = _appFactory.CreateApiClient();
 
         // Act
-        var action = async () => await client.Delete(Guid.NewGuid().ToString());
+        var action = async () => await client.Delete(Guid.CreateVersion7().ToString());
 
         // Assert
         var exception = await action.ShouldThrowAsync<ApiException>();
@@ -40,7 +40,7 @@ public class DeleteEndpointTests : StorageApiIntegrationTestsBase
     public async Task DownloadEndpoint_WithValidKey_WillReturnOk()
     {
         // Arrange
-        var client = _appFactory.CreateAuthorizedApiClient(Guid.NewGuid());
+        var client = _appFactory.CreateAuthorizedApiClient(Guid.CreateVersion7());
         var storeResult = await client.Store("Utils/TestFiles/test-file.png");
 
         // Act

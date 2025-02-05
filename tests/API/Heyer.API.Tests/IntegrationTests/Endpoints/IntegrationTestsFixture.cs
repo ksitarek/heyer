@@ -89,7 +89,7 @@ public class IntegrationTestsFixture
 
     private string GetConnectionString(string databaseName)
     {
-        databaseName += Guid.NewGuid();
+        databaseName += Guid.CreateVersion7();
 
         _testDatabases.Add(databaseName);
 

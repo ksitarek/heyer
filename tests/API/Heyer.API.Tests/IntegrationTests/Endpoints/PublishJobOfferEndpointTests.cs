@@ -51,7 +51,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
         var client = _appFactory.CreateApiClient();
 
         // Act
-        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
+        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.CreateVersion7()));
 
         // Assert
         var exception = await action.ShouldThrowAsync<ApiException>();
@@ -65,7 +65,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
         var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Client1Id);
 
         // Act
-        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
+        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.CreateVersion7()));
 
         // Assert
         var exception = await action.ShouldThrowAsync<ApiException>();
@@ -81,7 +81,7 @@ public class PublishJobOfferEndpointTests : IntegrationTestsBase
             HiringPermissions.PublishJobOffer);
 
         // Act
-        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.NewGuid()));
+        var action = async () => await client.PublishJobOffer(new PublishJobOfferRequest(Guid.CreateVersion7()));
 
         // Assert
         var exception = await action.ShouldThrowAsync<ApiException>();

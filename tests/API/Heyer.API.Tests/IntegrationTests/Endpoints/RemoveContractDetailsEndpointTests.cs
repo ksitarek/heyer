@@ -66,7 +66,7 @@ public class RemoveContractDetailsEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateApiClient();
-        var request = new RemoveContractDetailsRequest(Guid.NewGuid(), EmploymentType.ContractOfEmployment);
+        var request = new RemoveContractDetailsRequest(Guid.CreateVersion7(), EmploymentType.ContractOfEmployment);
 
         // Act
         var action = async () => await client.RemoveContractDetails(request);
@@ -81,7 +81,7 @@ public class RemoveContractDetailsEndpointTests : IntegrationTestsBase
     {
         // Arrange
         var client = _appFactory.CreateAuthorizedApiClient(ApplicationFactoryConfiguration.Client1Id);
-        var request = new RemoveContractDetailsRequest(Guid.NewGuid(), EmploymentType.ContractOfEmployment);
+        var request = new RemoveContractDetailsRequest(Guid.CreateVersion7(), EmploymentType.ContractOfEmployment);
 
         // Act
         var action = async () => await client.RemoveContractDetails(request);
@@ -99,7 +99,7 @@ public class RemoveContractDetailsEndpointTests : IntegrationTestsBase
             ApplicationFactoryConfiguration.Client1Id,
             HiringPermissions.UpdateJobOffer);
 
-        var request = new RemoveContractDetailsRequest(Guid.NewGuid(), EmploymentType.ContractOfEmployment);
+        var request = new RemoveContractDetailsRequest(Guid.CreateVersion7(), EmploymentType.ContractOfEmployment);
 
         // Act
         var action = async () => await client.RemoveContractDetails(request);

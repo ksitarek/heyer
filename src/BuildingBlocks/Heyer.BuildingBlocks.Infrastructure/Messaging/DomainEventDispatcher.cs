@@ -82,7 +82,7 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
 
             return _outboxStore.Store(new OutboxMessage
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 CreatedAt = DateTime.UtcNow,
                 Type = notificationType.FullName!,
                 Data = domainEventNotification.Serialize()

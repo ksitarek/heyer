@@ -19,7 +19,7 @@ public class StoreRequestHandler : IRequestHandler<StoreRequest, Result<StoreRes
 
     public async Task<Result<StoreResult>> Handle(StoreRequest request, CancellationToken cancellationToken)
     {
-        var key = Guid.NewGuid().ToString();
+        var key = Guid.CreateVersion7().ToString();
 
         await using var fileReadStream = request.File.OpenReadStream();
 

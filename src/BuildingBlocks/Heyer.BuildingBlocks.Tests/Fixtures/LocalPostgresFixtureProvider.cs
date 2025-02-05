@@ -7,7 +7,7 @@ public class LocalPostgresFixtureProvider : IPostgresFixtureProvider
     private readonly NpgsqlConnection _connection =
         new("Host=localhost;Port=5432;Database=postgres;TrustServerCertificate=True");
 
-    private readonly string _dbName = $"TEST_{Guid.NewGuid()}";
+    private readonly string _dbName = $"TEST_{Guid.CreateVersion7()}";
 
     public string ConnectionString { get; private set; } = "";
 

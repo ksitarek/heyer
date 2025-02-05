@@ -11,7 +11,7 @@ public sealed class GenericEventHandler<T> : IIntegrationEventHandler<T> where T
     public Task Handle(T @event) =>
         _inboxStore.Store(new InboxMessage
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             Type = @event.GetType().FullName!,
             Data = @event.Serialize(),
             CreatedAt = @event.OccurredOn

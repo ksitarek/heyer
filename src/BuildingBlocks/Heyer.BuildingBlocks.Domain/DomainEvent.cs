@@ -9,7 +9,7 @@ public abstract record DomainEvent : INotification
 
     protected DomainEvent()
     {
-        EventId = Guid.NewGuid();
+        EventId = Guid.CreateVersion7();
         OccurredOn = DateTime.UtcNow;
     }
 }

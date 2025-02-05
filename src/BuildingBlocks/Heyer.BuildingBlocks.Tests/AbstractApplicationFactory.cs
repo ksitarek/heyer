@@ -74,7 +74,7 @@ public abstract class AbstractApplicationFactory<TProgram, TApiClient> :
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.CreateVersion7().ToString()),
             new Claim("companyId", companyId.ToString()), new Claim("companyName", $"ACME Corporation {companyId}")
         };
 

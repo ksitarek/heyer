@@ -52,7 +52,7 @@ public class CreateJobOfferHandlerTests
     public void SetUp()
     {
         _userDataProvider = Substitute.For<IUserDataProvider>();
-        _userDataProvider.Configure().CompanyId.Returns(Guid.NewGuid());
+        _userDataProvider.Configure().CompanyId.Returns(Guid.CreateVersion7());
         _userDataProvider.Configure().CompanyName.Returns("ACME Inc.");
 
         _jobOffersRepository = Substitute.For<IJobOffersRepository>();
