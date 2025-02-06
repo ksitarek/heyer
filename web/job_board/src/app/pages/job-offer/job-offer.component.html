@@ -1,0 +1,28 @@
+<div class="flex flex-row space-x-10">
+  <article class="flex-1">
+    <h3 hlmH3 class="mb-4">{{ details.OfferSummary }}</h3>
+
+    <div hlmCard>
+      <div class="flex flex-row mt-6" hlmCardContent>
+        <div class="w-96">
+          <a>{{ details.CompanyDetails.Name }}</a>
+          <p class="text-muted-foreground">
+            {{ details.OfficeLocation.City }}, {{ details.OfficeLocation.Country }}
+
+            <h-remote-work-indicator [remoteWork]="details.RemoteWork" />
+          </p>
+        </div>
+        <div class="flex-1"><h-requirements [requirements]="details.Requirements" /></div>
+      </div>
+    </div>
+
+    <p class="mb-4"></p>
+
+    <div [innerHTML]="details.JobDescription"></div>
+  </article>
+  <aside class="w-96">
+    <button type="button" class="w-full mb-6" hlmBtn>Apply <ng-icon name="lucideSend" class="ml-2" /></button>
+
+    <h-contracts-details [contractsDetails]="details.ContractsDetails" />
+  </aside>
+</div>
