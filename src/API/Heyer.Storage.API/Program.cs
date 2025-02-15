@@ -1,5 +1,6 @@
 using System.Reflection;
 using FluentValidation;
+using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.HealthChecks;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
@@ -12,9 +13,9 @@ using Heyer.Storage.API.Providers.Storage;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(builder.Configuration.GetSection("Cors"));
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAntiforgery();
+builder.Services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
 
 builder.Services.AddHealthChecks()
     .AddCheck<StorageHealthcheck>("Storage", timeout: TimeSpan.FromSeconds(3))
@@ -34,6 +35,7 @@ builder.Services.AddRegistryStrategy(builder.Configuration.GetSection("RegistryS
 var app = builder.Build();
 
 app.UseAntiforgery();
+app.UsePreconfiguredCors();
 
 app.MapEndpoints();
 app.UseHealthChecks("/health", new HealthCheckOptions { ResponseWriter = JsonResponseWriter.WriteResponse });

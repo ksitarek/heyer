@@ -2,9 +2,11 @@ using Heyer.BuildingBlocks.Application.Results;
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
 using Heyer.Modules.JobBoard.Application.JobOffers.List;
 using Heyer.Modules.JobBoard.Application.JobOffers.PublicJobOfferDetails;
+using Heyer.Modules.JobBoard.Application.Mapping;
 using Heyer.Modules.JobBoard.PublishedLanguage.DTOs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Heyer.Modules.JobBoard.Application;
 
@@ -14,6 +16,7 @@ public static class JobBoardEndpointsConfiguration
     {
         MapGetJobOfferDetailsEndpoint(app);
         MapGetJobOffersListEndpoint(app);
+        MapNewCandidateApplyEndpoint(app);
     }
 
     private static void MapGetJobOfferDetailsEndpoint(WebApplication app) =>
@@ -43,4 +46,19 @@ public static class JobBoardEndpointsConfiguration
                            ? Results.Ok(result.Value)
                            : ResponseErrorHandling.Handle(result);
                    });
+
+    private static void MapNewCandidateApplyEndpoint(WebApplication app) =>
+        app.MapPost("/job-offers/new-candidate-apply",
+                    async (IJobBoardModule module,
+                           [FromBody] NewCandidateApplyToJobOfferRequest request,
+                           CancellationToken cancellationToken) =>
+                    {
+                        var command = request.MapToCommand();
+
+                        var result = await module.DispatchCommand(command, cancellationToken);
+
+                        return result.IsSuccess
+                            ? Results.Ok()
+                            : ResponseErrorHandling.Handle(result);
+                    });
 }

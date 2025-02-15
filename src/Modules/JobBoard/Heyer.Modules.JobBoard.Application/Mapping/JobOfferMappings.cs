@@ -1,4 +1,5 @@
 using Heyer.Modules.Hiring.PublishedLanguage.DTOs;
+using Heyer.Modules.JobBoard.Application.JobOffers.NewCandidateApply;
 using Heyer.Modules.JobBoard.Domain.JobOffers;
 using Heyer.Modules.JobBoard.PublishedLanguage.DTOs;
 
@@ -6,6 +7,15 @@ namespace Heyer.Modules.JobBoard.Application.Mapping;
 
 public static class JobOfferMappings
 {
+    public static NewCandidateApplyToJobOffer MapToCommand(this NewCandidateApplyToJobOfferRequest request) => new(
+        new PublishedJobOfferId(request.JobOfferId),
+        request.FirstName,
+        request.LastName,
+        request.Email,
+        request.ResumeKey,
+        request.IncludeInCandidatePool,
+        request.Attributes);
+
     public static PublishedJobOfferDetails MapToJobOfferDetails(this PublishedJobOffer publishedJobOffer) =>
         new(publishedJobOffer.Id.Guid,
             publishedJobOffer.CompanyDetails,

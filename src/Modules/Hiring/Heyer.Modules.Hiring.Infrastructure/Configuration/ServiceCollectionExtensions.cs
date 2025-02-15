@@ -1,6 +1,7 @@
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
+using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 using Heyer.Modules.Hiring.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ internal static class ServiceCollectionExtensions
     internal static IServiceCollection AddPersistence(this IServiceCollection services)
     {
         services.AddScoped<IJobOffersRepository, JobOffersRepository>();
+        services.AddScoped<ICandidatesRepository, CandidatesRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

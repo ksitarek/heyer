@@ -1,0 +1,42 @@
+<hlm-dialog-header>
+  <h2 hlmDialogTitle hlmH2>{{ offerSummary }}</h2>
+</hlm-dialog-header>
+
+<form class="flex flex-col mt-6 space-y-4" [formGroup]="applyForm">
+  <hlm-form-field>
+    <label hlmLabel>
+      First name <span class="text-red-600">*</span>
+      <input hlmInput type="text" class="w-full" required formControlName="firstName" />
+    </label>
+  </hlm-form-field>
+  <hlm-form-field>
+    <label hlmLabel>
+      Last name <span class="text-red-600">*</span>
+      <input hlmInput type="text" class="w-full" required formControlName="lastName" />
+    </label>
+  </hlm-form-field>
+  <hlm-form-field>
+    <label hlmLabel>
+      Email <span class="text-red-600">*</span>
+      <input hlmInput type="text" class="w-full" required formControlName="email" />
+    </label>
+  </hlm-form-field>
+
+  <h-resume-field formControlName="resumeKey" />
+
+  <hlm-form-field>
+    <label hlmLabel class="flex items-center">
+      <hlm-checkbox class="mr-2" hlmInput formControlName="consentNow" />
+      I consent to the processing of my personal data in this recruitment process <span class="text-red-600">*</span>
+    </label>
+  </hlm-form-field>
+
+  <hlm-form-field>
+    <label hlmLabel class="flex items-center">
+      <hlm-checkbox class="mr-2" hlmInput formControlName="consentFuture" />
+      I consent to the processing of my personal data in future recruitment processes in {{ companyName }}
+    </label>
+  </hlm-form-field>
+
+  <h-send-application-btn [applyForm]="applyForm" [jobOfferId]="jobOfferId" />
+</form>
