@@ -38,5 +38,5 @@
     </label>
   </hlm-form-field>
 
-  <h-send-application-btn [applyForm]="applyForm" [jobOfferId]="jobOfferId" />
+  <h-send-application-btn [applyForm]="applyForm" [jobOfferId]="jobOfferId" (applicationSent)="applicationSent()" />
 </form>

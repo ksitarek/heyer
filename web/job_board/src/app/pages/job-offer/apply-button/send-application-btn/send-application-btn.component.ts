@@ -1,7 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import { take } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { NewCandidateApplication } from './new-candidate-application.model';
 import { SendApplicationService } from './send-application.service';
 
@@ -14,6 +14,7 @@ import { SendApplicationService } from './send-application.service';
 export class SendApplicationBtnComponent {
   public readonly applyForm = input.required<FormGroup>();
   public readonly jobOfferId = input.required<string>();
+  public readonly applicationSent = output();
 
   constructor(private sendApplicationService: SendApplicationService) {}
 
@@ -38,7 +39,15 @@ export class SendApplicationBtnComponent {
       this.getBooleanValue('consentFuture'),
     );
 
-    this.sendApplicationService.newCandidateApply(payload).pipe(take(1)).subscribe();
+    this.sendApplicationService
+      .newCandidateApply(payload)
+      .pipe(
+        take(1),
+        tap(() => {
+          this.applicationSent.emit();
+        }),
+      )
+      .subscribe();
   }
 
   private getStringValue(key: string): string {

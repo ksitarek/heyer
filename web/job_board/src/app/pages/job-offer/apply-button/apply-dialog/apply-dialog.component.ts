@@ -51,4 +51,8 @@ export class ApplyDialogComponent {
   public get jobOfferId(): string {
     return this.details.Id;
   }
+
+  public applicationSent(): void {
+    this.dialogRef.close();
+  }
 }
