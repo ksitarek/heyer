@@ -1,7 +1,6 @@
-namespace Heyer.Modules.Hiring.PublishedLanguage.DTOs;
+namespace Heyer.Modules.JobBoard.Domain.JobOffers;
 
-public record NewCandidateApplyToJobOfferRequest(
-    Guid PublishedJobOfferId,
+public record JobOfferApplication(
     string FirstName,
     string LastName,
     string Email,

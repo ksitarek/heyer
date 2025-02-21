@@ -6,6 +6,17 @@ internal static class HiringModuleCompositionRoot
 {
     private static IServiceProvider? _serviceProvider;
 
+
+    public static IServiceProvider ServiceProvider
+    {
+        get
+        {
+            EnsureServiceProviderIsSet();
+
+            return _serviceProvider!;
+        }
+    }
+
     public static IServiceScope CreateScope()
     {
         EnsureServiceProviderIsSet();

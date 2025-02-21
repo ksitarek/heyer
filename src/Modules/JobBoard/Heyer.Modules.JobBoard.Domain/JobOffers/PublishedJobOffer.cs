@@ -76,6 +76,13 @@ public class PublishedJobOffer : Entity
                                           publishedUntil,
                                           requirements);
 
+    public Result AddApplication(JobOfferApplication application)
+    {
+        AddDomainEvent(new NewJobOfferApplicationCreated(Id, CompanyDetails, application));
+
+        return Result.Ok();
+    }
+
     public Result TakeDown()
     {
         var validationResult = ChallengeBusinessRules(

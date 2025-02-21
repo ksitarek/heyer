@@ -8,7 +8,7 @@ namespace Heyer.Modules.JobBoard.Application.Mapping;
 public static class JobOfferMappings
 {
     public static NewCandidateApplyToJobOffer MapToCommand(this NewCandidateApplyToJobOfferRequest request) => new(
-        new PublishedJobOfferId(request.JobOfferId),
+        new PublishedJobOfferId(request.PublishedJobOfferId),
         request.FirstName,
         request.LastName,
         request.Email,
