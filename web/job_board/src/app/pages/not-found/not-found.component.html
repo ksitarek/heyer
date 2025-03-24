@@ -1,0 +1,10 @@
+<div class="space-y-10 text-center">
+  <ng-icon name="lucideMessageCircleQuestion" size="72" />
+
+  @if (content) {
+    <h1 hlmH1>{{ content.key }}</h1>
+    <p>{{ content.value }}</p>
+    <p>Go to <a class="text-primary" [routerLink]="['/']">homepage</a>.</p>
+  }
+  <p>👀</p>
+</div>

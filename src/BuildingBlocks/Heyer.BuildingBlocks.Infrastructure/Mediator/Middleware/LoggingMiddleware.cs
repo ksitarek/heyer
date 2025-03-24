@@ -47,7 +47,8 @@ public class LoggingMiddleware<TRequest, TResult> : IPipelineBehavior<TRequest, 
                 Log.Error(e, "Error when handling {RequestName}", typeof(TRequest).Name);
 
                 var result = new TResult();
-                result.Errors.Add(new Error(e.Message).CausedBy(e));
+
+                result.Reasons.Add(new ExceptionalError(e.Message, e));
 
                 return result;
             }

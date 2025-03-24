@@ -57,19 +57,19 @@ public abstract class GenericInboxProcessingJob
 
         if (type != null)
         {
-            var command = message.Data.Deserialize(type);
-
-            if (command is IDomainEventNotification domainNotification)
-            {
-                var valueUserDataProvider = _userDataProvider as ValueUserDataProvider;
-
-                valueUserDataProvider!.SetExecutionContext(domainNotification.ExecutionContext.UserId,
-                                                           domainNotification.ExecutionContext.CompanyId,
-                                                           domainNotification.ExecutionContext.CompanyName);
-            }
-
             try
             {
+                var command = message.Data.Deserialize(type);
+
+                if (command is IDomainEventNotification domainNotification)
+                {
+                    var valueUserDataProvider = _userDataProvider as ValueUserDataProvider;
+
+                    valueUserDataProvider!.SetExecutionContext(domainNotification.ExecutionContext.UserId,
+                                                               domainNotification.ExecutionContext.CompanyId,
+                                                               domainNotification.ExecutionContext.CompanyName);
+                }
+
                 await _mediator!.Publish(command!);
                 await _inboxStore!.SetProcessedAt(message.Id, DateTime.UtcNow);
             }

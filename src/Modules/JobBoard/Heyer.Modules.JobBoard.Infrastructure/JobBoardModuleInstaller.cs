@@ -4,7 +4,6 @@ using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.HealthChecks;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
-using Heyer.BuildingBlocks.Infrastructure.Integration.Persistence;
 using Heyer.BuildingBlocks.Infrastructure.Integration.Processing;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
@@ -28,10 +27,10 @@ public class JobBoardModuleInstaller : ModuleInstaller, IJobBoardModuleInstaller
 
     public override void ConfigureEventBusSubscriptions(IEventBus eventBus)
     {
-        var inboxStore = JobBoardModuleCompositionRoot.ServiceProvider.GetRequiredService<IInboxStore>();
-
-        eventBus.Subscribe(new GenericEventHandler<JobOfferPublishedIntegrationEvent>(inboxStore));
-        eventBus.Subscribe(new GenericEventHandler<JobOfferTakenDownIntegrationEvent>(inboxStore));
+        eventBus.Subscribe(
+            new GenericEventHandler<JobOfferPublishedIntegrationEvent>(JobBoardModuleCompositionRoot.ServiceProvider));
+        eventBus.Subscribe(
+            new GenericEventHandler<JobOfferTakenDownIntegrationEvent>(JobBoardModuleCompositionRoot.ServiceProvider));
     }
 
     public override void ConfigureServiceProvider()

@@ -3,6 +3,7 @@ using Hangfire;
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Infrastructure;
 using Heyer.BuildingBlocks.Infrastructure.Integration;
+using Heyer.BuildingBlocks.Infrastructure.Integration.Processing;
 using Heyer.BuildingBlocks.Infrastructure.Mediator;
 using Heyer.BuildingBlocks.Infrastructure.Mediator.Middleware;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
@@ -10,6 +11,7 @@ using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.Modules.Hiring.Application;
 using Heyer.Modules.Hiring.Infrastructure.Configuration;
 using Heyer.Modules.Hiring.Infrastructure.Integration;
+using Heyer.Modules.Hiring.PublishedLanguage.IntegrationEvents;
 using Heyer.Storage.API.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,9 +23,10 @@ public class HiringModuleInstaller : ModuleInstaller, IHiringModuleInstaller
     protected override Func<IServiceScope> ScopeProvider { get; }
         = HiringModuleCompositionRoot.CreateScope;
 
-    public override void ConfigureEventBusSubscriptions(IEventBus eventBus)
-    {
-    }
+    public override void ConfigureEventBusSubscriptions(IEventBus eventBus) =>
+        eventBus.Subscribe(
+            new GenericEventHandler<NewJobOfferApplicationCreatedIntegrationEventWithContext>(
+                HiringModuleCompositionRoot.ServiceProvider));
 
     public override void ConfigureServiceProvider()
     {

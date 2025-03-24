@@ -1,6 +1,6 @@
 using FluentResults;
 
-namespace Heyer.BuildingBlocks.Application.Results;
+namespace Heyer.BuildingBlocks.Domain;
 
 public class BusinessRuleViolationError : Error
 {

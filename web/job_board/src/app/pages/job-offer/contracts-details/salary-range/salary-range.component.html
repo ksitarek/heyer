@@ -1,0 +1,8 @@
+<div class="mt-2 text-lg">
+  @if (range.IsPublished) {
+    <span class="font-medium text-primary">{{ range.From }}</span> PLN &ndash;
+    <span class="font-medium text-primary">{{ range.To }}</span> PLN
+  } @else {
+    <span class="font-medium text-primary">Undisclosed</span>
+  }
+</div>

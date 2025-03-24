@@ -1,0 +1,16 @@
+<form [formGroup]="resumeFormGroup">
+  <hlm-form-field>
+    <label hlmLabel>
+      Resume <span class="text-red-600">*</span>
+      <input
+        #fileInput
+        hlmInput
+        type="file"
+        class="w-full"
+        required
+        formControlName="resume"
+        accept="application/pdf"
+      />
+    </label>
+  </hlm-form-field>
+</form>

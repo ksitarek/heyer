@@ -63,13 +63,15 @@ internal class DomainEventDispatcher : IDomainEventDispatcher
         {
             var notificationType = _domainEventNotificationsRegistry.GetNotificationType(domainEventName);
 
+            var executionContext = new ExecutionContext(
+                _userDataProvider.UserId,
+                _userDataProvider.CompanyId,
+                _userDataProvider.CompanyName);
+
             var domainEventNotification = Activator.CreateInstance(notificationType,
                                                                    domainEvent.EventId,
                                                                    domainEvent,
-                                                                   new ExecutionContext(
-                                                                       _userDataProvider.UserId,
-                                                                       _userDataProvider.CompanyId,
-                                                                       _userDataProvider.CompanyName));
+                                                                   executionContext);
 
             if (domainEventNotification == null)
             {

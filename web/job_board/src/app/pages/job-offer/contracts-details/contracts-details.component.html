@@ -1,0 +1,7 @@
+<div hlmCard>
+  <div hlmCardContent class="flex flex-col py-6 space-y-6">
+    @for (details of contractsDetails(); track details) {
+      <h-contract-details [contractDetails]="details" />
+    }
+  </div>
+</div>

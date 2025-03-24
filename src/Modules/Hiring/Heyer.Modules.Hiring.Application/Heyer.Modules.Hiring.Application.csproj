@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Heyer.Modules.Hiring.Domain\Heyer.Modules.Hiring.Domain.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Candidates\"/>
+  </ItemGroup>
+
 </Project>

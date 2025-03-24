@@ -22,5 +22,5 @@ public interface IStorageApiClient : IDisposable
     Task Preserve([Path] string key);
 
     [Post("/store")]
-    Task<StoreResult> Store([Header("RequestVerificationToken")] string csrf, [Body] MultipartFormDataContent file);
+    Task<StoreResult> Store([Header("X-XSRF-TOKEN")] string csrf, [Body] MultipartFormDataContent file);
 }

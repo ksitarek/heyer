@@ -140,3 +140,5 @@ _NCrunch*
 .docker
 
 node_modules
+
+src/API/Heyer.Storage.API/tmpstorage
