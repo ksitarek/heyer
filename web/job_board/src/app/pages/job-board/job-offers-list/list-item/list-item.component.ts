@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import {
   HlmCardDescriptionDirective,
@@ -6,11 +7,20 @@ import {
   HlmCardHeaderDirective,
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
-import { EmploymentType, ListItemModel, RemoteWork } from './list-item.model';
+import { EmploymentType } from '../../../../models/employment-type.model';
+import { RemoteWork } from '../../../../models/remote-work.model';
+import { ListItemModel } from './list-item.model';
 
 @Component({
   selector: 'h-list-item',
-  imports: [NgIcon, HlmCardDirective, HlmCardHeaderDirective, HlmCardTitleDirective, HlmCardDescriptionDirective],
+  imports: [
+    NgIcon,
+    HlmCardDirective,
+    HlmCardHeaderDirective,
+    HlmCardTitleDirective,
+    HlmCardDescriptionDirective,
+    RouterModule,
+  ],
   templateUrl: './list-item.component.html',
   styleUrl: './list-item.component.scss',
 })

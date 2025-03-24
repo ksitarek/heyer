@@ -10,6 +10,7 @@ import * as lucide from '@ng-icons/lucide';
 import { environment } from '../environments/environment';
 
 export const heyerApiUrl = new InjectionToken<string>('heyerApiUrl');
+export const storageApiUrl = new InjectionToken<string>('storageApiUrl');
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,5 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideIcons(lucide),
     { provide: heyerApiUrl, useValue: environment.heyerApi },
+    { provide: storageApiUrl, useValue: environment.storageApi },
   ],
 };

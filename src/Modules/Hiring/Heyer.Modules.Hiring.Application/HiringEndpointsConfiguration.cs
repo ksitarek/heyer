@@ -1,7 +1,6 @@
 using Heyer.BuildingBlocks.Application.Authorization;
 using Heyer.BuildingBlocks.Application.HttpLanguage;
 using Heyer.BuildingBlocks.Application.Results;
-using Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
 using Heyer.Modules.Hiring.Application.JobOffers.CheckForConflicts;
 using Heyer.Modules.Hiring.Application.JobOffers.Create;
 using Heyer.Modules.Hiring.Application.JobOffers.GetById;
@@ -24,7 +23,6 @@ public static class HiringEndpointsConfiguration
         MapCreateJobOfferEndpoint(app);
         MapGetJobOfferByIdEndpoint(app);
         MapGetJobOffersListEndpoint(app);
-        MapNewCandidateApplyEndpoint(app);
         MapPublishJobOfferEndpoint(app);
         MapRemoveContractDetailsEndpoint(app);
         MapSetOfficeLocationEndpoint(app);
@@ -114,19 +112,6 @@ public static class HiringEndpointsConfiguration
                            ? Results.Ok(result.Value)
                            : ResponseErrorHandling.Handle(result);
                    }).RequirePermission(HiringPermissions.ListJobOffers);
-
-    private static void MapNewCandidateApplyEndpoint(WebApplication app) =>
-        app.MapPost("/job-offers/new-candidate-apply",
-                    async (IHiringModule module,
-                           [FromBody] NewCandidateApplyToJobOffer command,
-                           CancellationToken cancellationToken) =>
-                    {
-                        var result = await module.DispatchCommand(command, cancellationToken);
-
-                        return result.IsSuccess
-                            ? Results.Ok()
-                            : ResponseErrorHandling.Handle(result);
-                    });
 
     private static void MapPublishJobOfferEndpoint(WebApplication app) =>
         app.MapPost("/job-offers/publish",

@@ -1,10 +1,10 @@
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.Modules.Hiring.Domain.JobOffers;
 
-namespace Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
+namespace Heyer.Modules.Hiring.Application.JobOffers;
 
 public record NewCandidateApplyToJobOffer(
-    JobOfferId PublishedJobOfferId,
+    JobOfferId JobOfferId,
     string FirstName,
     string LastName,
     string Email,

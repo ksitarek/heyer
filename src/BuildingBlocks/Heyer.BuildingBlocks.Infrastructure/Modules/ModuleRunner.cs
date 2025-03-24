@@ -7,7 +7,9 @@ namespace Heyer.BuildingBlocks.Infrastructure.Modules;
 
 public abstract class ModuleRunner : IModuleRunner
 {
-    public abstract Func<IServiceScope> ScopeProvider { get; }
+    protected ModuleRunner(Func<IServiceScope> scopeProvider) => ScopeProvider = scopeProvider;
+
+    private Func<IServiceScope> ScopeProvider { get; init; }
 
     public async Task<Result> DispatchCommand<TCommand>(TCommand command, CancellationToken cancellationToken)
         where TCommand : ICommand

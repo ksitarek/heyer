@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using FluentResults;
-using Heyer.BuildingBlocks.Application.Results;
 
 namespace Heyer.BuildingBlocks.Domain;
 

@@ -1,3 +1,7 @@
+import { ContractDetails } from '../../../../models/contract-details.model';
+import { RemoteWork } from '../../../../models/remote-work.model';
+import { SalaryRange } from '../../../../models/salary-range.model';
+
 export class ListItemModel {
   public constructor(
     public Id: string,
@@ -31,33 +35,4 @@ export class ListItemModel {
       obj.TimeDenominator,
     );
   }
-}
-
-export enum RemoteWork {
-  Unknown,
-  No,
-  Hybrid,
-  Yes,
-}
-
-export enum EmploymentType {
-  ContractOfEmployment,
-  B2B,
-}
-
-export class SalaryRange {
-  public constructor(
-    public IsPublished: boolean,
-    public From: number,
-    public To: number,
-  ) {}
-}
-
-export class ContractDetails {
-  public constructor(
-    public EmploymentType: EmploymentType,
-    public SalaryRange: SalaryRange,
-    public TimeNominator: number,
-    public TimeDenominator: number,
-  ) {}
 }

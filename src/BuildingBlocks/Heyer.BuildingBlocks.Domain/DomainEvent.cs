@@ -4,8 +4,8 @@ namespace Heyer.BuildingBlocks.Domain;
 
 public abstract record DomainEvent : INotification
 {
-    public Guid EventId { get; }
-    public DateTime OccurredOn { get; }
+    public Guid EventId { get; protected set; }
+    public DateTime OccurredOn { get; protected set; }
 
     protected DomainEvent()
     {

@@ -3,43 +3,30 @@ using Heyer.BuildingBlocks.Application.Results;
 using Heyer.BuildingBlocks.Infrastructure.Messaging;
 using Heyer.Modules.Hiring.Domain.Candidates;
 using Heyer.Modules.Hiring.Domain.JobOffers;
-using Heyer.Storage.API.Client;
 
-namespace Heyer.Modules.Hiring.Application.Candidates.NewCandidateApply;
+namespace Heyer.Modules.Hiring.Application.JobOffers;
 
 public class NewCandidateApplyToJobOfferHandler : ICommandHandler<NewCandidateApplyToJobOffer>
 {
     private readonly ICandidatesRepository _candidatesRepository;
     private readonly IJobOffersRepository _jobOffersRepository;
-    private readonly IStorageApiClient _storageApiClient;
 
     public NewCandidateApplyToJobOfferHandler(
         IJobOffersRepository jobOffersRepository,
-        ICandidatesRepository candidatesRepository,
-        IStorageApiClient storageApiClient)
+        ICandidatesRepository candidatesRepository)
     {
         _jobOffersRepository = jobOffersRepository;
         _candidatesRepository = candidatesRepository;
-        _storageApiClient = storageApiClient;
     }
 
     public async Task<Result> Handle(NewCandidateApplyToJobOffer request, CancellationToken cancellationToken)
     {
         var jobOffer =
-            await _jobOffersRepository.GetJobOfferById(request.PublishedJobOfferId, cancellationToken);
+            await _jobOffersRepository.GetJobOfferById(request.JobOfferId, cancellationToken);
 
         if (jobOffer is null)
         {
             return new NotFoundError();
-        }
-
-        try
-        {
-            await _storageApiClient.Preserve(request.ResumeKey);
-        }
-        catch (Exception e)
-        {
-            return Result.Fail(new ExceptionalError("Failed to preserve resume", e));
         }
 
         var createCandidateResult = await CreateCandidate(request, cancellationToken);

@@ -3,9 +3,7 @@ using Heyer.BuildingBlocks.Infrastructure.Integration;
 using Heyer.BuildingBlocks.Infrastructure.Modules;
 using Heyer.BuildingBlocks.Infrastructure.Scheduler;
 using Heyer.BuildingBlocks.Json;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
-using IHealthCheck = Heyer.BuildingBlocks.Infrastructure.HealthChecks.IHealthCheck;
 
 namespace Heyer.API.Host;
 
@@ -14,7 +12,8 @@ internal class HostBuilder
     private readonly WebApplicationBuilder _builder;
 
     private readonly IEventBus _eventBus = new InProcessEventBus();
-    private readonly List<ModuleRunner> _modules = new();
+
+    private readonly IHealthChecksBuilder _healthChecksBuilder;
 
     public HostBuilder(WebApplicationBuilder builder)
     {
@@ -25,54 +24,37 @@ internal class HostBuilder
         _builder.Services.AddScheduler(builder.Configuration.GetSection("Scheduler"));
         _builder.Services.AddCors(builder.Configuration.GetSection("Cors"));
         _builder.Services.ConfigureJson();
+
+        _healthChecksBuilder = _builder.Services.AddHealthChecks();
     }
 
     public HostBuilder AddModule<TInterface, TImplementation>()
-        where TImplementation : ModuleRunner, TInterface, IModuleInstaller
+        where TImplementation : class, TInterface, new()
         where TInterface : class, IModuleInstaller
     {
-        var module = Activator.CreateInstance(typeof(TImplementation), _builder.Configuration, _eventBus)
-            as TImplementation;
+        var module = new TImplementation();
 
         if (module is null)
         {
             throw new Exception($"Unable to create instance of module {typeof(TImplementation)}");
         }
 
-        _modules.Add(module);
+        module.SetEventBus(_eventBus);
+        module.SetConfiguration(_builder.Configuration);
 
-        _builder.Services.AddModule<TInterface, TImplementation>(module);
+        module.ConfigureServiceProvider();
+
+        module.ConfigureHealthChecks(_healthChecksBuilder);
+
+        _builder.Services.AddSingleton<TInterface, TImplementation>(_ => module);
+        _builder.Services.AddSingleton<IModuleInstaller, TImplementation>(_ => module);
+
+        module.RegisterInGlobalContainer(_builder.Services);
 
         return this;
     }
 
     public Host Build() => new(_builder.Build());
-
-    public HostBuilder ConfigureHealthChecks()
-    {
-        var healthChecksBuilder = _builder.Services.AddHealthChecks();
-
-        foreach (var module in _modules)
-        {
-            using var moduleScope = module.ScopeProvider.Invoke();
-
-            var moduleHealthChecks = moduleScope.ServiceProvider.GetServices<IHealthCheck>();
-            foreach (var check in moduleHealthChecks)
-            {
-                healthChecksBuilder.Add(
-                    new HealthCheckRegistration(
-                        check.Name,
-                        check,
-                        HealthStatus.Unhealthy,
-                        [
-                            module.GetType().Name
-                        ],
-                        check.Timeout));
-            }
-        }
-
-        return this;
-    }
 
     public HostBuilder ConfigureLogging()
     {

@@ -1,0 +1,7 @@
+using Heyer.BuildingBlocks.Infrastructure.Modules;
+
+namespace Heyer.Modules.JobBoard.Application;
+
+public interface IJobBoardModuleInstaller : IModuleInstaller
+{
+}
